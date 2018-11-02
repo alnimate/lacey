@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="6.2.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.1.3" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="3.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Lacey.Medusa.Common.DataAnnotations\Lacey.Medusa.Common.DataAnnotations.csproj" />
+    <ProjectReference Include="..\Lacey.Medusa.Common.Resources\Lacey.Medusa.Common.Resources.csproj" />
+    <ProjectReference Include="..\Lacey.Medusa.Common.Services\Lacey.Medusa.Common.Services.csproj" />
+  </ItemGroup>
+
+</Project>
