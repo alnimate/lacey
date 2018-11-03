@@ -11,7 +11,7 @@ namespace Lacey.Medusa.Youtube.Dal.EntityConfigurations
             builder.HasKey(e => e.Id);
 
             builder.Property(e => e.ChannelId).HasMaxLength(30).IsRequired();
-            builder.Property(e => e.Title).HasMaxLength(30).IsRequired();
+            builder.Property(e => e.Name).HasColumnName("Title").HasMaxLength(30).IsRequired();
             builder.Property(e => e.CreatedAt).IsRequired();
 
             builder.ToTable("Channels");

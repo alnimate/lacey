@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Practices.ServiceLocation;
 using Ninject;
 
-namespace Lacey.Medusa.Common.DI.Infrastructure
+namespace Lacey.Medusa.Common.DI.Web.Infrastructure
 {
     public class NinjectServiceLocator : ServiceLocatorImplBase
     {
