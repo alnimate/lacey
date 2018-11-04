@@ -5,11 +5,13 @@ VisualStudioVersion = 15.0.27004.2006
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Google.Apis.YouTube.Samples.Playlists", "Google.Apis.YouTube.Samples.Playlists\Google.Apis.YouTube.Samples.Playlists.csproj", "{5781C0CB-169B-42BE-A7D2-766520F3CCD0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Google.Apis.YouTube.Samples.Search", "Google.Apis.YouTube.Samples.Search\Google.Apis.YouTube.Samples.Search.csproj", "{1DB7F593-3C99-4171-A584-5234457E7351}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Google.Apis.YouTube.Samples.Search", "Google.Apis.YouTube.Samples.Search\Google.Apis.YouTube.Samples.Search.csproj", "{1DB7F593-3C99-4171-A584-5234457E7351}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Google.Apis.YouTube.Samples.Upload", "Google.Apis.YouTube.Samples.Upload\Google.Apis.YouTube.Samples.Upload.csproj", "{19C80AA8-950B-4182-940F-760EFE9D32BB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Google.Apis.YouTube.v3", "..\Google.Apis.YouTube.v3\Google.Apis.YouTube.v3.csproj", "{4A5FA115-B4FB-48CA-81AE-23EBDEC901D9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Youtube.Api", "..\..\youtube\Lacey.Medusa.Youtube.Api\Lacey.Medusa.Youtube.Api.csproj", "{C5C3FB8C-96EF-4E34-90E8-B2E638242840}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Google.Apis.YouTube.v3", "..\Google.Apis.YouTube.v3\Google.Apis.YouTube.v3.csproj", "{983B5D83-DF3B-4E61-BE40-AF740E1D4093}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +31,14 @@ Global
 		{19C80AA8-950B-4182-940F-760EFE9D32BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{19C80AA8-950B-4182-940F-760EFE9D32BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{19C80AA8-950B-4182-940F-760EFE9D32BB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4A5FA115-B4FB-48CA-81AE-23EBDEC901D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4A5FA115-B4FB-48CA-81AE-23EBDEC901D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4A5FA115-B4FB-48CA-81AE-23EBDEC901D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4A5FA115-B4FB-48CA-81AE-23EBDEC901D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5C3FB8C-96EF-4E34-90E8-B2E638242840}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5C3FB8C-96EF-4E34-90E8-B2E638242840}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5C3FB8C-96EF-4E34-90E8-B2E638242840}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5C3FB8C-96EF-4E34-90E8-B2E638242840}.Release|Any CPU.Build.0 = Release|Any CPU
+		{983B5D83-DF3B-4E61-BE40-AF740E1D4093}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{983B5D83-DF3B-4E61-BE40-AF740E1D4093}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{983B5D83-DF3B-4E61-BE40-AF740E1D4093}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{983B5D83-DF3B-4E61-BE40-AF740E1D4093}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
