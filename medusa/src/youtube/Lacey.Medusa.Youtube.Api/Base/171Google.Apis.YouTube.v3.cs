@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Branding properties for the watch. All deprecated.</summary>
-  public class WatchSettings : IDirectResponseSchema
+  internal class WatchSettings : IDirectResponseSchema
   {
     /// <summary>The text color for the video watch page's branded area.</summary>
     [JsonProperty("backgroundColor")]

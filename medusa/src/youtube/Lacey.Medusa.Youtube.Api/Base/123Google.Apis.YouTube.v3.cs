@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Describes a single promoted item.</summary>
-  public class PromotedItem : IDirectResponseSchema
+  internal class PromotedItem : IDirectResponseSchema
   {
     /// <summary>A custom message to display for this promotion. This field is currently ignored unless the promoted
     /// item is a website.</summary>

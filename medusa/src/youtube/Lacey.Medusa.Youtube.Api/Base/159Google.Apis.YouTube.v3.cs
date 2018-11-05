@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Player to be used for a video playback.</summary>
-  public class VideoPlayer : IDirectResponseSchema
+  internal class VideoPlayer : IDirectResponseSchema
   {
     [JsonProperty("embedHeight")]
     public virtual long? EmbedHeight { get; set; }

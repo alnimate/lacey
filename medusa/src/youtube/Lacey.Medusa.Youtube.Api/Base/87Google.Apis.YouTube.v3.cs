@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Branding properties for images associated with the channel.</summary>
-  public class ImageSettings : IDirectResponseSchema
+  internal class ImageSettings : IDirectResponseSchema
   {
     /// <summary>The URL for the background image shown on the video watch page. The image should be 1200px by
     /// 615px, with a maximum file size of 128k.</summary>

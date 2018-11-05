@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Channel localization setting</summary>
-  public class ChannelLocalization : IDirectResponseSchema
+  internal class ChannelLocalization : IDirectResponseSchema
   {
     /// <summary>The localized strings for channel's description.</summary>
     [JsonProperty("description")]

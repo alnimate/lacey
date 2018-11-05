@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 
 namespace Lacey.Medusa.Youtube.Api.Base
 {
-  public class VideoAgeGating : IDirectResponseSchema
+  internal class VideoAgeGating : IDirectResponseSchema
   {
     /// <summary>Indicates whether or not the video has alcoholic beverage content. Only users of legal purchasing
     /// age in a particular country, as identified by ICAP, can view the content.</summary>

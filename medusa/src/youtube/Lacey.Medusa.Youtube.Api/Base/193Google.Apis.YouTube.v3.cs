@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Nonprofit information.</summary>
-  public class Nonprofit : IDirectResponseSchema
+  internal class Nonprofit : IDirectResponseSchema
   {
     /// <summary>Id of the nonprofit.</summary>
     [JsonProperty("nonprofitId")]

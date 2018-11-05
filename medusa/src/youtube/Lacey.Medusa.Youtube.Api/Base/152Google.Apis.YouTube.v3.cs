@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Information about an audio stream.</summary>
-  public class VideoFileDetailsAudioStream : IDirectResponseSchema
+  internal class VideoFileDetailsAudioStream : IDirectResponseSchema
   {
     /// <summary>The audio stream's bitrate, in bits per second.</summary>
     [JsonProperty("bitrateBps")]

@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Detailed settings of a stream.</summary>
-  public class LiveStreamContentDetails : IDirectResponseSchema
+  internal class LiveStreamContentDetails : IDirectResponseSchema
   {
     /// <summary>The ingestion URL where the closed captions of this stream are sent.</summary>
     [JsonProperty("closedCaptionsIngestionUrl")]

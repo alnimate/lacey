@@ -11,7 +11,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>A sponsor resource represents a sponsor for a YouTube channel. A sponsor provides recurring monetary
   /// support to a creator and receives special benefits.</summary>
-  public class Sponsor : IDirectResponseSchema
+  internal class Sponsor : IDirectResponseSchema
   {
     /// <summary>Etag of this resource.</summary>
     [JsonProperty("etag")]

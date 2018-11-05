@@ -13,7 +13,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
   /// channel's content or other indicators, such as the channel's popularity. The list is similar to video
   /// categories, with the difference being that a video's uploader can assign a video category but only YouTube can
   /// assign a channel category.</summary>
-  public class GuideCategory : IDirectResponseSchema
+  internal class GuideCategory : IDirectResponseSchema
   {
     /// <summary>Etag of this resource.</summary>
     [JsonProperty("etag")]

@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 
 namespace Lacey.Medusa.Youtube.Api.Base
 {
-  public class ChannelSection : IDirectResponseSchema
+  internal class ChannelSection : IDirectResponseSchema
   {
     /// <summary>The contentDetails object contains details about the channel section content, such as a list of
     /// playlists or channels featured in the section.</summary>

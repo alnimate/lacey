@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Details about monetization of a YouTube Video.</summary>
-  public class VideoMonetizationDetails : IDirectResponseSchema
+  internal class VideoMonetizationDetails : IDirectResponseSchema
   {
     /// <summary>The value of access indicates whether the video can be monetized or not.</summary>
     [JsonProperty("access")]

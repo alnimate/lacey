@@ -11,7 +11,7 @@ using Lacey.Medusa.Common.Api.Core.Base.Util;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>The "videoCategories" collection of methods.</summary>
-  public class VideoCategoriesResource
+  internal class VideoCategoriesResource
   {
     private const string Resource = "videoCategories";
     /// <summary>The service which this resource belongs to.</summary>
@@ -32,7 +32,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
     }
 
     /// <summary>Returns a list of categories that can be associated with YouTube videos.</summary>
-    public class ListRequest : YouTubeBaseServiceRequest<VideoCategoryListResponse>
+    internal class ListRequest : YouTubeBaseServiceRequest<VideoCategoryListResponse>
     {
       /// <summary>Constructs a new List request.</summary>
       public ListRequest(IClientService service, string part)

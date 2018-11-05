@@ -11,7 +11,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>A liveChatModerator resource represents a moderator for a YouTube live chat. A chat moderator has the
   /// ability to ban/unban users from a chat, remove message, etc.</summary>
-  public class LiveChatModerator : IDirectResponseSchema
+  internal class LiveChatModerator : IDirectResponseSchema
   {
     /// <summary>Etag of this resource.</summary>
     [JsonProperty("etag")]

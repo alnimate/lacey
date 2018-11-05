@@ -11,7 +11,7 @@ using Lacey.Medusa.Common.Api.Core.Base.Util;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>The "i18nRegions" collection of methods.</summary>
-  public class I18nRegionsResource
+  internal class I18nRegionsResource
   {
     private const string Resource = "i18nRegions";
     /// <summary>The service which this resource belongs to.</summary>
@@ -32,7 +32,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
     }
 
     /// <summary>Returns a list of content regions that the YouTube website supports.</summary>
-    public class ListRequest : YouTubeBaseServiceRequest<I18nRegionListResponse>
+    internal class ListRequest : YouTubeBaseServiceRequest<I18nRegionListResponse>
     {
       /// <summary>Constructs a new List request.</summary>
       public ListRequest(IClientService service, string part)

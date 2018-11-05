@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>A superChatEvent resource represents a Super Chat purchase on a YouTube channel.</summary>
-  public class SuperChatEvent : IDirectResponseSchema
+  internal class SuperChatEvent : IDirectResponseSchema
   {
     /// <summary>Etag of this resource.</summary>
     [JsonProperty("etag")]

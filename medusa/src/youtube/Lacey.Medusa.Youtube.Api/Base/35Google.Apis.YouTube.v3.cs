@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Information about a resource that received a positive (like) rating.</summary>
-  public class ActivityContentDetailsLike : IDirectResponseSchema
+  internal class ActivityContentDetailsLike : IDirectResponseSchema
   {
     /// <summary>The resourceId object contains information that identifies the rated resource.</summary>
     [JsonProperty("resourceId")]

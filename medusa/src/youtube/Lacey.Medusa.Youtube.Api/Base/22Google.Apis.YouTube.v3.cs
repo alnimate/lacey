@@ -13,7 +13,7 @@ using Lacey.Medusa.Common.Api.Core.Base.Util;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>The "watermarks" collection of methods.</summary>
-  public class WatermarksResource
+  internal class WatermarksResource
   {
     private const string Resource = "watermarks";
     /// <summary>The service which this resource belongs to.</summary>
@@ -54,7 +54,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
     }
 
     /// <summary>Uploads a watermark image to YouTube and sets it for a channel.</summary>
-    public class SetRequest : YouTubeBaseServiceRequest<string>
+    internal class SetRequest : YouTubeBaseServiceRequest<string>
     {
       /// <summary>Constructs a new Set request.</summary>
       public SetRequest(IClientService service, InvideoBranding body, string channelId)
@@ -141,7 +141,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
     }
 
     /// <summary>Set media upload which supports resumable upload.</summary>
-    public class SetMediaUpload : ResumableUpload<InvideoBranding>
+    internal class SetMediaUpload : ResumableUpload<InvideoBranding>
     {
       /// <summary>Data format for the response.</summary>
       /// 
@@ -210,7 +210,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
     }
 
     /// <summary>Deletes a channel's watermark image.</summary>
-    public class UnsetRequest : YouTubeBaseServiceRequest<string>
+    internal class UnsetRequest : YouTubeBaseServiceRequest<string>
     {
       /// <summary>Constructs a new Unset request.</summary>
       public UnsetRequest(IClientService service, string channelId)

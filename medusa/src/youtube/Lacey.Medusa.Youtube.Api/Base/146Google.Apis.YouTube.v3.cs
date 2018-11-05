@@ -11,7 +11,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>A videoCategory resource identifies a category that has been or could be associated with uploaded
   /// videos.</summary>
-  public class VideoCategory : IDirectResponseSchema
+  internal class VideoCategory : IDirectResponseSchema
   {
     /// <summary>Etag of this resource.</summary>
     [JsonProperty("etag")]

@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Describes a temporal position of a visual widget inside a video.</summary>
-  public class InvideoTiming : IDirectResponseSchema
+  internal class InvideoTiming : IDirectResponseSchema
   {
     /// <summary>Defines the duration in milliseconds for which the promotion should be displayed. If missing, the
     /// client should use the default.</summary>

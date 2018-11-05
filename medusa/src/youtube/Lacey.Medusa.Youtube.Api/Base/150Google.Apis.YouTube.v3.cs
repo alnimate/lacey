@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>DEPRECATED Region restriction of the video.</summary>
-  public class VideoContentDetailsRegionRestriction : IDirectResponseSchema
+  internal class VideoContentDetailsRegionRestriction : IDirectResponseSchema
   {
     /// <summary>A list of region codes that identify countries where the video is viewable. If this property is
     /// present and a country is not listed in its value, then the video is blocked from appearing in that country.

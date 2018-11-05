@@ -12,7 +12,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Describes original video file properties, including technical details about audio and video streams,
   /// but also metadata information like content length, digitization time, or geotagging information.</summary>
-  public class VideoFileDetails : IDirectResponseSchema
+  internal class VideoFileDetails : IDirectResponseSchema
   {
     /// <summary>A list of audio streams contained in the uploaded video file. Each item in the list contains
     /// detailed metadata about an audio stream.</summary>

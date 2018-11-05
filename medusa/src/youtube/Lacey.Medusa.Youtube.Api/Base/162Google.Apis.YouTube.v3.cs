@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Project specific details about the content of a YouTube Video.</summary>
-  public class VideoProjectDetails : IDirectResponseSchema
+  internal class VideoProjectDetails : IDirectResponseSchema
   {
     /// <summary>A list of project tags associated with the video during the upload.</summary>
     [JsonProperty("tags")]

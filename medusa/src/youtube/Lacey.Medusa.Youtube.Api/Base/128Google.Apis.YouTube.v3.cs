@@ -12,7 +12,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
   /// <summary>A search result contains information about a YouTube video, channel, or playlist that matches the
   /// search parameters specified in an API request. While a search result points to a uniquely identifiable resource,
   /// like a video, it does not have its own persistent data.</summary>
-  public class SearchResult : IDirectResponseSchema
+  internal class SearchResult : IDirectResponseSchema
   {
     /// <summary>Etag of this resource.</summary>
     [JsonProperty("etag")]

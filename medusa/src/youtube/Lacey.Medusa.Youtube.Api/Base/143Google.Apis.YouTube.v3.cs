@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Basic details about a video category, such as its localized title.</summary>
-  public class VideoAbuseReportReasonSnippet : IDirectResponseSchema
+  internal class VideoAbuseReportReasonSnippet : IDirectResponseSchema
   {
     /// <summary>The localized label belonging to this abuse report reason.</summary>
     [JsonProperty("label")]

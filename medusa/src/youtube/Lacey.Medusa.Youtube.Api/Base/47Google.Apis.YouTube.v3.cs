@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Brief description of the live stream cdn settings.</summary>
-  public class CdnSettings : IDirectResponseSchema
+  internal class CdnSettings : IDirectResponseSchema
   {
     /// <summary>The format of the video stream that you are sending to Youtube.</summary>
     [JsonProperty("format")]

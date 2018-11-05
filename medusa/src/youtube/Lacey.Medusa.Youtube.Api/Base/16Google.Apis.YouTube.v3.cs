@@ -12,7 +12,7 @@ using Lacey.Medusa.Common.Api.Core.Base.Util;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>The "search" collection of methods.</summary>
-  public class SearchResource
+  internal class SearchResource
   {
     private const string Resource = "search";
     /// <summary>The service which this resource belongs to.</summary>
@@ -37,7 +37,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
     /// <summary>Returns a collection of search results that match the query parameters specified in the API
     /// request. By default, a search result set identifies matching video, channel, and playlist resources, but you
     /// can also configure queries to only retrieve a specific type of resource.</summary>
-    public class ListRequest : YouTubeBaseServiceRequest<SearchListResponse>
+    internal class ListRequest : YouTubeBaseServiceRequest<SearchListResponse>
     {
       /// <summary>Constructs a new List request.</summary>
       public ListRequest(IClientService service, string part)

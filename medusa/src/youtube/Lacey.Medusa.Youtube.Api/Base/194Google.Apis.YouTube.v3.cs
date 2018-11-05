@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 
 namespace Lacey.Medusa.Youtube.Api.Base
 {
-  public class NonprofitId : IDirectResponseSchema
+  internal class NonprofitId : IDirectResponseSchema
   {
     [JsonProperty("value")]
     public virtual string Value { get; set; }

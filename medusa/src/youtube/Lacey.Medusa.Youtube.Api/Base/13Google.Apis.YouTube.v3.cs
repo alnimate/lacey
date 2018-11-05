@@ -11,7 +11,7 @@ using Lacey.Medusa.Common.Api.Core.Base.Util;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>The "liveStreams" collection of methods.</summary>
-  public class LiveStreamsResource
+  internal class LiveStreamsResource
   {
     private const string Resource = "liveStreams";
     /// <summary>The service which this resource belongs to.</summary>
@@ -69,7 +69,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
     }
 
     /// <summary>Deletes a video stream.</summary>
-    public class DeleteRequest : YouTubeBaseServiceRequest<string>
+    internal class DeleteRequest : YouTubeBaseServiceRequest<string>
     {
       /// <summary>Constructs a new Delete request.</summary>
       public DeleteRequest(IClientService service, string id)
@@ -173,7 +173,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
 
     /// <summary>Creates a video stream. The stream enables you to send your video to YouTube, which can then
     /// broadcast the video to your audience.</summary>
-    public class InsertRequest : YouTubeBaseServiceRequest<LiveStream>
+    internal class InsertRequest : YouTubeBaseServiceRequest<LiveStream>
     {
       /// <summary>Constructs a new Insert request.</summary>
       public InsertRequest(IClientService service, LiveStream body, string part)
@@ -289,7 +289,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
     }
 
     /// <summary>Returns a list of video streams that match the API request parameters.</summary>
-    public class ListRequest : YouTubeBaseServiceRequest<LiveStreamListResponse>
+    internal class ListRequest : YouTubeBaseServiceRequest<LiveStreamListResponse>
     {
       /// <summary>Constructs a new List request.</summary>
       public ListRequest(IClientService service, string part)
@@ -451,7 +451,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
 
     /// <summary>Updates a video stream. If the properties that you want to change cannot be updated, then you need
     /// to create a new stream with the proper settings.</summary>
-    public class UpdateRequest : YouTubeBaseServiceRequest<LiveStream>
+    internal class UpdateRequest : YouTubeBaseServiceRequest<LiveStream>
     {
       /// <summary>Constructs a new Update request.</summary>
       public UpdateRequest(IClientService service, LiveStream body, string part)

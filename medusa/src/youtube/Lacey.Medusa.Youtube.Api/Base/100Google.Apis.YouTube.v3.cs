@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>A live stream describes a live ingestion point.</summary>
-  public class LiveStream : IDirectResponseSchema
+  internal class LiveStream : IDirectResponseSchema
   {
     /// <summary>The cdn object defines the live stream's content delivery network (CDN) settings. These settings
     /// provide details about the manner in which you stream your content to YouTube.</summary>

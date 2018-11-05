@@ -11,7 +11,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>The auditDetails object encapsulates channel data that is relevant for YouTube Partners during the
   /// audit process.</summary>
-  public class ChannelAuditDetails : IDirectResponseSchema
+  internal class ChannelAuditDetails : IDirectResponseSchema
   {
     /// <summary>Whether or not the channel respects the community guidelines.</summary>
     [JsonProperty("communityGuidelinesGoodStanding")]

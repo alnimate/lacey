@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 
 namespace Lacey.Medusa.Youtube.Api.Base
 {
-  public class PlaylistStatus : IDirectResponseSchema
+  internal class PlaylistStatus : IDirectResponseSchema
   {
     /// <summary>The playlist's privacy status.</summary>
     [JsonProperty("privacyStatus")]

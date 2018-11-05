@@ -23,7 +23,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
   /// 
   /// You can then use the   playlistItems.list method to retrieve any of those lists. You can also add or remove
   /// items from those lists by calling the   playlistItems.insert and   playlistItems.delete methods.</summary>
-  public class Playlist : IDirectResponseSchema
+  internal class Playlist : IDirectResponseSchema
   {
     /// <summary>The contentDetails object contains information like video count.</summary>
     [JsonProperty("contentDetails")]
