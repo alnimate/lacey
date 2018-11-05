@@ -22,17 +22,16 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Reflection;
+using Lacey.Medusa.Common.Api.Base.Media;
+using Lacey.Medusa.Common.Api.Base.Services;
+using Lacey.Medusa.Common.Api.Core.Base;
+using Lacey.Medusa.Common.Api.Core.Base.Http;
+using Lacey.Medusa.Common.Api.Core.Base.Logging;
+using Lacey.Medusa.Common.Api.Core.Base.Requests;
+using Lacey.Medusa.Common.Api.Core.Base.Testing;
+using Lacey.Medusa.Common.Api.Core.Base.Util;
 
-using Google.Apis.Http;
-using Google.Apis.Logging;
-using Google.Apis.Media;
-using Google.Apis.Requests;
-using Google.Apis.Services;
-using Google.Apis.Testing;
-using Google.Apis.Util;
-
-namespace Google.Apis.Upload
+namespace Lacey.Medusa.Common.Api.Base.Upload
 {
     /// <summary>
     /// Media upload which uses Google's resumable media upload protocol to upload data.
@@ -888,7 +887,7 @@ namespace Google.Apis.Upload
 
         /// <summary>
         /// Gets or sets the path of the method (combined with
-        /// <see cref="Google.Apis.Services.IClientService.BaseUri"/>) to produce 
+        /// <see cref="IClientService.BaseUri"/>) to produce 
         /// absolute Uri. 
         /// </summary>
         public string Path { get; private set; }

@@ -14,12 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Google.Apis.Http
+namespace Lacey.Medusa.Common.Api.Core.Base.Http
 {
     /// <summary> 
     /// HTTP client initializer for changing the default behavior of HTTP client. 

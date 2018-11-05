@@ -16,7 +16,7 @@ limitations under the License.
 
 using System;
 
-namespace Google.Apis.Json
+namespace Lacey.Medusa.Common.Api.Core.Base.Json
 {
     /// <summary>
     /// All values of a type with this attribute are represented as a literal <c>null</c> in JSON.

@@ -17,7 +17,7 @@ limitations under the License.
 using System;
 using System.IO;
 
-namespace Google.Apis
+namespace Lacey.Medusa.Common.Api.Core.Base
 {
     /// <summary>Serialization interface that supports serialize and deserialize methods.</summary>
     public interface ISerializer

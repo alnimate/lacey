@@ -8,11 +8,11 @@ using System.IO;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
-using Google.Apis.Discovery;
-using Google.Apis.Download;
-using Google.Apis.Services;
-using Google.Apis.Upload;
-using Google.Apis.Util;
+using Lacey.Medusa.Common.Api.Base.Download;
+using Lacey.Medusa.Common.Api.Base.Services;
+using Lacey.Medusa.Common.Api.Base.Upload;
+using Lacey.Medusa.Common.Api.Core.Base.Discovery;
+using Lacey.Medusa.Common.Api.Core.Base.Util;
 
 namespace Lacey.Medusa.Youtube.Api.Base
 {

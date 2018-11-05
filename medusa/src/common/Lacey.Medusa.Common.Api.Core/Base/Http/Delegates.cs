@@ -1,4 +1,4 @@
-﻿namespace Google.Apis.Http
+﻿namespace Lacey.Medusa.Common.Api.Core.Base.Http
 {
     /// <summary>
     /// A delegate used to intercept stream data without modifying it.

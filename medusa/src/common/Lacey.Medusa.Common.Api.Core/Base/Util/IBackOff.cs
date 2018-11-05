@@ -16,7 +16,7 @@ limitations under the License.
 
 using System;
 
-namespace Google.Apis.Util
+namespace Lacey.Medusa.Common.Api.Core.Base.Util
 {
     /// <summary>Strategy interface to control back-off between retry attempts.</summary>
     public interface IBackOff

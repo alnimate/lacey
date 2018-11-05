@@ -14,9 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using System.Collections.Generic;
-
-namespace Google.Apis.Discovery
+namespace Lacey.Medusa.Common.Api.Core.Base.Discovery
 {
     /// <summary>Represents a parameter for a method.</summary>
     public interface IParameter

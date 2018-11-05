@@ -4,10 +4,10 @@
 // MVID: E56916E5-79D6-4645-883A-B3D57DB2C10C
 // Assembly location: C:\Users\Lacey\AppData\Local\Temp\Jylyxot\d3b8721247\lib\netstandard2.0\Google.Apis.YouTube.v3.dll
 
-using Google.Apis.Discovery;
-using Google.Apis.Requests;
-using Google.Apis.Services;
-using Google.Apis.Util;
+using Lacey.Medusa.Common.Api.Base.Requests;
+using Lacey.Medusa.Common.Api.Base.Services;
+using Lacey.Medusa.Common.Api.Core.Base.Discovery;
+using Lacey.Medusa.Common.Api.Core.Base.Util;
 
 namespace Lacey.Medusa.Youtube.Api.Base
 {

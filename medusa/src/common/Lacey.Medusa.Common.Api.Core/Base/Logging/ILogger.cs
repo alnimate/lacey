@@ -16,7 +16,7 @@ limitations under the License.
 
 using System;
 
-namespace Google.Apis.Logging
+namespace Lacey.Medusa.Common.Api.Core.Base.Logging
 {
     /// <summary>Describes a logging interface which is used for outputting messages.</summary>
     public interface ILogger

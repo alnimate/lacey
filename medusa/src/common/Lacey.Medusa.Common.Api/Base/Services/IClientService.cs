@@ -18,16 +18,16 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Lacey.Medusa.Common.Api.Base.Requests;
+using Lacey.Medusa.Common.Api.Core.Base;
+using Lacey.Medusa.Common.Api.Core.Base.Http;
+using Lacey.Medusa.Common.Api.Core.Base.Requests;
 
-using Google.Apis.Discovery;
-using Google.Apis.Http;
-using Google.Apis.Requests;
-
-namespace Google.Apis.Services
+namespace Lacey.Medusa.Common.Api.Base.Services
 {
     /// <summary>
     /// Client service contains all the necessary information a Google service requires. 
-    /// Each concrete <see cref="Google.Apis.Requests.IClientServiceRequest"/> has a reference to a service for 
+    /// Each concrete <see cref="IClientServiceRequest"/> has a reference to a service for 
     /// important properties like API key, application name, base Uri, etc.
     /// This service interface also contains serialization methods to serialize an object to stream and deserialize a 
     /// stream into an object.
@@ -39,8 +39,8 @@ namespace Google.Apis.Services
 
         /// <summary>
         /// Gets a HTTP client initializer which is able to custom properties on 
-        /// <see cref="Google.Apis.Http.ConfigurableHttpClient"/> and 
-        /// <see cref="Google.Apis.Http.ConfigurableMessageHandler"/>.
+        /// <see cref="ConfigurableHttpClient"/> and 
+        /// <see cref="ConfigurableMessageHandler"/>.
         /// </summary>
         IConfigurableHttpClientInitializer HttpClientInitializer { get; }
 

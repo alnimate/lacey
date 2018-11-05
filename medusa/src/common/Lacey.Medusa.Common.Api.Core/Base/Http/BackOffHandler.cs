@@ -18,15 +18,14 @@ using System;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Lacey.Medusa.Common.Api.Core.Base.Logging;
+using Lacey.Medusa.Common.Api.Core.Base.Util;
 
-using Google.Apis.Logging;
-using Google.Apis.Util;
-
-namespace Google.Apis.Http
+namespace Lacey.Medusa.Common.Api.Core.Base.Http
 {
     /// <summary>
     /// A thread-safe back-off handler which handles an abnormal HTTP response or an exception with 
-    /// <see cref="Google.Apis.Util.IBackOff"/>.
+    /// <see cref="IBackOff"/>.
     /// </summary>
     public class BackOffHandler : IHttpUnsuccessfulResponseHandler, IHttpExceptionHandler
     {
@@ -63,8 +62,8 @@ namespace Google.Apis.Http
 
             /// <summary>
             /// Default function which handles exception which aren't 
-            /// <see cref="System.Threading.Tasks.TaskCanceledException"/> or 
-            /// <see cref="System.OperationCanceledException"/>. Those exceptions represent a task or an operation
+            /// <see cref="TaskCanceledException"/> or 
+            /// <see cref="OperationCanceledException"/>. Those exceptions represent a task or an operation
             /// which was canceled and shouldn't be retried.
             /// </summary>
             public static readonly Func<Exception, bool> DefaultHandleExceptionFunc =

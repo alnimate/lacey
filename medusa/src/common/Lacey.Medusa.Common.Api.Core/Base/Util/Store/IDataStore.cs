@@ -14,10 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using System;
 using System.Threading.Tasks;
 
-namespace Google.Apis.Util.Store
+namespace Lacey.Medusa.Common.Api.Core.Base.Util.Store
 {
     /// <summary>
     /// Stores and manages data objects, where the key is a string and the value is an object.

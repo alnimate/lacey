@@ -18,7 +18,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Google.Apis.Json
+namespace Lacey.Medusa.Common.Api.Core.Base.Json
 {
     /// <summary>
     /// Provides values which are explicitly expressed as <c>null</c> when converted to JSON.

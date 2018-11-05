@@ -14,10 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using Google.Apis.Logging;
 using System;
+using Lacey.Medusa.Common.Api.Core.Base.Logging;
 
-namespace Google
+namespace Lacey.Medusa.Common.Api.Core.Base
 {
     /// <summary>Defines the context in which this library runs. It allows setting up custom loggers.</summary>
     public static class ApplicationContext

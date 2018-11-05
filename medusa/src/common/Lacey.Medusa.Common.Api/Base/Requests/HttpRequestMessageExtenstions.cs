@@ -15,15 +15,13 @@ limitations under the License.
 */
 
 using System.IO;
+using System.IO.Compression;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using Lacey.Medusa.Common.Api.Base.Services;
 
-using System.IO.Compression;
-
-using Google.Apis.Services;
-
-namespace Google.Apis.Requests
+namespace Lacey.Medusa.Common.Api.Base.Requests
 {
     /// <summary>Extension methods to <see cref="System.Net.Http.HttpRequestMessage"/>.</summary>
     static class HttpRequestMessageExtenstions

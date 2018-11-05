@@ -15,11 +15,8 @@ limitations under the License.
 */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace Google.Apis.Http
+namespace Lacey.Medusa.Common.Api.Core.Base.Http
 {
     /// <summary>
     /// Indicates if exponential back-off is used automatically on exceptions in a service requests and \ or when 503 

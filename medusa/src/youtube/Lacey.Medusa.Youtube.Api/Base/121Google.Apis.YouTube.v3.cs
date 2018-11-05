@@ -6,8 +6,8 @@
 
 using System;
 using System.Collections.Generic;
-using Google.Apis.Requests;
-using Google.Apis.Util;
+using Lacey.Medusa.Common.Api.Base.Requests;
+using Lacey.Medusa.Common.Api.Core.Base.Util;
 using Newtonsoft.Json;
 
 namespace Lacey.Medusa.Youtube.Api.Base

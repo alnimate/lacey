@@ -17,6 +17,7 @@
 
 using System.IO;
 using System.Linq;
+using Lacey.Medusa.Common.Api.Base.Services;
 using Lacey.Medusa.Youtube.Api.Base;
 
 namespace Google.Apis.YouTube.Samples.Search
@@ -25,9 +26,7 @@ namespace Google.Apis.YouTube.Samples.Search
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
-    using Services;
-
-  /// <summary>
+    /// <summary>
   /// YouTube Data API v3 sample: search by keyword.
   /// Relies on the Google APIs Client Library for .NET, v1.7.0 or higher.
   /// See https://code.google.com/p/google-api-dotnet-client/wiki/GettingStarted

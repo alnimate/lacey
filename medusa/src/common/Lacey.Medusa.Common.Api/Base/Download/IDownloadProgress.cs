@@ -16,7 +16,7 @@ limitations under the License.
 
 using System;
 
-namespace Google.Apis.Download
+namespace Lacey.Medusa.Common.Api.Base.Download
 {
     /// <summary>Enum which represents the status of the current download.</summary>
     public enum DownloadStatus

@@ -18,21 +18,20 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
+using System.Runtime.ExceptionServices;
 using System.Threading;
 using System.Threading.Tasks;
+using Lacey.Medusa.Common.Api.Base.Services;
+using Lacey.Medusa.Common.Api.Core.Base;
+using Lacey.Medusa.Common.Api.Core.Base.Discovery;
+using Lacey.Medusa.Common.Api.Core.Base.Http;
+using Lacey.Medusa.Common.Api.Core.Base.Logging;
+using Lacey.Medusa.Common.Api.Core.Base.Requests;
+using Lacey.Medusa.Common.Api.Core.Base.Requests.Parameters;
+using Lacey.Medusa.Common.Api.Core.Base.Testing;
+using Lacey.Medusa.Common.Api.Core.Base.Util;
 
-using Google.Apis.Discovery;
-using Google.Apis.Http;
-using Google.Apis.Logging;
-using Google.Apis.Services;
-using Google.Apis.Testing;
-using Google.Apis.Util;
-using Google.Apis.Requests.Parameters;
-using System.Runtime.ExceptionServices;
-
-namespace Google.Apis.Requests
+namespace Lacey.Medusa.Common.Api.Base.Requests
 {
     /// <summary>
     /// Represents an abstract, strongly typed request base class to make requests to a service.
@@ -268,7 +267,7 @@ namespace Google.Apis.Requests
         }
 
         /// <summary>
-        /// Creates the <see cref="Google.Apis.Requests.RequestBuilder"/> which is used to generate a request.
+        /// Creates the <see cref="RequestBuilder"/> which is used to generate a request.
         /// </summary>
         /// <returns>
         /// A new builder instance which contains the HTTP method and the right Uri with its path and query parameters.

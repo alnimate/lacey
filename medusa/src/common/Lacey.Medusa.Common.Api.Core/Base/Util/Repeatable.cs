@@ -18,7 +18,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace Google.Apis.Util
+namespace Lacey.Medusa.Common.Api.Core.Base.Util
 {
     /// <summary>
     /// Repeatable class which allows you to both pass a single element, as well as an array, as a parameter value.

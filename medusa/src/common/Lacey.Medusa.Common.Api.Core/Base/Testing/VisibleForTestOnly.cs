@@ -16,7 +16,7 @@ limitations under the License.
 
 using System;
 
-namespace Google.Apis.Testing
+namespace Lacey.Medusa.Common.Api.Core.Base.Testing
 {
     /// <summary>
     /// Marker Attribute to indicate a Method/Class/Property has been made more visible for purpose of testing.

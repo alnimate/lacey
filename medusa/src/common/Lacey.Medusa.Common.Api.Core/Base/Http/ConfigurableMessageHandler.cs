@@ -19,15 +19,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Lacey.Medusa.Common.Api.Core.Base.Logging;
+using Lacey.Medusa.Common.Api.Core.Base.Testing;
+using Lacey.Medusa.Common.Api.Core.Base.Util;
 
-using Google.Apis.Logging;
-using Google.Apis.Testing;
-using System.Net.Http.Headers;
-
-namespace Google.Apis.Http
+namespace Lacey.Medusa.Common.Api.Core.Base.Http
 {
     /// <summary>
     /// A message handler which contains the main logic of our HTTP requests. It contains a list of 
@@ -66,7 +66,7 @@ namespace Google.Apis.Http
         public const string ResponseStreamInterceptorProviderKey = "__ResponseStreamInterceptorProviderKey";
 
         /// <summary>The current API version of this client library.</summary>
-        private static readonly string ApiVersion = Google.Apis.Util.Utilities.GetLibraryVersion();
+        private static readonly string ApiVersion = Utilities.GetLibraryVersion();
 
         /// <summary>The User-Agent suffix header which contains the <see cref="ApiVersion"/>.</summary>
         private static readonly string UserAgentSuffix = "google-api-dotnet-client/" + ApiVersion + " (gzip)";

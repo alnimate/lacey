@@ -16,7 +16,7 @@ limitations under the License.
 
 using System;
 
-namespace Google.Apis.Logging
+namespace Lacey.Medusa.Common.Api.Core.Base.Logging
 {
     /// <summary>
     /// Represents a NullLogger which does not do any logging.

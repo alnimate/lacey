@@ -16,11 +16,11 @@ limitations under the License.
 
 using System.Net.Http;
 
-namespace Google.Apis.Http
+namespace Lacey.Medusa.Common.Api.Core.Base.Http
 {
     /// <summary>
-    /// Configurable HTTP client inherits from <see cref="System.Net.Http.HttpClient"/> and contains a reference to 
-    /// <see cref="Google.Apis.Http.ConfigurableMessageHandler"/>.
+    /// Configurable HTTP client inherits from <see cref="HttpClient"/> and contains a reference to 
+    /// <see cref="ConfigurableMessageHandler"/>.
     /// </summary>
     public class ConfigurableHttpClient : HttpClient
     {

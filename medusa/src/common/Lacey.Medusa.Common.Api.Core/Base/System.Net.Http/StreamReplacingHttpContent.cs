@@ -20,7 +20,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace Google.Apis.Http
+namespace Lacey.Medusa.Common.Api.Core.Base.System.Net.Http
 {
     /// <summary>
     /// An HttpContent based on an existing one, but allowing the stream to be replaced.

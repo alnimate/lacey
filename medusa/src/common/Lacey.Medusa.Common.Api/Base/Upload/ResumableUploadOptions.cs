@@ -12,11 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Google.Apis.Http;
 using System;
 using System.Net.Http;
+using Lacey.Medusa.Common.Api.Core.Base;
+using Lacey.Medusa.Common.Api.Core.Base.Http;
 
-namespace Google.Apis.Upload
+namespace Lacey.Medusa.Common.Api.Base.Upload
 {
     /// <summary>
     /// Options for <see cref="ResumableUpload"/> operations.
@@ -52,7 +53,7 @@ namespace Google.Apis.Upload
         public string ServiceName { get; set; }
 
         /// <summary>
-        /// Gets the <see cref="HttpClient"/> as a <see cref="Google.Apis.Http.ConfigurableHttpClient"/> if it is an instance of one.
+        /// Gets the <see cref="HttpClient"/> as a <see cref="Core.Base.Http.ConfigurableHttpClient"/> if it is an instance of one.
         /// </summary>
         internal ConfigurableHttpClient ConfigurableHttpClient => HttpClient as ConfigurableHttpClient;
     }

@@ -14,9 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using Google.Apis.Util;
+using Lacey.Medusa.Common.Api.Core.Base.Util;
 
-namespace Google.Apis.Discovery
+namespace Lacey.Medusa.Common.Api.Core.Base.Discovery
 {
     /// <summary>
     /// Specifies a list of features which can be defined within the discovery document of a service.

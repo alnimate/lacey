@@ -17,10 +17,9 @@ limitations under the License.
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Lacey.Medusa.Common.Api.Core.Base.Util;
 
-using Google.Apis.Util;
-
-namespace Google.Apis.Requests.Parameters
+namespace Lacey.Medusa.Common.Api.Core.Base.Requests.Parameters
 {
     /// <summary>A collection of parameters (key value pairs). May contain duplicate keys.</summary>
     public class ParameterCollection : List<KeyValuePair<string, string>>

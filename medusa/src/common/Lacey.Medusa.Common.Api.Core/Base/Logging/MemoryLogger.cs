@@ -14,12 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using Google.Apis.Util;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Lacey.Medusa.Common.Api.Core.Base.Util;
 
-namespace Google.Apis.Logging
+namespace Lacey.Medusa.Common.Api.Core.Base.Logging
 {
     /// <summary>
     /// A logger than logs to an in-memory buffer.

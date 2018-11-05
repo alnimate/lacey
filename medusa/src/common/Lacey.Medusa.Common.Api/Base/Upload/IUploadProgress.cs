@@ -15,11 +15,8 @@ limitations under the License.
 */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace Google.Apis.Upload
+namespace Lacey.Medusa.Common.Api.Base.Upload
 {
     /// <summary>
     /// Enum to communicate the status of an upload for progress reporting.

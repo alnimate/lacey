@@ -19,7 +19,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Google.Apis.Download
+namespace Lacey.Medusa.Common.Api.Base.Download
 {
     /// <summary>Media download which uses download file part by part, by <see cref="ChunkSize"/>.</summary>
     public interface IMediaDownloader

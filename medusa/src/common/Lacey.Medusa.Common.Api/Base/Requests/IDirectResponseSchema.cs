@@ -14,9 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using Newtonsoft.Json;
-
-namespace Google.Apis.Requests
+namespace Lacey.Medusa.Common.Api.Base.Requests
 {
     /// <summary>
     /// Interface containing additional response-properties which will be added to every schema type which is 

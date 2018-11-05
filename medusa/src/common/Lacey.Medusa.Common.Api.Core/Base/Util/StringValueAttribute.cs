@@ -16,7 +16,7 @@ limitations under the License.
 
 using System;
 
-namespace Google.Apis.Util
+namespace Lacey.Medusa.Common.Api.Core.Base.Util
 {
     /// <summary>Defines an attribute containing a string representation of the member.</summary>
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = false)]

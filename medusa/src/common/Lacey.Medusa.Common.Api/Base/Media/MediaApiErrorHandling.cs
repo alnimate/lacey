@@ -16,15 +16,14 @@ limitations under the License.
 
 using System.Net.Http;
 using System.Threading.Tasks;
-
+using Lacey.Medusa.Common.Api.Base.Services;
+using Lacey.Medusa.Common.Api.Core.Base;
+using Lacey.Medusa.Common.Api.Core.Base.Json;
+using Lacey.Medusa.Common.Api.Core.Base.Requests;
+using Lacey.Medusa.Common.Api.Core.Base.Util;
 using Newtonsoft.Json;
 
-using Google.Apis.Json;
-using Google.Apis.Requests;
-using Google.Apis.Services;
-using Google.Apis.Util;
-
-namespace Google.Apis.Media
+namespace Lacey.Medusa.Common.Api.Base.Media
 {
     /// <summary>
     /// Common error handling code for the Media API.

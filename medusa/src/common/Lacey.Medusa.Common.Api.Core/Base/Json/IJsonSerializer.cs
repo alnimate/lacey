@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-namespace Google.Apis.Json
+namespace Lacey.Medusa.Common.Api.Core.Base.Json
 {
     /// <summary>Represents a JSON serializer.</summary>
     public interface IJsonSerializer : ISerializer

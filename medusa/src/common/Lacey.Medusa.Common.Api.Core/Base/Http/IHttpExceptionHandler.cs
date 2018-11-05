@@ -19,7 +19,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Google.Apis.Http
+namespace Lacey.Medusa.Common.Api.Core.Base.Http
 {
     /// <summary>Argument class to <see cref="IHttpExceptionHandler.HandleExceptionAsync"/>.</summary>
     public class HandleExceptionArgs

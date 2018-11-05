@@ -16,7 +16,7 @@ limitations under the License.
 
 using System;
 
-namespace Google.Apis.Util
+namespace Lacey.Medusa.Common.Api.Core.Base.Util
 {
     /// <summary>
     /// An attribute which is used to specially mark a property for reflective purposes, 

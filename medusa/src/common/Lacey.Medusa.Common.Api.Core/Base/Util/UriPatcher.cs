@@ -17,7 +17,7 @@ limitations under the License.
 using System;
 using System.Reflection;
 
-namespace Google.Apis.Util
+namespace Lacey.Medusa.Common.Api.Core.Base.Util
 {
     /// <summary>
     /// Workarounds for some unfortunate behaviors in the .NET Framework's
@@ -67,7 +67,7 @@ namespace Google.Apis.Util
         /// </summary>
         public static void PatchUriQuirks()
         {
-            var uriParser = typeof(System.Uri).GetTypeInfo().Assembly.GetType("System.UriParser");
+            var uriParser = typeof(global::System.Uri).GetTypeInfo().Assembly.GetType("System.UriParser");
             if (uriParser == null) { return; }
 
             // Is "%2f" unescaped for http: or https: URIs?

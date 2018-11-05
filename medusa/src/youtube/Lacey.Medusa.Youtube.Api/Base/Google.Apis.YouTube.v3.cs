@@ -5,8 +5,8 @@
 // Assembly location: C:\Users\Lacey\AppData\Local\Temp\Jylyxot\d3b8721247\lib\netstandard2.0\Google.Apis.YouTube.v3.dll
 
 using System.Collections.Generic;
-using Google.Apis.Discovery;
-using Google.Apis.Services;
+using Lacey.Medusa.Common.Api.Base.Services;
+using Lacey.Medusa.Common.Api.Core.Base.Discovery;
 
 namespace Lacey.Medusa.Youtube.Api.Base
 {

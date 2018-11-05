@@ -19,10 +19,9 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
+using Lacey.Medusa.Common.Api.Core.Base.Testing;
 
-using Google.Apis.Testing;
-
-namespace Google.Apis.Http
+namespace Lacey.Medusa.Common.Api.Core.Base.Http
 {
     /// <summary>
     /// Intercepts HTTP GET requests with a URLs longer than a specified maximum number of characters.

@@ -13,12 +13,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Google.Apis.Discovery
+namespace Lacey.Medusa.Common.Api.Core.Base.Discovery
 {
     /// <summary>Represents a method's parameter.</summary>
     public class Parameter : IParameter

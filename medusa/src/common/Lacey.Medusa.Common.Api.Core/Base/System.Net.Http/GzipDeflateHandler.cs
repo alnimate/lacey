@@ -23,7 +23,7 @@ using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Google.Apis.Http
+namespace Lacey.Medusa.Common.Api.Core.Base.System.Net.Http
 {
     /// <summary>
     /// An HttpMessageHandler that performs decompression for Deflate and Gzip content.

@@ -19,7 +19,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Google.Apis.Http
+namespace Lacey.Medusa.Common.Api.Core.Base.Http
 {
     /// <summary>
     /// An HttpMessageHandler that delegates to one of two inner handlers based on a condition

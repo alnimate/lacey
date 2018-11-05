@@ -19,8 +19,9 @@ using System.IO;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Lacey.Medusa.Common.Api.Core.Base.System.Net.Http;
 
-namespace Google.Apis.Http
+namespace Lacey.Medusa.Common.Api.Core.Base.Http
 {
     /// <summary>
     /// An HttpMessageHandler that (conditionally) intercepts response streams, allowing inline

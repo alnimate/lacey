@@ -14,10 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using Google.Apis.Requests;
+using Lacey.Medusa.Common.Api.Core.Base.Requests;
 using Newtonsoft.Json;
 
-namespace Google.Apis.Util
+namespace Lacey.Medusa.Common.Api.Core.Base.Util
 {
     /// <summary>
     /// Calls to Google Api return StandardResponses as Json with

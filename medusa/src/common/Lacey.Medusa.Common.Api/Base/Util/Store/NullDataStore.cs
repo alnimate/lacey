@@ -15,8 +15,9 @@ limitations under the License.
 */
 
 using System.Threading.Tasks;
+using Lacey.Medusa.Common.Api.Core.Base.Util.Store;
 
-namespace Google.Apis.Util.Store
+namespace Lacey.Medusa.Common.Api.Base.Util.Store
 {
     /// <summary>
     /// A null datastore. Nothing is stored, nothing is retrievable.

@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-﻿
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -24,13 +24,12 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Reflection;
+using Lacey.Medusa.Common.Api.Base.Services;
+using Lacey.Medusa.Common.Api.Core.Base.Http;
+using Lacey.Medusa.Common.Api.Core.Base.Requests;
+using Lacey.Medusa.Common.Api.Core.Base.Testing;
 
-using Google.Apis.Http;
-using Google.Apis.Services;
-using Google.Apis.Testing;
-
-namespace Google.Apis.Requests
+namespace Lacey.Medusa.Common.Api.Base.Requests
 {
     /// <summary>
     /// A batch request which represents individual requests to Google servers. You should add a single service 

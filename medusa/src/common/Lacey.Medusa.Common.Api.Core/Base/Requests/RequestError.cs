@@ -16,10 +16,9 @@ limitations under the License.
 
 using System.Collections.Generic;
 using System.Text;
+using Lacey.Medusa.Common.Api.Core.Base.Util;
 
-using Google.Apis.Util;
-
-namespace Google.Apis.Requests
+namespace Lacey.Medusa.Common.Api.Core.Base.Requests
 {
     /// <summary>
     /// Collection of server errors

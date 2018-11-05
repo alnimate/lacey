@@ -20,12 +20,11 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
+using Lacey.Medusa.Common.Api.Core.Base.Http;
+using Lacey.Medusa.Common.Api.Core.Base.Logging;
+using Lacey.Medusa.Common.Api.Core.Base.Util;
 
-using Google.Apis.Http;
-using Google.Apis.Logging;
-using Google.Apis.Util;
-
-namespace Google.Apis.Requests
+namespace Lacey.Medusa.Common.Api.Core.Base.Requests
 {
     /// <summary>Utility class for building a URI using <see cref="BuildUri"/> or a HTTP request using 
     /// <see cref="CreateRequest"/> from the query and path parameters of a REST call.</summary>
@@ -72,7 +71,7 @@ namespace Google.Apis.Requests
         private string method;
 
         /// <summary>The HTTP method used for this request (such as GET, PUT, POST, etc...).</summary>
-        /// <remarks>The default Value is <see cref="Google.Apis.Http.HttpConsts.Get"/>.</remarks>
+        /// <remarks>The default Value is <see cref="HttpConsts.Get"/>.</remarks>
         public string Method
         {
             get { return method; }

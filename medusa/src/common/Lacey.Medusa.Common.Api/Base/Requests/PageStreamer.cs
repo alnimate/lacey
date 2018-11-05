@@ -19,7 +19,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Google.Apis.Requests
+namespace Lacey.Medusa.Common.Api.Base.Requests
 {
     // TODO(jskeet): Make sure one of our samples uses this.
 

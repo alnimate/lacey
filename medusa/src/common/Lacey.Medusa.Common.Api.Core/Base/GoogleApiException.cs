@@ -16,11 +16,10 @@ limitations under the License.
 
 using System;
 using System.Net;
+using Lacey.Medusa.Common.Api.Core.Base.Requests;
+using Lacey.Medusa.Common.Api.Core.Base.Util;
 
-using Google.Apis.Requests;
-using Google.Apis.Util;
-
-namespace Google
+namespace Lacey.Medusa.Common.Api.Core.Base
 {
     /// <summary>Represents an exception thrown by an API Service.</summary>
     public class GoogleApiException : Exception

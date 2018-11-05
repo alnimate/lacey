@@ -14,11 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using Google.Apis.Logging;
 using System.Net;
 using System.Net.Http;
+using Lacey.Medusa.Common.Api.Core.Base.Logging;
+using Lacey.Medusa.Common.Api.Core.Base.System.Net.Http;
 
-namespace Google.Apis.Http
+namespace Lacey.Medusa.Common.Api.Core.Base.Http
 {
     /// <summary>The default implementation of the HTTP client factory.</summary>
     public class HttpClientFactory : IHttpClientFactory

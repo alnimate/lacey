@@ -16,28 +16,28 @@ limitations under the License.
 
 using System;
 
-namespace Google.Apis.Util
+namespace Lacey.Medusa.Common.Api.Core.Base.Util
 {
     /// <summary>Clock wrapper for getting the current time.</summary>
     public interface IClock
     {
         /// <summary>
-        /// Gets a <see cref="System.DateTime"/> object that is set to the current date and time on this computer, 
+        /// Gets a <see cref="DateTime"/> object that is set to the current date and time on this computer, 
         /// expressed as the local time.
         /// </summary>
         [Obsolete("System local time is almost always inappropriate to use. If you really need this, call UtcNow and then call ToLocalTime on the result")]
         DateTime Now { get; }
 
         /// <summary>
-        /// Gets a <see cref="System.DateTime"/> object that is set to the current date and time on this computer, 
+        /// Gets a <see cref="DateTime"/> object that is set to the current date and time on this computer, 
         /// expressed as UTC time.
         /// </summary>
         DateTime UtcNow { get; }
     }
 
     /// <summary>
-    /// A default clock implementation that wraps the <see cref="System.DateTime.UtcNow"/>
-    /// and <see cref="System.DateTime.Now"/> properties.
+    /// A default clock implementation that wraps the <see cref="DateTime.UtcNow"/>
+    /// and <see cref="DateTime.Now"/> properties.
     /// </summary>
     public class SystemClock : IClock
     {

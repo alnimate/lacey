@@ -15,14 +15,11 @@ limitations under the License.
 */
 
 using System;
-using System.Linq;
 using System.Text.RegularExpressions;
+using Lacey.Medusa.Common.Api.Core.Base.Discovery;
+using Lacey.Medusa.Common.Api.Core.Base.Testing;
 
-using Google.Apis.Discovery;
-using Google.Apis.Testing;
-using Google.Apis.Util;
-
-namespace Google.Apis.Requests.Parameters
+namespace Lacey.Medusa.Common.Api.Core.Base.Requests.Parameters
 {
     /// <summary>Logic for validating a parameter.</summary>
     public static class ParameterValidator

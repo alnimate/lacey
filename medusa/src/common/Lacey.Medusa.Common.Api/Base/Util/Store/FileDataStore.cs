@@ -16,12 +16,13 @@ limitations under the License.
 
 // TODO: This does not support UWP Storage.
 
-using Google.Apis.Json;
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using Lacey.Medusa.Common.Api.Core.Base.Json;
+using Lacey.Medusa.Common.Api.Core.Base.Util.Store;
 
-namespace Google.Apis.Util.Store
+namespace Lacey.Medusa.Common.Api.Base.Util.Store
 {
     /// <summary>
     /// File data store that implements <see cref="IDataStore"/>. This store creates a different file for each 

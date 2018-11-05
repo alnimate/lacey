@@ -17,11 +17,11 @@ limitations under the License.
 using System.Net;
 using System.Net.Http;
 
-namespace Google.Apis.Http
+namespace Lacey.Medusa.Common.Api.Core.Base.Http
 {
     /// <summary>
-    /// Extension methods to <see cref="System.Net.Http.HttpRequestMessage"/> and 
-    /// <see cref="System.Net.Http.HttpResponseMessage"/>.
+    /// Extension methods to <see cref="HttpRequestMessage"/> and 
+    /// <see cref="HttpResponseMessage"/>.
     /// </summary>
     public static class HttpExtenstions
     {

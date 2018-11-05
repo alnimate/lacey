@@ -18,10 +18,10 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Google.Apis.Http
+namespace Lacey.Medusa.Common.Api.Core.Base.Http
 {
     /// <summary>
-    /// HTTP request execute interceptor to intercept a <see cref="System.Net.Http.HttpRequestMessage"/> before it has
+    /// HTTP request execute interceptor to intercept a <see cref="HttpRequestMessage"/> before it has
     /// been sent. Sample usage is attaching "Authorization" header to a request.
     /// </summary>
     public interface IHttpExecuteInterceptor

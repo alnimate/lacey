@@ -14,15 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using Google.Apis.Testing;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using Lacey.Medusa.Common.Api.Core.Base.Testing;
 
-namespace Google.Apis.Util
+namespace Lacey.Medusa.Common.Api.Core.Base.Util
 {
     /// <summary>A utility class which contains helper methods and extension methods.</summary>
     public static class Utilities
@@ -35,7 +35,7 @@ namespace Google.Apis.Util
         }
 
         /// <summary>
-        /// A Google.Apis utility method for throwing an <see cref="System.ArgumentNullException"/> if the object is
+        /// A Google.Apis utility method for throwing an <see cref="ArgumentNullException"/> if the object is
         /// <c>null</c>.
         /// </summary>
         public static T ThrowIfNull<T>(this T obj, string paramName)
@@ -49,7 +49,7 @@ namespace Google.Apis.Util
         }
 
         /// <summary>
-        /// A Google.Apis utility method for throwing an <see cref="System.ArgumentNullException"/> if the string is
+        /// A Google.Apis utility method for throwing an <see cref="ArgumentNullException"/> if the string is
         /// <c>null</c> or empty.
         /// </summary>
         /// <returns>The original string.</returns>
@@ -149,7 +149,7 @@ namespace Google.Apis.Util
         }
 
         /// <summary>
-        /// Parses the input string and returns <see cref="System.DateTime"/> if the input is a valid 
+        /// Parses the input string and returns <see cref="DateTime"/> if the input is a valid 
         /// representation of a date. Otherwise it returns <c>null</c>.
         /// </summary>
         public static DateTime? GetDateTimeFromString(string raw)

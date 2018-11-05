@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-namespace Google.Apis.Logging
+namespace Lacey.Medusa.Common.Api.Core.Base.Logging
 {
     /// <summary>
     /// The supported logging levels.

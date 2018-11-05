@@ -17,17 +17,17 @@ limitations under the License.
 using System;
 using System.IO;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
+using Lacey.Medusa.Common.Api.Base.Media;
+using Lacey.Medusa.Common.Api.Base.Services;
+using Lacey.Medusa.Common.Api.Core.Base;
+using Lacey.Medusa.Common.Api.Core.Base.Http;
+using Lacey.Medusa.Common.Api.Core.Base.Logging;
+using Lacey.Medusa.Common.Api.Core.Base.Util;
 
-using Google.Apis.Logging;
-using Google.Apis.Media;
-using Google.Apis.Services;
-using Google.Apis.Util;
-using System.Net.Http.Headers;
-using Google.Apis.Http;
-
-namespace Google.Apis.Download
+namespace Lacey.Medusa.Common.Api.Base.Download
 {
     /// <summary>
     /// A media downloader implementation which handles media downloads.

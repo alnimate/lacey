@@ -20,11 +20,10 @@ using System.IO;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Lacey.Medusa.Common.Api.Base.Services;
+using Lacey.Medusa.Common.Api.Core.Base.Discovery;
 
-using Google.Apis.Discovery;
-using Google.Apis.Services;
-
-namespace Google.Apis.Requests
+namespace Lacey.Medusa.Common.Api.Base.Requests
 {
     /// <summary>A client service request which supports both sync and async execution to get the stream.</summary>
     public interface IClientServiceRequest

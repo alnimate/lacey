@@ -14,15 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using Google.Apis.Util;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using System;
 using System.IO;
-using System.Reflection;
 using System.Linq;
+using System.Reflection;
+using Lacey.Medusa.Common.Api.Core.Base.Util;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
-namespace Google.Apis.Json
+namespace Lacey.Medusa.Common.Api.Core.Base.Json
 {
     /// <summary>
     /// A JSON converter which honers RFC 3339 and the serialized date is accepted by Google services.

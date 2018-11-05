@@ -14,9 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using System;
-
-namespace Google.Apis.Discovery
+namespace Lacey.Medusa.Common.Api.Core.Base.Discovery
 {
     /// <summary>An enumeration of all supported discovery versions.</summary>
     public enum DiscoveryVersion

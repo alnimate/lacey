@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-namespace Google.Apis.Requests
+namespace Lacey.Medusa.Common.Api.Core.Base.Requests
 {
     /// <summary>
     /// A single server error
