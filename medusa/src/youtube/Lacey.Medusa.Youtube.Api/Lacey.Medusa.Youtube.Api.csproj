@@ -11,8 +11,4 @@
     <ProjectReference Include="..\..\common\Lacey.Medusa.Common.Api\Lacey.Medusa.Common.Api.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Services\Concrete\" />
-  </ItemGroup>
-
 </Project>

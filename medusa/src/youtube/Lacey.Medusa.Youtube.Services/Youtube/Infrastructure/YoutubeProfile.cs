@@ -16,6 +16,7 @@ namespace Lacey.Medusa.Youtube.Services.Youtube.Infrastructure
                     e => new Video(
                         e.Id,
                         e.VideoId,
+                        e.Name,
                         e.Description,
                         e.PublishedAt,
                         e.ChannelId))

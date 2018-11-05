@@ -40,6 +40,7 @@ BEGIN
 	CREATE TABLE [dbo].[Videos](
 		[Id] INT NOT NULL,	
 		[VideoId] NVARCHAR(20) NOT NULL,
+		[Title] NVARCHAR(30) NOT NULL,
 		[Description] NVARCHAR(100) NOT NULL,
 		[PublishedAt] DATETIME NOT NULL,
 		[ChannelId] INT NOT NULL,
