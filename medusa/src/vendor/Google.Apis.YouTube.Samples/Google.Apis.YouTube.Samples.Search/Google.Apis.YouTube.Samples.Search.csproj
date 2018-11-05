@@ -11,10 +11,4 @@
     <PackageReference Include="Google.Apis.YouTube.v3" Version="1.36.1.1226" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="google_api_key.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
 </Project>

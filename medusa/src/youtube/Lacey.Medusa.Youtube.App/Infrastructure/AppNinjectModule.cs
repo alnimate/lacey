@@ -21,7 +21,8 @@ namespace Lacey.Medusa.Youtube.App.Infrastructure
             // API
             this.Bind<IAuthProvider>().To<SimpleAuthProvider>()
                 .InTransientScope()
-                .WithConstructorArgument("apiKeyFile", "google_api_key.txt");
+                .WithConstructorArgument("apiKeyFile", 
+                    "c:\\lacey\\projects\\lacey\\medusa\\src\\secrets\\google_api_key.txt");
 
             // Services
             this.Bind<IVideosService>().To<VideosService>().InTransientScope();

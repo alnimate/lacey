@@ -29,11 +29,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Youtube.App", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Common.DI", "..\common\Lacey.Medusa.Common.DI\Lacey.Medusa.Common.DI.csproj", "{FE029BA8-9A7E-40C2-98D2-F51F9A6DE62C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Google.Apis.YouTube.Samples.Search", "..\vendor\Google.Apis.YouTube.Samples\Google.Apis.YouTube.Samples.Search\Google.Apis.YouTube.Samples.Search.csproj", "{A15B95CB-230B-4201-BD00-6009866A2066}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Common.Api.Core", "..\common\Lacey.Medusa.Common.Api.Core\Lacey.Medusa.Common.Api.Core.csproj", "{DE793B94-806E-4169-82EE-73AB5C5C177F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lacey.Medusa.Common.Api.Core", "..\common\Lacey.Medusa.Common.Api.Core\Lacey.Medusa.Common.Api.Core.csproj", "{DE793B94-806E-4169-82EE-73AB5C5C177F}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lacey.Medusa.Common.Api", "..\common\Lacey.Medusa.Common.Api\Lacey.Medusa.Common.Api.csproj", "{40D4C9C7-8579-417A-8AB6-AEB3F1651DC9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Common.Api", "..\common\Lacey.Medusa.Common.Api\Lacey.Medusa.Common.Api.csproj", "{40D4C9C7-8579-417A-8AB6-AEB3F1651DC9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Youtube.Api", "Lacey.Medusa.Youtube.Api\Lacey.Medusa.Youtube.Api.csproj", "{8FA3F017-AAE3-4DAD-889D-F1CD3BA0169C}"
 EndProject
@@ -95,10 +93,6 @@ Global
 		{FE029BA8-9A7E-40C2-98D2-F51F9A6DE62C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FE029BA8-9A7E-40C2-98D2-F51F9A6DE62C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FE029BA8-9A7E-40C2-98D2-F51F9A6DE62C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A15B95CB-230B-4201-BD00-6009866A2066}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A15B95CB-230B-4201-BD00-6009866A2066}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A15B95CB-230B-4201-BD00-6009866A2066}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A15B95CB-230B-4201-BD00-6009866A2066}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DE793B94-806E-4169-82EE-73AB5C5C177F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DE793B94-806E-4169-82EE-73AB5C5C177F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DE793B94-806E-4169-82EE-73AB5C5C177F}.Release|Any CPU.ActiveCfg = Release|Any CPU
