@@ -17,7 +17,7 @@
 
 using System.IO;
 using System.Linq;
-using Lacey.Medusa.Youtube.Api;
+using Lacey.Medusa.Youtube.Api.Base;
 
 namespace Google.Apis.YouTube.Samples.Search
 {
