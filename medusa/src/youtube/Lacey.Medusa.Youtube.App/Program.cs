@@ -5,7 +5,7 @@ using Lacey.Medusa.Common.Dal.Infrastructure;
 using Lacey.Medusa.Youtube.App.Configuration;
 using Lacey.Medusa.Youtube.App.Infrastructure;
 using Lacey.Medusa.Youtube.Dal.Infrastructure;
-using Lacey.Medusa.Youtube.Services.Api.Services.Videos;
+using Lacey.Medusa.Youtube.Services.Transfer.Services.Videos;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -42,8 +42,8 @@ namespace Lacey.Medusa.Youtube.App
             logger.LogDebug("Starting application");
 
 
-            var videosService = serviceProvider.GetService<IYoutubeVideosService>();
-            var videos = videosService.GetChannelVideos(appConfiguration.ChannelsForImport.First());
+            var videosService = serviceProvider.GetService<IVideoTransferService>();
+            var videos = videosService.GetChannelVideos(appConfiguration.SourceChannels.First()).Result;
         }
     }
 }

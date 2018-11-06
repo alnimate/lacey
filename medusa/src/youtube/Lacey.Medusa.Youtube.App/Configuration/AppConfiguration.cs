@@ -6,8 +6,8 @@
 
         public string ApiKeyFile { get; set; }
 
-        public string[] ChannelsForImport { get; set; }
+        public string[] SourceChannels { get; set; }
 
-        public string ChannelToImport { get; set; }
+        public string[] DestChannels { get; set; }
     }
 }

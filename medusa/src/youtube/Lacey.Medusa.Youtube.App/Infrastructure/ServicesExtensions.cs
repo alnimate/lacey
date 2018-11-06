@@ -2,10 +2,8 @@
 using Lacey.Medusa.Youtube.Dal.Infrastructure;
 using Lacey.Medusa.Youtube.Services.Api.Services.Auth;
 using Lacey.Medusa.Youtube.Services.Api.Services.Auth.Concrete;
-using Lacey.Medusa.Youtube.Services.Api.Services.Videos;
-using Lacey.Medusa.Youtube.Services.Api.Services.Videos.Concrete;
-using Lacey.Medusa.Youtube.Services.Database.Services.Videos;
-using Lacey.Medusa.Youtube.Services.Database.Services.Videos.Concrete;
+using Lacey.Medusa.Youtube.Services.Transfer.Services.Videos;
+using Lacey.Medusa.Youtube.Services.Transfer.Services.Videos.Concrete;
 
 namespace Lacey.Medusa.Youtube.App.Infrastructure
 {
@@ -32,8 +30,7 @@ namespace Lacey.Medusa.Youtube.App.Infrastructure
             services.AddTransient<IYoutubeAuthProvider, SimpleYoutubeAuthProvider>(
                 provider => new SimpleYoutubeAuthProvider(apiKeyFile));
 
-            services.AddTransient<IYoutubeVideosService, YoutubeVideosService>();
-            services.AddTransient<IVideosService, VideosService>();
+            services.AddTransient<IVideoTransferService, VideoTransferService>();
 
             return services;
         }
