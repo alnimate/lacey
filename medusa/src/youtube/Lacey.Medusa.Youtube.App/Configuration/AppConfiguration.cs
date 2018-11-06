@@ -2,8 +2,12 @@
 {
     public sealed class AppConfiguration
     {
-        public string UploadFolder { get; set; }
+        public string VideosFolder { get; set; }
 
         public string ApiKeyFile { get; set; }
+
+        public string[] ChannelsForImport { get; set; }
+
+        public string ChannelToImport { get; set; }
     }
 }

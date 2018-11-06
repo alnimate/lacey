@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Linq;
 using AutoMapper;
 using Lacey.Medusa.Common.Dal.Infrastructure;
 using Lacey.Medusa.Youtube.App.Configuration;
@@ -42,7 +43,7 @@ namespace Lacey.Medusa.Youtube.App
 
 
             var videosService = serviceProvider.GetService<IYoutubeVideosService>();
-            var videos = videosService.GetChannelVideos("UC7hHqT2-4xadNgoGOox5A4Q");
+            var videos = videosService.GetChannelVideos(appConfiguration.ChannelsForImport.First());
         }
     }
 }

@@ -4,6 +4,8 @@ using Lacey.Medusa.Youtube.Services.Api.Services.Auth;
 using Lacey.Medusa.Youtube.Services.Api.Services.Auth.Concrete;
 using Lacey.Medusa.Youtube.Services.Api.Services.Videos;
 using Lacey.Medusa.Youtube.Services.Api.Services.Videos.Concrete;
+using Lacey.Medusa.Youtube.Services.Database.Services.Videos;
+using Lacey.Medusa.Youtube.Services.Database.Services.Videos.Concrete;
 
 namespace Lacey.Medusa.Youtube.App.Infrastructure
 {
@@ -31,6 +33,7 @@ namespace Lacey.Medusa.Youtube.App.Infrastructure
                 provider => new SimpleYoutubeAuthProvider(apiKeyFile));
 
             services.AddTransient<IYoutubeVideosService, YoutubeVideosService>();
+            services.AddTransient<IVideosService, VideosService>();
 
             return services;
         }
