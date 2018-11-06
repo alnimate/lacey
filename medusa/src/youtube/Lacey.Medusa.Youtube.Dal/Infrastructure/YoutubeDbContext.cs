@@ -1,4 +1,4 @@
-﻿using Lacey.Medusa.Common.Dal.Infrastructure.Concrete;
+﻿using Lacey.Medusa.Common.Dal.Dal.Concrete;
 using Lacey.Medusa.Youtube.Dal.EntityConfigurations;
 using Lacey.Medusa.Youtube.Domain.Entities;
 using Microsoft.EntityFrameworkCore;

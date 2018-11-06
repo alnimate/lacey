@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Lacey.Medusa.Common.Dal.Infrastructure.Concrete
+namespace Lacey.Medusa.Common.Dal.Dal.Concrete
 {
     public class UnitOfWork : IUnitOfWork
     {

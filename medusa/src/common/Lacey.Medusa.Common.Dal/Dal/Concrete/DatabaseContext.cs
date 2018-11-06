@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Lacey.Medusa.Common.Dal.Utils;
 using Microsoft.EntityFrameworkCore;
 
-namespace Lacey.Medusa.Common.Dal.Infrastructure.Concrete
+namespace Lacey.Medusa.Common.Dal.Dal.Concrete
 {
     public abstract class DatabaseContext : DbContext, IDbContext
     {

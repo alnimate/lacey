@@ -1,4 +1,4 @@
-﻿namespace Lacey.Medusa.Common.Dal.Infrastructure.Concrete
+﻿namespace Lacey.Medusa.Common.Dal.Dal.Concrete
 {
     public sealed class UnitOfWorkFactory : IUnitOfWorkFactory
     {

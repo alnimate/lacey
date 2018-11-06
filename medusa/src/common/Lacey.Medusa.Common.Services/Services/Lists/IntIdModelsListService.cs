@@ -1,6 +1,7 @@
-﻿namespace Lacey.Medusa.Common.Services.Services.Lists
+﻿using Lacey.Medusa.Common.Dal.Dal;
+
+namespace Lacey.Medusa.Common.Services.Services.Lists
 {
-    using Dal.Infrastructure;
     using Domain.Entities;
     using Lacey.Medusa.Common.Domain.Interfaces;
 

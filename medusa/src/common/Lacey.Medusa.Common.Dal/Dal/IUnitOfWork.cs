@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Lacey.Medusa.Common.Dal.Infrastructure
+namespace Lacey.Medusa.Common.Dal.Dal
 {
     public interface IUnitOfWork : IDisposable
     {

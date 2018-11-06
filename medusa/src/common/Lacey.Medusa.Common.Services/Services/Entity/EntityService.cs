@@ -1,10 +1,10 @@
-﻿namespace Lacey.Medusa.Common.Services.Services.Entity
+﻿using Lacey.Medusa.Common.Dal.Dal;
+
+namespace Lacey.Medusa.Common.Services.Services.Entity
 {
     using System.Threading.Tasks;
 
     using AutoMapper;
-
-    using Dal.Infrastructure;
     using Domain.Entities;
     using Models.Business;
     using Common;

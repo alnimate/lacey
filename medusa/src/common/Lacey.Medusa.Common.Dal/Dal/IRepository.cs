@@ -4,7 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace Lacey.Medusa.Common.Dal.Infrastructure
+namespace Lacey.Medusa.Common.Dal.Dal
 {
     public interface IRepository<TEntity> where TEntity : class
     {

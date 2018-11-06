@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using AutoMapper;
-using Lacey.Medusa.Common.Dal.Infrastructure;
+using Lacey.Medusa.Common.Dal.Dal;
 using Lacey.Medusa.Common.Services.Services.Entity;
 using Lacey.Medusa.Youtube.Domain.Entities;
 using Lacey.Medusa.Youtube.Services.Database.Mappers;

@@ -1,8 +1,8 @@
-﻿namespace Lacey.Medusa.Common.Services.Services.Statistics
+﻿using Lacey.Medusa.Common.Dal.Dal;
+
+namespace Lacey.Medusa.Common.Services.Services.Statistics
 {
     using System.Threading.Tasks;
-
-    using Dal.Infrastructure;
     using Lacey.Medusa.Common.Services.Models.Statistics;
     using Common;
     using Interfaces;

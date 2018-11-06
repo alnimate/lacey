@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
-namespace Lacey.Medusa.Common.Dal.Infrastructure.Concrete
+namespace Lacey.Medusa.Common.Dal.Dal.Concrete
 {
     public sealed class Repository<TEntity> : IRepository<TEntity>
     where TEntity : class

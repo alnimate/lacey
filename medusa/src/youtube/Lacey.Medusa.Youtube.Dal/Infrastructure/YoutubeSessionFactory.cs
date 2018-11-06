@@ -1,4 +1,4 @@
-﻿using Lacey.Medusa.Common.Dal.Infrastructure;
+﻿using Lacey.Medusa.Common.Dal.Dal;
 
 namespace Lacey.Medusa.Youtube.Dal.Infrastructure
 {

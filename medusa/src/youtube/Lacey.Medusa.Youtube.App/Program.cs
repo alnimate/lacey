@@ -1,9 +1,13 @@
 ﻿using System.IO;
-using Lacey.Medusa.Common.DI.Infrastructure;
+using AutoMapper;
+using Lacey.Medusa.Common.Dal.Infrastructure;
 using Lacey.Medusa.Youtube.App.Configuration;
 using Lacey.Medusa.Youtube.App.Infrastructure;
+using Lacey.Medusa.Youtube.Dal.Infrastructure;
 using Lacey.Medusa.Youtube.Services.Api.Services.Videos;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace Lacey.Medusa.Youtube.App
 {
@@ -19,9 +23,25 @@ namespace Lacey.Medusa.Youtube.App
             var appConfiguration = configuration.GetSection("App").Get<AppConfiguration>();
             var connectionString = configuration.GetConnectionString("Default");
 
-            DependencyInjectionUtils.Initialize();
+            //setup our DI
+            var serviceProvider = new ServiceCollection()
+                .AddLogging()
+                .AddAutoMapper()
+                .AddEntityFramework<YoutubeSqlServerDbContext>(connectionString)
+                .AddAppServices(connectionString, appConfiguration.ApiKeyFile)
+                .BuildServiceProvider();
 
-            var videosService = ManualDependencyResolver.Get<IYoutubeVideosService>();
+            //configure console logging
+            serviceProvider
+                .GetService<ILoggerFactory>()
+                .AddConsole(LogLevel.Debug);
+
+            var logger = serviceProvider.GetService<ILoggerFactory>()
+                .CreateLogger<Program>();
+            logger.LogDebug("Starting application");
+
+
+            var videosService = serviceProvider.GetService<IYoutubeVideosService>();
             var videos = videosService.GetChannelVideos("UC7hHqT2-4xadNgoGOox5A4Q");
         }
     }

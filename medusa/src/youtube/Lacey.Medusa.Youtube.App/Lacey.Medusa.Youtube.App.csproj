@@ -7,13 +7,15 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="6.2.2" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="3.2.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.1.1" />
-    <PackageReference Include="Ninject" Version="3.3.4" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="2.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="2.1.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\common\Lacey.Medusa.Common.Dal\Lacey.Medusa.Common.Dal.csproj" />
-    <ProjectReference Include="..\..\common\Lacey.Medusa.Common.DI\Lacey.Medusa.Common.DI.csproj" />
     <ProjectReference Include="..\..\common\Lacey.Medusa.Common.Mapping\Lacey.Medusa.Common.Mapping.csproj" />
     <ProjectReference Include="..\Lacey.Medusa.Youtube.Dal\Lacey.Medusa.Youtube.Dal.csproj" />
     <ProjectReference Include="..\Lacey.Medusa.Youtube.Services\Lacey.Medusa.Youtube.Services.csproj" />

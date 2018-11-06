@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
-namespace Lacey.Medusa.Common.Dal.Infrastructure
+namespace Lacey.Medusa.Common.Dal.Dal
 {
     public interface IDbContext
     {
