@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Describes information necessary for ingesting an RTMP or an HTTP stream.</summary>
-  internal class IngestionInfo : IDirectResponseSchema
+  public class IngestionInfo : IDirectResponseSchema
   {
     /// <summary>The backup ingestion URL that you should use to stream video to YouTube. You have the option of
     /// simultaneously streaming the content that you are sending to the ingestionAddress to this URL.</summary>

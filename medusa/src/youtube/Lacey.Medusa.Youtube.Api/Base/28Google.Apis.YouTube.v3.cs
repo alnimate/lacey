@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Rights management policy for YouTube resources.</summary>
-  internal class AccessPolicy : IDirectResponseSchema
+  public class AccessPolicy : IDirectResponseSchema
   {
     /// <summary>The value of allowed indicates whether the access to the policy is allowed or denied by
     /// default.</summary>

@@ -11,7 +11,7 @@ using Lacey.Medusa.Common.Api.Core.Base.Util;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>The "superChatEvents" collection of methods.</summary>
-  internal class SuperChatEventsResource
+  public class SuperChatEventsResource
   {
     private const string Resource = "superChatEvents";
     /// <summary>The service which this resource belongs to.</summary>
@@ -32,7 +32,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
     }
 
     /// <summary>Lists Super Chat events for a channel.</summary>
-    internal class ListRequest : YouTubeBaseServiceRequest<SuperChatEventListResponse>
+    public class ListRequest : YouTubeBaseServiceRequest<SuperChatEventListResponse>
     {
       /// <summary>Constructs a new List request.</summary>
       public ListRequest(IClientService service, string part)

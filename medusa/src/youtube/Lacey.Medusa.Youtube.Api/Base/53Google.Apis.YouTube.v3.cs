@@ -13,7 +13,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>The contentOwnerDetails object encapsulates channel data that is relevant for YouTube Partners linked
   /// with the channel.</summary>
-  internal class ChannelContentOwnerDetails : IDirectResponseSchema
+  public class ChannelContentOwnerDetails : IDirectResponseSchema
   {
     /// <summary>The ID of the content owner linked to the channel.</summary>
     [JsonProperty("contentOwner")]

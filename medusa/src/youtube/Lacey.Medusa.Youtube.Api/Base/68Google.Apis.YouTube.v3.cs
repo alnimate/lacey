@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Freebase topic information related to the channel.</summary>
-  internal class ChannelTopicDetails : IDirectResponseSchema
+  public class ChannelTopicDetails : IDirectResponseSchema
   {
     /// <summary>A list of Wikipedia URLs that describe the channel's content.</summary>
     [JsonProperty("topicCategories")]

@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Details about the content to witch a subscription refers.</summary>
-  internal class SubscriptionContentDetails : IDirectResponseSchema
+  public class SubscriptionContentDetails : IDirectResponseSchema
   {
     /// <summary>The type of activity this subscription is for (only uploads, everything).</summary>
     [JsonProperty("activityType")]

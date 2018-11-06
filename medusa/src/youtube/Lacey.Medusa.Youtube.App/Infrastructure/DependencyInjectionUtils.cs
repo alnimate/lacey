@@ -2,7 +2,7 @@
 using AutoMapper;
 using Lacey.Medusa.Common.DI.Infrastructure;
 using Lacey.Medusa.Common.DI.Modules;
-using Lacey.Medusa.Youtube.Services.Youtube.Infrastructure;
+using Lacey.Medusa.Youtube.Services.Database.Infrastructure;
 using Ninject;
 
 namespace Lacey.Medusa.Youtube.App.Infrastructure

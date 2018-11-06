@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 
 namespace Lacey.Medusa.Youtube.Api.Base
 {
-  internal class LiveChatModeratorSnippet : IDirectResponseSchema
+  public class LiveChatModeratorSnippet : IDirectResponseSchema
   {
     /// <summary>The ID of the live chat this moderator can act on.</summary>
     [JsonProperty("liveChatId")]

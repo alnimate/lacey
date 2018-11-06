@@ -11,7 +11,7 @@ using Lacey.Medusa.Common.Api.Core.Base.Util;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>The "channelSections" collection of methods.</summary>
-  internal class ChannelSectionsResource
+  public class ChannelSectionsResource
   {
     private const string Resource = "channelSections";
     /// <summary>The service which this resource belongs to.</summary>
@@ -68,7 +68,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
     }
 
     /// <summary>Deletes a channelSection.</summary>
-    internal class DeleteRequest : YouTubeBaseServiceRequest<string>
+    public class DeleteRequest : YouTubeBaseServiceRequest<string>
     {
       /// <summary>Constructs a new Delete request.</summary>
       public DeleteRequest(IClientService service, string id)
@@ -146,7 +146,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
     }
 
     /// <summary>Adds a channelSection for the authenticated user's channel.</summary>
-    internal class InsertRequest : YouTubeBaseServiceRequest<ChannelSection>
+    public class InsertRequest : YouTubeBaseServiceRequest<ChannelSection>
     {
       /// <summary>Constructs a new Insert request.</summary>
       public InsertRequest(IClientService service, ChannelSection body, string part)
@@ -261,7 +261,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
     }
 
     /// <summary>Returns channelSection resources that match the API request criteria.</summary>
-    internal class ListRequest : YouTubeBaseServiceRequest<ChannelSectionListResponse>
+    public class ListRequest : YouTubeBaseServiceRequest<ChannelSectionListResponse>
     {
       /// <summary>Constructs a new List request.</summary>
       public ListRequest(IClientService service, string part)
@@ -401,7 +401,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
     }
 
     /// <summary>Update a channelSection.</summary>
-    internal class UpdateRequest : YouTubeBaseServiceRequest<ChannelSection>
+    public class UpdateRequest : YouTubeBaseServiceRequest<ChannelSection>
     {
       /// <summary>Constructs a new Update request.</summary>
       public UpdateRequest(IClientService service, ChannelSection body, string part)

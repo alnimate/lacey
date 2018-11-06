@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Ratings schemes. The country-specific ratings are mostly for movies and shows. NEXT_ID: 71</summary>
-  internal class ContentRating : IDirectResponseSchema
+  public class ContentRating : IDirectResponseSchema
   {
     /// <summary>The video's Australian Classification Board (ACB) or Australian Communications and Media Authority
     /// (ACMA) rating. ACMA ratings are used to classify children's television programming.</summary>

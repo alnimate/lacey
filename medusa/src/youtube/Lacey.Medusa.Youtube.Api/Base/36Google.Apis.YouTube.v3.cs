@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Information about a new playlist item.</summary>
-  internal class ActivityContentDetailsPlaylistItem : IDirectResponseSchema
+  public class ActivityContentDetailsPlaylistItem : IDirectResponseSchema
   {
     /// <summary>The value that YouTube uses to uniquely identify the playlist.</summary>
     [JsonProperty("playlistId")]

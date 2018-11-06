@@ -11,7 +11,7 @@ using Lacey.Medusa.Common.Api.Core.Base.Util;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>The "videoAbuseReportReasons" collection of methods.</summary>
-  internal class VideoAbuseReportReasonsResource
+  public class VideoAbuseReportReasonsResource
   {
     private const string Resource = "videoAbuseReportReasons";
     /// <summary>The service which this resource belongs to.</summary>
@@ -32,7 +32,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
     }
 
     /// <summary>Returns a list of abuse reasons that can be used for reporting abusive videos.</summary>
-    internal class ListRequest : YouTubeBaseServiceRequest<VideoAbuseReportReasonListResponse>
+    public class ListRequest : YouTubeBaseServiceRequest<VideoAbuseReportReasonListResponse>
     {
       /// <summary>Constructs a new List request.</summary>
       public ListRequest(IClientService service, string part)

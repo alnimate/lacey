@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 
 namespace Lacey.Medusa.Youtube.Api.Base
 {
-  internal class LiveStreamConfigurationIssue : IDirectResponseSchema
+  public class LiveStreamConfigurationIssue : IDirectResponseSchema
   {
     /// <summary>The long-form description of the issue and how to resolve it.</summary>
     [JsonProperty("description")]

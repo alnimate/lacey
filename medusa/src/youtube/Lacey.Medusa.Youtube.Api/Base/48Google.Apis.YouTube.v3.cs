@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>A channel resource contains information about a YouTube channel.</summary>
-  internal class Channel : IDirectResponseSchema
+  public class Channel : IDirectResponseSchema
   {
     /// <summary>The auditionDetails object encapsulates channel data that is relevant for YouTube Partners during
     /// the audition process.</summary>

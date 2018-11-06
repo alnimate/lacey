@@ -11,7 +11,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>A caption resource represents a YouTube caption track. A caption track is associated with exactly one
   /// YouTube video.</summary>
-  internal class Caption : IDirectResponseSchema
+  public class Caption : IDirectResponseSchema
   {
     /// <summary>Etag of this resource.</summary>
     [JsonProperty("etag")]

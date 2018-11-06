@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Information about the uploaded video.</summary>
-  internal class ActivityContentDetailsUpload : IDirectResponseSchema
+  public class ActivityContentDetailsUpload : IDirectResponseSchema
   {
     /// <summary>The ID that YouTube uses to uniquely identify the uploaded video.</summary>
     [JsonProperty("videoId")]

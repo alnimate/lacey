@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 
 namespace Lacey.Medusa.Youtube.Api.Base
 {
-  internal class LiveBroadcastStatus : IDirectResponseSchema
+  public class LiveBroadcastStatus : IDirectResponseSchema
   {
     /// <summary>The broadcast's status. The status can be updated using the API's liveBroadcasts.transition
     /// method.</summary>

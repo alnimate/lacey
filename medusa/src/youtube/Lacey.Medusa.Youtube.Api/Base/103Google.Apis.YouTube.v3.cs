@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 
 namespace Lacey.Medusa.Youtube.Api.Base
 {
-  internal class LiveStreamHealthStatus : IDirectResponseSchema
+  public class LiveStreamHealthStatus : IDirectResponseSchema
   {
     /// <summary>The configurations issues on this stream</summary>
     [JsonProperty("configurationIssues")]

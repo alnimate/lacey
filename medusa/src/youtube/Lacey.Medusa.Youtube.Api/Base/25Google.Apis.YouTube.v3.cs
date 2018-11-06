@@ -11,7 +11,7 @@ using Lacey.Medusa.Common.Api.Core.Base.Util;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>The "liveChatModerators" collection of methods.</summary>
-  internal class LiveChatModeratorsResource
+  public class LiveChatModeratorsResource
   {
     private const string Resource = "liveChatModerators";
     /// <summary>The service which this resource belongs to.</summary>
@@ -52,7 +52,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
     }
 
     /// <summary>Removes a chat moderator.</summary>
-    internal class DeleteRequest : YouTubeBaseServiceRequest<string>
+    public class DeleteRequest : YouTubeBaseServiceRequest<string>
     {
       /// <summary>Constructs a new Delete request.</summary>
       public DeleteRequest(IClientService service, string id)
@@ -110,7 +110,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
     }
 
     /// <summary>Adds a new moderator for the chat.</summary>
-    internal class InsertRequest : YouTubeBaseServiceRequest<LiveChatModerator>
+    public class InsertRequest : YouTubeBaseServiceRequest<LiveChatModerator>
     {
       /// <summary>Constructs a new Insert request.</summary>
       public InsertRequest(IClientService service, LiveChatModerator body, string part)
@@ -179,7 +179,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
     }
 
     /// <summary>Lists moderators for a live chat.</summary>
-    internal class ListRequest : YouTubeBaseServiceRequest<LiveChatModeratorListResponse>
+    public class ListRequest : YouTubeBaseServiceRequest<LiveChatModeratorListResponse>
     {
       /// <summary>Constructs a new List request.</summary>
       public ListRequest(IClientService service, string liveChatId, string part)

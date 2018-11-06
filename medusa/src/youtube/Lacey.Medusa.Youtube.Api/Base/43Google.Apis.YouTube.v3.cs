@@ -13,7 +13,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Basic details about an activity, including title, description, thumbnails, activity type and
   /// group.</summary>
-  internal class ActivitySnippet : IDirectResponseSchema
+  public class ActivitySnippet : IDirectResponseSchema
   {
     /// <summary>The ID that YouTube uses to uniquely identify the channel associated with the activity.</summary>
     [JsonProperty("channelId")]

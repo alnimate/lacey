@@ -23,7 +23,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
   /// from those lists by calling the   playlistItems.insert and   playlistItems.delete methods. For example, if a
   /// user gives a positive rating to a video, you would insert that video into the liked videos playlist for that
   /// user's channel.</summary>
-  internal class PlaylistItem : IDirectResponseSchema
+  public class PlaylistItem : IDirectResponseSchema
   {
     /// <summary>The contentDetails object is included in the resource if the included item is a YouTube video. The
     /// object contains additional information about the video.</summary>

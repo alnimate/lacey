@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Playlist localization setting</summary>
-  internal class PlaylistLocalization : IDirectResponseSchema
+  public class PlaylistLocalization : IDirectResponseSchema
   {
     /// <summary>The localized strings for playlist's description.</summary>
     [JsonProperty("description")]

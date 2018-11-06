@@ -11,7 +11,7 @@ using Lacey.Medusa.Common.Api.Core.Base.Util;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>The "sponsors" collection of methods.</summary>
-  internal class SponsorsResource
+  public class SponsorsResource
   {
     private const string Resource = "sponsors";
     /// <summary>The service which this resource belongs to.</summary>
@@ -32,7 +32,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
     }
 
     /// <summary>Lists sponsors for a channel.</summary>
-    internal class ListRequest : YouTubeBaseServiceRequest<SponsorListResponse>
+    public class ListRequest : YouTubeBaseServiceRequest<SponsorListResponse>
     {
       /// <summary>Constructs a new List request.</summary>
       public ListRequest(IClientService service, string part)

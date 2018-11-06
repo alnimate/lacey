@@ -1,8 +1,8 @@
 ﻿using System.IO;
 using Lacey.Medusa.Common.DI.Infrastructure;
-using Lacey.Medusa.Youtube.Api.Services.Videos;
 using Lacey.Medusa.Youtube.App.Configuration;
 using Lacey.Medusa.Youtube.App.Infrastructure;
+using Lacey.Medusa.Youtube.Services.Api.Services.Videos;
 using Microsoft.Extensions.Configuration;
 
 namespace Lacey.Medusa.Youtube.App
@@ -21,7 +21,7 @@ namespace Lacey.Medusa.Youtube.App
 
             DependencyInjectionUtils.Initialize();
 
-            var videosService = ManualDependencyResolver.Get<IVideosService>();
+            var videosService = ManualDependencyResolver.Get<IYoutubeVideosService>();
             var videos = videosService.GetChannelVideos("UC7hHqT2-4xadNgoGOox5A4Q");
         }
     }

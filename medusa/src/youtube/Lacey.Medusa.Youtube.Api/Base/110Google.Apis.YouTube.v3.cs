@@ -11,7 +11,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Paging details for lists of resources, including total number of items available and number of
   /// resources returned in a single page.</summary>
-  internal class PageInfo : IDirectResponseSchema
+  public class PageInfo : IDirectResponseSchema
   {
     /// <summary>The number of results included in the API response.</summary>
     [JsonProperty("resultsPerPage")]

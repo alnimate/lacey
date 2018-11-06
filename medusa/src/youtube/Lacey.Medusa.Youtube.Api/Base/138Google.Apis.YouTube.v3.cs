@@ -9,7 +9,7 @@ using Lacey.Medusa.Common.Api.Base.Requests;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Stub token pagination template to suppress results.</summary>
-  internal class TokenPagination : IDirectResponseSchema
+  public class TokenPagination : IDirectResponseSchema
   {
     /// <summary>The ETag of the item.</summary>
     public virtual string ETag { get; set; }

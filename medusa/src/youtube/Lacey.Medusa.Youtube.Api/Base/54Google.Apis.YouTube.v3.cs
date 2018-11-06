@@ -11,7 +11,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Pings that the app shall fire (authenticated by biscotti cookie). Each ping has a context, in which the
   /// app must fire the ping, and a url identifying the ping.</summary>
-  internal class ChannelConversionPing : IDirectResponseSchema
+  public class ChannelConversionPing : IDirectResponseSchema
   {
     /// <summary>Defines the context of the ping.</summary>
     [JsonProperty("context")]

@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Brief description of the live stream status.</summary>
-  internal class LiveStreamStatus : IDirectResponseSchema
+  public class LiveStreamStatus : IDirectResponseSchema
   {
     /// <summary>The health status of the stream.</summary>
     [JsonProperty("healthStatus")]

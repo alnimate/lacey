@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Localized versions of certain video properties (e.g. title).</summary>
-  internal class VideoLocalization : IDirectResponseSchema
+  public class VideoLocalization : IDirectResponseSchema
   {
     /// <summary>Localized version of the video's description.</summary>
     [JsonProperty("description")]

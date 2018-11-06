@@ -13,7 +13,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Basic details about a subscription, including title, description and thumbnails of the subscribed
   /// item.</summary>
-  internal class SubscriptionSnippet : IDirectResponseSchema
+  public class SubscriptionSnippet : IDirectResponseSchema
   {
     /// <summary>The ID that YouTube uses to uniquely identify the subscriber's channel.</summary>
     [JsonProperty("channelId")]

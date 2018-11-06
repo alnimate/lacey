@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Details about a channel bulletin post.</summary>
-  internal class ActivityContentDetailsBulletin : IDirectResponseSchema
+  public class ActivityContentDetailsBulletin : IDirectResponseSchema
   {
     /// <summary>The resourceId object contains information that identifies the resource associated with a bulletin
     /// post.</summary>

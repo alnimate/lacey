@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Describes processing status and progress and availability of some other Video resource parts.</summary>
-  internal class VideoProcessingDetails : IDirectResponseSchema
+  public class VideoProcessingDetails : IDirectResponseSchema
   {
     /// <summary>This value indicates whether video editing suggestions, which might improve video quality or the
     /// playback experience, are available for the video. You can retrieve these suggestions by requesting the

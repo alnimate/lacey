@@ -11,7 +11,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>A comment thread represents information that applies to a top level comment and all its replies. It can
   /// also include the top level comment itself and some of the replies.</summary>
-  internal class CommentThread : IDirectResponseSchema
+  public class CommentThread : IDirectResponseSchema
   {
     /// <summary>Etag of this resource.</summary>
     [JsonProperty("etag")]

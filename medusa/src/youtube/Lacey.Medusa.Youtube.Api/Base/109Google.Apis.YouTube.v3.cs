@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Settings and Info of the monitor stream</summary>
-  internal class MonitorStreamInfo : IDirectResponseSchema
+  public class MonitorStreamInfo : IDirectResponseSchema
   {
     /// <summary>If you have set the enableMonitorStream property to true, then this property determines the length
     /// of the live broadcast delay.</summary>

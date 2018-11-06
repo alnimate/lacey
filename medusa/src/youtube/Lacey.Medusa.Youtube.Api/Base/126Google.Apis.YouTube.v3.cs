@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>A resource id is a generic reference that points to another YouTube resource.</summary>
-  internal class ResourceId : IDirectResponseSchema
+  public class ResourceId : IDirectResponseSchema
   {
     /// <summary>The ID that YouTube uses to uniquely identify the referred resource, if that resource is a channel.
     /// This property is only present if the resourceId.kind value is youtube#channel.</summary>

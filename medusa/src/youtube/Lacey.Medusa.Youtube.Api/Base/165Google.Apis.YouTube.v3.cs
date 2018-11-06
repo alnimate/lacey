@@ -13,7 +13,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Basic details about a video, including title, description, uploader, thumbnails and category.</summary>
-  internal class VideoSnippet : IDirectResponseSchema
+  public class VideoSnippet : IDirectResponseSchema
   {
     /// <summary>The YouTube video category associated with the video.</summary>
     [JsonProperty("categoryId")]

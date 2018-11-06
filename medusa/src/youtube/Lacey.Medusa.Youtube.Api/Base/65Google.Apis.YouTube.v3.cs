@@ -12,7 +12,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Basic details about a channel, including title, description and thumbnails.</summary>
-  internal class ChannelSnippet : IDirectResponseSchema
+  public class ChannelSnippet : IDirectResponseSchema
   {
     /// <summary>The country of the channel.</summary>
     [JsonProperty("country")]

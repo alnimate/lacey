@@ -14,7 +14,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
   /// favorite, commenting on a video, uploading a video, and so forth. Each activity resource identifies the type of
   /// action, the channel associated with the action, and the resource(s) associated with the action, such as the
   /// video that was rated or uploaded.</summary>
-  internal class Activity : IDirectResponseSchema
+  public class Activity : IDirectResponseSchema
   {
     /// <summary>The contentDetails object contains information about the content associated with the activity. For
     /// example, if the snippet.type value is videoRated, then the contentDetails object's content identifies the

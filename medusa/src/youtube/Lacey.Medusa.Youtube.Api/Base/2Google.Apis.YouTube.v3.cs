@@ -12,7 +12,7 @@ using Lacey.Medusa.Common.Api.Core.Base.Util;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>The "activities" collection of methods.</summary>
-  internal class ActivitiesResource
+  public class ActivitiesResource
   {
     private const string Resource = "activities";
     /// <summary>The service which this resource belongs to.</summary>
@@ -61,7 +61,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
     /// marking a video as a favorite, you need to use other API methods to generate those activity resources. For
     /// example, you would use the API's videos.rate() method to rate a video and the playlistItems.insert() method
     /// to mark a video as a favorite.</summary>
-    internal class InsertRequest : YouTubeBaseServiceRequest<Activity>
+    public class InsertRequest : YouTubeBaseServiceRequest<Activity>
     {
       /// <summary>Constructs a new Insert request.</summary>
       public InsertRequest(IClientService service, Activity body, string part)
@@ -131,7 +131,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
     /// <summary>Returns a list of channel activity events that match the request criteria. For example, you can
     /// retrieve events associated with a particular channel, events associated with the user's subscriptions and
     /// Google+ friends, or the YouTube home page feed, which is customized for each user.</summary>
-    internal class ListRequest : YouTubeBaseServiceRequest<ActivityListResponse>
+    public class ListRequest : YouTubeBaseServiceRequest<ActivityListResponse>
     {
       /// <summary>Constructs a new List request.</summary>
       public ListRequest(IClientService service, string part)

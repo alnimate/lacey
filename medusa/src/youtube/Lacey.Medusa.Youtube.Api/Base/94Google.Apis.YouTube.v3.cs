@@ -11,7 +11,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>A liveBroadcast resource represents an event that will be streamed, via live video, on
   /// YouTube.</summary>
-  internal class LiveBroadcast : IDirectResponseSchema
+  public class LiveBroadcast : IDirectResponseSchema
   {
     /// <summary>The contentDetails object contains information about the event's video content, such as whether the
     /// content can be shown in an embedded video player or if it will be archived and therefore available for

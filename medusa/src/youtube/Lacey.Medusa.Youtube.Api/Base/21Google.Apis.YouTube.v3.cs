@@ -13,7 +13,7 @@ using Lacey.Medusa.Common.Api.Core.Base.Util;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>The "videos" collection of methods.</summary>
-  internal class VideosResource
+  public class VideosResource
   {
     private const string Resource = "videos";
     /// <summary>The service which this resource belongs to.</summary>
@@ -123,7 +123,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
     }
 
     /// <summary>Deletes a YouTube video.</summary>
-    internal class DeleteRequest : YouTubeBaseServiceRequest<string>
+    public class DeleteRequest : YouTubeBaseServiceRequest<string>
     {
       /// <summary>Constructs a new Delete request.</summary>
       public DeleteRequest(IClientService service, string id)
@@ -200,7 +200,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
     }
 
     /// <summary>Retrieves the ratings that the authorized user gave to a list of specified videos.</summary>
-    internal class GetRatingRequest : YouTubeBaseServiceRequest<VideoGetRatingResponse>
+    public class GetRatingRequest : YouTubeBaseServiceRequest<VideoGetRatingResponse>
     {
       /// <summary>Constructs a new GetRating request.</summary>
       public GetRatingRequest(IClientService service, string id)
@@ -278,7 +278,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
     }
 
     /// <summary>Uploads a video to YouTube and optionally sets the video's metadata.</summary>
-    internal class InsertRequest : YouTubeBaseServiceRequest<Video>
+    public class InsertRequest : YouTubeBaseServiceRequest<Video>
     {
       /// <summary>Constructs a new Insert request.</summary>
       public InsertRequest(IClientService service, Video body, string part)
@@ -440,7 +440,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
     }
 
     /// <summary>Insert media upload which supports resumable upload.</summary>
-    internal class InsertMediaUpload : ResumableUpload<Video, Video>
+    public class InsertMediaUpload : ResumableUpload<Video, Video>
     {
       /// <summary>Data format for the response.</summary>
       /// 
@@ -552,7 +552,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
     }
 
     /// <summary>Returns a list of videos that match the API request parameters.</summary>
-    internal class ListRequest : YouTubeBaseServiceRequest<VideoListResponse>
+    public class ListRequest : YouTubeBaseServiceRequest<VideoListResponse>
     {
       /// <summary>Constructs a new List request.</summary>
       public ListRequest(IClientService service, string part)
@@ -820,7 +820,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
     }
 
     /// <summary>Add a like or dislike rating to a video or remove a rating from a video.</summary>
-    internal class RateRequest : YouTubeBaseServiceRequest<string>
+    public class RateRequest : YouTubeBaseServiceRequest<string>
     {
       /// <summary>Constructs a new Rate request.</summary>
       public RateRequest(IClientService service, string id, VideosResource.RateRequest.RatingEnum rating)
@@ -902,7 +902,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
     }
 
     /// <summary>Report abuse for a video.</summary>
-    internal class ReportAbuseRequest : YouTubeBaseServiceRequest<string>
+    public class ReportAbuseRequest : YouTubeBaseServiceRequest<string>
     {
       /// <summary>Constructs a new ReportAbuse request.</summary>
       public ReportAbuseRequest(IClientService service, VideoAbuseReport body)
@@ -975,7 +975,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
     }
 
     /// <summary>Updates a video's metadata.</summary>
-    internal class UpdateRequest : YouTubeBaseServiceRequest<Video>
+    public class UpdateRequest : YouTubeBaseServiceRequest<Video>
     {
       /// <summary>Constructs a new Update request.</summary>
       public UpdateRequest(IClientService service, Video body, string part)

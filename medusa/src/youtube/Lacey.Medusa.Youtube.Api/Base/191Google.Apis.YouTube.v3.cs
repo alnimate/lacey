@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 
 namespace Lacey.Medusa.Youtube.Api.Base
 {
-  internal class LiveChatTextMessageDetails : IDirectResponseSchema
+  public class LiveChatTextMessageDetails : IDirectResponseSchema
   {
     /// <summary>The user's message.</summary>
     [JsonProperty("messageText")]

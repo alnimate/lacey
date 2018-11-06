@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>A i18nRegion resource identifies a region where YouTube is available.</summary>
-  internal class I18nRegion : IDirectResponseSchema
+  public class I18nRegion : IDirectResponseSchema
   {
     /// <summary>Etag of this resource.</summary>
     [JsonProperty("etag")]

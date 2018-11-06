@@ -12,7 +12,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Basic details about a comment, such as its author and text.</summary>
-  internal class CommentSnippet : IDirectResponseSchema
+  public class CommentSnippet : IDirectResponseSchema
   {
     /// <summary>The id of the author's YouTube channel, if any.</summary>
     [JsonProperty("authorChannelId")]

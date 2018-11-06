@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 
 namespace Lacey.Medusa.Youtube.Api.Base
 {
-  internal class LocalizedProperty : IDirectResponseSchema
+  public class LocalizedProperty : IDirectResponseSchema
   {
     [JsonProperty("default")]
     public virtual string Default__ { get; set; }
