@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using EFCore.BulkExtensions;
@@ -11,7 +12,8 @@ namespace Lacey.Medusa.Common.Dal.Dal.Concrete
     {
         protected DatabaseContext(string connectionString)
             : base(new DbContextOptionsBuilder()
-                    .UseSqlServer(connectionString).Options)
+                    .UseSqlServer(connectionString,
+                        p => p.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null)).Options)
         {
         }
 
