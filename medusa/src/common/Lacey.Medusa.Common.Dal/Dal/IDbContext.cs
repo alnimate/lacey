@@ -19,8 +19,8 @@ namespace Lacey.Medusa.Common.Dal.Dal
 
         void ExecuteCommand(string command, params object[] parameters);
 
-        void BulkAdd<T>(IEnumerable<T> entities);
-
         Task<int> CommitAsync();
+
+        Task BulkAddAsync<T>(IEnumerable<T> entities) where T : class;
     }
 }

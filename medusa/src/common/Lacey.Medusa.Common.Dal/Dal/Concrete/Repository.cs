@@ -105,13 +105,8 @@ namespace Lacey.Medusa.Common.Dal.Dal.Concrete
         public void Clear()
         {
             var tableName = this.context.GetTableName<TEntity>();
-            var sqlCommand = $"TRUNCATE TABLE [{tableName}]";
+            var sqlCommand = $"DELETE FROM [{tableName}]; DBCC CHECKIDENT ([{tableName}], RESEED, 1);";
             this.context.ExecuteCommand(sqlCommand);
-        }
-
-        public void BulkAdd(IEnumerable<TEntity> entities)
-        {
-            this.context.BulkAdd(entities);
         }
 
         public async Task AddAsync(TEntity entity)
@@ -127,6 +122,11 @@ namespace Lacey.Medusa.Common.Dal.Dal.Concrete
         public async Task<TEntity> GetByIdAsync<TId>(TId id)
         {
             return await this.dbset.FindAsync(id);
+        }
+
+        public async Task BulkAddAsync<T>(IEnumerable<T> entities) where T : class
+        {
+            await this.context.BulkAddAsync(entities);
         }
     }
 }

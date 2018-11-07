@@ -10,14 +10,12 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Models.Store
             string videoId,
             string title,
             string description,
-            DateTime publishedAt,
-            int channelId)
+            DateTime publishedAt)
         {
             VideoId = videoId;
             Title = title;
             Description = description;
             PublishedAt = publishedAt;
-            ChannelId = channelId;
         }
 
         [Required]
@@ -33,6 +31,6 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Models.Store
         public DateTime PublishedAt { get; }
 
         [IntId]
-        public int ChannelId { get; }
+        public int ChannelId { get; set; }
     }
 }

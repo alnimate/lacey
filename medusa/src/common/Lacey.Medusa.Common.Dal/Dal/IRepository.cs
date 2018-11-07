@@ -36,12 +36,12 @@ namespace Lacey.Medusa.Common.Dal.Dal
 
         void Clear();
 
-        void BulkAdd(IEnumerable<TEntity> entities);
-
         Task AddAsync(TEntity entity);
 
         Task AddRangeAsync(IEnumerable<TEntity> entities);
 
         Task<TEntity> GetByIdAsync<TId>(TId id);
+
+        Task BulkAddAsync<T>(IEnumerable<T> entities) where T : class;
     }
 }

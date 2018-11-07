@@ -15,7 +15,7 @@ IF NOT EXISTS
      WHERE [name] = 'Medusa')
 BEGIN
 	CREATE LOGIN [Medusa] 
-		WITH PASSWORD=N'DbPassword!1234', 
+		WITH PASSWORD=N'DbPassword!234', 
 		DEFAULT_DATABASE=[MedusaYoutube], 
 		DEFAULT_LANGUAGE=[us_english], 
 		CHECK_EXPIRATION=OFF, 

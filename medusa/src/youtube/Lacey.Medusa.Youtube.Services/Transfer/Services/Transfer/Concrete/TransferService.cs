@@ -43,6 +43,10 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Transfer.Concrete
         {
             var downloadChannel = await this.downloadService.DownloadChannel(sourceChannelId);
             this.DoDownloadChannel(downloadChannel);
+
+            var storeChannel = this.mapper.Map<StoreChannel>(downloadChannel);
+            await this.storeService.StoreChannel(storeChannel);
+            this.DoStoreChannel(storeChannel);
         }
 
         private void DoDownloadChannel(DownloadChannel channel)
