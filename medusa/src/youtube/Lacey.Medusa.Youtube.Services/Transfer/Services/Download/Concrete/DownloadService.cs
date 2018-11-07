@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Lacey.Medusa.Youtube.Api.Base;
 using Lacey.Medusa.Youtube.Api.Services.Auth;
@@ -15,20 +16,30 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Download.Concrete
 
         public async Task<DownloadChannel> DownloadChannel(string channelId)
         {
-            var searchListRequest = this.Youtube.Search.List("snippet");
-            searchListRequest.Order = SearchResource.ListRequest.OrderEnum.Date;
-            searchListRequest.MaxResults = 50;
-            searchListRequest.ChannelId = channelId;
-            var searchListResult = await searchListRequest.ExecuteAsync();
+            var request = this.Youtube.Search.List("snippet");
+            request.Order = SearchResource.ListRequest.OrderEnum.Date;
+            request.MaxResults = 50;
+            request.ChannelId = channelId;
+
+            var videosList = new List<DownloadVideo>();
+            var nextPageToken = string.Empty;
+            while (nextPageToken != null)
+            {
+                request.PageToken = nextPageToken;
+                var response = await request.ExecuteAsync();
+
+                var videos = response.Items.Select(v => new DownloadVideo(v.Id.VideoId,
+                    v.Snippet.Title,
+                    v.Snippet.Description,
+                    v.Snippet.PublishedAt));
+                videosList.AddRange(videos);
+
+                nextPageToken = response.NextPageToken;
+            }
 
             var channel = new DownloadChannelInfo(channelId, null, null);
-            var videos = searchListResult.Items.Select(v => new DownloadVideo(v.Id.VideoId, 
-                v.Snippet.Title,
-                v.Snippet.Description,
-                v.Snippet.PublishedAt))
-                .ToArray();
 
-            return new DownloadChannel(channel, videos);
+            return new DownloadChannel(channel, videosList);
         }
     }
 }
