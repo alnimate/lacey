@@ -10,13 +10,15 @@ namespace Lacey.Medusa.Youtube.Services.Management.Models.Channels.Entity
         public Channel(
             int id,
             string channelId, 
-            string name, 
+            string name,
+            string description,
             DateTime createdAt, 
             IEnumerable<ChannelVideo> videos)
             : base(id)
         {
             ChannelId = channelId;
             Name = name;
+            Description = description;
             CreatedAt = createdAt;
             Videos = videos;
         }
@@ -28,6 +30,8 @@ namespace Lacey.Medusa.Youtube.Services.Management.Models.Channels.Entity
         [Required]
         [MaxLength(30)]
         public string Name { get; }
+
+        public string Description { get; }
 
         public DateTime CreatedAt { get; }
 

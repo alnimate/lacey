@@ -1,12 +1,12 @@
 ﻿using Lacey.Medusa.Common.Api.Base.Services;
 using Lacey.Medusa.Youtube.Api.Base;
-using Lacey.Medusa.Youtube.Services.Api.Services.Auth;
+using Lacey.Medusa.Youtube.Api.Services.Auth;
 
-namespace Lacey.Medusa.Youtube.Services.Api.Services.Common
+namespace Lacey.Medusa.Youtube.Api.Services.Common
 {
     public abstract class YoutubeService
     {
-        internal YouTubeService Youtube { get; }
+        public YouTubeService Youtube { get; }
 
         protected YoutubeService(IYoutubeAuthProvider youtubeAuthProvider)
         {

@@ -5,7 +5,10 @@ using Lacey.Medusa.Common.Dal.Infrastructure;
 using Lacey.Medusa.Youtube.App.Configuration;
 using Lacey.Medusa.Youtube.App.Infrastructure;
 using Lacey.Medusa.Youtube.Dal.Infrastructure;
-using Lacey.Medusa.Youtube.Services.Transfer.Services.Videos;
+using Lacey.Medusa.Youtube.Services.Transfer.Models.Download;
+using Lacey.Medusa.Youtube.Services.Transfer.Models.Store;
+using Lacey.Medusa.Youtube.Services.Transfer.Models.Upload;
+using Lacey.Medusa.Youtube.Services.Transfer.Services.Transfer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -14,7 +17,9 @@ namespace Lacey.Medusa.Youtube.App
 {
     class Program
     {
-        static void Main(string[] args)
+        private static ILogger<Program> logger;
+
+        static void Main()
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
@@ -37,13 +42,30 @@ namespace Lacey.Medusa.Youtube.App
                 .GetService<ILoggerFactory>()
                 .AddConsole(LogLevel.Debug);
 
-            var logger = serviceProvider.GetService<ILoggerFactory>()
+            logger = serviceProvider.GetService<ILoggerFactory>()
                 .CreateLogger<Program>();
-            logger.LogDebug("Starting application");
 
+            var transferService = serviceProvider.GetService<ITransferService>();
+            transferService.OnDownloadChannel += OnDownloadChannel;
+            transferService.OnStoreChannel += OnStoreChannel;
+            transferService.OnUploadChannel += OnUploadChannel;
 
-            var videosService = serviceProvider.GetService<IVideoTransferService>();
-            var videos = videosService.GetChannelVideos(appConfiguration.SourceChannels.First()).Result;
+            transferService.TransferChannel(
+                appConfiguration.SourceChannels.First(),
+                appConfiguration.DestChannels.First()).Wait();
+        }
+
+        private static void OnDownloadChannel(DownloadChannel channel)
+        {
+            logger.LogTrace($"Channel {channel.Channel.ChannelId} loaded.");
+        }
+
+        private static void OnStoreChannel(StoreChannel channel)
+        {
+        }
+
+        private static void OnUploadChannel(UploadChannel channel)
+        {
         }
     }
 }

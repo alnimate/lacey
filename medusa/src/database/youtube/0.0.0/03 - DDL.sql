@@ -14,6 +14,7 @@ BEGIN
 		[Id] INT IDENTITY(1,1) NOT NULL,		
 		[ChannelId] NVARCHAR(30) NOT NULL,
 		[Title] NVARCHAR(30) NOT NULL,
+		[Description] NVARCHAR(MAX) NULL,
 		[CreatedAt] DATETIME NOT NULL
 CONSTRAINT [PK_Channels] PRIMARY KEY CLUSTERED 
 (
@@ -39,9 +40,9 @@ IF OBJECT_ID (N'Videos', N'U') IS NULL
 BEGIN
 	CREATE TABLE [dbo].[Videos](
 		[Id] INT NOT NULL,	
-		[VideoId] NVARCHAR(20) NOT NULL,
+		[VideoId] NVARCHAR(30) NOT NULL,
 		[Title] NVARCHAR(30) NOT NULL,
-		[Description] NVARCHAR(100) NOT NULL,
+		[Description] NVARCHAR(MAX) NULL,
 		[PublishedAt] DATETIME NOT NULL,
 		[ChannelId] INT NOT NULL,
 		[CreatedAt] DATETIME NOT NULL

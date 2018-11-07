@@ -1,4 +1,4 @@
-﻿namespace Lacey.Medusa.Youtube.Services.Api.Services.Auth
+﻿namespace Lacey.Medusa.Youtube.Api.Services.Auth
 {
     public interface IYoutubeAuthProvider
     {

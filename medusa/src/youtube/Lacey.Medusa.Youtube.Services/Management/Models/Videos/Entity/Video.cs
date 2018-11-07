@@ -31,8 +31,6 @@ namespace Lacey.Medusa.Youtube.Services.Management.Models.Videos.Entity
         [MaxLength(30)]
         public string Name { get; }
 
-        [Required]
-        [MaxLength(100)]
         public string Description { get; }
 
         public DateTime PublishedAt { get; }

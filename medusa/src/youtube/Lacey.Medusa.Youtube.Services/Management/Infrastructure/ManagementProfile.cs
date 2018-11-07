@@ -6,9 +6,9 @@ using Lacey.Medusa.Youtube.Services.Management.Models.Videos.Entity;
 
 namespace Lacey.Medusa.Youtube.Services.Management.Infrastructure
 {
-    public class YoutubeProfile : Profile
+    public class ManagementProfile : Profile
     {
-        public YoutubeProfile()
+        public ManagementProfile()
         {
             // Entities
             this.CreateMap<VideoEntity, Video>()
@@ -29,6 +29,7 @@ namespace Lacey.Medusa.Youtube.Services.Management.Infrastructure
                             Id = m.Id,
                             ChannelId = m.ChannelId,
                             Name = m.Name,
+                            Description = m.Description,
                             Videos = Mapper.Map<ICollection<VideoEntity>>(m.Videos)
                         });
         }

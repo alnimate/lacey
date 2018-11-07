@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Linq;
 
-namespace Lacey.Medusa.Youtube.Services.Api.Services.Auth.Concrete
+namespace Lacey.Medusa.Youtube.Api.Services.Auth.Concrete
 {
     public sealed class SimpleYoutubeAuthProvider : IYoutubeAuthProvider
     {

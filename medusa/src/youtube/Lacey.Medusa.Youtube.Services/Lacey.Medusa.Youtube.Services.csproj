@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="6.2.2" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.1.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -19,10 +20,6 @@
     <ProjectReference Include="..\..\common\Lacey.Medusa.Common.Services\Lacey.Medusa.Common.Services.csproj" />
     <ProjectReference Include="..\Lacey.Medusa.Youtube.Api\Lacey.Medusa.Youtube.Api.csproj" />
     <ProjectReference Include="..\Lacey.Medusa.Youtube.Domain\Lacey.Medusa.Youtube.Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Transfer\Infrastructure\" />
   </ItemGroup>
 
 </Project>

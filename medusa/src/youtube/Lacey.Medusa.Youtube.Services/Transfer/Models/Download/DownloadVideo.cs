@@ -1,22 +1,20 @@
 ﻿using System;
 
-namespace Lacey.Medusa.Youtube.Services.Transfer.Models.Videos
+namespace Lacey.Medusa.Youtube.Services.Transfer.Models.Download
 {
-    public sealed class SourceVideo
+    public sealed class DownloadVideo
     {
-        public SourceVideo(
+        public DownloadVideo(
             string videoId,
             string title,
             string description,
-            DateTime? publishedAt,
-            string channelId)
+            DateTime? publishedAt)
         {
             
             VideoId = videoId;
             Title = title;
             Description = description;
             PublishedAt = publishedAt;
-            ChannelId = channelId;
         }
 
         public string VideoId { get; }
@@ -26,7 +24,5 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Models.Videos
         public string Description { get; }
 
         public DateTime? PublishedAt { get; }
-
-        public string ChannelId { get; }
     }
 }

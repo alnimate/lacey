@@ -2,11 +2,11 @@
 using System.ComponentModel.DataAnnotations;
 using Lacey.Medusa.Common.DataAnnotations.Attributes.Data;
 
-namespace Lacey.Medusa.Youtube.Services.Transfer.Models.Videos
+namespace Lacey.Medusa.Youtube.Services.Transfer.Models.Store
 {
-    public sealed class DestVideo
+    public sealed class StoreVideo
     {
-        public DestVideo(
+        public StoreVideo(
             string videoId,
             string title,
             string description,
@@ -21,15 +21,13 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Models.Videos
         }
 
         [Required]
-        [MaxLength(20)]
+        [MaxLength(30)]
         public string VideoId { get; }
 
         [Required]
         [MaxLength(30)]
         public string Title { get; }
 
-        [Required]
-        [MaxLength(100)]
         public string Description { get; }
 
         public DateTime PublishedAt { get; }
