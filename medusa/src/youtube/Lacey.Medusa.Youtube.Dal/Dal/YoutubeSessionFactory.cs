@@ -1,6 +1,6 @@
 ﻿using Lacey.Medusa.Common.Dal.Dal;
 
-namespace Lacey.Medusa.Youtube.Dal.Infrastructure
+namespace Lacey.Medusa.Youtube.Dal.Dal
 {
     public class YoutubeSessionFactory : ISessionFactory
     {

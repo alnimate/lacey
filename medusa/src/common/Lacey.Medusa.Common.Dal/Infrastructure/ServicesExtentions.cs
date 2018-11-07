@@ -14,14 +14,14 @@ namespace Lacey.Medusa.Common.Dal.Infrastructure
         /// <param name="services"></param>
         /// <param name="connectionString"></param>
         /// <returns></returns>
-        public static IServiceCollection AddEntityFramework<TDbContext>(
+        public static IServiceCollection AddCommonDalServices<TDbContext>(
             this IServiceCollection services,
             string connectionString) where TDbContext : DbContext
         {
             services
                 .AddEntityFrameworkSqlServer()
                 .AddDbContext<TDbContext>(options => 
-                    options.UseSqlServer(connectionString, opt => opt.UseRowNumberForPaging()));
+                    options.UseSqlServer(connectionString));
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IUnitOfWorkFactory, UnitOfWorkFactory>();

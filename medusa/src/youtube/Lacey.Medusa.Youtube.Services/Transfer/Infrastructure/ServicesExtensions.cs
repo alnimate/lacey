@@ -17,7 +17,7 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Infrastructure
         /// </summary>
         /// <param name="services"></param>
         /// <returns></returns>
-        public static IServiceCollection AddTransferServices(
+        public static IServiceCollection AddYoutubeTransferServices(
             this IServiceCollection services)
         {
             services.AddTransient<IDownloadService, DownloadService>();

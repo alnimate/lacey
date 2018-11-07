@@ -1,19 +1,17 @@
 ﻿using System.IO;
 using System.Linq;
 using AutoMapper;
-using Lacey.Medusa.Common.Dal.Infrastructure;
-using Lacey.Medusa.Youtube.App.Configuration;
-using Lacey.Medusa.Youtube.App.Infrastructure;
-using Lacey.Medusa.Youtube.Dal.Infrastructure;
 using Lacey.Medusa.Youtube.Services.Transfer.Models.Download;
 using Lacey.Medusa.Youtube.Services.Transfer.Models.Store;
 using Lacey.Medusa.Youtube.Services.Transfer.Models.Upload;
 using Lacey.Medusa.Youtube.Services.Transfer.Services.Transfer;
+using Lacey.Medusa.Youtube.Transfer.Configuration;
+using Lacey.Medusa.Youtube.Transfer.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace Lacey.Medusa.Youtube.App
+namespace Lacey.Medusa.Youtube.Transfer
 {
     class Program
     {
@@ -33,7 +31,6 @@ namespace Lacey.Medusa.Youtube.App
             var serviceProvider = new ServiceCollection()
                 .AddLogging()
                 .AddAutoMapper()
-                .AddEntityFramework<YoutubeSqlServerDbContext>(connectionString)
                 .AddAppServices(connectionString, appConfiguration.ApiKeyFile)
                 .BuildServiceProvider();
 

@@ -12,7 +12,7 @@ namespace Lacey.Medusa.Youtube.Services.Common.Infrastructure
         /// <param name="services"></param>
         /// <param name="apiKeyFile"></param>
         /// <returns></returns>
-        public static IServiceCollection AddCommonServices(
+        public static IServiceCollection AddYoutubeCommonServices(
             this IServiceCollection services,
             string apiKeyFile)
         {

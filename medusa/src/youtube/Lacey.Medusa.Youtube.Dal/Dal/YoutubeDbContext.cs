@@ -3,7 +3,7 @@ using Lacey.Medusa.Youtube.Dal.EntityConfigurations;
 using Lacey.Medusa.Youtube.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace Lacey.Medusa.Youtube.Dal.Infrastructure
+namespace Lacey.Medusa.Youtube.Dal.Dal
 {
     public class YoutubeDbContext : DatabaseContext
     {

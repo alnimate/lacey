@@ -11,12 +11,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Common.Service
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Common.DataAnnotations", "..\common\Lacey.Medusa.Common.DataAnnotations\Lacey.Medusa.Common.DataAnnotations.csproj", "{FD4F24EA-D0AD-4EC9-A64D-B072554BA364}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Common.Web", "..\common\Lacey.Medusa.Common.Web\Lacey.Medusa.Common.Web.csproj", "{024F0E56-ED42-4599-9D2B-D2E86E5AFEC3}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Common.Mapping", "..\common\Lacey.Medusa.Common.Mapping\Lacey.Medusa.Common.Mapping.csproj", "{58A2EC3F-CA69-44E4-9E53-27AE92A460A7}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Common.Resources", "..\common\Lacey.Medusa.Common.Resources\Lacey.Medusa.Common.Resources.csproj", "{0F0858F2-F2E3-4ABD-8579-6707B2CFA6EC}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Youtube.Domain", "Lacey.Medusa.Youtube.Domain\Lacey.Medusa.Youtube.Domain.csproj", "{B56918E5-1D74-4E24-B9AD-42D1011668AE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Youtube.Dal", "Lacey.Medusa.Youtube.Dal\Lacey.Medusa.Youtube.Dal.csproj", "{D361CDD3-5B48-4244-A414-B88213A152D1}"
@@ -25,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Youtube.Servic
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Common.Files", "..\common\Lacey.Medusa.Common.Files\Lacey.Medusa.Common.Files.csproj", "{82692963-3C40-4BCD-8B68-9A02CC25E407}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Youtube.App", "Lacey.Medusa.Youtube.App\Lacey.Medusa.Youtube.App.csproj", "{4A68CDDB-5587-4F44-99E6-D82D03DBE58B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Youtube.Transfer", "Lacey.Medusa.Youtube.App\Lacey.Medusa.Youtube.Transfer.csproj", "{4A68CDDB-5587-4F44-99E6-D82D03DBE58B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Common.Api.Core", "..\common\Lacey.Medusa.Common.Api.Core\Lacey.Medusa.Common.Api.Core.csproj", "{DE793B94-806E-4169-82EE-73AB5C5C177F}"
 EndProject
@@ -55,18 +49,6 @@ Global
 		{FD4F24EA-D0AD-4EC9-A64D-B072554BA364}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD4F24EA-D0AD-4EC9-A64D-B072554BA364}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FD4F24EA-D0AD-4EC9-A64D-B072554BA364}.Release|Any CPU.Build.0 = Release|Any CPU
-		{024F0E56-ED42-4599-9D2B-D2E86E5AFEC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{024F0E56-ED42-4599-9D2B-D2E86E5AFEC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{024F0E56-ED42-4599-9D2B-D2E86E5AFEC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{024F0E56-ED42-4599-9D2B-D2E86E5AFEC3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{58A2EC3F-CA69-44E4-9E53-27AE92A460A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{58A2EC3F-CA69-44E4-9E53-27AE92A460A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{58A2EC3F-CA69-44E4-9E53-27AE92A460A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{58A2EC3F-CA69-44E4-9E53-27AE92A460A7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0F0858F2-F2E3-4ABD-8579-6707B2CFA6EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0F0858F2-F2E3-4ABD-8579-6707B2CFA6EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0F0858F2-F2E3-4ABD-8579-6707B2CFA6EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0F0858F2-F2E3-4ABD-8579-6707B2CFA6EC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B56918E5-1D74-4E24-B9AD-42D1011668AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B56918E5-1D74-4E24-B9AD-42D1011668AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B56918E5-1D74-4E24-B9AD-42D1011668AE}.Release|Any CPU.ActiveCfg = Release|Any CPU

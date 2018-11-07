@@ -15,8 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\common\Lacey.Medusa.Common.Dal\Lacey.Medusa.Common.Dal.csproj" />
-    <ProjectReference Include="..\..\common\Lacey.Medusa.Common.Mapping\Lacey.Medusa.Common.Mapping.csproj" />
     <ProjectReference Include="..\Lacey.Medusa.Youtube.Dal\Lacey.Medusa.Youtube.Dal.csproj" />
     <ProjectReference Include="..\Lacey.Medusa.Youtube.Services\Lacey.Medusa.Youtube.Services.csproj" />
   </ItemGroup>

@@ -16,17 +16,22 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Download.Concrete
 
         public async Task<DownloadChannel> DownloadChannel(string channelId)
         {
-            var request = this.Youtube.Search.List("snippet");
-            request.Order = SearchResource.ListRequest.OrderEnum.Date;
-            request.MaxResults = 50;
-            request.ChannelId = channelId;
+            var channelRequest = this.Youtube.Channels.List("snippet");
+            channelRequest.Id = channelId;
+            var channelResponse = await channelRequest.ExecuteAsync();
+            var channel = channelResponse.Items.First();
+
+            var videosRequest = this.Youtube.Search.List("snippet");
+            videosRequest.Order = SearchResource.ListRequest.OrderEnum.Date;
+            videosRequest.MaxResults = 50;
+            videosRequest.ChannelId = channelId;
 
             var videosList = new List<DownloadVideo>();
             var nextPageToken = string.Empty;
             while (nextPageToken != null)
             {
-                request.PageToken = nextPageToken;
-                var response = await request.ExecuteAsync();
+                videosRequest.PageToken = nextPageToken;
+                var response = await videosRequest.ExecuteAsync();
 
                 var videos = response.Items.Select(v => new DownloadVideo(v.Id.VideoId,
                     v.Snippet.Title,
@@ -37,9 +42,11 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Download.Concrete
                 nextPageToken = response.NextPageToken;
             }
 
-            var channel = new DownloadChannelInfo(channelId, null, null);
+            var channelInfo = new DownloadChannelInfo(channel.Id, 
+                channel.Snippet.Title,
+                channel.Snippet.Description);
 
-            return new DownloadChannel(channel, videosList);
+            return new DownloadChannel(channelInfo, videosList);
         }
     }
 }

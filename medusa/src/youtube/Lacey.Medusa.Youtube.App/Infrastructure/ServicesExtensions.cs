@@ -1,12 +1,10 @@
-﻿using Lacey.Medusa.Common.Dal.Dal;
-using Lacey.Medusa.Youtube.Dal.Infrastructure;
+﻿using Lacey.Medusa.Youtube.Dal.Infrastructure;
 using Lacey.Medusa.Youtube.Services.Common.Infrastructure;
 using Lacey.Medusa.Youtube.Services.Transfer.Infrastructure;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace Lacey.Medusa.Youtube.App.Infrastructure
+namespace Lacey.Medusa.Youtube.Transfer.Infrastructure
 {
-    using Microsoft.Extensions.DependencyInjection;
-
     public static class ServicesExtensions
     {
         /// <summary>
@@ -22,13 +20,12 @@ namespace Lacey.Medusa.Youtube.App.Infrastructure
             string apiKeyFile)
         {
 
-            services.AddTransient<ISessionFactory, YoutubeSessionFactory>(
-                provider => new YoutubeSessionFactory(connectionString));
-
-            services.AddCommonServices(apiKeyFile)
-                .AddTransferServices();
+            services
+                .AddYoutubeDalServices(connectionString)
+                .AddYoutubeCommonServices(apiKeyFile)
+                .AddYoutubeTransferServices();
 
             return services;
         }
-}
+    }
 }

@@ -1,4 +1,4 @@
-﻿namespace Lacey.Medusa.Youtube.App.Configuration
+﻿namespace Lacey.Medusa.Youtube.Transfer.Configuration
 {
     public sealed class AppConfiguration
     {
