@@ -1,19 +1,21 @@
-﻿using System.Collections.Generic;
-
-namespace Lacey.Medusa.Youtube.Common.Models
+﻿namespace Lacey.Medusa.Youtube.Common.Models
 {
     public sealed class YoutubeChannel
     {
         public YoutubeChannel(
-            YoutubeChannelInfo channel, 
-            IEnumerable<YoutubeVideo> videos)
+            string channelId, 
+            string title, 
+            string description)
         {
-            Channel = channel;
-            Videos = videos;
+            ChannelId = channelId;
+            Title = title;
+            Description = description;
         }
 
-        public YoutubeChannelInfo Channel { get; }
+        public string ChannelId { get; }
 
-        public IEnumerable<YoutubeVideo> Videos { get; }
+        public string Title { get; }
+
+        public string Description { get; }
     }
 }

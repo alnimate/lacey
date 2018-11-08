@@ -20,17 +20,11 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Infrastructure
                     y.Description,
                     y.PublishedAt));
 
-            this.CreateMap<YoutubeChannelInfo, DownloadChannelInfo>()
+            this.CreateMap<YoutubeChannel, DownloadChannelInfo>()
                 .ConstructUsing(y => new DownloadChannelInfo(
                     y.ChannelId,
                     y.Title,
                     y.Description));
-
-            this.CreateMap<YoutubeChannel, DownloadChannel>()
-                .ConstructUsing(y => new DownloadChannel(
-                    Mapper.Map<DownloadChannelInfo>(y.Channel),
-                    Mapper.Map<IEnumerable<DownloadVideo>>(y.Videos)));
-
 
             // Download => Store
             this.CreateMap<DownloadVideo, StoreVideo>()
