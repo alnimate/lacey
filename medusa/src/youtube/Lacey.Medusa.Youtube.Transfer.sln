@@ -31,6 +31,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Youtube.Common
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Youtube.Transfer", "Lacey.Medusa.Youtube.Transfer\Lacey.Medusa.Youtube.Transfer.csproj", "{856C7762-660A-4E70-A506-F518CD90A3C3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lacey.Medusa.Youtube.Scrap", "Lacey.Medusa.Youtube.Scrap\Lacey.Medusa.Youtube.Scrap.csproj", "{17B619BF-FCE9-44B0-8F5A-5F7F43090124}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -93,6 +95,10 @@ Global
 		{856C7762-660A-4E70-A506-F518CD90A3C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{856C7762-660A-4E70-A506-F518CD90A3C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{856C7762-660A-4E70-A506-F518CD90A3C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17B619BF-FCE9-44B0-8F5A-5F7F43090124}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17B619BF-FCE9-44B0-8F5A-5F7F43090124}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17B619BF-FCE9-44B0-8F5A-5F7F43090124}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17B619BF-FCE9-44B0-8F5A-5F7F43090124}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

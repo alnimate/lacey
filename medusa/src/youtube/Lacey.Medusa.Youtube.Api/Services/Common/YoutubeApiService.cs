@@ -4,11 +4,11 @@ using Lacey.Medusa.Youtube.Api.Services.Auth;
 
 namespace Lacey.Medusa.Youtube.Api.Services.Common
 {
-    public abstract class YoutubeService
+    public abstract class YoutubeApiService
     {
         internal YouTubeService Youtube { get; }
 
-        protected YoutubeService(IYoutubeAuthProvider youtubeAuthProvider)
+        protected YoutubeApiService(IYoutubeAuthProvider youtubeAuthProvider)
         {
             this.Youtube = new YouTubeService(new BaseClientService.Initializer
             {

@@ -9,7 +9,7 @@ using Lacey.Medusa.Youtube.Common.Models;
 
 namespace Lacey.Medusa.Youtube.Api.Services.Channels
 {
-    public sealed class YoutubeChannelApiProvider : YoutubeService, IYoutubeChannelProvider
+    public sealed class YoutubeChannelApiProvider : YoutubeApiService, IYoutubeChannelProvider
     {
         public YoutubeChannelApiProvider(IYoutubeAuthProvider youtubeAuthProvider) : 
             base(youtubeAuthProvider)

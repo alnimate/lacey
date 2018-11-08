@@ -1,6 +1,5 @@
 ﻿using Lacey.Medusa.Youtube.Api.Infrastructure;
-using Lacey.Medusa.Youtube.Api.Services.Channels;
-using Lacey.Medusa.Youtube.Common.Interfaces;
+using Lacey.Medusa.Youtube.Scrap.Infrastructure;
 using Lacey.Medusa.Youtube.Services.Transfer.Services.Download;
 using Lacey.Medusa.Youtube.Services.Transfer.Services.Download.Concrete;
 using Lacey.Medusa.Youtube.Services.Transfer.Services.Store;
@@ -25,8 +24,9 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Infrastructure
             this IServiceCollection services,
             string apiKeyFile)
         {
-            services.AddYoutubeApiServices(apiKeyFile)
-                .AddTransient<IYoutubeChannelProvider, YoutubeChannelApiProvider>()
+            services
+//                .AddYoutubeApiServices(apiKeyFile)
+                .AddYoutubeScrapServices()
                 .AddTransient<IDownloadService, DownloadService>()
                 .AddTransient<IStoreService, StoreService>()
                 .AddTransient<IUploadService, UploadService>()
