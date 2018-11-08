@@ -13,7 +13,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Basic details about a search result, including title, description and thumbnails of the item referenced
   /// by the search result.</summary>
-  public class SearchResultSnippet : IDirectResponseSchema
+  internal class SearchResultSnippet : IDirectResponseSchema
   {
     /// <summary>The value that YouTube uses to uniquely identify the channel that published the resource that the
     /// search result identifies.</summary>

@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 
 namespace Lacey.Medusa.Youtube.Api.Base
 {
-  public class PlaylistPlayer : IDirectResponseSchema
+  internal class PlaylistPlayer : IDirectResponseSchema
   {
     /// <summary>An  tag that embeds a player that will play the playlist.</summary>
     [JsonProperty("embedHtml")]

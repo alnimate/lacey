@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Basic details about a channel section, including title, style and position.</summary>
-  public class ChannelSectionSnippet : IDirectResponseSchema
+  internal class ChannelSectionSnippet : IDirectResponseSchema
   {
     /// <summary>The ID that YouTube uses to uniquely identify the channel that published the channel
     /// section.</summary>

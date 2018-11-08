@@ -6,7 +6,7 @@ namespace Lacey.Medusa.Youtube.Api.Services.Common
 {
     public abstract class YoutubeService
     {
-        public YouTubeService Youtube { get; }
+        internal YouTubeService Youtube { get; }
 
         protected YoutubeService(IYoutubeAuthProvider youtubeAuthProvider)
         {

@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Information about a video that was marked as a favorite video.</summary>
-  public class ActivityContentDetailsFavorite : IDirectResponseSchema
+  internal class ActivityContentDetailsFavorite : IDirectResponseSchema
   {
     /// <summary>The resourceId object contains information that identifies the resource that was marked as a
     /// favorite.</summary>

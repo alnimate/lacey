@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>A pair Property / Value.</summary>
-  public class PropertyValue : IDirectResponseSchema
+  internal class PropertyValue : IDirectResponseSchema
   {
     /// <summary>A property.</summary>
     [JsonProperty("property")]

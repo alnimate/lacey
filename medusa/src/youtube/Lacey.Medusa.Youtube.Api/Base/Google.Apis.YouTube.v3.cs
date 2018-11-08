@@ -11,7 +11,7 @@ using Lacey.Medusa.Common.Api.Core.Base.Discovery;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>The YouTube Service.</summary>
-  public class YouTubeService : BaseClientService
+  internal class YouTubeService : BaseClientService
   {
     /// <summary>The API version.</summary>
     public const string Version = "v3";
@@ -372,7 +372,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
     }
 
     /// <summary>Available OAuth 2.0 scopes for use with the YouTube Data API.</summary>
-    public class Scope
+    internal class Scope
     {
       /// <summary>Manage your YouTube account</summary>
       public static string Youtube = "https://www.googleapis.com/auth/youtube";

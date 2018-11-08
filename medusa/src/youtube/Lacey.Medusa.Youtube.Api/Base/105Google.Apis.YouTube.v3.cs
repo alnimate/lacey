@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 
 namespace Lacey.Medusa.Youtube.Api.Base
 {
-  public class LiveStreamSnippet : IDirectResponseSchema
+  internal class LiveStreamSnippet : IDirectResponseSchema
   {
     /// <summary>The ID that YouTube uses to uniquely identify the channel that is transmitting the
     /// stream.</summary>

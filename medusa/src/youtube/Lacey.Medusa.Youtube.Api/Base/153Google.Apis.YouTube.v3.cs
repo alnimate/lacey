@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Information about a video stream.</summary>
-  public class VideoFileDetailsVideoStream : IDirectResponseSchema
+  internal class VideoFileDetailsVideoStream : IDirectResponseSchema
   {
     /// <summary>The video content's display aspect ratio, which specifies the aspect ratio in which the video
     /// should be displayed.</summary>

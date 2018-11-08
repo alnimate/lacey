@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Branding properties for the channel view.</summary>
-  public class ChannelSettings : IDirectResponseSchema
+  internal class ChannelSettings : IDirectResponseSchema
   {
     /// <summary>The country of the channel.</summary>
     [JsonProperty("country")]

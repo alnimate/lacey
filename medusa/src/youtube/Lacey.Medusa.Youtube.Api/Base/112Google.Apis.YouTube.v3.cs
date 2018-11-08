@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 
 namespace Lacey.Medusa.Youtube.Api.Base
 {
-  public class PlaylistContentDetails : IDirectResponseSchema
+  internal class PlaylistContentDetails : IDirectResponseSchema
   {
     /// <summary>The number of videos in the playlist.</summary>
     [JsonProperty("itemCount")]

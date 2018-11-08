@@ -12,7 +12,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Details about the live streaming metadata.</summary>
-  public class VideoLiveStreamingDetails : IDirectResponseSchema
+  internal class VideoLiveStreamingDetails : IDirectResponseSchema
   {
     /// <summary>The ID of the currently active live chat attached to this video. This field is filled only if the
     /// video is a currently live broadcast that has live chat. Once the broadcast transitions to complete this

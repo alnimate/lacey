@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Basic details about a video category, such as its localized title.</summary>
-  public class VideoCategorySnippet : IDirectResponseSchema
+  internal class VideoCategorySnippet : IDirectResponseSchema
   {
     [JsonProperty("assignable")]
     public virtual bool? Assignable { get; set; }

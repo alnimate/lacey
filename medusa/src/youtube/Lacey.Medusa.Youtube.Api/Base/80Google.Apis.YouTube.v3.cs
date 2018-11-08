@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Basic details about a guide category.</summary>
-  public class GuideCategorySnippet : IDirectResponseSchema
+  internal class GuideCategorySnippet : IDirectResponseSchema
   {
     [JsonProperty("channelId")]
     public virtual string ChannelId { get; set; }

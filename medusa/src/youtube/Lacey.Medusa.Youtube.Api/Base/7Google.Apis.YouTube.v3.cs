@@ -11,7 +11,7 @@ using Lacey.Medusa.Common.Api.Core.Base.Util;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>The "commentThreads" collection of methods.</summary>
-  public class CommentThreadsResource
+  internal class CommentThreadsResource
   {
     private const string Resource = "commentThreads";
     /// <summary>The service which this resource belongs to.</summary>
@@ -53,7 +53,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
 
     /// <summary>Creates a new top-level comment. To add a reply to an existing comment, use the comments.insert
     /// method instead.</summary>
-    public class InsertRequest : YouTubeBaseServiceRequest<CommentThread>
+    internal class InsertRequest : YouTubeBaseServiceRequest<CommentThread>
     {
       /// <summary>Constructs a new Insert request.</summary>
       public InsertRequest(IClientService service, CommentThread body, string part)
@@ -121,7 +121,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
     }
 
     /// <summary>Returns a list of comment threads that match the API request parameters.</summary>
-    public class ListRequest : YouTubeBaseServiceRequest<CommentThreadListResponse>
+    internal class ListRequest : YouTubeBaseServiceRequest<CommentThreadListResponse>
     {
       /// <summary>Constructs a new List request.</summary>
       public ListRequest(IClientService service, string part)
@@ -371,7 +371,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
     }
 
     /// <summary>Modifies the top-level comment in a comment thread.</summary>
-    public class UpdateRequest : YouTubeBaseServiceRequest<CommentThread>
+    internal class UpdateRequest : YouTubeBaseServiceRequest<CommentThread>
     {
       /// <summary>Constructs a new Update request.</summary>
       public UpdateRequest(IClientService service, CommentThread body, string part)

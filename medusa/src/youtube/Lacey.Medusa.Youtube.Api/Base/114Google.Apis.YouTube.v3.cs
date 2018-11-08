@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 
 namespace Lacey.Medusa.Youtube.Api.Base
 {
-  public class PlaylistItemContentDetails : IDirectResponseSchema
+  internal class PlaylistItemContentDetails : IDirectResponseSchema
   {
     /// <summary>The time, measured in seconds from the start of the video, when the video should stop playing. (The
     /// playlist owner can specify the times when the video should start and stop playing when the video is played

@@ -11,7 +11,7 @@ using Lacey.Medusa.Common.Api.Core.Base.Util;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>The "playlistItems" collection of methods.</summary>
-  public class PlaylistItemsResource
+  internal class PlaylistItemsResource
   {
     private const string Resource = "playlistItems";
     /// <summary>The service which this resource belongs to.</summary>
@@ -74,7 +74,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
     }
 
     /// <summary>Deletes a playlist item.</summary>
-    public class DeleteRequest : YouTubeBaseServiceRequest<string>
+    internal class DeleteRequest : YouTubeBaseServiceRequest<string>
     {
       /// <summary>Constructs a new Delete request.</summary>
       public DeleteRequest(IClientService service, string id)
@@ -151,7 +151,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
     }
 
     /// <summary>Adds a resource to a playlist.</summary>
-    public class InsertRequest : YouTubeBaseServiceRequest<PlaylistItem>
+    internal class InsertRequest : YouTubeBaseServiceRequest<PlaylistItem>
     {
       /// <summary>Constructs a new Insert request.</summary>
       public InsertRequest(IClientService service, PlaylistItem body, string part)
@@ -240,7 +240,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
     /// <summary>Returns a collection of playlist items that match the API request parameters. You can retrieve all
     /// of the playlist items in a specified playlist or retrieve one or more playlist items by their unique
     /// IDs.</summary>
-    public class ListRequest : YouTubeBaseServiceRequest<PlaylistItemListResponse>
+    internal class ListRequest : YouTubeBaseServiceRequest<PlaylistItemListResponse>
     {
       /// <summary>Constructs a new List request.</summary>
       public ListRequest(IClientService service, string part)
@@ -394,7 +394,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
 
     /// <summary>Modifies a playlist item. For example, you could update the item's position in the
     /// playlist.</summary>
-    public class UpdateRequest : YouTubeBaseServiceRequest<PlaylistItem>
+    internal class UpdateRequest : YouTubeBaseServiceRequest<PlaylistItem>
     {
       /// <summary>Constructs a new Update request.</summary>
       public UpdateRequest(IClientService service, PlaylistItem body, string part)

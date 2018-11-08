@@ -12,7 +12,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Detailed settings of a broadcast.</summary>
-  public class LiveBroadcastContentDetails : IDirectResponseSchema
+  internal class LiveBroadcastContentDetails : IDirectResponseSchema
   {
     /// <summary>This value uniquely identifies the live stream bound to the broadcast.</summary>
     [JsonProperty("boundStreamId")]

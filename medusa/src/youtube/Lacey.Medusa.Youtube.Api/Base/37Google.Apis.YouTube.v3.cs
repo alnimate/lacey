@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Details about a resource which is being promoted.</summary>
-  public class ActivityContentDetailsPromotedItem : IDirectResponseSchema
+  internal class ActivityContentDetailsPromotedItem : IDirectResponseSchema
   {
     /// <summary>The URL the client should fetch to request a promoted item.</summary>
     [JsonProperty("adTag")]

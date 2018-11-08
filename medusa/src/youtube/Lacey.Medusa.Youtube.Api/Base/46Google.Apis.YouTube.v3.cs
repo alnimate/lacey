@@ -12,7 +12,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Basic details about a caption track, such as its language and name.</summary>
-  public class CaptionSnippet : IDirectResponseSchema
+  internal class CaptionSnippet : IDirectResponseSchema
   {
     /// <summary>The type of audio track associated with the caption track.</summary>
     [JsonProperty("audioTrackType")]

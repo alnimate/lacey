@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 
 namespace Lacey.Medusa.Youtube.Api.Base
 {
-  public class LiveChatMessageDeletedDetails : IDirectResponseSchema
+  internal class LiveChatMessageDeletedDetails : IDirectResponseSchema
   {
     [JsonProperty("deletedMessageId")]
     public virtual string DeletedMessageId { get; set; }

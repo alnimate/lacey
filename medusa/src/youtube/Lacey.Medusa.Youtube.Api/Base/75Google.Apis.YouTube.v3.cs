@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Basic details about a comment thread.</summary>
-  public class CommentThreadSnippet : IDirectResponseSchema
+  internal class CommentThreadSnippet : IDirectResponseSchema
   {
     /// <summary>Whether the current viewer of the thread can reply to it. This is viewer specific - other viewers
     /// may see a different value for this field.</summary>

@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Video processing progress and completion time estimate.</summary>
-  public class VideoProcessingDetailsProcessingProgress : IDirectResponseSchema
+  internal class VideoProcessingDetailsProcessingProgress : IDirectResponseSchema
   {
     /// <summary>The number of parts of the video that YouTube has already processed. You can estimate the
     /// percentage of the video that YouTube has already processed by calculating: 100 * parts_processed /

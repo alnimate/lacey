@@ -12,7 +12,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
   /// <summary>A subscription resource contains information about a YouTube user subscription. A subscription notifies
   /// a user when new videos are added to a channel or when another user takes one of several actions on YouTube, such
   /// as uploading a video, rating a video, or commenting on a video.</summary>
-  public class Subscription : IDirectResponseSchema
+  internal class Subscription : IDirectResponseSchema
   {
     /// <summary>The contentDetails object contains basic statistics about the subscription.</summary>
     [JsonProperty("contentDetails")]

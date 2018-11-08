@@ -11,7 +11,7 @@ using Lacey.Medusa.Common.Api.Core.Base.Util;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>The "liveChatBans" collection of methods.</summary>
-  public class LiveChatBansResource
+  internal class LiveChatBansResource
   {
     private const string Resource = "liveChatBans";
     /// <summary>The service which this resource belongs to.</summary>
@@ -42,7 +42,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
     }
 
     /// <summary>Removes a chat ban.</summary>
-    public class DeleteRequest : YouTubeBaseServiceRequest<string>
+    internal class DeleteRequest : YouTubeBaseServiceRequest<string>
     {
       /// <summary>Constructs a new Delete request.</summary>
       public DeleteRequest(IClientService service, string id)
@@ -100,7 +100,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
     }
 
     /// <summary>Adds a new ban to the chat.</summary>
-    public class InsertRequest : YouTubeBaseServiceRequest<LiveChatBan>
+    internal class InsertRequest : YouTubeBaseServiceRequest<LiveChatBan>
     {
       /// <summary>Constructs a new Insert request.</summary>
       public InsertRequest(IClientService service, LiveChatBan body, string part)

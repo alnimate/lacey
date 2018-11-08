@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Basic details about an i18n language, such as language code and human-readable name.</summary>
-  public class I18nLanguageSnippet : IDirectResponseSchema
+  internal class I18nLanguageSnippet : IDirectResponseSchema
   {
     /// <summary>A short BCP-47 code that uniquely identifies a language.</summary>
     [JsonProperty("hl")]

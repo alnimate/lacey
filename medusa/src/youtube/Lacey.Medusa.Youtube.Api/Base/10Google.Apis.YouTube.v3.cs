@@ -11,7 +11,7 @@ using Lacey.Medusa.Common.Api.Core.Base.Util;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>The "i18nLanguages" collection of methods.</summary>
-  public class I18nLanguagesResource
+  internal class I18nLanguagesResource
   {
     private const string Resource = "i18nLanguages";
     /// <summary>The service which this resource belongs to.</summary>
@@ -32,7 +32,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
     }
 
     /// <summary>Returns a list of application languages that the YouTube website supports.</summary>
-    public class ListRequest : YouTubeBaseServiceRequest<I18nLanguageListResponse>
+    internal class ListRequest : YouTubeBaseServiceRequest<I18nLanguageListResponse>
     {
       /// <summary>Constructs a new List request.</summary>
       public ListRequest(IClientService service, string part)

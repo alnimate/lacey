@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 
 namespace Lacey.Medusa.Youtube.Api.Base
 {
-  public class LiveBroadcastSnippet : IDirectResponseSchema
+  internal class LiveBroadcastSnippet : IDirectResponseSchema
   {
     /// <summary>The date and time that the broadcast actually ended. This information is only available once the
     /// broadcast's state is complete. The value is specified in ISO 8601 (YYYY-MM-DDThh:mm:ss.sZ) format.</summary>

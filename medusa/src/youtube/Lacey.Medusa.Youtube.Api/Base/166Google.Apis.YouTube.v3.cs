@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Statistics about the video, such as the number of times the video was viewed or liked.</summary>
-  public class VideoStatistics : IDirectResponseSchema
+  internal class VideoStatistics : IDirectResponseSchema
   {
     /// <summary>The number of comments for the video.</summary>
     [JsonProperty("commentCount")]

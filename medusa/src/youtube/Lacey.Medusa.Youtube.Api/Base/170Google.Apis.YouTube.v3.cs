@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Freebase topic information related to the video.</summary>
-  public class VideoTopicDetails : IDirectResponseSchema
+  internal class VideoTopicDetails : IDirectResponseSchema
   {
     /// <summary>Similar to topic_id, except that these topics are merely relevant to the video. These are topics
     /// that may be mentioned in, or appear in the video. You can retrieve information about each topic using

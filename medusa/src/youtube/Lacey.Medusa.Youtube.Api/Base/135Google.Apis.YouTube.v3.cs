@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>A thumbnail is an image representing a YouTube resource.</summary>
-  public class Thumbnail : IDirectResponseSchema
+  internal class Thumbnail : IDirectResponseSchema
   {
     /// <summary>(Optional) Height of the thumbnail image.</summary>
     [JsonProperty("height")]

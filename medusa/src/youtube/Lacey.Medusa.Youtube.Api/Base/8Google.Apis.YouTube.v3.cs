@@ -11,7 +11,7 @@ using Lacey.Medusa.Common.Api.Core.Base.Util;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>The "comments" collection of methods.</summary>
-  public class CommentsResource
+  internal class CommentsResource
   {
     private const string Resource = "comments";
     /// <summary>The service which this resource belongs to.</summary>
@@ -78,7 +78,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
     }
 
     /// <summary>Deletes a comment.</summary>
-    public class DeleteRequest : YouTubeBaseServiceRequest<string>
+    internal class DeleteRequest : YouTubeBaseServiceRequest<string>
     {
       /// <summary>Constructs a new Delete request.</summary>
       public DeleteRequest(IClientService service, string id)
@@ -136,7 +136,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
 
     /// <summary>Creates a reply to an existing comment. Note: To create a top-level comment, use the
     /// commentThreads.insert method.</summary>
-    public class InsertRequest : YouTubeBaseServiceRequest<Comment>
+    internal class InsertRequest : YouTubeBaseServiceRequest<Comment>
     {
       /// <summary>Constructs a new Insert request.</summary>
       public InsertRequest(IClientService service, Comment body, string part)
@@ -204,7 +204,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
     }
 
     /// <summary>Returns a list of comments that match the API request parameters.</summary>
-    public class ListRequest : YouTubeBaseServiceRequest<CommentListResponse>
+    internal class ListRequest : YouTubeBaseServiceRequest<CommentListResponse>
     {
       /// <summary>Constructs a new List request.</summary>
       public ListRequest(IClientService service, string part)
@@ -350,7 +350,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
     }
 
     /// <summary>Expresses the caller's opinion that one or more comments should be flagged as spam.</summary>
-    public class MarkAsSpamRequest : YouTubeBaseServiceRequest<string>
+    internal class MarkAsSpamRequest : YouTubeBaseServiceRequest<string>
     {
       /// <summary>Constructs a new MarkAsSpam request.</summary>
       public MarkAsSpamRequest(IClientService service, string id)
@@ -409,7 +409,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
 
     /// <summary>Sets the moderation status of one or more comments. The API request must be authorized by the owner
     /// of the channel or video associated with the comments.</summary>
-    public class SetModerationStatusRequest : YouTubeBaseServiceRequest<string>
+    internal class SetModerationStatusRequest : YouTubeBaseServiceRequest<string>
     {
       /// <summary>Constructs a new SetModerationStatus request.</summary>
       public SetModerationStatusRequest(IClientService service, string id, CommentsResource.SetModerationStatusRequest.ModerationStatusEnum moderationStatus)
@@ -514,7 +514,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
     }
 
     /// <summary>Modifies a comment.</summary>
-    public class UpdateRequest : YouTubeBaseServiceRequest<Comment>
+    internal class UpdateRequest : YouTubeBaseServiceRequest<Comment>
     {
       /// <summary>Constructs a new Update request.</summary>
       public UpdateRequest(IClientService service, Comment body, string part)

@@ -12,7 +12,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Recording information associated with the video.</summary>
-  public class VideoRecordingDetails : IDirectResponseSchema
+  internal class VideoRecordingDetails : IDirectResponseSchema
   {
     /// <summary>The geolocation information associated with the video.</summary>
     [JsonProperty("location")]

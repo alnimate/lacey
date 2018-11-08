@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 
 namespace Lacey.Medusa.Youtube.Api.Base
 {
-  public class SponsorSnippet : IDirectResponseSchema
+  internal class SponsorSnippet : IDirectResponseSchema
   {
     /// <summary>The id of the channel being sponsored.</summary>
     [JsonProperty("channelId")]
