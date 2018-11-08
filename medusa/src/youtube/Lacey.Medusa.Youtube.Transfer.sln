@@ -19,15 +19,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Youtube.Servic
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Common.Files", "..\common\Lacey.Medusa.Common.Files\Lacey.Medusa.Common.Files.csproj", "{82692963-3C40-4BCD-8B68-9A02CC25E407}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Youtube.Transfer", "Lacey.Medusa.Youtube.App\Lacey.Medusa.Youtube.Transfer.csproj", "{4A68CDDB-5587-4F44-99E6-D82D03DBE58B}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Common.Api.Core", "..\common\Lacey.Medusa.Common.Api.Core\Lacey.Medusa.Common.Api.Core.csproj", "{DE793B94-806E-4169-82EE-73AB5C5C177F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Common.Api", "..\common\Lacey.Medusa.Common.Api\Lacey.Medusa.Common.Api.csproj", "{40D4C9C7-8579-417A-8AB6-AEB3F1651DC9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Youtube.Api", "Lacey.Medusa.Youtube.Api\Lacey.Medusa.Youtube.Api.csproj", "{8FA3F017-AAE3-4DAD-889D-F1CD3BA0169C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lacey.Medusa.Common.Validation", "..\common\Lacey.Medusa.Common.Validation\Lacey.Medusa.Common.Validation.csproj", "{2F0A8742-9DFF-449D-B84C-B54D883298B1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Common.Validation", "..\common\Lacey.Medusa.Common.Validation\Lacey.Medusa.Common.Validation.csproj", "{2F0A8742-9DFF-449D-B84C-B54D883298B1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Youtube.Common", "Lacey.Medusa.Youtube.Common\Lacey.Medusa.Youtube.Common.csproj", "{A251A6D7-29AE-4F9A-9420-BEB828563BBA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Youtube.Transfer", "Lacey.Medusa.Youtube.Transfer\Lacey.Medusa.Youtube.Transfer.csproj", "{856C7762-660A-4E70-A506-F518CD90A3C3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -67,10 +69,6 @@ Global
 		{82692963-3C40-4BCD-8B68-9A02CC25E407}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{82692963-3C40-4BCD-8B68-9A02CC25E407}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{82692963-3C40-4BCD-8B68-9A02CC25E407}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4A68CDDB-5587-4F44-99E6-D82D03DBE58B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4A68CDDB-5587-4F44-99E6-D82D03DBE58B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4A68CDDB-5587-4F44-99E6-D82D03DBE58B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4A68CDDB-5587-4F44-99E6-D82D03DBE58B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DE793B94-806E-4169-82EE-73AB5C5C177F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DE793B94-806E-4169-82EE-73AB5C5C177F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DE793B94-806E-4169-82EE-73AB5C5C177F}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -87,6 +85,14 @@ Global
 		{2F0A8742-9DFF-449D-B84C-B54D883298B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2F0A8742-9DFF-449D-B84C-B54D883298B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2F0A8742-9DFF-449D-B84C-B54D883298B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A251A6D7-29AE-4F9A-9420-BEB828563BBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A251A6D7-29AE-4F9A-9420-BEB828563BBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A251A6D7-29AE-4F9A-9420-BEB828563BBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A251A6D7-29AE-4F9A-9420-BEB828563BBA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{856C7762-660A-4E70-A506-F518CD90A3C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{856C7762-660A-4E70-A506-F518CD90A3C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{856C7762-660A-4E70-A506-F518CD90A3C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{856C7762-660A-4E70-A506-F518CD90A3C3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

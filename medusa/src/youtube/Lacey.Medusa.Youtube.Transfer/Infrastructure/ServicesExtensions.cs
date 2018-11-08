@@ -1,5 +1,4 @@
 ﻿using Lacey.Medusa.Youtube.Dal.Infrastructure;
-using Lacey.Medusa.Youtube.Services.Common.Infrastructure;
 using Lacey.Medusa.Youtube.Services.Transfer.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -22,8 +21,7 @@ namespace Lacey.Medusa.Youtube.Transfer.Infrastructure
 
             services
                 .AddYoutubeDalServices(connectionString)
-                .AddYoutubeCommonServices(apiKeyFile)
-                .AddYoutubeTransferServices();
+                .AddYoutubeTransferServices(apiKeyFile);
 
             return services;
         }

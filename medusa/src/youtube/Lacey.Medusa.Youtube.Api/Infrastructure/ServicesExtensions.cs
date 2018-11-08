@@ -2,7 +2,7 @@
 using Lacey.Medusa.Youtube.Api.Services.Auth.Concrete;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Lacey.Medusa.Youtube.Services.Common.Infrastructure
+namespace Lacey.Medusa.Youtube.Api.Infrastructure
 {
     public static class ServicesExtensions
     {
@@ -12,7 +12,7 @@ namespace Lacey.Medusa.Youtube.Services.Common.Infrastructure
         /// <param name="services"></param>
         /// <param name="apiKeyFile"></param>
         /// <returns></returns>
-        public static IServiceCollection AddYoutubeCommonServices(
+        public static IServiceCollection AddYoutubeApiServices(
             this IServiceCollection services,
             string apiKeyFile)
         {
