@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using Lacey.Medusa.Common.DataAnnotations.Extensions;
+using Lacey.Medusa.Common.Validation.Extensions;
 
-namespace Lacey.Medusa.Common.DataAnnotations.Validation
+namespace Lacey.Medusa.Common.Validation.Validation
 {
     public static class EntityValidator
     {

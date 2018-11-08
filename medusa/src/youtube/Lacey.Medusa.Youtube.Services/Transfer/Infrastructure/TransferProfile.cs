@@ -33,10 +33,12 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Infrastructure
             this.CreateMap<StoreVideo, VideoEntity>()
                 .ConstructUsing(s => new VideoEntity
                 {
+                    ChannelId = s.ChannelId,
                     VideoId = s.VideoId,
                     Name = s.Title,
                     Description = s.Description,
-                    PublishedAt = s.PublishedAt
+                    PublishedAt = s.PublishedAt,
+                    CreatedAt = DateTime.UtcNow
                 });
 
             this.CreateMap<StoreChannelInfo, ChannelEntity>()

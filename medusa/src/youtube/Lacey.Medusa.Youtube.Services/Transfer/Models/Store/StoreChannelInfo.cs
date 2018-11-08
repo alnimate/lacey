@@ -1,8 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Lacey.Medusa.Common.Validation.Validation;
 
 namespace Lacey.Medusa.Youtube.Services.Transfer.Models.Store
 {
-    public sealed class StoreChannelInfo
+    public sealed class StoreChannelInfo : ValidatableModel
     {
         public StoreChannelInfo(
             string channelId, 
@@ -19,7 +20,6 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Models.Store
         public string ChannelId { get; }
 
         [Required]
-        [MaxLength(30)]
         public string Title { get; }
 
         public string Description { get; }

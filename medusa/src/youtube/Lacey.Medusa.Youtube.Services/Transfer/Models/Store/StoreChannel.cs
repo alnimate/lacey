@@ -14,6 +14,8 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Models.Store
 
         public StoreChannelInfo Channel { get; }
 
-        public IEnumerable<StoreVideo> Videos { get; }
+        public IEnumerable<StoreVideo> Videos { get; set; }
+
+        public IEnumerable<StoreVideo> InvalidVideos { get; set; }
     }
 }

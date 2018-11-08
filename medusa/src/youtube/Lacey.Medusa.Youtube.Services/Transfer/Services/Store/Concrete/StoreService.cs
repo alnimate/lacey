@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Lacey.Medusa.Common.Dal.Dal;
 using Lacey.Medusa.Common.Services.Services.Common;
+using Lacey.Medusa.Common.Validation.Extensions;
 using Lacey.Medusa.Youtube.Domain.Entities;
 using Lacey.Medusa.Youtube.Services.Transfer.Models.Store;
 
@@ -28,17 +29,20 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Store.Concrete
                 var videosRep = uow.GetRepository<VideoEntity>();
 
                 var channelEntity = this.mapper.Map<ChannelEntity>(channel.Channel);
-                channelsRep.Add(channelEntity);
+                await channelsRep.AddAsync(channelEntity);
                 await uow.SaveAsync();
 
-                var videoEntities = this.mapper.Map<IEnumerable<VideoEntity>>(channel.Videos);
-                var enumerable = videoEntities as VideoEntity[] ?? videoEntities.ToArray();
-                foreach (var videoEntity in enumerable)
+                foreach (var video in channel.Videos)
                 {
-                    videoEntity.ChannelId = channelEntity.Id;
+                    video.ChannelId = channelEntity.Id;
                 }
 
-                await videosRep.BulkAddAsync(enumerable);
+                var validVideos = channel.Videos.ValidationFilter(out var invalidVideos);
+                channel.Videos = validVideos;
+                channel.InvalidVideos = invalidVideos;
+
+                var videoEntities = this.mapper.Map<IEnumerable<VideoEntity>>(validVideos).ToArray();
+                await videosRep.BulkAddAsync(videoEntities);
             }
         }
     }

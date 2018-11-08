@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Lacey.Medusa.Common.DataAnnotations.Extensions
+namespace Lacey.Medusa.Common.Validation.Extensions
 {
     public static class TypeExtensions
     {    
