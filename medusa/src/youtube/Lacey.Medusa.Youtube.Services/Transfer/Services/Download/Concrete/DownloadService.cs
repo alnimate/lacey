@@ -16,22 +16,25 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Download.Concrete
 
         public async Task<DownloadChannel> DownloadChannel(string channelId)
         {
-            var channelRequest = this.Youtube.Channels.List("snippet");
-            channelRequest.Id = channelId;
-            var channelResponse = await channelRequest.ExecuteAsync();
-            var channel = channelResponse.Items.First();
+            var channelInfo = await this.DownloadChannelInfo(channelId);
+            var videos = await this.DownloadChannelVideos(channelId);
 
-            var videosRequest = this.Youtube.Search.List("snippet");
-            videosRequest.Order = SearchResource.ListRequest.OrderEnum.Date;
-            videosRequest.MaxResults = 50;
-            videosRequest.ChannelId = channelId;
+            return new DownloadChannel(channelInfo, videos);
+        }
+
+        private async Task<IEnumerable<DownloadVideo>> DownloadChannelVideos(string channelId)
+        {
+            var request = this.Youtube.Search.List("snippet");
+            request.Order = SearchResource.ListRequest.OrderEnum.Date;
+            request.MaxResults = 50;
+            request.ChannelId = channelId;
 
             var videosList = new List<DownloadVideo>();
             var nextPageToken = string.Empty;
             while (nextPageToken != null)
             {
-                videosRequest.PageToken = nextPageToken;
-                var response = await videosRequest.ExecuteAsync();
+                request.PageToken = nextPageToken;
+                var response = await request.ExecuteAsync();
 
                 var videos = response.Items.Select(v => new DownloadVideo(v.Id.VideoId,
                     v.Snippet.Title,
@@ -42,11 +45,19 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Download.Concrete
                 nextPageToken = response.NextPageToken;
             }
 
-            var channelInfo = new DownloadChannelInfo(channel.Id, 
+            return videosList;
+        }
+
+        private async Task<DownloadChannelInfo> DownloadChannelInfo(string channelId)
+        {
+            var request = this.Youtube.Channels.List("snippet");
+            request.Id = channelId;
+            var response = await request.ExecuteAsync();
+            var channel = response.Items.First();
+
+            return new DownloadChannelInfo(channel.Id,
                 channel.Snippet.Title,
                 channel.Snippet.Description);
-
-            return new DownloadChannel(channelInfo, videosList);
         }
     }
 }

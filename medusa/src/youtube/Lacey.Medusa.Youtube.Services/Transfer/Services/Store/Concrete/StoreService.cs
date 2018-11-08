@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -29,7 +28,6 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Store.Concrete
                 var videosRep = uow.GetRepository<VideoEntity>();
 
                 var channelEntity = this.mapper.Map<ChannelEntity>(channel.Channel);
-                channelEntity.CreatedAt = DateTime.UtcNow;
                 channelsRep.Add(channelEntity);
                 await uow.SaveAsync();
 
@@ -38,7 +36,6 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Store.Concrete
                 foreach (var videoEntity in enumerable)
                 {
                     videoEntity.ChannelId = channelEntity.Id;
-                    videoEntity.CreatedAt = DateTime.UtcNow;
                 }
 
                 await videosRep.BulkAddAsync(enumerable);
