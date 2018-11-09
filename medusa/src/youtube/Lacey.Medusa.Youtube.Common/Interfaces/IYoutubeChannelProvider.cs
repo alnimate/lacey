@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Lacey.Medusa.Youtube.Common.Models;
+using Lacey.Medusa.Youtube.Common.Models.Common;
 
 namespace Lacey.Medusa.Youtube.Common.Interfaces
 {

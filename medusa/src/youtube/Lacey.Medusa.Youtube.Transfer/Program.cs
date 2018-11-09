@@ -1,10 +1,7 @@
 ﻿using System.IO;
 using System.Linq;
 using AutoMapper;
-using Lacey.Medusa.Youtube.Services.Store.Models;
-using Lacey.Medusa.Youtube.Services.Transfer.Models.Download;
-using Lacey.Medusa.Youtube.Services.Transfer.Models.Upload;
-using Lacey.Medusa.Youtube.Services.Transfer.Services.Transfer;
+using Lacey.Medusa.Youtube.Services.Transfer.Services;
 using Lacey.Medusa.Youtube.Transfer.Configuration;
 using Lacey.Medusa.Youtube.Transfer.Infrastructure;
 using Microsoft.Extensions.Configuration;
@@ -43,26 +40,10 @@ namespace Lacey.Medusa.Youtube.Transfer
                 .CreateLogger<Program>();
 
             var transferService = serviceProvider.GetService<ITransferService>();
-            transferService.OnDownloadChannel += OnDownloadChannel;
-            transferService.OnStoreChannel += OnStoreChannel;
-            transferService.OnUploadChannel += OnUploadChannel;
 
             transferService.TransferChannel(
                 appConfiguration.SourceChannels.First(),
                 appConfiguration.DestChannels.First()).Wait();
-        }
-
-        private static void OnDownloadChannel(DownloadChannel channel)
-        {
-            logger.LogTrace($"Channel {channel.Channel.ChannelId} loaded.");
-        }
-
-        private static void OnStoreChannel(StoreChannel channel)
-        {
-        }
-
-        private static void OnUploadChannel(UploadChannel channel)
-        {
         }
     }
 }

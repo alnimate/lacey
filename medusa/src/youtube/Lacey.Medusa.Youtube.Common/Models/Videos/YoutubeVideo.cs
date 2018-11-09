@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Lacey.Medusa.Youtube.Common.Models
+namespace Lacey.Medusa.Youtube.Common.Models.Videos
 {
     public sealed class YoutubeVideo
     {
