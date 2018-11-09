@@ -17,8 +17,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Youtube.Dal", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Youtube.Services", "Lacey.Medusa.Youtube.Services\Lacey.Medusa.Youtube.Services.csproj", "{AAD34FBE-D9BB-4986-BF2C-D845407EFBB1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Common.Files", "..\common\Lacey.Medusa.Common.Files\Lacey.Medusa.Common.Files.csproj", "{82692963-3C40-4BCD-8B68-9A02CC25E407}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Common.Api.Core", "..\common\Lacey.Medusa.Common.Api.Core\Lacey.Medusa.Common.Api.Core.csproj", "{DE793B94-806E-4169-82EE-73AB5C5C177F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Common.Api", "..\common\Lacey.Medusa.Common.Api\Lacey.Medusa.Common.Api.csproj", "{40D4C9C7-8579-417A-8AB6-AEB3F1651DC9}"
@@ -31,7 +29,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Youtube.Common
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Youtube.Transfer", "Lacey.Medusa.Youtube.Transfer\Lacey.Medusa.Youtube.Transfer.csproj", "{856C7762-660A-4E70-A506-F518CD90A3C3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lacey.Medusa.Youtube.Scrap", "Lacey.Medusa.Youtube.Scrap\Lacey.Medusa.Youtube.Scrap.csproj", "{17B619BF-FCE9-44B0-8F5A-5F7F43090124}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Youtube.Scrap", "Lacey.Medusa.Youtube.Scrap\Lacey.Medusa.Youtube.Scrap.csproj", "{17B619BF-FCE9-44B0-8F5A-5F7F43090124}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lacey.Medusa.Common.Extensions", "..\common\Lacey.Medusa.Common.Extensions\Lacey.Medusa.Common.Extensions.csproj", "{99EC1CCF-821A-411B-97AD-02FEFC5D936F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lacey.Medusa.Common.Cli", "..\common\Lacey.Medusa.Common.Cli\Lacey.Medusa.Common.Cli.csproj", "{857EE654-CDD0-4187-8447-5D060E588B52}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -67,10 +69,6 @@ Global
 		{AAD34FBE-D9BB-4986-BF2C-D845407EFBB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AAD34FBE-D9BB-4986-BF2C-D845407EFBB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AAD34FBE-D9BB-4986-BF2C-D845407EFBB1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{82692963-3C40-4BCD-8B68-9A02CC25E407}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{82692963-3C40-4BCD-8B68-9A02CC25E407}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{82692963-3C40-4BCD-8B68-9A02CC25E407}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{82692963-3C40-4BCD-8B68-9A02CC25E407}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DE793B94-806E-4169-82EE-73AB5C5C177F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DE793B94-806E-4169-82EE-73AB5C5C177F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DE793B94-806E-4169-82EE-73AB5C5C177F}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -99,6 +97,14 @@ Global
 		{17B619BF-FCE9-44B0-8F5A-5F7F43090124}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{17B619BF-FCE9-44B0-8F5A-5F7F43090124}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{17B619BF-FCE9-44B0-8F5A-5F7F43090124}.Release|Any CPU.Build.0 = Release|Any CPU
+		{99EC1CCF-821A-411B-97AD-02FEFC5D936F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99EC1CCF-821A-411B-97AD-02FEFC5D936F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99EC1CCF-821A-411B-97AD-02FEFC5D936F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99EC1CCF-821A-411B-97AD-02FEFC5D936F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{857EE654-CDD0-4187-8447-5D060E588B52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{857EE654-CDD0-4187-8447-5D060E588B52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{857EE654-CDD0-4187-8447-5D060E588B52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{857EE654-CDD0-4187-8447-5D060E588B52}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

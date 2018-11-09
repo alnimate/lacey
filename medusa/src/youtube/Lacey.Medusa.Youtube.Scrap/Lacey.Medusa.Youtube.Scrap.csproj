@@ -11,7 +11,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\common\Lacey.Medusa.Common.Cli\Lacey.Medusa.Common.Cli.csproj" />
+    <ProjectReference Include="..\..\common\Lacey.Medusa.Common.Extensions\Lacey.Medusa.Common.Extensions.csproj" />
     <ProjectReference Include="..\Lacey.Medusa.Youtube.Common\Lacey.Medusa.Youtube.Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="ffmpeg.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
