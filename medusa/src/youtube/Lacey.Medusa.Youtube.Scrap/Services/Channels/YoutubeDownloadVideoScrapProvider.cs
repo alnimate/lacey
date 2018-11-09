@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using AutoMapper;
 using Lacey.Medusa.Common.Cli.Base;
 using Lacey.Medusa.Common.Extensions.Base;
 using Lacey.Medusa.Youtube.Common.Interfaces;
@@ -16,9 +17,11 @@ namespace Lacey.Medusa.Youtube.Scrap.Services.Channels
         private readonly Cli converterCli;
 
         public YoutubeDownloadVideoScrapProvider(
+            IMapper mapper,
             string tempFolder, 
             string outputFolder, 
             string converterFilePath)
+            : base(mapper)
         {
             this.tempFolder = tempFolder;
             this.outputFolder = outputFolder;

@@ -1,5 +1,7 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Lacey.Medusa.Youtube.Common.Interfaces;
 using Lacey.Medusa.Youtube.Common.Models.About;
 using Lacey.Medusa.Youtube.Common.Models.Common;
@@ -10,6 +12,9 @@ namespace Lacey.Medusa.Youtube.Scrap.Services.Channels
 {
     public sealed class YoutubeChannelScrapProvider : YoutubeScrapService, IYoutubeChannelProvider
     {
+        public YoutubeChannelScrapProvider(IMapper mapper) : base(mapper)
+        {
+        }
 
         public async Task<YoutubeChannel> GetYoutubeChannel(string channelId)
         {
@@ -17,11 +22,7 @@ namespace Lacey.Medusa.Youtube.Scrap.Services.Channels
             var uploads = await this.Youtube.GetChannelUploadsAsync(channelId);
 
             var videos = new YoutubeVideos(
-                uploads.Select(v => new YoutubeVideo(
-                    v.Id,
-                    v.Title,
-                    v.Description,
-                    v.UploadDate.UtcDateTime)).ToArray());
+                this.Mapper.Map<IEnumerable<YoutubeVideo>>(uploads).ToArray());
 
             var about = new YoutubeAbout(null);
 

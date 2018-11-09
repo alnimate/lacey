@@ -1,4 +1,5 @@
-﻿using Lacey.Medusa.Youtube.Scrap.Base;
+﻿using AutoMapper;
+using Lacey.Medusa.Youtube.Scrap.Base;
 
 namespace Lacey.Medusa.Youtube.Scrap.Services.Common
 {
@@ -6,8 +7,11 @@ namespace Lacey.Medusa.Youtube.Scrap.Services.Common
     {
         internal IYoutubeClient Youtube { get; }
 
-        protected YoutubeScrapService()
+        protected readonly IMapper Mapper;
+
+        protected YoutubeScrapService(IMapper mapper)
         {
+            Mapper = mapper;
             Youtube = new YoutubeClient();
         }
     }

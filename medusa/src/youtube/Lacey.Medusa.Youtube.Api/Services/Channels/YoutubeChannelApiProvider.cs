@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Lacey.Medusa.Youtube.Api.Base;
 using Lacey.Medusa.Youtube.Api.Services.Auth;
 using Lacey.Medusa.Youtube.Api.Services.Common;
@@ -13,8 +14,10 @@ namespace Lacey.Medusa.Youtube.Api.Services.Channels
 {
     public sealed class YoutubeChannelApiProvider : YoutubeApiService, IYoutubeChannelProvider
     {
-        public YoutubeChannelApiProvider(IYoutubeAuthProvider youtubeAuthProvider) : 
-            base(youtubeAuthProvider)
+        public YoutubeChannelApiProvider(
+            IYoutubeAuthProvider youtubeAuthProvider, 
+            IMapper mapper) 
+            : base(youtubeAuthProvider, mapper)
         {
         }
 
@@ -26,7 +29,7 @@ namespace Lacey.Medusa.Youtube.Api.Services.Channels
             var channel = response.Items.First();
 
             var videos = await this.GetYoutubeVideos(channelId);
-            var about = new YoutubeAbout(channel.Snippet.Description);
+            var about = this.Mapper.Map<YoutubeAbout>(channel.Snippet);
 
             return new YoutubeChannel(channel.Id,
                 channel.Snippet.Title,
@@ -48,10 +51,7 @@ namespace Lacey.Medusa.Youtube.Api.Services.Channels
                 request.PageToken = nextPageToken;
                 var response = await request.ExecuteAsync();
 
-                var videos = response.Items.Select(v => new YoutubeVideo(v.Id.VideoId,
-                    v.Snippet.Title,
-                    v.Snippet.Description,
-                    v.Snippet.PublishedAt));
+                var videos = this.Mapper.Map<IEnumerable<YoutubeVideo>>(response.Items);
                 videosList.AddRange(videos);
 
                 nextPageToken = response.NextPageToken;
@@ -59,6 +59,5 @@ namespace Lacey.Medusa.Youtube.Api.Services.Channels
 
             return new YoutubeVideos(videosList);
         }
-
     }
 }

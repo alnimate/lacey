@@ -1,4 +1,5 @@
-﻿using Lacey.Medusa.Youtube.Common.Interfaces;
+﻿using AutoMapper;
+using Lacey.Medusa.Youtube.Common.Interfaces;
 using Lacey.Medusa.Youtube.Scrap.Services.Channels;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -16,6 +17,7 @@ namespace Lacey.Medusa.Youtube.Scrap.Infrastructure
                 .AddTransient<IYoutubeChannelProvider, YoutubeChannelScrapProvider>()
                 .AddTransient<IYoutubeDownloadVideoProvider, YoutubeDownloadVideoScrapProvider>(
                     provider => new YoutubeDownloadVideoScrapProvider(
+                        provider.GetService<IMapper>(),
                         tempFolder,
                         outputFolder,
                         converterFilePath));

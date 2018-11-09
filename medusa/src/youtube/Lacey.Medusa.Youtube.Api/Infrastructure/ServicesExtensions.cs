@@ -15,7 +15,8 @@ namespace Lacey.Medusa.Youtube.Api.Infrastructure
             services
                 .AddTransient<IYoutubeAuthProvider, SimpleYoutubeAuthProvider>(
                     provider => new SimpleYoutubeAuthProvider(apiKeyFile))
-                .AddTransient<IYoutubeChannelProvider, YoutubeChannelApiProvider>();
+                .AddTransient<IYoutubeChannelProvider, YoutubeChannelApiProvider>()
+                .AddTransient<IYoutubeDownloadVideoProvider, YoutubeDownloadVideoApiProvider>();
 
             return services;
         }
