@@ -41,7 +41,7 @@ namespace Lacey.Medusa.Youtube.Scrap.Base
                 await input.CopyToAsync(output, progress, cancellationToken).ConfigureAwait(false);
         }
 
-#if NETSTANDARD2_0 || NET45 || NETCOREAPP1_0
+//#if NETSTANDARD2_0 || NET45 || NETCOREAPP1_0
 
         /// <inheritdoc />
         public async Task DownloadMediaStreamAsync(MediaStreamInfo info, string filePath,
@@ -53,6 +53,6 @@ namespace Lacey.Medusa.Youtube.Scrap.Base
                 await DownloadMediaStreamAsync(info, output, progress, cancellationToken).ConfigureAwait(false);
         }
 
-#endif
+//#endif
     }
 }

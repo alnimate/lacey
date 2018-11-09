@@ -106,7 +106,7 @@ namespace Lacey.Medusa.Youtube.Scrap.Base
         Task DownloadMediaStreamAsync(MediaStreamInfo info, Stream output,
             IProgress<double> progress = null, CancellationToken cancellationToken = default(CancellationToken));
 
-#if NETSTANDARD2_0 || NET45 || NETCOREAPP1_0
+//#if NETSTANDARD2_0 || NET45 || NETCOREAPP1_0
 
         /// <summary>
         /// Downloads the stream associated with given metadata to a file.
@@ -114,7 +114,7 @@ namespace Lacey.Medusa.Youtube.Scrap.Base
         Task DownloadMediaStreamAsync(MediaStreamInfo info, string filePath,
             IProgress<double> progress = null, CancellationToken cancellationToken = default(CancellationToken));
 
-#endif
+//#endif
 
         #endregion
 
