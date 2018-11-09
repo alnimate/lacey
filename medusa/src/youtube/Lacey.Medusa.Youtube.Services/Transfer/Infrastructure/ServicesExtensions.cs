@@ -2,11 +2,8 @@
 using Lacey.Medusa.Youtube.Api.Services.Auth.Concrete;
 using Lacey.Medusa.Youtube.Api.Services.Channels;
 using Lacey.Medusa.Youtube.Common.Interfaces;
-using Lacey.Medusa.Youtube.Scrap.Services.Channels;
 using Lacey.Medusa.Youtube.Services.Transfer.Services.Download;
 using Lacey.Medusa.Youtube.Services.Transfer.Services.Download.Concrete;
-using Lacey.Medusa.Youtube.Services.Transfer.Services.Store;
-using Lacey.Medusa.Youtube.Services.Transfer.Services.Store.Concrete;
 using Lacey.Medusa.Youtube.Services.Transfer.Services.Transfer;
 using Lacey.Medusa.Youtube.Services.Transfer.Services.Transfer.Concrete;
 using Lacey.Medusa.Youtube.Services.Transfer.Services.Upload;
@@ -37,7 +34,6 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Infrastructure
 //                .AddTransient<IYoutubeVideosProvider, YoutubeVideosScrapProvider>()
 
                 .AddTransient<IDownloadService, DownloadService>()
-                .AddTransient<IStoreService, StoreService>()
                 .AddTransient<IUploadService, UploadService>()
                 .AddTransient<ITransferService, TransferService>();
 

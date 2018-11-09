@@ -6,9 +6,9 @@ using Lacey.Medusa.Common.Dal.Dal;
 using Lacey.Medusa.Common.Services.Services.Common;
 using Lacey.Medusa.Common.Validation.Extensions;
 using Lacey.Medusa.Youtube.Domain.Entities;
-using Lacey.Medusa.Youtube.Services.Transfer.Models.Store;
+using Lacey.Medusa.Youtube.Services.Store.Models;
 
-namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Store.Concrete
+namespace Lacey.Medusa.Youtube.Services.Store.Services.Concrete
 {
     public sealed class StoreService : UnitOfWorkService, IStoreService
     {

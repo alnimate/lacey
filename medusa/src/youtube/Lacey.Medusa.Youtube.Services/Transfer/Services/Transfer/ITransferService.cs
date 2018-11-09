@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
+using Lacey.Medusa.Youtube.Services.Store.Events;
 using Lacey.Medusa.Youtube.Services.Transfer.Events.Download;
-using Lacey.Medusa.Youtube.Services.Transfer.Events.Store;
 using Lacey.Medusa.Youtube.Services.Transfer.Events.Upload;
 
 namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Transfer

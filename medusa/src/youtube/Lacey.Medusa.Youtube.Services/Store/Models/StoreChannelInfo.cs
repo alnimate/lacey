@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Lacey.Medusa.Common.Validation.Validation;
 
-namespace Lacey.Medusa.Youtube.Services.Transfer.Models.Store
+namespace Lacey.Medusa.Youtube.Services.Store.Models
 {
     public sealed class StoreChannelInfo : ValidatableModel
     {

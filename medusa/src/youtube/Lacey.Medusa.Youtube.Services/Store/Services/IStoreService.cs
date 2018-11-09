@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using Lacey.Medusa.Youtube.Services.Transfer.Models.Store;
+using Lacey.Medusa.Youtube.Services.Store.Models;
 
-namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Store
+namespace Lacey.Medusa.Youtube.Services.Store.Services
 {
     public interface IStoreService
     {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Lacey.Medusa.Youtube.Services.Transfer.Models.Store
+namespace Lacey.Medusa.Youtube.Services.Store.Models
 {
     public sealed class StoreChannel
     {

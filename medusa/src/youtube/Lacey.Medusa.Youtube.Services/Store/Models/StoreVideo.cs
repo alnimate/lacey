@@ -4,7 +4,7 @@ using Lacey.Medusa.Common.DataAnnotations.Attributes.Data;
 using Lacey.Medusa.Common.DataAnnotations.Attributes.DateTime;
 using Lacey.Medusa.Common.Validation.Validation;
 
-namespace Lacey.Medusa.Youtube.Services.Transfer.Models.Store
+namespace Lacey.Medusa.Youtube.Services.Store.Models
 {
     public sealed class StoreVideo : ValidatableModel
     {

@@ -1,8 +1,8 @@
 ﻿using System.IO;
 using System.Linq;
 using AutoMapper;
+using Lacey.Medusa.Youtube.Services.Store.Models;
 using Lacey.Medusa.Youtube.Services.Transfer.Models.Download;
-using Lacey.Medusa.Youtube.Services.Transfer.Models.Store;
 using Lacey.Medusa.Youtube.Services.Transfer.Models.Upload;
 using Lacey.Medusa.Youtube.Services.Transfer.Services.Transfer;
 using Lacey.Medusa.Youtube.Transfer.Configuration;
