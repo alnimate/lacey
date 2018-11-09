@@ -26,7 +26,8 @@ namespace Lacey.Medusa.Youtube.Api.Infrastructure
                     v.Snippet.Title,
                     v.Snippet.Description,
                     v.Snippet.PublishedAt,
-                    Mapper.Map<YoutubeThumbnails>(v.Snippet.Thumbnails)));
+                    Mapper.Map<YoutubeThumbnails>(v.Snippet.Thumbnails),
+                    null));
 
             this.CreateMap<ChannelSnippet, YoutubeAbout>()
                 .ConstructUsing(s => new YoutubeAbout(s.Description));

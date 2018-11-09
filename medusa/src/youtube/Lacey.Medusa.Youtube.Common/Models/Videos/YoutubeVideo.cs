@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Lacey.Medusa.Youtube.Common.Models.Common;
 
 namespace Lacey.Medusa.Youtube.Common.Models.Videos
@@ -10,7 +11,8 @@ namespace Lacey.Medusa.Youtube.Common.Models.Videos
             string title,
             string description,
             DateTime? publishedAt, 
-            YoutubeThumbnails thumbnails)
+            YoutubeThumbnails thumbnails, 
+            IEnumerable<string> tags)
         {
             
             VideoId = videoId;
@@ -18,6 +20,7 @@ namespace Lacey.Medusa.Youtube.Common.Models.Videos
             Description = description;
             PublishedAt = publishedAt;
             Thumbnails = thumbnails;
+            Tags = tags;
         }
 
         public string VideoId { get; }
@@ -29,5 +32,7 @@ namespace Lacey.Medusa.Youtube.Common.Models.Videos
         public DateTime? PublishedAt { get; }
 
         public YoutubeThumbnails Thumbnails { get; }
+
+        public IEnumerable<string> Tags { get; }
     }
 }
