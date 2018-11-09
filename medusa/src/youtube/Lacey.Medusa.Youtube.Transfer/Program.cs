@@ -28,7 +28,12 @@ namespace Lacey.Medusa.Youtube.Transfer
             var serviceProvider = new ServiceCollection()
                 .AddLogging()
                 .AddAutoMapper()
-                .AddAppServices(connectionString, appConfiguration.ApiKeyFile)
+                .AddAppServices(
+                    connectionString, 
+                    appConfiguration.ApiKeyFile,
+                    Path.Combine(Directory.GetCurrentDirectory(), appConfiguration.TempFolder),
+                    Path.Combine(Directory.GetCurrentDirectory(), appConfiguration.OutputFolder),
+                    Path.Combine(Directory.GetCurrentDirectory(), appConfiguration.ConverterFile))
                 .BuildServiceProvider();
 
             //configure console logging

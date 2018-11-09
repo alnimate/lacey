@@ -6,16 +6,19 @@ namespace Lacey.Medusa.Youtube.Scrap.Infrastructure
 {
     public static class ServicesExtensions
     {
-        /// <summary>
-        /// Application services registration
-        /// </summary>
-        /// <param name="services"></param>
-        /// <returns></returns>
         public static IServiceCollection AddYoutubeScrapServices(
-            this IServiceCollection services)
+            this IServiceCollection services,
+            string tempFolder,
+            string outputFolder,
+            string converterFilePath)
         {
             services
-                .AddTransient<IYoutubeChannelProvider, YoutubeChannelScrapProvider>();
+                .AddTransient<IYoutubeChannelProvider, YoutubeChannelScrapProvider>()
+                .AddTransient<IYoutubeDownloadVideoProvider, YoutubeDownloadVideoScrapProvider>(
+                    provider => new YoutubeDownloadVideoScrapProvider(
+                        tempFolder,
+                        outputFolder,
+                        converterFilePath));
 
             return services;
         }

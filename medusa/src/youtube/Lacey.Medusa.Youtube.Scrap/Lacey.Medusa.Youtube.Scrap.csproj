@@ -16,10 +16,4 @@
     <ProjectReference Include="..\Lacey.Medusa.Youtube.Common\Lacey.Medusa.Youtube.Common.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="ffmpeg.exe">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
 </Project>

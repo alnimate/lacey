@@ -8,19 +8,19 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Infrastructure
 {
     public static class ServicesExtensions
     {
-        /// <summary>
-        /// Application services registration
-        /// </summary>
-        /// <param name="services"></param>
-        /// <param name="apiKeyFile"></param>
-        /// <returns></returns>
         public static IServiceCollection AddYoutubeTransferServices(
             this IServiceCollection services,
-            string apiKeyFile)
+            string apiKeyFile,
+            string tempFolder,
+            string outputFolder,
+            string converterFilePath)
         {
             services
-//                .AddYoutubeApiServices(apiKeyFile)
-                .AddYoutubeScrapServices()
+                .AddYoutubeApiServices(apiKeyFile)
+                .AddYoutubeScrapServices(
+                    tempFolder,
+                    outputFolder,
+                    converterFilePath)
 
                 .AddTransient<ITransferService, TransferService>();
 
