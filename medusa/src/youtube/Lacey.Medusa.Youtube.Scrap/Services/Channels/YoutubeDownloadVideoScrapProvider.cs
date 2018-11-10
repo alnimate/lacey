@@ -56,7 +56,7 @@ namespace Lacey.Medusa.Youtube.Scrap.Services.Channels
             using (var progress = new ProgressBar())
                 await this.Youtube.DownloadMediaStreamAsync(audioStreamInfo, audioStreamFilePath, progress);
 
-            return new YoutubeVideoFile(audioStreamFilePath);
+            return new YoutubeVideoFile(videoStreamFilePath);
 
             // Mux streams
             Console.WriteLine("Combining...");
