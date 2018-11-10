@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using AutoMapper;
 using Lacey.Medusa.Youtube.Api.Base;
+using Lacey.Medusa.Youtube.Common.Enums;
 using Lacey.Medusa.Youtube.Common.Models.About;
 using Lacey.Medusa.Youtube.Common.Models.Common;
 using Lacey.Medusa.Youtube.Common.Models.Videos;
@@ -47,7 +48,7 @@ namespace Lacey.Medusa.Youtube.Api.Infrastructure
                     },
                     Status = new VideoStatus
                     {
-                        PrivacyStatus = "unlisted" // or "private" or "public"
+                        PrivacyStatus = PrivacyStatus.Public
                     }
                 });
         }
