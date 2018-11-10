@@ -16,9 +16,12 @@ namespace Lacey.Medusa.Youtube.Api.Services.Common
             IMapper mapper)
         {
             this.Mapper = mapper;
+
+
             this.Youtube = new YouTubeService(new BaseClientService.Initializer
             {
                 ApiKey = youtubeAuthProvider.GetApiKey(),
+                HttpClientInitializer = youtubeAuthProvider.GetUserCredentials().Result,
                 ApplicationName = GetType().ToString()
             });
         }

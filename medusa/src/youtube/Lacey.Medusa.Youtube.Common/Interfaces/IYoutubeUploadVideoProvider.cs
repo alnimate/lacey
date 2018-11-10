@@ -3,8 +3,8 @@ using Lacey.Medusa.Youtube.Common.Models.Videos;
 
 namespace Lacey.Medusa.Youtube.Common.Interfaces
 {
-    public interface IYoutubeDownloadVideoProvider
+    public interface IYoutubeUploadVideoProvider
     {
-        Task<YoutubeVideoFile> DownloadVideo(string videoId);
+        Task UploadVideo(string channelId, YoutubeVideo youtubeVideo, string filePath);
     }
 }

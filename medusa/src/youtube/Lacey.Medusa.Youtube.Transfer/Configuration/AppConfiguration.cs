@@ -4,6 +4,10 @@
     {        
         public string ApiKeyFile { get; set; }
 
+        public string ClientSecretsFilePath { get; set; }
+
+        public string UserName { get; set; }
+
         public string TempFolder { get; set; }
 
         public string OutputFolder { get; set; }

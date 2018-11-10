@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Linq;
+using AutoMapper;
 using Lacey.Medusa.Youtube.Api.Base;
 using Lacey.Medusa.Youtube.Common.Models.About;
 using Lacey.Medusa.Youtube.Common.Models.Common;
@@ -10,6 +11,7 @@ namespace Lacey.Medusa.Youtube.Api.Infrastructure
     {
         public YoutubeApiProfile()
         {
+            // Download
             this.CreateMap<Thumbnail, YoutubeThumbnail>()
                 .ConstructUsing(t => new YoutubeThumbnail(t.Url));
 
@@ -31,6 +33,23 @@ namespace Lacey.Medusa.Youtube.Api.Infrastructure
 
             this.CreateMap<ChannelSnippet, YoutubeAbout>()
                 .ConstructUsing(s => new YoutubeAbout(s.Description));
+
+            // Upload
+            this.CreateMap<YoutubeVideo, Video>()
+                .ConstructUsing(v => new Video
+                {
+                    Snippet = new VideoSnippet
+                    {
+                        Title = v.Title,
+                        Description = v.Description,
+                        Tags = v.Tags.ToList(),
+                        CategoryId = "22", // See https://developers.google.com/youtube/v3/docs/videoCategories/list
+                    },
+                    Status = new VideoStatus
+                    {
+                        PrivacyStatus = "unlisted" // or "private" or "public"
+                    }
+                });
         }
     }
 }

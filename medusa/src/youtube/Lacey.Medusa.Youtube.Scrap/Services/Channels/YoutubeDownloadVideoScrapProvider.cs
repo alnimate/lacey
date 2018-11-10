@@ -5,8 +5,10 @@ using AutoMapper;
 using Lacey.Medusa.Common.Cli.Base;
 using Lacey.Medusa.Common.Extensions.Base;
 using Lacey.Medusa.Youtube.Common.Interfaces;
+using Lacey.Medusa.Youtube.Common.Models.Videos;
 using Lacey.Medusa.Youtube.Scrap.Base.Models.MediaStreams;
 using Lacey.Medusa.Youtube.Scrap.Services.Common;
+using Lacey.Medusa.Youtube.Scrap.Utils;
 
 namespace Lacey.Medusa.Youtube.Scrap.Services.Channels
 {
@@ -28,7 +30,7 @@ namespace Lacey.Medusa.Youtube.Scrap.Services.Channels
             this.converterCli = new Cli(converterFilePath);
         }
 
-        public async Task DownloadVideo(string videoId)
+        public async Task<YoutubeVideoFile> DownloadVideo(string videoId)
         {
             Console.WriteLine($"Working on video [{videoId}]...");
 
@@ -47,10 +49,14 @@ namespace Lacey.Medusa.Youtube.Scrap.Services.Channels
             Directory.CreateDirectory(tempFolder);
             var videoStreamFileExt = videoStreamInfo.Container.GetFileExtension();
             var videoStreamFilePath = Path.Combine(tempFolder, $"VID-{Guid.NewGuid()}.{videoStreamFileExt}");
-            await this.Youtube.DownloadMediaStreamAsync(videoStreamInfo, videoStreamFilePath);
+            using (var progress = new ProgressBar())
+                await this.Youtube.DownloadMediaStreamAsync(videoStreamInfo, videoStreamFilePath, progress);
             var audioStreamFileExt = audioStreamInfo.Container.GetFileExtension();
             var audioStreamFilePath = Path.Combine(tempFolder, $"AUD-{Guid.NewGuid()}.{audioStreamFileExt}");
-            await this.Youtube.DownloadMediaStreamAsync(audioStreamInfo, audioStreamFilePath);
+            using (var progress = new ProgressBar())
+                await this.Youtube.DownloadMediaStreamAsync(audioStreamInfo, audioStreamFilePath, progress);
+
+            return new YoutubeVideoFile(audioStreamFilePath);
 
             // Mux streams
             Console.WriteLine("Combining...");
@@ -74,6 +80,8 @@ namespace Lacey.Medusa.Youtube.Scrap.Services.Channels
             }
 
             Console.WriteLine($"Downloaded video [{videoId}] to [{outputFilePath}]");
+
+            return new YoutubeVideoFile(outputFilePath);
         }
     }
 }

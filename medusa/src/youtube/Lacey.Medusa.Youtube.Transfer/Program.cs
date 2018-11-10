@@ -31,6 +31,8 @@ namespace Lacey.Medusa.Youtube.Transfer
                 .AddAppServices(
                     connectionString, 
                     appConfiguration.ApiKeyFile,
+                    appConfiguration.ClientSecretsFilePath,
+                    appConfiguration.UserName,
                     Path.Combine(Directory.GetCurrentDirectory(), appConfiguration.TempFolder),
                     Path.Combine(Directory.GetCurrentDirectory(), appConfiguration.OutputFolder),
                     Path.Combine(Directory.GetCurrentDirectory(), appConfiguration.ConverterFile))

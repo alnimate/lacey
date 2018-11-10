@@ -10,6 +10,8 @@ namespace Lacey.Medusa.Youtube.Transfer.Infrastructure
             this IServiceCollection services,
             string connectionString,
             string apiKeyFile,
+            string clientSecretsFilePath,
+            string userName,
             string tempFolder,
             string outputFolder,
             string converterFilePath)
@@ -19,6 +21,8 @@ namespace Lacey.Medusa.Youtube.Transfer.Infrastructure
                 .AddYoutubeDalServices(connectionString)
                 .AddYoutubeTransferServices(
                     apiKeyFile,
+                    clientSecretsFilePath,
+                    userName,
                     tempFolder,
                     outputFolder,
                     converterFilePath);
