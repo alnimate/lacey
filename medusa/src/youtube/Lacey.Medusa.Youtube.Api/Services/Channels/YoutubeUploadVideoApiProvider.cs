@@ -37,15 +37,15 @@ namespace Lacey.Medusa.Youtube.Api.Services.Channels
             }
         }
 
-        private void OnProgressChanged(IUploadProgress obj)
+        private void OnProgressChanged(IUploadProgress progress)
         {            
-            this.Logger.LogTrace($"Bytes sent {obj.BytesSent}. Status {obj.Status}.");
+            this.Logger.LogTrace($"Bytes sent {progress.BytesSent}. Status {progress.Status}.");
         }
 
 
-        private void OnResponseReceived(Video obj)
+        private void OnResponseReceived(Video video)
         {
-            this.Logger.LogTrace($"Response received. Status {obj.Status}.");
+            this.Logger.LogTrace($"Video '{video.Snippet.Title}' uploaded.");
         }
     }
 }

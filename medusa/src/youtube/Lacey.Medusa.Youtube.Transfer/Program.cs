@@ -46,7 +46,7 @@ namespace Lacey.Medusa.Youtube.Transfer
             logger = serviceProvider.GetService<ILoggerFactory>()
                 .CreateLogger<Program>();
 
-            logger.LogTrace("Starting application...");
+            logger.LogTrace("Welcome to the YouTube transferring tool!");
 
             var transferService = serviceProvider.GetService<ITransferService>();
 

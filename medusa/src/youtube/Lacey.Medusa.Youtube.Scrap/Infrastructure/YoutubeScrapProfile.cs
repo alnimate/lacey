@@ -24,7 +24,8 @@ namespace Lacey.Medusa.Youtube.Scrap.Infrastructure
                     v.Description,
                     v.UploadDate.UtcDateTime,
                     Mapper.Map<YoutubeThumbnails>(v.Thumbnails),
-                    v.Keywords));
+                    v.Keywords,
+                    v.Duration));
         }
     }
 }

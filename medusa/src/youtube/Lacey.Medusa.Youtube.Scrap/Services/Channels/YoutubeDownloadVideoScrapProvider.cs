@@ -58,20 +58,33 @@ namespace Lacey.Medusa.Youtube.Scrap.Services.Channels
             using (var progress = new ProgressBar())
                 await this.Youtube.DownloadMediaStreamAsync(audioStreamInfo, audioStreamFilePath, progress);
 
-//            return new YoutubeVideoFile(videoStreamFilePath);
+            Directory.CreateDirectory(outputFolder);
+            var outputFilePath = Path.Combine(outputFolder, $"{cleanTitle}.mp4");
+
+            using (var stream = File.OpenRead(videoStreamFilePath))
+            {
+                if (stream.Length > 30 * 1024 * 1024)
+                {
+                    // Delete temp files
+                    this.Logger.LogTrace("Deleting temp files...");
+                    stream.Close();
+                    File.Move(videoStreamFilePath, outputFilePath);
+                    File.Delete(audioStreamFilePath);
+                    this.Logger.LogTrace($"Downloaded video [{videoId}] to [{outputFilePath}]");
+                    return new YoutubeVideoFile(outputFilePath);
+                }
+            }
 
             // Mux streams
             this.Logger.LogTrace("Combining...");
-            Directory.CreateDirectory(outputFolder);
-            var outputFilePath = Path.Combine(outputFolder, $"{cleanTitle}.mp4");
             this.converterCli.SetArguments($"-i \"{videoStreamFilePath}\" -i \"{audioStreamFilePath}\" -shortest \"{outputFilePath}\" -y");
             try
             {
                 await converterCli.ExecuteAsync();
             }
-            catch (Exception)
+            catch (Exception exc)
             {
-                // ignored
+                this.Logger.LogError(exc.Message);
             }
             finally
             {
@@ -82,7 +95,6 @@ namespace Lacey.Medusa.Youtube.Scrap.Services.Channels
             }
 
             this.Logger.LogTrace($"Downloaded video [{videoId}] to [{outputFilePath}]");
-
             return new YoutubeVideoFile(outputFilePath);
         }
     }

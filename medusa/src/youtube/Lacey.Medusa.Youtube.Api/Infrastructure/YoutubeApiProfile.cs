@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using AutoMapper;
 using Lacey.Medusa.Youtube.Api.Base;
 using Lacey.Medusa.Youtube.Common.Enums;
@@ -30,7 +31,8 @@ namespace Lacey.Medusa.Youtube.Api.Infrastructure
                     v.Snippet.Description,
                     v.Snippet.PublishedAt,
                     Mapper.Map<YoutubeThumbnails>(v.Snippet.Thumbnails),
-                    null));
+                    null,
+                    TimeSpan.Zero));
 
             this.CreateMap<ChannelSnippet, YoutubeAbout>()
                 .ConstructUsing(s => new YoutubeAbout(s.Description));
