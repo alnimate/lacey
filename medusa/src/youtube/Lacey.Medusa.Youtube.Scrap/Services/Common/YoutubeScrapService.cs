@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Lacey.Medusa.Youtube.Scrap.Base;
+using Microsoft.Extensions.Logging;
 
 namespace Lacey.Medusa.Youtube.Scrap.Services.Common
 {
@@ -9,9 +10,14 @@ namespace Lacey.Medusa.Youtube.Scrap.Services.Common
 
         protected readonly IMapper Mapper;
 
-        protected YoutubeScrapService(IMapper mapper)
+        protected readonly ILogger Logger;
+
+        protected YoutubeScrapService(
+            IMapper mapper, 
+            ILogger<YoutubeScrapService> logger)
         {
             Mapper = mapper;
+            this.Logger = logger;
             Youtube = new YoutubeClient();
         }
     }

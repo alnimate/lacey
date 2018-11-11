@@ -18,14 +18,15 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Infrastructure
             string converterFilePath)
         {
             services
-                .AddYoutubeApiServices(
-                    apiKeyFile,
-                    clientSecretsFilePath,
-                    userName)
                 .AddYoutubeScrapServices(
                     tempFolder,
                     outputFolder,
                     converterFilePath)
+
+                .AddYoutubeApiServices(
+                    apiKeyFile,
+                    clientSecretsFilePath,
+                    userName)
 
                 .AddTransient<ITransferService, TransferService>();
 

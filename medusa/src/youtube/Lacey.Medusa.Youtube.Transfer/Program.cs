@@ -24,33 +24,37 @@ namespace Lacey.Medusa.Youtube.Transfer
             var appConfiguration = configuration.GetSection("App").Get<AppConfiguration>();
             var connectionString = configuration.GetConnectionString("Default");
 
+            var currentFolder = Directory.GetCurrentDirectory();
             //setup our DI
             var serviceProvider = new ServiceCollection()
-                .AddLogging()
+                .AddLogging(logBuilder => 
+                    logBuilder
+                        .AddLog4Net()
+                        .SetMinimumLevel(LogLevel.Trace))
                 .AddAutoMapper()
                 .AddAppServices(
                     connectionString, 
                     appConfiguration.ApiKeyFile,
                     appConfiguration.ClientSecretsFilePath,
                     appConfiguration.UserName,
-                    Path.Combine(Directory.GetCurrentDirectory(), appConfiguration.TempFolder),
-                    Path.Combine(Directory.GetCurrentDirectory(), appConfiguration.OutputFolder),
-                    Path.Combine(Directory.GetCurrentDirectory(), appConfiguration.ConverterFile))
+                    Path.Combine(currentFolder, appConfiguration.TempFolder),
+                    Path.Combine(currentFolder, appConfiguration.OutputFolder),
+                    Path.Combine(currentFolder, appConfiguration.ConverterFile))
                 .BuildServiceProvider();
 
             //configure console logging
-            serviceProvider
-                .GetService<ILoggerFactory>()
-                .AddConsole(LogLevel.Debug);
-
             logger = serviceProvider.GetService<ILoggerFactory>()
                 .CreateLogger<Program>();
+
+            logger.LogTrace("Starting application...");
 
             var transferService = serviceProvider.GetService<ITransferService>();
 
             transferService.TransferChannel(
                 appConfiguration.SourceChannels.First(),
                 appConfiguration.DestChannels.First()).Wait();
+
+            serviceProvider.Dispose();
         }
     }
 }

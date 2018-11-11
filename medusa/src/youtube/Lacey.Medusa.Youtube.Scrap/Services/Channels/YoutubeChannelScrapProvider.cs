@@ -7,12 +7,16 @@ using Lacey.Medusa.Youtube.Common.Models.About;
 using Lacey.Medusa.Youtube.Common.Models.Common;
 using Lacey.Medusa.Youtube.Common.Models.Videos;
 using Lacey.Medusa.Youtube.Scrap.Services.Common;
+using Microsoft.Extensions.Logging;
 
 namespace Lacey.Medusa.Youtube.Scrap.Services.Channels
 {
     public sealed class YoutubeChannelScrapProvider : YoutubeScrapService, IYoutubeChannelProvider
     {
-        public YoutubeChannelScrapProvider(IMapper mapper) : base(mapper)
+        public YoutubeChannelScrapProvider(
+            IMapper mapper,
+            ILogger<YoutubeChannelScrapProvider> logger) 
+            : base(mapper, logger)
         {
         }
 

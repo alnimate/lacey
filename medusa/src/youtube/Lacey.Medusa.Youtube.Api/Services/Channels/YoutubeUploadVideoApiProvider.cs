@@ -7,12 +7,17 @@ using Lacey.Medusa.Youtube.Api.Services.Auth;
 using Lacey.Medusa.Youtube.Api.Services.Common;
 using Lacey.Medusa.Youtube.Common.Interfaces;
 using Lacey.Medusa.Youtube.Common.Models.Videos;
+using Microsoft.Extensions.Logging;
 
 namespace Lacey.Medusa.Youtube.Api.Services.Channels
 {
     public sealed class YoutubeUploadVideoApiProvider : YoutubeApiService, IYoutubeUploadVideoProvider
     {
-        public YoutubeUploadVideoApiProvider(IYoutubeAuthProvider youtubeAuthProvider, IMapper mapper) : base(youtubeAuthProvider, mapper)
+        public YoutubeUploadVideoApiProvider(
+            IYoutubeAuthProvider youtubeAuthProvider, 
+            IMapper mapper,
+            ILogger<YoutubeUploadVideoApiProvider> logger)
+            : base(youtubeAuthProvider, mapper, logger)
         {
         }
 
@@ -24,7 +29,7 @@ namespace Lacey.Medusa.Youtube.Api.Services.Channels
             var video = this.Mapper.Map<Video>(youtubeVideo);
             using (var fileStream = new FileStream(filePath, FileMode.Open))
             {
-                var videosInsertRequest = this.Youtube.Videos.Insert(video, "snippet,status", fileStream, "video/*");
+                var videosInsertRequest = this.YoutubeOAuth2.Videos.Insert(video, "snippet,status", fileStream, "video/*");
                 videosInsertRequest.ProgressChanged += OnProgressChanged;
                 videosInsertRequest.ResponseReceived += OnResponseReceived;
 
@@ -34,11 +39,13 @@ namespace Lacey.Medusa.Youtube.Api.Services.Channels
 
         private void OnProgressChanged(IUploadProgress obj)
         {            
+            this.Logger.LogTrace($"Bytes sent {obj.BytesSent}. Status {obj.Status}.");
         }
 
 
         private void OnResponseReceived(Video obj)
         {
+            this.Logger.LogTrace($"Response received. Status {obj.Status}.");
         }
     }
 }

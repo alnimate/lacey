@@ -43,7 +43,7 @@ namespace Lacey.Medusa.Youtube.Api.Infrastructure
                     {
                         Title = v.Title,
                         Description = v.Description,
-                        Tags = v.Tags.ToList(),
+                        Tags = v.Tags?.ToList(),
                         CategoryId = "22", // See https://developers.google.com/youtube/v3/docs/videoCategories/list
                     },
                     Status = new VideoStatus

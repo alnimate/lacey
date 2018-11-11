@@ -9,6 +9,7 @@ using Lacey.Medusa.Youtube.Common.Interfaces;
 using Lacey.Medusa.Youtube.Common.Models.About;
 using Lacey.Medusa.Youtube.Common.Models.Common;
 using Lacey.Medusa.Youtube.Common.Models.Videos;
+using Microsoft.Extensions.Logging;
 
 namespace Lacey.Medusa.Youtube.Api.Services.Channels
 {
@@ -16,8 +17,9 @@ namespace Lacey.Medusa.Youtube.Api.Services.Channels
     {
         public YoutubeChannelApiProvider(
             IYoutubeAuthProvider youtubeAuthProvider, 
-            IMapper mapper) 
-            : base(youtubeAuthProvider, mapper)
+            IMapper mapper,
+            ILogger<YoutubeChannelApiProvider> logger) 
+            : base(youtubeAuthProvider, mapper, logger)
         {
         }
 

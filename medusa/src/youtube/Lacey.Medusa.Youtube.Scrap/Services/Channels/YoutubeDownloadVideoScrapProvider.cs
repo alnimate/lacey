@@ -9,6 +9,7 @@ using Lacey.Medusa.Youtube.Common.Models.Videos;
 using Lacey.Medusa.Youtube.Scrap.Base.Models.MediaStreams;
 using Lacey.Medusa.Youtube.Scrap.Services.Common;
 using Lacey.Medusa.Youtube.Scrap.Utils;
+using Microsoft.Extensions.Logging;
 
 namespace Lacey.Medusa.Youtube.Scrap.Services.Channels
 {
@@ -20,10 +21,11 @@ namespace Lacey.Medusa.Youtube.Scrap.Services.Channels
 
         public YoutubeDownloadVideoScrapProvider(
             IMapper mapper,
+            ILogger<YoutubeDownloadVideoScrapProvider> logger,
             string tempFolder, 
             string outputFolder, 
             string converterFilePath)
-            : base(mapper)
+            : base(mapper, logger)
         {
             this.tempFolder = tempFolder;
             this.outputFolder = outputFolder;
@@ -32,12 +34,12 @@ namespace Lacey.Medusa.Youtube.Scrap.Services.Channels
 
         public async Task<YoutubeVideoFile> DownloadVideo(string videoId)
         {
-            Console.WriteLine($"Working on video [{videoId}]...");
+            this.Logger.LogTrace($"Working on video [{videoId}]...");
 
             // Get video info
             var video = await this.Youtube.GetVideoAsync(videoId);
             var cleanTitle = video.Title.Replace(Path.GetInvalidFileNameChars(), '_');
-            Console.WriteLine($"{video.Title}");
+            this.Logger.LogTrace($"{video.Title}");
 
             // Get best streams
             var streamInfoSet = await this.Youtube.GetVideoMediaStreamInfosAsync(videoId);
@@ -45,7 +47,7 @@ namespace Lacey.Medusa.Youtube.Scrap.Services.Channels
             var audioStreamInfo = streamInfoSet.Audio.WithHighestBitrate();
 
             // Download streams
-            Console.WriteLine("Downloading...");
+            this.Logger.LogTrace("Downloading...");
             Directory.CreateDirectory(tempFolder);
             var videoStreamFileExt = videoStreamInfo.Container.GetFileExtension();
             var videoStreamFilePath = Path.Combine(tempFolder, $"VID-{Guid.NewGuid()}.{videoStreamFileExt}");
@@ -56,10 +58,10 @@ namespace Lacey.Medusa.Youtube.Scrap.Services.Channels
             using (var progress = new ProgressBar())
                 await this.Youtube.DownloadMediaStreamAsync(audioStreamInfo, audioStreamFilePath, progress);
 
-            return new YoutubeVideoFile(videoStreamFilePath);
+//            return new YoutubeVideoFile(videoStreamFilePath);
 
             // Mux streams
-            Console.WriteLine("Combining...");
+            this.Logger.LogTrace("Combining...");
             Directory.CreateDirectory(outputFolder);
             var outputFilePath = Path.Combine(outputFolder, $"{cleanTitle}.mp4");
             this.converterCli.SetArguments($"-i \"{videoStreamFilePath}\" -i \"{audioStreamFilePath}\" -shortest \"{outputFilePath}\" -y");
@@ -74,12 +76,12 @@ namespace Lacey.Medusa.Youtube.Scrap.Services.Channels
             finally
             {
                 // Delete temp files
-                Console.WriteLine("Deleting temp files...");
+                this.Logger.LogTrace("Deleting temp files...");
                 File.Delete(videoStreamFilePath);
                 File.Delete(audioStreamFilePath);
             }
 
-            Console.WriteLine($"Downloaded video [{videoId}] to [{outputFilePath}]");
+            this.Logger.LogTrace($"Downloaded video [{videoId}] to [{outputFilePath}]");
 
             return new YoutubeVideoFile(outputFilePath);
         }
