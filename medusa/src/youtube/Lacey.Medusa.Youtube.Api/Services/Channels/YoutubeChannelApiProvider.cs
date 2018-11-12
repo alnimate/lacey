@@ -30,11 +30,12 @@ namespace Lacey.Medusa.Youtube.Api.Services.Channels
             var response = await request.ExecuteAsync();
             var channel = response.Items.First();
 
+            var channelInfo = new YoutubeChannelInfo(channel.Id, channel.Snippet.Title);
             var videos = await this.GetChannelVideos(channelId);
             var about = this.Mapper.Map<YoutubeAbout>(channel.Snippet);
 
-            return new YoutubeChannel(channel.Id,
-                channel.Snippet.Title,
+            return new YoutubeChannel(
+                channelInfo,
                 videos,
                 about);
         }

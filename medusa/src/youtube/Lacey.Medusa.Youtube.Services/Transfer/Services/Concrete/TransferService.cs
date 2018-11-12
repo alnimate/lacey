@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Lacey.Medusa.Common.Validation.Extensions;
 using Lacey.Medusa.Youtube.Common.Services;
@@ -51,10 +52,18 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
 
                 var videoFile = await this.downloadVideoProvider.DownloadVideo(video.VideoId);
 
-                await this.uploadVideoProvider.UploadVideo(
-                    destChannelId,
-                    video,
-                    videoFile.FilePath);
+                try
+                {
+                    await this.uploadVideoProvider.UploadVideo(
+                        destChannelId,
+                        video,
+                        videoFile.FilePath);
+                }
+                finally
+                {
+                    this.logger.LogTrace("Deleting temp files...");
+                    File.Delete(videoFile.FilePath);
+                }
             }
         }
     }

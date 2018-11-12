@@ -1,4 +1,5 @@
-﻿using Lacey.Medusa.Youtube.Dal.Infrastructure;
+﻿using Lacey.Medusa.Common.Email.Infrastructure;
+using Lacey.Medusa.Youtube.Dal.Infrastructure;
 using Lacey.Medusa.Youtube.Services.Transfer.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -14,11 +15,20 @@ namespace Lacey.Medusa.Youtube.Transfer.Infrastructure
             string userName,
             string tempFolder,
             string outputFolder,
-            string converterFilePath)
+            string converterFilePath,
+            string smtpHost,
+            int smtpPort,
+            string smtpUserName,
+            string smtpSecretFilePath)
         {
 
             services
                 .AddYoutubeDalServices(connectionString)
+                .AddEmailServices(
+                    smtpHost,
+                    smtpPort,
+                    smtpUserName, 
+                    smtpSecretFilePath)
                 .AddYoutubeTransferServices(
                     apiKeyFile,
                     clientSecretsFilePath,

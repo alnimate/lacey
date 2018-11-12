@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using AutoMapper;
+using Lacey.Medusa.Common.Email.Services.Email;
 using Lacey.Medusa.Youtube.Services.Transfer.Services;
 using Lacey.Medusa.Youtube.Transfer.Configuration;
 using Lacey.Medusa.Youtube.Transfer.Infrastructure;
@@ -22,7 +23,7 @@ namespace Lacey.Medusa.Youtube.Transfer
                 .AddJsonFile("appsettings.json");
 
             var configuration = builder.Build();
-            var appConfiguration = configuration.GetSection("App").Get<AppConfiguration>();
+            var config = configuration.GetSection("App").Get<AppConfiguration>();
             var connectionString = configuration.GetConnectionString("Default");
 
             var currentFolder = Directory.GetCurrentDirectory();
@@ -35,12 +36,16 @@ namespace Lacey.Medusa.Youtube.Transfer
                 .AddAutoMapper()
                 .AddAppServices(
                     connectionString, 
-                    appConfiguration.ApiKeyFile,
-                    appConfiguration.ClientSecretsFilePath,
-                    appConfiguration.UserName,
-                    Path.Combine(currentFolder, appConfiguration.TempFolder),
-                    Path.Combine(currentFolder, appConfiguration.OutputFolder),
-                    Path.Combine(currentFolder, appConfiguration.ConverterFile))
+                    config.ApiKeyFile,
+                    config.ClientSecretsFilePath,
+                    config.UserName,
+                    Path.Combine(currentFolder, config.TempFolder),
+                    Path.Combine(currentFolder, config.OutputFolder),
+                    Path.Combine(currentFolder, config.ConverterFile),
+                    config.Email.SmtpHost,
+                    config.Email.SmtpPort,
+                    config.Email.SmtpUsername,
+                    Path.Combine(currentFolder, config.Email.SmtpSecretFile))
                 .BuildServiceProvider();
 
             //configure console logging
@@ -51,11 +56,13 @@ namespace Lacey.Medusa.Youtube.Transfer
 
             var transferService = serviceProvider.GetService<ITransferService>();
 
+            var sourceChannelId = config.SourceChannels.First();
+            var destChannelId = config.DestChannels.First();
             try
             {
                 transferService.TransferChannel(
-                    appConfiguration.SourceChannels.First(),
-                    appConfiguration.DestChannels.First()).Wait();
+                    sourceChannelId,
+                    destChannelId).Wait();
             }
             catch (Exception exc)
             {
@@ -63,12 +70,20 @@ namespace Lacey.Medusa.Youtube.Transfer
             }
             finally
             {
-                if (Directory.Exists(appConfiguration.TempFolder))
-                {
-                    logger.LogTrace("Deleting temp files...");
-                    Directory.Delete(appConfiguration.TempFolder, true);
-                }
+                var emailService = serviceProvider.GetService<IEmailProvider>();
+                emailService.Send(
+                    config.Email.From,
+                    config.Email.To,
+                    "YouTube Transfer Completed.",
+                    $"Channel https://www.youtube.com/channel/{sourceChannelId} was transferred to https://www.youtube.com/channel/{destChannelId}.",
+                    true,
+                    new []
+                    {
+                        Path.Combine(currentFolder, config.Logs.LogFile)
+                    });
+
                 serviceProvider.Dispose();
+                logger.LogTrace($"Transferring completed!{Environment.NewLine}");
             }
         }
     }

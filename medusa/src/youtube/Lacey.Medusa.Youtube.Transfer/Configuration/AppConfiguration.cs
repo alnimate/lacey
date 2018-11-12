@@ -17,5 +17,9 @@
         public string[] SourceChannels { get; set; }
 
         public string[] DestChannels { get; set; }
+
+        public EmailConfiguration Email { get; set; }
+
+        public LogsConfiguration Logs { get; set; }
     }
 }
