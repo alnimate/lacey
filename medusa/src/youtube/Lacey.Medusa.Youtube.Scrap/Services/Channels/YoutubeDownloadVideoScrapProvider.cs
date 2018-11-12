@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Lacey.Medusa.Common.Cli.Base;
 using Lacey.Medusa.Common.Extensions.Base;
-using Lacey.Medusa.Youtube.Common.Interfaces;
 using Lacey.Medusa.Youtube.Common.Models.Videos;
+using Lacey.Medusa.Youtube.Common.Services;
 using Lacey.Medusa.Youtube.Scrap.Base.Models.MediaStreams;
 using Lacey.Medusa.Youtube.Scrap.Services.Common;
 using Lacey.Medusa.Youtube.Scrap.Utils;
@@ -82,9 +82,9 @@ namespace Lacey.Medusa.Youtube.Scrap.Services.Channels
             {
                 await converterCli.ExecuteAsync();
             }
-            catch (Exception exc)
+            catch (Exception)
             {
-                this.Logger.LogError(exc.Message);
+                // ignored
             }
             finally
             {

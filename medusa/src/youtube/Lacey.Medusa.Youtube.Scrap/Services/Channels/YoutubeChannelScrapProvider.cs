@@ -2,10 +2,10 @@
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using Lacey.Medusa.Youtube.Common.Interfaces;
 using Lacey.Medusa.Youtube.Common.Models.About;
 using Lacey.Medusa.Youtube.Common.Models.Common;
 using Lacey.Medusa.Youtube.Common.Models.Videos;
+using Lacey.Medusa.Youtube.Common.Services;
 using Lacey.Medusa.Youtube.Scrap.Services.Common;
 using Microsoft.Extensions.Logging;
 
@@ -35,6 +35,14 @@ namespace Lacey.Medusa.Youtube.Scrap.Services.Channels
                 channel.Title,
                 videos,
                 about);
+        }
+
+        public async Task<YoutubeVideos> GetChannelVideos(string channelId)
+        {
+            var uploads = await this.Youtube.GetChannelUploadsAsync(channelId);
+
+            return new YoutubeVideos(
+                this.Mapper.Map<IEnumerable<YoutubeVideo>>(uploads).ToArray());
         }
     }
 }

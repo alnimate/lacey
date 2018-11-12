@@ -1,4 +1,5 @@
 ﻿using Lacey.Medusa.Youtube.Api.Infrastructure;
+using Lacey.Medusa.Youtube.Common.Infrastructure;
 using Lacey.Medusa.Youtube.Scrap.Infrastructure;
 using Lacey.Medusa.Youtube.Services.Transfer.Services;
 using Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete;
@@ -18,15 +19,19 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Infrastructure
             string converterFilePath)
         {
             services
+                .AddYoutubeApiServices(
+                    apiKeyFile,
+                    clientSecretsFilePath,
+                    userName)
+
                 .AddYoutubeScrapServices(
                     tempFolder,
                     outputFolder,
                     converterFilePath)
 
-                .AddYoutubeApiServices(
-                    apiKeyFile,
-                    clientSecretsFilePath,
-                    userName)
+                // Highest priority providers
+                .AddYoutubeServices(
+                    tempFolder)
 
                 .AddTransient<ITransferService, TransferService>();
 

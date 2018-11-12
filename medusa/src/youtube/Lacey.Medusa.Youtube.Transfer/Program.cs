@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using AutoMapper;
 using Lacey.Medusa.Youtube.Services.Transfer.Services;
@@ -50,11 +51,25 @@ namespace Lacey.Medusa.Youtube.Transfer
 
             var transferService = serviceProvider.GetService<ITransferService>();
 
-            transferService.TransferChannel(
-                appConfiguration.SourceChannels.First(),
-                appConfiguration.DestChannels.First()).Wait();
-
-            serviceProvider.Dispose();
+            try
+            {
+                transferService.TransferChannel(
+                    appConfiguration.SourceChannels.First(),
+                    appConfiguration.DestChannels.First()).Wait();
+            }
+            catch (Exception exc)
+            {
+                logger.LogError(exc.Message);
+            }
+            finally
+            {
+                if (Directory.Exists(appConfiguration.TempFolder))
+                {
+                    logger.LogTrace("Deleting temp files...");
+                    Directory.Delete(appConfiguration.TempFolder, true);
+                }
+                serviceProvider.Dispose();
+            }
         }
     }
 }

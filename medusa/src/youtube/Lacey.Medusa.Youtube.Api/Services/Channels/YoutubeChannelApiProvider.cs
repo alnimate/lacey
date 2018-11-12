@@ -5,10 +5,10 @@ using AutoMapper;
 using Lacey.Medusa.Youtube.Api.Base;
 using Lacey.Medusa.Youtube.Api.Services.Auth;
 using Lacey.Medusa.Youtube.Api.Services.Common;
-using Lacey.Medusa.Youtube.Common.Interfaces;
 using Lacey.Medusa.Youtube.Common.Models.About;
 using Lacey.Medusa.Youtube.Common.Models.Common;
 using Lacey.Medusa.Youtube.Common.Models.Videos;
+using Lacey.Medusa.Youtube.Common.Services;
 using Microsoft.Extensions.Logging;
 
 namespace Lacey.Medusa.Youtube.Api.Services.Channels
@@ -30,7 +30,7 @@ namespace Lacey.Medusa.Youtube.Api.Services.Channels
             var response = await request.ExecuteAsync();
             var channel = response.Items.First();
 
-            var videos = await this.GetYoutubeVideos(channelId);
+            var videos = await this.GetChannelVideos(channelId);
             var about = this.Mapper.Map<YoutubeAbout>(channel.Snippet);
 
             return new YoutubeChannel(channel.Id,
@@ -39,7 +39,7 @@ namespace Lacey.Medusa.Youtube.Api.Services.Channels
                 about);
         }
 
-        private async Task<YoutubeVideos> GetYoutubeVideos(string channelId)
+        public async Task<YoutubeVideos> GetChannelVideos(string channelId)
         {
             var request = this.Youtube.Search.List("snippet");
             request.Order = SearchResource.ListRequest.OrderEnum.Date;

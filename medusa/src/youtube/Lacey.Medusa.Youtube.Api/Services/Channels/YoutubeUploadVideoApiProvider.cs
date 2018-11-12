@@ -5,8 +5,8 @@ using Lacey.Medusa.Common.Api.Base.Upload;
 using Lacey.Medusa.Youtube.Api.Base;
 using Lacey.Medusa.Youtube.Api.Services.Auth;
 using Lacey.Medusa.Youtube.Api.Services.Common;
-using Lacey.Medusa.Youtube.Common.Interfaces;
 using Lacey.Medusa.Youtube.Common.Models.Videos;
+using Lacey.Medusa.Youtube.Common.Services;
 using Microsoft.Extensions.Logging;
 
 namespace Lacey.Medusa.Youtube.Api.Services.Channels

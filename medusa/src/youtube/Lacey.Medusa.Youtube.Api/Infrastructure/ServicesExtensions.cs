@@ -1,7 +1,7 @@
 ﻿using Lacey.Medusa.Youtube.Api.Services.Auth;
 using Lacey.Medusa.Youtube.Api.Services.Auth.Concrete;
 using Lacey.Medusa.Youtube.Api.Services.Channels;
-using Lacey.Medusa.Youtube.Common.Interfaces;
+using Lacey.Medusa.Youtube.Common.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Lacey.Medusa.Youtube.Api.Infrastructure

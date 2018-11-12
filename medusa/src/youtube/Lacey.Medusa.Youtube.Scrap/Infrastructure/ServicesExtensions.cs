@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Lacey.Medusa.Youtube.Common.Interfaces;
+using Lacey.Medusa.Youtube.Common.Services;
 using Lacey.Medusa.Youtube.Scrap.Services.Channels;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;

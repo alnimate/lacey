@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Lacey.Medusa.Youtube.Common.Models.Videos;
 
-namespace Lacey.Medusa.Youtube.Common.Interfaces
+namespace Lacey.Medusa.Youtube.Common.Services
 {
     public interface IYoutubeUploadVideoProvider
     {

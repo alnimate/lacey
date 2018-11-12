@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using Lacey.Medusa.Common.Validation.Extensions;
-using Lacey.Medusa.Youtube.Common.Interfaces;
+using Lacey.Medusa.Youtube.Common.Services;
 using Microsoft.Extensions.Logging;
 
 namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
@@ -31,7 +31,7 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
         public async Task TransferChannel(string sourceChannelId, string destChannelId)
         {
             var sourceChannel = await this.channelProvider.GetYoutubeChannel(sourceChannelId);
-            var destChannel = await this.channelProvider.GetYoutubeChannel(destChannelId);
+            var destVideos = await this.channelProvider.GetChannelVideos(destChannelId);
 
             var validSourceVideos = sourceChannel.Videos.Items
                 .ValidationFilter(out var invalidVideos);
@@ -43,7 +43,7 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
             foreach (var video in validSourceVideos
                 .OrderBy(v => v.PublishedAt))
             {
-                if (destChannel.Videos.Items.Any(video.Equals))
+                if (destVideos.Items.Any(video.Equals))
                 {
                     this.logger.LogTrace($"Video \"{video.Title}\" skipped. Video already exists.");
                     continue;
