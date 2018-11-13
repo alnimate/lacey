@@ -26,7 +26,6 @@ namespace Lacey.Medusa.Youtube.Transfer
             var config = configuration.GetSection("App").Get<AppConfiguration>();
             var connectionString = configuration.GetConnectionString("Default");
 
-            var currentFolder = Directory.GetCurrentDirectory();
             //setup our DI
             var serviceProvider = new ServiceCollection()
                 .AddLogging(logBuilder => 
@@ -34,18 +33,8 @@ namespace Lacey.Medusa.Youtube.Transfer
                         .AddLog4Net()
                         .SetMinimumLevel(LogLevel.Trace))
                 .AddAutoMapper()
-                .AddAppServices(
-                    connectionString, 
-                    config.ApiKeyFile,
-                    config.ClientSecretsFilePath,
-                    config.UserName,
-                    Path.Combine(currentFolder, config.TempFolder),
-                    Path.Combine(currentFolder, config.OutputFolder),
-                    Path.Combine(currentFolder, config.ConverterFile),
-                    config.Email.SmtpHost,
-                    config.Email.SmtpPort,
-                    config.Email.SmtpUsername,
-                    Path.Combine(currentFolder, config.Email.SmtpSecretFile))
+                .AddAppServices(config,
+                    connectionString)
                 .BuildServiceProvider();
 
             //configure console logging
@@ -71,10 +60,11 @@ namespace Lacey.Medusa.Youtube.Transfer
             finally
             {
                 var emailService = serviceProvider.GetService<IEmailProvider>();
+                var currentFolder = Directory.GetCurrentDirectory();
                 emailService.Send(
                     config.Email.From,
                     config.Email.To,
-                    "YouTube Transfer Completed.",
+                    config.Email.Subject,
                     $"Channel https://www.youtube.com/channel/{sourceChannelId} was transferred to https://www.youtube.com/channel/{destChannelId}.",
                     true,
                     new []

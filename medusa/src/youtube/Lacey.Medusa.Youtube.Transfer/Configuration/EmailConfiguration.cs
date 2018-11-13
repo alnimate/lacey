@@ -13,5 +13,7 @@
         public string SmtpUsername { get; set; }
 
         public string SmtpSecretFile { get; set; }
+
+        public string Subject { get; set; }
     }
 }

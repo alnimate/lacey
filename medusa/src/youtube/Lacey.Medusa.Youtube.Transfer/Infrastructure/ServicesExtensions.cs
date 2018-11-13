@@ -1,6 +1,8 @@
-﻿using Lacey.Medusa.Common.Email.Infrastructure;
+﻿using System.IO;
+using Lacey.Medusa.Common.Email.Infrastructure;
 using Lacey.Medusa.Youtube.Dal.Infrastructure;
 using Lacey.Medusa.Youtube.Services.Transfer.Infrastructure;
+using Lacey.Medusa.Youtube.Transfer.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Lacey.Medusa.Youtube.Transfer.Infrastructure
@@ -9,33 +11,25 @@ namespace Lacey.Medusa.Youtube.Transfer.Infrastructure
     {
         public static IServiceCollection AddAppServices(
             this IServiceCollection services,
-            string connectionString,
-            string apiKeyFile,
-            string clientSecretsFilePath,
-            string userName,
-            string tempFolder,
-            string outputFolder,
-            string converterFilePath,
-            string smtpHost,
-            int smtpPort,
-            string smtpUserName,
-            string smtpSecretFilePath)
+            AppConfiguration config,
+            string connectionString)
         {
+            var currentFolder = Directory.GetCurrentDirectory();
 
             services
                 .AddYoutubeDalServices(connectionString)
                 .AddEmailServices(
-                    smtpHost,
-                    smtpPort,
-                    smtpUserName, 
-                    smtpSecretFilePath)
+                    config.Email.SmtpHost,
+                    config.Email.SmtpPort,
+                    config.Email.SmtpUsername,
+                    Path.Combine(currentFolder, config.Email.SmtpSecretFile))
                 .AddYoutubeTransferServices(
-                    apiKeyFile,
-                    clientSecretsFilePath,
-                    userName,
-                    tempFolder,
-                    outputFolder,
-                    converterFilePath);
+                    config.ApiKeyFile,
+                    config.ClientSecretsFilePath,
+                    config.UserName,
+                    Path.Combine(currentFolder, config.TempFolder),
+                    Path.Combine(currentFolder, config.OutputFolder),
+                    Path.Combine(currentFolder, config.ConverterFile));
 
             return services;
         }
