@@ -5,17 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="6.2.2" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="2.1.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\common\Lacey.Medusa.Common.DataAnnotations\Lacey.Medusa.Common.DataAnnotations.csproj" />
-    <ProjectReference Include="..\..\common\Lacey.Medusa.Common.Services\Lacey.Medusa.Common.Services.csproj" />
-    <ProjectReference Include="..\..\common\Lacey.Medusa.Common.Validation\Lacey.Medusa.Common.Validation.csproj" />
     <ProjectReference Include="..\Lacey.Medusa.Youtube.Api\Lacey.Medusa.Youtube.Api.csproj" />
-    <ProjectReference Include="..\Lacey.Medusa.Youtube.Domain\Lacey.Medusa.Youtube.Domain.csproj" />
-    <ProjectReference Include="..\Lacey.Medusa.Youtube.Scrap\Lacey.Medusa.Youtube.Scrap.csproj" />
   </ItemGroup>
 
 </Project>

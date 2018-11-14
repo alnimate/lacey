@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 
 namespace Lacey.Medusa.Youtube.Api.Base
 {
-  internal class InvideoBranding : IDirectResponseSchema
+  public class InvideoBranding : IDirectResponseSchema
   {
     [JsonProperty("imageBytes")]
     public virtual string ImageBytes { get; set; }

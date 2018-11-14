@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 
 namespace Lacey.Medusa.Youtube.Api.Base
 {
-  internal class LiveChatMessageSnippet : IDirectResponseSchema
+  public class LiveChatMessageSnippet : IDirectResponseSchema
   {
     /// <summary>The ID of the user that authored this message, this field is not always filled. textMessageEvent -
     /// the user that wrote the message fanFundingEvent - the user that funded the broadcast newSponsorEvent - the

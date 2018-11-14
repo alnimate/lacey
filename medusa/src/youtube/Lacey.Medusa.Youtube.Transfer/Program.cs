@@ -24,7 +24,6 @@ namespace Lacey.Medusa.Youtube.Transfer
 
             var configuration = builder.Build();
             var config = configuration.GetSection("App").Get<AppConfiguration>();
-            var connectionString = configuration.GetConnectionString("Default");
 
             //setup our DI
             var serviceProvider = new ServiceCollection()
@@ -33,8 +32,7 @@ namespace Lacey.Medusa.Youtube.Transfer
                         .AddLog4Net()
                         .SetMinimumLevel(LogLevel.Trace))
                 .AddAutoMapper()
-                .AddAppServices(config,
-                    connectionString)
+                .AddAppServices(config)
                 .BuildServiceProvider();
 
             //configure console logging

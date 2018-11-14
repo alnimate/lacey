@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>A liveChatBan resource represents a ban for a YouTube live chat.</summary>
-  internal class LiveChatBan : IDirectResponseSchema
+  public class LiveChatBan : IDirectResponseSchema
   {
     /// <summary>Etag of this resource.</summary>
     [JsonProperty("etag")]

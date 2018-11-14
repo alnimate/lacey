@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Internal representation of thumbnails for a YouTube resource.</summary>
-  internal class ThumbnailDetails : IDirectResponseSchema
+  public class ThumbnailDetails : IDirectResponseSchema
   {
     /// <summary>The default image for this resource.</summary>
     [JsonProperty("default")]

@@ -12,7 +12,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Specifies suggestions on how to improve video content, including encoding hints, tag suggestions, and
   /// editor suggestions.</summary>
-  internal class VideoSuggestions : IDirectResponseSchema
+  public class VideoSuggestions : IDirectResponseSchema
   {
     /// <summary>A list of video editing operations that might improve the video quality or playback experience of
     /// the uploaded video.</summary>

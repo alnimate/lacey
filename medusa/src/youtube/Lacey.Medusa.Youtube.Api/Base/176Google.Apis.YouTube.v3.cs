@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>A liveChatMessage resource represents a chat message in a YouTube Live Chat.</summary>
-  internal class LiveChatMessage : IDirectResponseSchema
+  public class LiveChatMessage : IDirectResponseSchema
   {
     /// <summary>The authorDetails object contains basic details about the user that posted this message.</summary>
     [JsonProperty("authorDetails")]

@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Basic details about an i18n region, such as region code and human-readable name.</summary>
-  internal class I18nRegionSnippet : IDirectResponseSchema
+  public class I18nRegionSnippet : IDirectResponseSchema
   {
     /// <summary>The region code as a 2-letter ISO country code.</summary>
     [JsonProperty("gl")]

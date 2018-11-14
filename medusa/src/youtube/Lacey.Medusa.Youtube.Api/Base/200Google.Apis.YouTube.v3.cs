@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 
 namespace Lacey.Medusa.Youtube.Api.Base
 {
-  internal class SuperChatEventSnippet : IDirectResponseSchema
+  public class SuperChatEventSnippet : IDirectResponseSchema
   {
     /// <summary>The purchase amount, in micros of the purchase currency. e.g., 1 is represented as
     /// 1000000.</summary>

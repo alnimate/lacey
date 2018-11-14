@@ -11,7 +11,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Describes the spatial position of a visual widget inside a video. It is a union of various position
   /// types, out of which only will be set one.</summary>
-  internal class InvideoPosition : IDirectResponseSchema
+  public class InvideoPosition : IDirectResponseSchema
   {
     /// <summary>Describes in which corner of the video the visual widget will appear.</summary>
     [JsonProperty("cornerPosition")]

@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 
 namespace Lacey.Medusa.Youtube.Api.Base
 {
-  internal class LiveChatSuperChatDetails : IDirectResponseSchema
+  public class LiveChatSuperChatDetails : IDirectResponseSchema
   {
     /// <summary>A rendered string that displays the fund amount and currency to the user.</summary>
     [JsonProperty("amountDisplayString")]

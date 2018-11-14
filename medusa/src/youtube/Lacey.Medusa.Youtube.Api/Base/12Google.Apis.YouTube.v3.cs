@@ -12,7 +12,7 @@ using Lacey.Medusa.Common.Api.Core.Base.Util;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>The "liveBroadcasts" collection of methods.</summary>
-  internal class LiveBroadcastsResource
+  public class LiveBroadcastsResource
   {
     private const string Resource = "liveBroadcasts";
     /// <summary>The service which this resource belongs to.</summary>
@@ -117,7 +117,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
     /// <summary>Binds a YouTube broadcast to a stream or removes an existing binding between a broadcast and a
     /// stream. A broadcast can only be bound to one video stream, though a video stream may be bound to more than
     /// one broadcast.</summary>
-    internal class BindRequest : YouTubeBaseServiceRequest<LiveBroadcast>
+    public class BindRequest : YouTubeBaseServiceRequest<LiveBroadcast>
     {
       /// <summary>Constructs a new Bind request.</summary>
       public BindRequest(IClientService service, string id, string part)
@@ -249,7 +249,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
     }
 
     /// <summary>Controls the settings for a slate that can be displayed in the broadcast stream.</summary>
-    internal class ControlRequest : YouTubeBaseServiceRequest<LiveBroadcast>
+    public class ControlRequest : YouTubeBaseServiceRequest<LiveBroadcast>
     {
       /// <summary>Constructs a new Control request.</summary>
       public ControlRequest(IClientService service, string id, string part)
@@ -414,7 +414,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
     }
 
     /// <summary>Deletes a broadcast.</summary>
-    internal class DeleteRequest : YouTubeBaseServiceRequest<string>
+    public class DeleteRequest : YouTubeBaseServiceRequest<string>
     {
       /// <summary>Constructs a new Delete request.</summary>
       public DeleteRequest(IClientService service, string id)
@@ -517,7 +517,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
     }
 
     /// <summary>Creates a broadcast.</summary>
-    internal class InsertRequest : YouTubeBaseServiceRequest<LiveBroadcast>
+    public class InsertRequest : YouTubeBaseServiceRequest<LiveBroadcast>
     {
       /// <summary>Constructs a new Insert request.</summary>
       public InsertRequest(IClientService service, LiveBroadcast body, string part)
@@ -633,7 +633,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
     }
 
     /// <summary>Returns a list of YouTube broadcasts that match the API request parameters.</summary>
-    internal class ListRequest : YouTubeBaseServiceRequest<LiveBroadcastListResponse>
+    public class ListRequest : YouTubeBaseServiceRequest<LiveBroadcastListResponse>
     {
       /// <summary>Constructs a new List request.</summary>
       public ListRequest(IClientService service, string part)
@@ -852,7 +852,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
     /// status. For example, when you transition a broadcast's status to testing, YouTube starts to transmit video
     /// to that broadcast's monitor stream. Before calling this method, you should confirm that the value of the
     /// status.streamStatus property for the stream bound to your broadcast is active.</summary>
-    internal class TransitionRequest : YouTubeBaseServiceRequest<LiveBroadcast>
+    public class TransitionRequest : YouTubeBaseServiceRequest<LiveBroadcast>
     {
       /// <summary>Constructs a new Transition request.</summary>
       public TransitionRequest(IClientService service, LiveBroadcastsResource.TransitionRequest.BroadcastStatusEnum broadcastStatus, string id, string part)
@@ -1002,7 +1002,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
 
     /// <summary>Updates a broadcast. For example, you could modify the broadcast settings defined in the
     /// liveBroadcast resource's contentDetails object.</summary>
-    internal class UpdateRequest : YouTubeBaseServiceRequest<LiveBroadcast>
+    public class UpdateRequest : YouTubeBaseServiceRequest<LiveBroadcast>
     {
       /// <summary>Constructs a new Update request.</summary>
       public UpdateRequest(IClientService service, LiveBroadcast body, string part)

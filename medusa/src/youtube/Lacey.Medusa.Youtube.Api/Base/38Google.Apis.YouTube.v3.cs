@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Information that identifies the recommended resource.</summary>
-  internal class ActivityContentDetailsRecommendation : IDirectResponseSchema
+  public class ActivityContentDetailsRecommendation : IDirectResponseSchema
   {
     /// <summary>The reason that the resource is recommended to the user.</summary>
     [JsonProperty("reason")]

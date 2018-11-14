@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>A video resource represents a YouTube video.</summary>
-  internal class Video : IDirectResponseSchema
+  public class Video : IDirectResponseSchema
   {
     /// <summary>Age restriction details related to a video. This data can only be retrieved by the video
     /// owner.</summary>

@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 
 namespace Lacey.Medusa.Youtube.Api.Base
 {
-  internal class I18nLanguageListResponse : IDirectResponseSchema
+  public class I18nLanguageListResponse : IDirectResponseSchema
   {
     /// <summary>Etag of this resource.</summary>
     [JsonProperty("etag")]

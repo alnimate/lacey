@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 
 namespace Lacey.Medusa.Youtube.Api.Base
 {
-  internal class VideoAbuseReportSecondaryReason : IDirectResponseSchema
+  public class VideoAbuseReportSecondaryReason : IDirectResponseSchema
   {
     /// <summary>The ID of this abuse report secondary reason.</summary>
     [JsonProperty("id")]

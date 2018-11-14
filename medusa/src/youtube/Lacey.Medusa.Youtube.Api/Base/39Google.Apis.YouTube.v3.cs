@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Details about a social network post.</summary>
-  internal class ActivityContentDetailsSocial : IDirectResponseSchema
+  public class ActivityContentDetailsSocial : IDirectResponseSchema
   {
     /// <summary>The author of the social network post.</summary>
     [JsonProperty("author")]

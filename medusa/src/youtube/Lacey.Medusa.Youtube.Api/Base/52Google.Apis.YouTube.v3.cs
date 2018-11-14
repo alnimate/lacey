@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Details about the content of a channel.</summary>
-  internal class ChannelContentDetails : IDirectResponseSchema
+  public class ChannelContentDetails : IDirectResponseSchema
   {
     [JsonProperty("relatedPlaylists")]
     public virtual ChannelContentDetails.RelatedPlaylistsData RelatedPlaylists { get; set; }
@@ -18,7 +18,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
     /// <summary>The ETag of the item.</summary>
     public virtual string ETag { get; set; }
 
-    internal class RelatedPlaylistsData
+    public class RelatedPlaylistsData
     {
       /// <summary>The ID of the playlist that contains the channel"s favorite videos. Use the
       /// playlistItems.insert and  playlistItems.delete to add or remove items from that list.</summary>

@@ -12,7 +12,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Describes an invideo promotion campaign consisting of multiple promoted items. A campaign belongs to a
   /// single channel_id.</summary>
-  internal class InvideoPromotion : IDirectResponseSchema
+  public class InvideoPromotion : IDirectResponseSchema
   {
     /// <summary>The default temporal position within the video where the promoted item will be displayed. Can be
     /// overriden by more specific timing in the item.</summary>

@@ -13,7 +13,7 @@ using Lacey.Medusa.Common.Api.Core.Base.Util;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>The "channelBanners" collection of methods.</summary>
-  internal class ChannelBannersResource
+  public class ChannelBannersResource
   {
     private const string Resource = "channelBanners";
     /// <summary>The service which this resource belongs to.</summary>
@@ -63,7 +63,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
     /// that the API returns for step 1. - Call the channels.update method to update the channel's branding
     /// settings. Set the brandingSettings.image.bannerExternalUrl property's value to the URL obtained in step
     /// 2.</summary>
-    internal class InsertRequest : YouTubeBaseServiceRequest<ChannelBannerResource>
+    public class InsertRequest : YouTubeBaseServiceRequest<ChannelBannerResource>
     {
       /// <summary>Constructs a new Insert request.</summary>
       public InsertRequest(IClientService service, ChannelBannerResource body)
@@ -153,7 +153,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
     }
 
     /// <summary>Insert media upload which supports resumable upload.</summary>
-    internal class InsertMediaUpload : ResumableUpload<ChannelBannerResource, ChannelBannerResource>
+    public class InsertMediaUpload : ResumableUpload<ChannelBannerResource, ChannelBannerResource>
     {
       /// <summary>Data format for the response.</summary>
       /// 

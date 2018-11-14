@@ -11,7 +11,7 @@ using Lacey.Medusa.Common.Api.Core.Base.Util;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>The "liveChatMessages" collection of methods.</summary>
-  internal class LiveChatMessagesResource
+  public class LiveChatMessagesResource
   {
     private const string Resource = "liveChatMessages";
     /// <summary>The service which this resource belongs to.</summary>
@@ -52,7 +52,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
     }
 
     /// <summary>Deletes a chat message.</summary>
-    internal class DeleteRequest : YouTubeBaseServiceRequest<string>
+    public class DeleteRequest : YouTubeBaseServiceRequest<string>
     {
       /// <summary>Constructs a new Delete request.</summary>
       public DeleteRequest(IClientService service, string id)
@@ -110,7 +110,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
     }
 
     /// <summary>Adds a message to a live chat.</summary>
-    internal class InsertRequest : YouTubeBaseServiceRequest<LiveChatMessage>
+    public class InsertRequest : YouTubeBaseServiceRequest<LiveChatMessage>
     {
       /// <summary>Constructs a new Insert request.</summary>
       public InsertRequest(IClientService service, LiveChatMessage body, string part)
@@ -179,7 +179,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
     }
 
     /// <summary>Lists live chat messages for a specific chat.</summary>
-    internal class ListRequest : YouTubeBaseServiceRequest<LiveChatMessageListResponse>
+    public class ListRequest : YouTubeBaseServiceRequest<LiveChatMessageListResponse>
     {
       /// <summary>Constructs a new List request.</summary>
       public ListRequest(IClientService service, string liveChatId, string part)

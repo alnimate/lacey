@@ -1,68 +1,64 @@
 ﻿using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Lacey.Medusa.Common.Validation.Extensions;
-using Lacey.Medusa.Youtube.Common.Services;
+using Lacey.Medusa.Youtube.Api.Base;
+using Lacey.Medusa.Youtube.Api.Services;
 using Microsoft.Extensions.Logging;
 
 namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
 {
     public sealed class TransferService : ITransferService
     {
-        private readonly IYoutubeChannelProvider channelProvider;
-
-        private readonly IYoutubeDownloadVideoProvider downloadVideoProvider;
-
-        private readonly IYoutubeUploadVideoProvider uploadVideoProvider;
+        private readonly IYoutubeProvider youtubeProvider;
 
         private readonly ILogger logger;
 
         public TransferService(
-            IYoutubeChannelProvider channelProvider, 
-            IYoutubeDownloadVideoProvider downloadVideoProvider, 
-            IYoutubeUploadVideoProvider uploadVideoProvider, 
+            IYoutubeProvider youtubeProvider, 
             ILogger<TransferService> logger)
         {
-            this.channelProvider = channelProvider;
-            this.downloadVideoProvider = downloadVideoProvider;
-            this.uploadVideoProvider = uploadVideoProvider;
+            this.youtubeProvider = youtubeProvider;
             this.logger = logger;
         }
 
         public async Task TransferChannel(string sourceChannelId, string destChannelId)
         {
-            var sourceChannel = await this.channelProvider.GetYoutubeChannel(sourceChannelId);
-            var destVideos = await this.channelProvider.GetChannelVideos(destChannelId);
+            var sourceVideos = await this.youtubeProvider.GetChannelVideos(sourceChannelId);
+            var destVideos = await this.youtubeProvider.GetChannelVideos(destChannelId);
 
-            var validSourceVideos = sourceChannel.Videos.Items
-                .ValidationFilter(out var invalidVideos);
-            foreach (var invalidVideo in invalidVideos)
+            foreach (var video in sourceVideos
+                .OrderBy(v => v.Snippet.PublishedAt))
             {
-                this.logger.LogTrace($"Video \"{invalidVideo.Title}\" skipped. {invalidVideo.ValidationResult}");
-            }
-
-            foreach (var video in validSourceVideos
-                .OrderBy(v => v.PublishedAt))
-            {
-                if (destVideos.Items.Any(video.Equals))
+                if (destVideos.Any(d => video.Snippet.Title == d.Snippet.Title))
                 {
-                    this.logger.LogTrace($"Video \"{video.Title}\" skipped. Video already exists.");
+                    this.logger.LogTrace($"Video \"{video.Snippet.Title}\" skipped. Video already exists.");
                     continue;
                 }
 
-                var videoFile = await this.downloadVideoProvider.DownloadVideo(video.VideoId);
-
+                var filePath = await this.youtubeProvider.DownloadVideo(video.Id.VideoId);
                 try
                 {
-                    await this.uploadVideoProvider.UploadVideo(
+                    await this.youtubeProvider.UploadVideo(
                         destChannelId,
-                        video,
-                        videoFile.FilePath);
+                        new Video
+                        {
+                            Snippet = new VideoSnippet
+                            {
+                                Title = video.Snippet.Title,
+                                Description = video.Snippet.Description,
+                                CategoryId = "22", // See https://developers.google.com/youtube/v3/docs/videoCategories/list
+                            },
+                            Status = new VideoStatus
+                            {
+                                PrivacyStatus = "public"
+                            }
+                        }, 
+                        filePath);
                 }
                 finally
                 {
                     this.logger.LogTrace("Deleting temp files...");
-                    File.Delete(videoFile.FilePath);
+                    File.Delete(filePath);
                 }
             }
         }

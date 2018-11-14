@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Geographical coordinates of a point, in WGS84.</summary>
-  internal class GeoPoint : IDirectResponseSchema
+  public class GeoPoint : IDirectResponseSchema
   {
     /// <summary>Altitude above the reference ellipsoid, in meters.</summary>
     [JsonProperty("altitude")]

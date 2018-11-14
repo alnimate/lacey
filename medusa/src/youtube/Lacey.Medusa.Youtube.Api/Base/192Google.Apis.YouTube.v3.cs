@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 
 namespace Lacey.Medusa.Youtube.Api.Base
 {
-  internal class LiveChatUserBannedMessageDetails : IDirectResponseSchema
+  public class LiveChatUserBannedMessageDetails : IDirectResponseSchema
   {
     /// <summary>The duration of the ban. This property is only present if the banType is temporary.</summary>
     [JsonProperty("banDurationSeconds")]

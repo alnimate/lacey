@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Branding properties of a YouTube channel.</summary>
-  internal class ChannelBrandingSettings : IDirectResponseSchema
+  public class ChannelBrandingSettings : IDirectResponseSchema
   {
     /// <summary>Branding properties for the channel view.</summary>
     [JsonProperty("channel")]

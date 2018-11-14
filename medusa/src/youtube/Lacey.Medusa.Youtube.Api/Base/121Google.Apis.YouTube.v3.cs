@@ -13,7 +13,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Basic details about a playlist, including title, description and thumbnails.</summary>
-  internal class PlaylistSnippet : IDirectResponseSchema
+  public class PlaylistSnippet : IDirectResponseSchema
   {
     /// <summary>The ID that YouTube uses to uniquely identify the channel that published the playlist.</summary>
     [JsonProperty("channelId")]

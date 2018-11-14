@@ -11,7 +11,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Statistics about the live broadcast. These represent a snapshot of the values at the time of the
   /// request. Statistics are only returned for live broadcasts.</summary>
-  internal class LiveBroadcastStatistics : IDirectResponseSchema
+  public class LiveBroadcastStatistics : IDirectResponseSchema
   {
     /// <summary>The number of viewers currently watching the broadcast. The property and its value will be present
     /// if the broadcast has current viewers and the broadcast owner has not hidden the viewcount for the video.

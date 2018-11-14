@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="6.2.2" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.1.1" />
   </ItemGroup>
 
@@ -15,7 +14,6 @@
     <ProjectReference Include="..\..\common\Lacey.Medusa.Common.Api.Core\Lacey.Medusa.Common.Api.Core.csproj" />
     <ProjectReference Include="..\..\common\Lacey.Medusa.Common.Api\Lacey.Medusa.Common.Api.csproj" />
     <ProjectReference Include="..\..\common\Lacey.Medusa.Common.Auth.OAuth2\Lacey.Medusa.Common.Auth.OAuth2.csproj" />
-    <ProjectReference Include="..\Lacey.Medusa.Youtube.Common\Lacey.Medusa.Youtube.Common.csproj" />
   </ItemGroup>
 
   <ItemGroup>

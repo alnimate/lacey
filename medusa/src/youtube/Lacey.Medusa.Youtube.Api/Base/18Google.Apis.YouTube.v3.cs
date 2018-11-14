@@ -13,7 +13,7 @@ using Lacey.Medusa.Common.Api.Core.Base.Util;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>The "thumbnails" collection of methods.</summary>
-  internal class ThumbnailsResource
+  public class ThumbnailsResource
   {
     private const string Resource = "thumbnails";
     /// <summary>The service which this resource belongs to.</summary>
@@ -44,7 +44,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
     }
 
     /// <summary>Uploads a custom video thumbnail to YouTube and sets it for a video.</summary>
-    internal class SetRequest : YouTubeBaseServiceRequest<ThumbnailSetResponse>
+    public class SetRequest : YouTubeBaseServiceRequest<ThumbnailSetResponse>
     {
       /// <summary>Constructs a new Set request.</summary>
       public SetRequest(IClientService service, string videoId)
@@ -121,7 +121,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
     }
 
     /// <summary>Set media upload which supports resumable upload.</summary>
-    internal class SetMediaUpload : ResumableUpload<string, ThumbnailSetResponse>
+    public class SetMediaUpload : ResumableUpload<string, ThumbnailSetResponse>
     {
       /// <summary>Data format for the response.</summary>
       /// 

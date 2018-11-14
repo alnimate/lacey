@@ -1,6 +1,5 @@
 ﻿using System.IO;
 using Lacey.Medusa.Common.Email.Infrastructure;
-using Lacey.Medusa.Youtube.Dal.Infrastructure;
 using Lacey.Medusa.Youtube.Services.Transfer.Infrastructure;
 using Lacey.Medusa.Youtube.Transfer.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,13 +10,11 @@ namespace Lacey.Medusa.Youtube.Transfer.Infrastructure
     {
         public static IServiceCollection AddAppServices(
             this IServiceCollection services,
-            AppConfiguration config,
-            string connectionString)
+            AppConfiguration config)
         {
             var currentFolder = Directory.GetCurrentDirectory();
 
             services
-                .AddYoutubeDalServices(connectionString)
                 .AddEmailServices(
                     config.Email.SmtpHost,
                     config.Email.SmtpPort,
@@ -27,9 +24,7 @@ namespace Lacey.Medusa.Youtube.Transfer.Infrastructure
                     config.ApiKeyFile,
                     config.ClientSecretsFilePath,
                     config.UserName,
-                    Path.Combine(currentFolder, config.TempFolder),
-                    Path.Combine(currentFolder, config.OutputFolder),
-                    Path.Combine(currentFolder, config.ConverterFile));
+                    Path.Combine(currentFolder, config.TempFolder));
 
             return services;
         }

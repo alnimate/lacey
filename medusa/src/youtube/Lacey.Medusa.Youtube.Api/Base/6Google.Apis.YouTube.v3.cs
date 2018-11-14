@@ -11,7 +11,7 @@ using Lacey.Medusa.Common.Api.Core.Base.Util;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>The "channels" collection of methods.</summary>
-  internal class ChannelsResource
+  public class ChannelsResource
   {
     private const string Resource = "channels";
     /// <summary>The service which this resource belongs to.</summary>
@@ -53,7 +53,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
     }
 
     /// <summary>Returns a collection of zero or more channel resources that match the request criteria.</summary>
-    internal class ListRequest : YouTubeBaseServiceRequest<ChannelListResponse>
+    public class ListRequest : YouTubeBaseServiceRequest<ChannelListResponse>
     {
       /// <summary>Constructs a new List request.</summary>
       public ListRequest(IClientService service, string part)
@@ -262,7 +262,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
 
     /// <summary>Updates a channel's metadata. Note that this method currently only supports updates to the channel
     /// resource's brandingSettings and invideoPromotion objects and their child properties.</summary>
-    internal class UpdateRequest : YouTubeBaseServiceRequest<Channel>
+    public class UpdateRequest : YouTubeBaseServiceRequest<Channel>
     {
       /// <summary>Constructs a new Update request.</summary>
       public UpdateRequest(IClientService service, Channel body, string part)

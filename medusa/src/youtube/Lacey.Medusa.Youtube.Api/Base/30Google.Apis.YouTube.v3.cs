@@ -11,7 +11,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Details about the content of an activity: the video that was shared, the channel that was subscribed
   /// to, etc.</summary>
-  internal class ActivityContentDetails : IDirectResponseSchema
+  public class ActivityContentDetails : IDirectResponseSchema
   {
     /// <summary>The bulletin object contains details about a channel bulletin post. This object is only present if
     /// the snippet.type is bulletin.</summary>

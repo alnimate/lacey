@@ -11,7 +11,7 @@ namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>A videoAbuseReportReason resource identifies a reason that a video could be reported as abusive. Video
   /// abuse report reasons are used with video.ReportAbuse.</summary>
-  internal class VideoAbuseReportReason : IDirectResponseSchema
+  public class VideoAbuseReportReason : IDirectResponseSchema
   {
     /// <summary>Etag of this resource.</summary>
     [JsonProperty("etag")]

@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>A channel banner returned as the response to a channel_banner.insert call.</summary>
-  internal class ChannelBannerResource : IDirectResponseSchema
+  public class ChannelBannerResource : IDirectResponseSchema
   {
     /// <summary>Etag of this resource.</summary>
     [JsonProperty("etag")]

@@ -3,18 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2048
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Common.Domain", "..\common\Lacey.Medusa.Common.Domain\Lacey.Medusa.Common.Domain.csproj", "{FC51ACAB-9952-49D9-A604-33DBA7FE458D}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Common.Dal", "..\common\Lacey.Medusa.Common.Dal\Lacey.Medusa.Common.Dal.csproj", "{D72E1321-B5F1-4D8D-AB36-89C62F6AF301}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Common.Services", "..\common\Lacey.Medusa.Common.Services\Lacey.Medusa.Common.Services.csproj", "{472E9FF7-2995-4D54-A301-3FBF0539A536}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Common.DataAnnotations", "..\common\Lacey.Medusa.Common.DataAnnotations\Lacey.Medusa.Common.DataAnnotations.csproj", "{FD4F24EA-D0AD-4EC9-A64D-B072554BA364}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Youtube.Domain", "Lacey.Medusa.Youtube.Domain\Lacey.Medusa.Youtube.Domain.csproj", "{B56918E5-1D74-4E24-B9AD-42D1011668AE}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Youtube.Dal", "Lacey.Medusa.Youtube.Dal\Lacey.Medusa.Youtube.Dal.csproj", "{D361CDD3-5B48-4244-A414-B88213A152D1}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Youtube.Services", "Lacey.Medusa.Youtube.Services\Lacey.Medusa.Youtube.Services.csproj", "{AAD34FBE-D9BB-4986-BF2C-D845407EFBB1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Common.Api.Core", "..\common\Lacey.Medusa.Common.Api.Core\Lacey.Medusa.Common.Api.Core.csproj", "{DE793B94-806E-4169-82EE-73AB5C5C177F}"
@@ -23,21 +11,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Common.Api", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Youtube.Api", "Lacey.Medusa.Youtube.Api\Lacey.Medusa.Youtube.Api.csproj", "{8FA3F017-AAE3-4DAD-889D-F1CD3BA0169C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Common.Validation", "..\common\Lacey.Medusa.Common.Validation\Lacey.Medusa.Common.Validation.csproj", "{2F0A8742-9DFF-449D-B84C-B54D883298B1}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Youtube.Common", "Lacey.Medusa.Youtube.Common\Lacey.Medusa.Youtube.Common.csproj", "{A251A6D7-29AE-4F9A-9420-BEB828563BBA}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Youtube.Transfer", "Lacey.Medusa.Youtube.Transfer\Lacey.Medusa.Youtube.Transfer.csproj", "{856C7762-660A-4E70-A506-F518CD90A3C3}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Youtube.Scrap", "Lacey.Medusa.Youtube.Scrap\Lacey.Medusa.Youtube.Scrap.csproj", "{17B619BF-FCE9-44B0-8F5A-5F7F43090124}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Common.Extensions", "..\common\Lacey.Medusa.Common.Extensions\Lacey.Medusa.Common.Extensions.csproj", "{99EC1CCF-821A-411B-97AD-02FEFC5D936F}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Common.Cli", "..\common\Lacey.Medusa.Common.Cli\Lacey.Medusa.Common.Cli.csproj", "{857EE654-CDD0-4187-8447-5D060E588B52}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Common.Auth.OAuth2", "..\common\Lacey.Medusa.Common.Auth.OAuth2\Lacey.Medusa.Common.Auth.OAuth2.csproj", "{C37E735E-1D67-405C-9F4D-178EDABC4972}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lacey.Medusa.Common.Email", "..\common\Lacey.Medusa.Common.Email\Lacey.Medusa.Common.Email.csproj", "{F1C7CDBC-3FD7-4EB7-B908-C6909F86865B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Common.Email", "..\common\Lacey.Medusa.Common.Email\Lacey.Medusa.Common.Email.csproj", "{F1C7CDBC-3FD7-4EB7-B908-C6909F86865B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,30 +23,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{FC51ACAB-9952-49D9-A604-33DBA7FE458D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FC51ACAB-9952-49D9-A604-33DBA7FE458D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FC51ACAB-9952-49D9-A604-33DBA7FE458D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FC51ACAB-9952-49D9-A604-33DBA7FE458D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D72E1321-B5F1-4D8D-AB36-89C62F6AF301}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D72E1321-B5F1-4D8D-AB36-89C62F6AF301}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D72E1321-B5F1-4D8D-AB36-89C62F6AF301}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D72E1321-B5F1-4D8D-AB36-89C62F6AF301}.Release|Any CPU.Build.0 = Release|Any CPU
-		{472E9FF7-2995-4D54-A301-3FBF0539A536}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{472E9FF7-2995-4D54-A301-3FBF0539A536}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{472E9FF7-2995-4D54-A301-3FBF0539A536}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{472E9FF7-2995-4D54-A301-3FBF0539A536}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FD4F24EA-D0AD-4EC9-A64D-B072554BA364}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FD4F24EA-D0AD-4EC9-A64D-B072554BA364}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FD4F24EA-D0AD-4EC9-A64D-B072554BA364}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FD4F24EA-D0AD-4EC9-A64D-B072554BA364}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B56918E5-1D74-4E24-B9AD-42D1011668AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B56918E5-1D74-4E24-B9AD-42D1011668AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B56918E5-1D74-4E24-B9AD-42D1011668AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B56918E5-1D74-4E24-B9AD-42D1011668AE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D361CDD3-5B48-4244-A414-B88213A152D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D361CDD3-5B48-4244-A414-B88213A152D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D361CDD3-5B48-4244-A414-B88213A152D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D361CDD3-5B48-4244-A414-B88213A152D1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AAD34FBE-D9BB-4986-BF2C-D845407EFBB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AAD34FBE-D9BB-4986-BF2C-D845407EFBB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AAD34FBE-D9BB-4986-BF2C-D845407EFBB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -85,30 +39,10 @@ Global
 		{8FA3F017-AAE3-4DAD-889D-F1CD3BA0169C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8FA3F017-AAE3-4DAD-889D-F1CD3BA0169C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8FA3F017-AAE3-4DAD-889D-F1CD3BA0169C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2F0A8742-9DFF-449D-B84C-B54D883298B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2F0A8742-9DFF-449D-B84C-B54D883298B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2F0A8742-9DFF-449D-B84C-B54D883298B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2F0A8742-9DFF-449D-B84C-B54D883298B1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A251A6D7-29AE-4F9A-9420-BEB828563BBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A251A6D7-29AE-4F9A-9420-BEB828563BBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A251A6D7-29AE-4F9A-9420-BEB828563BBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A251A6D7-29AE-4F9A-9420-BEB828563BBA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{856C7762-660A-4E70-A506-F518CD90A3C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{856C7762-660A-4E70-A506-F518CD90A3C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{856C7762-660A-4E70-A506-F518CD90A3C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{856C7762-660A-4E70-A506-F518CD90A3C3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{17B619BF-FCE9-44B0-8F5A-5F7F43090124}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{17B619BF-FCE9-44B0-8F5A-5F7F43090124}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{17B619BF-FCE9-44B0-8F5A-5F7F43090124}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{17B619BF-FCE9-44B0-8F5A-5F7F43090124}.Release|Any CPU.Build.0 = Release|Any CPU
-		{99EC1CCF-821A-411B-97AD-02FEFC5D936F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{99EC1CCF-821A-411B-97AD-02FEFC5D936F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{99EC1CCF-821A-411B-97AD-02FEFC5D936F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{99EC1CCF-821A-411B-97AD-02FEFC5D936F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{857EE654-CDD0-4187-8447-5D060E588B52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{857EE654-CDD0-4187-8447-5D060E588B52}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{857EE654-CDD0-4187-8447-5D060E588B52}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{857EE654-CDD0-4187-8447-5D060E588B52}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C37E735E-1D67-405C-9F4D-178EDABC4972}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C37E735E-1D67-405C-9F4D-178EDABC4972}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C37E735E-1D67-405C-9F4D-178EDABC4972}.Release|Any CPU.ActiveCfg = Release|Any CPU

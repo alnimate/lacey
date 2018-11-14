@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 
 namespace Lacey.Medusa.Youtube.Api.Base
 {
-  internal class LiveChatPollVotedDetails : IDirectResponseSchema
+  public class LiveChatPollVotedDetails : IDirectResponseSchema
   {
     /// <summary>The poll item the user chose.</summary>
     [JsonProperty("itemId")]

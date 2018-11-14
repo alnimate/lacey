@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Details about a channelsection, including playlists and channels.</summary>
-  internal class ChannelSectionContentDetails : IDirectResponseSchema
+  public class ChannelSectionContentDetails : IDirectResponseSchema
   {
     /// <summary>The channel ids for type multiple_channels.</summary>
     [JsonProperty("channels")]

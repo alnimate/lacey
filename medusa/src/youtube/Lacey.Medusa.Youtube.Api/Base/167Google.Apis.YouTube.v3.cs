@@ -12,7 +12,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Basic details about a video category, such as its localized title.</summary>
-  internal class VideoStatus : IDirectResponseSchema
+  public class VideoStatus : IDirectResponseSchema
   {
     /// <summary>This value indicates if the video can be embedded on another website.</summary>
     [JsonProperty("embeddable")]

@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>JSON template for the status part of a channel.</summary>
-  internal class ChannelStatus : IDirectResponseSchema
+  public class ChannelStatus : IDirectResponseSchema
   {
     /// <summary>If true, then the user is linked to either a YouTube username or G+ account. Otherwise, the user
     /// doesn't have a public YouTube identity.</summary>

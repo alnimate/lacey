@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>Details about the content of a YouTube Video.</summary>
-  internal class VideoContentDetails : IDirectResponseSchema
+  public class VideoContentDetails : IDirectResponseSchema
   {
     /// <summary>The value of captions indicates whether the video has captions or not.</summary>
     [JsonProperty("caption")]

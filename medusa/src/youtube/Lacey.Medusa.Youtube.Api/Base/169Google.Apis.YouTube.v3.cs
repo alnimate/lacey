@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>A single tag suggestion with it's relevance information.</summary>
-  internal class VideoSuggestionsTagSuggestion : IDirectResponseSchema
+  public class VideoSuggestionsTagSuggestion : IDirectResponseSchema
   {
     /// <summary>A set of video categories for which the tag is relevant. You can use this information to display
     /// appropriate tag suggestions based on the video category that the video uploader associates with the video.

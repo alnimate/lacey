@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 namespace Lacey.Medusa.Youtube.Api.Base
 {
   /// <summary>ChannelSection targeting setting.</summary>
-  internal class ChannelSectionTargeting : IDirectResponseSchema
+  public class ChannelSectionTargeting : IDirectResponseSchema
   {
     /// <summary>The country the channel section is targeting.</summary>
     [JsonProperty("countries")]

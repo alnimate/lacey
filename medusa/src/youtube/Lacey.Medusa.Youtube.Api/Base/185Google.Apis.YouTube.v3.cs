@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 
 namespace Lacey.Medusa.Youtube.Api.Base
 {
-  internal class LiveChatPollClosedDetails : IDirectResponseSchema
+  public class LiveChatPollClosedDetails : IDirectResponseSchema
   {
     /// <summary>The id of the poll that was closed.</summary>
     [JsonProperty("pollId")]
