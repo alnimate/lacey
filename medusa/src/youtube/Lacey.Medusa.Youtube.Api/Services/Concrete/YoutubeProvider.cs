@@ -56,28 +56,51 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
             return response.Items.First();
         }
 
-        public async Task<IReadOnlyList<SearchResult>> GetChannelVideos(string channelId)
+        public async Task<IReadOnlyList<Base.Video>> GetChannelVideos(string channelId)
         {
-            var request = this.youtube.Search.List("snippet");
-            request.Order = SearchResource.ListRequest.OrderEnum.Date;
+            var channelVideosIds = await this.GetChannelVideoIds(channelId);
+            var request = this.youtube.Videos.List("snippet");
+            request.Id = string.Join(',', channelVideosIds);
             request.MaxResults = 50;
-            request.ChannelId = channelId;
 
-            var list = new List<SearchResult>();
+            var list = new List<Base.Video>();
             var nextPageToken = string.Empty;
             while (nextPageToken != null)
             {
                 request.PageToken = nextPageToken;
                 var response = await request.ExecuteAsync();
 
-                list.AddRange(
-                    response.Items.Where(i => i.Id.Kind == SearchResultType.Video));
+                list.AddRange(response.Items);
 
                 nextPageToken = response.NextPageToken;
             }
 
             return list;
         }
+
+        private async Task<IReadOnlyList<string>> GetChannelVideoIds(string channelId)
+        {
+            var request = this.youtube.Search.List("snippet");
+            request.Order = SearchResource.ListRequest.OrderEnum.Date;
+            request.MaxResults = 50;
+            request.ChannelId = channelId;
+
+            var list = new List<string>();
+            var nextPageToken = string.Empty;
+            while (nextPageToken != null)
+            {
+                request.PageToken = nextPageToken;
+                var response = await request.ExecuteAsync();
+
+                list.AddRange(response.Items.Where(i => i.Id.Kind == SearchResultType.Video)
+                        .Select(v => v.Id.VideoId));
+
+                nextPageToken = response.NextPageToken;
+            }
+
+            return list;
+        }
+
 
         public async Task<string> DownloadVideo(string videoId)
         {

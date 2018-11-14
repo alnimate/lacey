@@ -50,6 +50,8 @@ namespace Lacey.Medusa.Youtube.Transfer
                 transferService.TransferChannel(
                     sourceChannelId,
                     destChannelId).Wait();
+
+                logger.LogTrace($"Transferring completed!{Environment.NewLine}");
             }
             catch (Exception exc)
             {
@@ -74,7 +76,6 @@ namespace Lacey.Medusa.Youtube.Transfer
                 }
 
                 serviceProvider.Dispose();
-                logger.LogTrace($"Transferring completed!{Environment.NewLine}");
             }
         }
     }

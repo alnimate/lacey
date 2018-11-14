@@ -8,7 +8,7 @@ namespace Lacey.Medusa.Youtube.Api.Services
     {
         Task<Channel> GetChannelInfo(string channelId);
 
-        Task<IReadOnlyList<SearchResult>> GetChannelVideos(string channelId);
+        Task<IReadOnlyList<Base.Video>> GetChannelVideos(string channelId);
 
         Task<string> DownloadVideo(string videoId);
 

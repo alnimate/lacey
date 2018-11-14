@@ -1,7 +1,6 @@
 ﻿using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Lacey.Medusa.Youtube.Api.Base;
 using Lacey.Medusa.Youtube.Api.Services;
 using Microsoft.Extensions.Logging;
 
@@ -35,30 +34,18 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                     continue;
                 }
 
-                var filePath = await this.youtubeProvider.DownloadVideo(video.Id.VideoId);
+                var filePath = await this.youtubeProvider.DownloadVideo(video.Id);
                 try
                 {
                     await this.youtubeProvider.UploadVideo(
                         destChannelId,
-                        new Video
-                        {
-                            Snippet = new VideoSnippet
-                            {
-                                Title = video.Snippet.Title,
-                                Description = video.Snippet.Description,
-                                CategoryId = "22", // See https://developers.google.com/youtube/v3/docs/videoCategories/list
-                            },
-                            Status = new VideoStatus
-                            {
-                                PrivacyStatus = "public"
-                            }
-                        }, 
+                        video, 
                         filePath);
                 }
                 finally
                 {
-                    this.logger.LogTrace("Deleting temp files...");
                     File.Delete(filePath);
+                    this.logger.LogTrace($"File {filePath} deleted.");
                 }
             }
         }
