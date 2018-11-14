@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Lacey.Medusa.Common.Api.Base.Services;
 using Lacey.Medusa.Common.Api.Base.Upload;
 using Lacey.Medusa.Youtube.Api.Base;
+using Lacey.Medusa.Youtube.Api.Extensions;
 using Lacey.Medusa.Youtube.Api.Models.Enums;
 using Lacey.Medusa.Youtube.Api.Video.Base.Core;
 using Microsoft.Extensions.Logging;
@@ -45,22 +46,41 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
 
         public async Task<Channel> GetChannelInfo(string channelId)
         {
-            var args = new []
-            {
-                "snippet",
-                "brandingSettings"
-            };
-            var request = this.youtube.Channels.List(string.Join(',', args));
+            var request = this.youtube.Channels.List(ChannelPart.AllAnonymous.AsListParam());
             request.Id = channelId;
             var response = await request.ExecuteAsync();
             return response.Items.First();
         }
 
+        public async Task<Channel> UpdateChannelInfo(Channel channelToUpdate)
+        {
+            return channelToUpdate;
+
+            var channel = new Channel();
+            var brandingSettings = new ChannelBrandingSettings();
+            var channelSettings = new ChannelSettings
+            {
+                ShowBrowseView = false,
+                ShowRelatedChannels = false
+            };
+
+            brandingSettings.Channel = channelSettings;
+            channel.BrandingSettings = brandingSettings;
+
+            var request = this.youtubeOAuth2.Channels.Update(channel, ChannelPart.BrandingSettings);
+            request.OnBehalfOfContentOwner = string.Empty;
+            return await request.ExecuteAsync();
+        }
+
         public async Task<IReadOnlyList<Base.Video>> GetChannelVideos(string channelId)
         {
             var channelVideosIds = await this.GetChannelVideoIds(channelId);
-            var request = this.youtube.Videos.List("snippet");
-            request.Id = string.Join(',', channelVideosIds);
+            var args = new[]
+            {
+                VideoPart.Snippet
+            };
+            var request = this.youtube.Videos.List(args.AsListParam());
+            request.Id = channelVideosIds.AsListParam();
             request.MaxResults = 50;
 
             var list = new List<Base.Video>();
@@ -80,7 +100,7 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
 
         private async Task<IReadOnlyList<string>> GetChannelVideoIds(string channelId)
         {
-            var request = this.youtube.Search.List("snippet");
+            var request = this.youtube.Search.List(VideoPart.Id);
             request.Order = SearchResource.ListRequest.OrderEnum.Date;
             request.MaxResults = 50;
             request.ChannelId = channelId;
@@ -92,7 +112,7 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
                 request.PageToken = nextPageToken;
                 var response = await request.ExecuteAsync();
 
-                list.AddRange(response.Items.Where(i => i.Id.Kind == SearchResultType.Video)
+                list.AddRange(response.Items.Where(i => i.Id.Kind == SearchResultKind.Video)
                         .Select(v => v.Id.VideoId));
 
                 nextPageToken = response.NextPageToken;
@@ -100,7 +120,6 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
 
             return list;
         }
-
 
         public async Task<string> DownloadVideo(string videoId)
         {
@@ -117,34 +136,39 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
             var outputFilePath = Path.Combine(this.outputFolder,
                 $"VID-{Guid.NewGuid()}{video.FileExtension}");
             File.WriteAllBytes(outputFilePath, video.GetBytes());
-            this.logger.LogTrace($"Downloaded video [{videoId}] to [{outputFilePath}]");
+            this.logger.LogTrace($"Video [{videoId}] downloaded to [{outputFilePath}]");
             return outputFilePath;
         }
 
-        public async Task UploadVideo(
+        public async Task<IUploadProgress> UploadVideo(
             string channelId,
             Base.Video video,
             string filePath)
         {
             using (var fileStream = new FileStream(filePath, FileMode.Open))
             {
-                var videosInsertRequest = this.youtubeOAuth2.Videos.Insert(video, "snippet,status", fileStream, "video/*");
-                videosInsertRequest.ProgressChanged += OnProgressChanged;
-                videosInsertRequest.ResponseReceived += OnResponseReceived;
+                var args = new []
+                {
+                    VideoPart.Snippet,
+                    VideoPart.Status
+                };
+                var request = this.youtubeOAuth2.Videos.Insert(video, args.AsListParam(), fileStream, "video/*");
+                request.ProgressChanged += OnProgressChanged;
+                request.ResponseReceived += OnResponseReceived;
 
-                await videosInsertRequest.UploadAsync();
+                return await request.UploadAsync();
             }
         }
 
         private void OnProgressChanged(IUploadProgress progress)
         {
-            this.logger.LogTrace($"Bytes sent {progress.BytesSent}. Status {progress.Status}.");
+            this.logger.LogTrace($"Bytes sent [{progress.BytesSent}]. Status [{progress.Status}].");
         }
 
 
         private void OnResponseReceived(Base.Video video)
         {
-            this.logger.LogTrace($"Video '{video.Snippet.Title}' uploaded.");
+            this.logger.LogTrace($"Video [{video.Snippet.Title}] uploaded.");
         }
     }
 }

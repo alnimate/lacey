@@ -22,6 +22,10 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
 
         public async Task TransferChannel(string sourceChannelId, string destChannelId)
         {
+            var channel = await this.youtubeProvider.GetChannelInfo(sourceChannelId);
+            channel.Id = destChannelId;
+            var updatedChannel = await this.youtubeProvider.UpdateChannelInfo(channel);
+
             var sourceVideos = await this.youtubeProvider.GetChannelVideos(sourceChannelId);
             var destVideos = await this.youtubeProvider.GetChannelVideos(destChannelId);
 
@@ -30,22 +34,24 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
             {
                 if (destVideos.Any(d => video.Snippet.Title == d.Snippet.Title))
                 {
-                    this.logger.LogTrace($"Video \"{video.Snippet.Title}\" skipped. Video already exists.");
+                    this.logger.LogTrace($"Video [{video.Snippet.Title}] skipped. Video already exists.");
                     continue;
                 }
 
                 var filePath = await this.youtubeProvider.DownloadVideo(video.Id);
                 try
                 {
-                    await this.youtubeProvider.UploadVideo(
+                    var uploadProgress = await this.youtubeProvider.UploadVideo(
                         destChannelId,
                         video, 
                         filePath);
+
+                    this.logger.LogTrace($"Bytes sent [{uploadProgress.BytesSent}]. Status [{uploadProgress.Status}].");
                 }
                 finally
                 {
                     File.Delete(filePath);
-                    this.logger.LogTrace($"File {filePath} deleted.");
+                    this.logger.LogTrace($"File [{filePath}] deleted.");
                 }
             }
         }
