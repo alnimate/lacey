@@ -25,12 +25,17 @@ namespace Lacey.Medusa.Youtube.Api.Services.Channels
 
         public async Task<YoutubeChannel> GetYoutubeChannel(string channelId)
         {
-            var request = this.Youtube.Channels.List("snippet");
+            var args = new []
+            {
+                "snippet",
+                "brandingSettings"
+            };
+            var request = this.Youtube.Channels.List(string.Join(',', args));
             request.Id = channelId;
             var response = await request.ExecuteAsync();
             var channel = response.Items.First();
 
-            var channelInfo = new YoutubeChannelInfo(channel.Id, channel.Snippet.Title);
+            var channelInfo = this.Mapper.Map<YoutubeChannelInfo>(channel);
             var videos = await this.GetChannelVideos(channelId);
             var about = this.Mapper.Map<YoutubeAbout>(channel.Snippet);
 

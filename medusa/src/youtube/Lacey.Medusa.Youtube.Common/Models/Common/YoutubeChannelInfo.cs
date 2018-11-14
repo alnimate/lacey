@@ -4,14 +4,18 @@
     {
         public YoutubeChannelInfo(
             string channelId, 
-            string title)
+            string title, 
+            YoutubeThumbnails thumbnails)
         {
             ChannelId = channelId;
             Title = title;
+            Thumbnails = thumbnails;
         }
 
         public string ChannelId { get; }
 
         public string Title { get; }
+
+        public YoutubeThumbnails Thumbnails { get; }
     }
 }

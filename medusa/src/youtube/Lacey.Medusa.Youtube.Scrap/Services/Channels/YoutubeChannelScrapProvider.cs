@@ -25,7 +25,7 @@ namespace Lacey.Medusa.Youtube.Scrap.Services.Channels
             var channel = await this.Youtube.GetChannelAsync(channelId);
             var uploads = await this.Youtube.GetChannelUploadsAsync(channelId);
 
-            var channelInfo = new YoutubeChannelInfo(channel.Id, channel.Title);
+            var channelInfo = new YoutubeChannelInfo(channel.Id, channel.Title, null);
             var videos = new YoutubeVideos(
                 this.Mapper.Map<IEnumerable<YoutubeVideo>>(uploads).ToArray());
             var about = new YoutubeAbout(null);

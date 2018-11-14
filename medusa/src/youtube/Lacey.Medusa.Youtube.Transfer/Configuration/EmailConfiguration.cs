@@ -15,5 +15,7 @@
         public string SmtpSecretFile { get; set; }
 
         public string Subject { get; set; }
+
+        public bool IsSendEmails { get; set; }
     }
 }

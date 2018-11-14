@@ -37,6 +37,12 @@ namespace Lacey.Medusa.Youtube.Api.Infrastructure
             this.CreateMap<ChannelSnippet, YoutubeAbout>()
                 .ConstructUsing(s => new YoutubeAbout(s.Description));
 
+            this.CreateMap<Channel, YoutubeChannelInfo>()
+                .ConstructUsing(c => new YoutubeChannelInfo(
+                    c.Id,
+                    c.Snippet.Title,
+                    Mapper.Map<YoutubeThumbnails>(c.Snippet.Thumbnails)));
+
             // Upload
             this.CreateMap<YoutubeVideo, Video>()
                 .ConstructUsing(v => new Video

@@ -59,18 +59,21 @@ namespace Lacey.Medusa.Youtube.Transfer
             }
             finally
             {
-                var emailService = serviceProvider.GetService<IEmailProvider>();
-                var currentFolder = Directory.GetCurrentDirectory();
-                emailService.Send(
-                    config.Email.From,
-                    config.Email.To,
-                    config.Email.Subject,
-                    $"Channel https://www.youtube.com/channel/{sourceChannelId} was transferred to https://www.youtube.com/channel/{destChannelId}.",
-                    true,
-                    new []
-                    {
-                        Path.Combine(currentFolder, config.Logs.LogFile)
-                    });
+                if (config.Email.IsSendEmails)
+                {
+                    var emailService = serviceProvider.GetService<IEmailProvider>();
+                    var currentFolder = Directory.GetCurrentDirectory();
+                    emailService.Send(
+                        config.Email.From,
+                        config.Email.To,
+                        config.Email.Subject,
+                        $"Channel https://www.youtube.com/channel/{sourceChannelId} was transferred to https://www.youtube.com/channel/{destChannelId}.",
+                        true,
+                        new[]
+                        {
+                            Path.Combine(currentFolder, config.Logs.LogFile)
+                        });
+                }
 
                 serviceProvider.Dispose();
                 logger.LogTrace($"Transferring completed!{Environment.NewLine}");
