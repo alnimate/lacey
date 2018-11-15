@@ -52,34 +52,21 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
             return response.Items.First();
         }
 
-        public async Task<Channel> UpdateChannelInfo(Channel channelToUpdate)
+        public async Task<Channel> UpdateChannelInfo(Channel channel)
         {
-            return channelToUpdate;
+            var channelUpdate = new Channel();
+            channelUpdate.Id = channel.Id;
+            channelUpdate.BrandingSettings = channel.BrandingSettings;
+            channelUpdate.BrandingSettings.Channel.Title = string.Empty;
 
-            var channel = new Channel();
-            var brandingSettings = new ChannelBrandingSettings();
-            var channelSettings = new ChannelSettings
-            {
-                ShowBrowseView = false,
-                ShowRelatedChannels = false
-            };
-
-            brandingSettings.Channel = channelSettings;
-            channel.BrandingSettings = brandingSettings;
-
-            var request = this.youtubeOAuth2.Channels.Update(channel, ChannelPart.BrandingSettings);
-            request.OnBehalfOfContentOwner = string.Empty;
+            var request = this.youtubeOAuth2.Channels.Update(channelUpdate, ChannelPart.BrandingSettings);
             return await request.ExecuteAsync();
         }
 
         public async Task<IReadOnlyList<Base.Video>> GetChannelVideos(string channelId)
         {
             var channelVideosIds = await this.GetChannelVideoIds(channelId);
-            var args = new[]
-            {
-                VideoPart.Snippet
-            };
-            var request = this.youtube.Videos.List(args.AsListParam());
+            var request = this.youtube.Videos.List(VideoPart.AllAnonymous.AsListParam());
             request.Id = channelVideosIds.AsListParam();
             request.MaxResults = 50;
 
@@ -147,12 +134,18 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
         {
             using (var fileStream = new FileStream(filePath, FileMode.Open))
             {
+                var videoUpdate = new Base.Video();
+                videoUpdate.Snippet = video.Snippet;
+                videoUpdate.Status = video.Status;
+                videoUpdate.RecordingDetails = video.RecordingDetails;
+
                 var args = new []
                 {
                     VideoPart.Snippet,
-                    VideoPart.Status
+                    VideoPart.Status,
+                    VideoPart.RecordingDetails,
                 };
-                var request = this.youtubeOAuth2.Videos.Insert(video, args.AsListParam(), fileStream, "video/*");
+                var request = this.youtubeOAuth2.Videos.Insert(videoUpdate, args.AsListParam(), fileStream, "video/*");
                 request.ProgressChanged += OnProgressChanged;
                 request.ResponseReceived += OnResponseReceived;
 

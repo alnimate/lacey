@@ -37,10 +37,11 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
             {
                 credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
                     GoogleClientSecrets.Load(stream).Secrets,
-                    // This OAuth 2.0 access scope allows an application to upload files to the
-                    // authenticated user's YouTube channel, but doesn't allow other types of access.
                     new[]
                     {
+                        YouTubeService.Scope.YoutubeForceSsl,
+                        YouTubeService.Scope.Youtubepartner,
+                        YouTubeService.Scope.Youtube,
                         YouTubeService.Scope.YoutubeUpload
                     },
                     this.userName,
