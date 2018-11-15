@@ -46,13 +46,35 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
 
         public async Task<Channel> UpdateChannelInfo(Channel channel)
         {
-            var channelUpdate = new Channel();
-            channelUpdate.Id = channel.Id;
-            channelUpdate.BrandingSettings = channel.BrandingSettings;
-            channelUpdate.BrandingSettings.Channel.Title = string.Empty;
+            var bannerImage = await this.youtube.HttpClient
+                .GetAsync(channel.BrandingSettings.Image.BannerTvHighImageUrl);
+            Directory.CreateDirectory(this.outputFolder);
+            var bannerFilePath = Path.Combine(this.outputFolder, $"BANNER-{Guid.NewGuid()}.jpg");
+            using (var fileStream = new FileStream(
+                bannerFilePath,
+                FileMode.Create, 
+                FileAccess.ReadWrite))
+            {
+                var stream = await bannerImage.Content.ReadAsStreamAsync();
+                await stream.CopyToAsync(fileStream);
 
-            var request = this.youtube.Channels.Update(channelUpdate, ChannelPart.BrandingSettings);
-            return await request.ExecuteAsync();
+                var banner = new ChannelBannerResource();
+                var bannerRequest = this.youtube.ChannelBanners.Insert(
+                    banner,
+                    fileStream,
+                    "image/jpeg");
+
+                await bannerRequest.UploadAsync();
+
+                var channelUpdate = new Channel();
+                channelUpdate.Id = channel.Id;
+                channelUpdate.BrandingSettings = channel.BrandingSettings;
+                channelUpdate.BrandingSettings.Channel.Title = string.Empty;
+                channelUpdate.BrandingSettings.Image.BannerExternalUrl = bannerRequest.ResponseBody.Url;
+
+                var request = this.youtube.Channels.Update(channelUpdate, ChannelPart.BrandingSettings);
+                return await request.ExecuteAsync();
+            }
         }
 
         public async Task<IReadOnlyList<Base.Video>> GetChannelVideos(string channelId)
