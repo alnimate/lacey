@@ -6,7 +6,7 @@ namespace Lacey.Medusa.Youtube.Scrap.Base.Exceptions
     /// <summary>
     /// Thrown when the video requires purchase and cannot be processed.
     /// </summary>
-    internal class VideoRequiresPurchaseException : Exception
+    public class VideoRequiresPurchaseException : Exception
     {
         /// <summary>
         /// ID of the video.

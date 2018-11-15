@@ -8,7 +8,7 @@ namespace Lacey.Medusa.Youtube.Scrap.Base.Models.MediaStreams
     /// <summary>
     /// Metadata associated with a certain <see cref="MediaStream"/> that contains only video.
     /// </summary>
-    internal partial class VideoStreamInfo : MediaStreamInfo
+    public partial class VideoStreamInfo : MediaStreamInfo
     {
         /// <summary>
         /// Video bitrate (bits/s) of the associated stream.
@@ -67,7 +67,7 @@ namespace Lacey.Medusa.Youtube.Scrap.Base.Models.MediaStreams
         }
     }
 
-    internal partial class VideoStreamInfo
+    public partial class VideoStreamInfo
     {
         private static readonly Dictionary<string, VideoQuality> VideoQualityLabelMap = 
             Enum.GetValues(typeof(VideoQuality)).Cast<VideoQuality>().ToDictionary(

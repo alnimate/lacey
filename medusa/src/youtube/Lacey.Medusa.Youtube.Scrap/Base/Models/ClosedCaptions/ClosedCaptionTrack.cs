@@ -6,7 +6,7 @@ namespace Lacey.Medusa.Youtube.Scrap.Base.Models.ClosedCaptions
     /// <summary>
     /// Set of captions that get displayed during video playback.
     /// </summary>
-    internal class ClosedCaptionTrack
+    public class ClosedCaptionTrack
     {
         /// <summary>
         /// Metadata associated with this track.

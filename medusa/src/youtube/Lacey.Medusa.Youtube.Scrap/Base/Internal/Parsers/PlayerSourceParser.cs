@@ -6,7 +6,7 @@ using Lacey.Medusa.Youtube.Scrap.Base.Internal.CipherOperations;
 
 namespace Lacey.Medusa.Youtube.Scrap.Base.Internal.Parsers
 {
-    internal partial class PlayerSourceParser
+    public partial class PlayerSourceParser
     {
         private readonly string _raw;
 
@@ -100,7 +100,7 @@ namespace Lacey.Medusa.Youtube.Scrap.Base.Internal.Parsers
         }
     }
 
-    internal partial class PlayerSourceParser
+    public partial class PlayerSourceParser
     {
         public static PlayerSourceParser Initialize(string raw)
         {

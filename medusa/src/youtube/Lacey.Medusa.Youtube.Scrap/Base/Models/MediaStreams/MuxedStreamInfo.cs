@@ -5,7 +5,7 @@ namespace Lacey.Medusa.Youtube.Scrap.Base.Models.MediaStreams
     /// <summary>
     /// Metadata associated with a certain <see cref="MediaStream"/> that contains both audio and video.
     /// </summary>
-    internal class MuxedStreamInfo : MediaStreamInfo
+    public class MuxedStreamInfo : MediaStreamInfo
     {
         /// <summary>
         /// Audio encoding of the associated stream.

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Lacey.Medusa.Youtube.Scrap.Base.Internal
 {
-    internal class SegmentedHttpStream : Stream
+    public class SegmentedHttpStream : Stream
     {
         private readonly HttpClient _httpClient;
         private readonly string _url;

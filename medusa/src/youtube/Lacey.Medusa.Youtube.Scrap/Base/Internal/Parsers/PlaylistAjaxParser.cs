@@ -6,7 +6,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Lacey.Medusa.Youtube.Scrap.Base.Internal.Parsers
 {
-    internal partial class PlaylistAjaxParser
+    public partial class PlaylistAjaxParser
     {
         private readonly JToken _root;
 
@@ -34,9 +34,9 @@ namespace Lacey.Medusa.Youtube.Scrap.Base.Internal.Parsers
         }
     }
 
-    internal partial class PlaylistAjaxParser
+    public partial class PlaylistAjaxParser
     {
-        internal class VideoParser
+        public class VideoParser
         {
             private readonly JToken _root;
 
@@ -75,7 +75,7 @@ namespace Lacey.Medusa.Youtube.Scrap.Base.Internal.Parsers
         }
     }
 
-    internal partial class PlaylistAjaxParser
+    public partial class PlaylistAjaxParser
     {
         public static PlaylistAjaxParser Initialize(string raw)
         {

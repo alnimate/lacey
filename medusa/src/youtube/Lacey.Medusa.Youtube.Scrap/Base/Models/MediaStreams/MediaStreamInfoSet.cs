@@ -6,7 +6,7 @@ namespace Lacey.Medusa.Youtube.Scrap.Base.Models.MediaStreams
     /// <summary>
     /// Set of all available media stream infos.
     /// </summary>
-    internal class MediaStreamInfoSet
+    public class MediaStreamInfoSet
     {
         /// <summary>
         /// Muxed streams.

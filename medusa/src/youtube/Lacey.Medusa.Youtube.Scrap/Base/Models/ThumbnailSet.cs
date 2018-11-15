@@ -5,7 +5,7 @@ namespace Lacey.Medusa.Youtube.Scrap.Base.Models
     /// <summary>
     /// Set of thumbnails for a video.
     /// </summary>
-    internal class ThumbnailSet
+    public class ThumbnailSet
     {
         private readonly string _videoId;
 

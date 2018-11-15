@@ -5,7 +5,7 @@ namespace Lacey.Medusa.Youtube.Scrap.Base.Models
     /// <summary>
     /// User activity statistics.
     /// </summary>
-    internal class Statistics
+    public class Statistics
     {
         /// <summary>
         /// View count.

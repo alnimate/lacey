@@ -1,6 +1,6 @@
 ﻿namespace Lacey.Medusa.Youtube.Scrap.Base.Internal.CipherOperations
 {
-    internal class SliceCipherOperation : ICipherOperation
+    public class SliceCipherOperation : ICipherOperation
     {
         private readonly int _index;
 

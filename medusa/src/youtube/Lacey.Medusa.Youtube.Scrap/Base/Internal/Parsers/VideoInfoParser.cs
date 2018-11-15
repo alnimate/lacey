@@ -5,7 +5,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Lacey.Medusa.Youtube.Scrap.Base.Internal.Parsers
 {
-    internal partial class VideoInfoParser
+    public partial class VideoInfoParser
     {
         private readonly IReadOnlyDictionary<string, string> _root;
 
@@ -87,9 +87,9 @@ namespace Lacey.Medusa.Youtube.Scrap.Base.Internal.Parsers
         }
     }
 
-    internal partial class VideoInfoParser
+    public partial class VideoInfoParser
     {
-        internal class MuxedStreamInfoParser
+        public class MuxedStreamInfoParser
         {
             private readonly IReadOnlyDictionary<string, string> _root;
 
@@ -105,7 +105,7 @@ namespace Lacey.Medusa.Youtube.Scrap.Base.Internal.Parsers
             public string ParseSignature() => _root.GetOrDefault("s");
         }
 
-        internal class AdaptiveStreamInfoParser
+        public class AdaptiveStreamInfoParser
         {
             private readonly IReadOnlyDictionary<string, string> _root;
 
@@ -136,7 +136,7 @@ namespace Lacey.Medusa.Youtube.Scrap.Base.Internal.Parsers
             public string ParseQualityLabel() => _root.GetOrDefault("quality_label");
         }
 
-        internal class ClosedCaptionTrackInfoParser
+        public class ClosedCaptionTrackInfoParser
         {
             private readonly JToken _root;
 
@@ -156,7 +156,7 @@ namespace Lacey.Medusa.Youtube.Scrap.Base.Internal.Parsers
         }
     }
 
-    internal partial class VideoInfoParser
+    public partial class VideoInfoParser
     {
         public static VideoInfoParser Initialize(string raw)
         {

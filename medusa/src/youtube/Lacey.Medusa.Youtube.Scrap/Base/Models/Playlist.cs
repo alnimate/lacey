@@ -7,7 +7,7 @@ namespace Lacey.Medusa.Youtube.Scrap.Base.Models
     /// <summary>
     /// Information about a YouTube playlist.
     /// </summary>
-    internal partial class Playlist
+    public partial class Playlist
     {
         /// <summary>
         /// ID of this playlist.
@@ -67,7 +67,7 @@ namespace Lacey.Medusa.Youtube.Scrap.Base.Models
         public override string ToString() => Title;
     }
 
-    internal partial class Playlist
+    public partial class Playlist
     {
         /// <summary>
         /// Get playlist type by ID.

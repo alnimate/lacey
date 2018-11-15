@@ -5,7 +5,7 @@ namespace Lacey.Medusa.Youtube.Scrap.Base.Models.MediaStreams
     /// <summary>
     /// Metadata associated with a certain <see cref="MediaStream"/> that contains only audio.
     /// </summary>
-    internal class AudioStreamInfo : MediaStreamInfo
+    public class AudioStreamInfo : MediaStreamInfo
     {
         /// <summary>
         /// Bitrate (bit/s) of the associated stream.

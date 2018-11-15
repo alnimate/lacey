@@ -5,7 +5,7 @@ namespace Lacey.Medusa.Youtube.Scrap.Base.Models
     /// <summary>
     /// Information about a YouTube channel.
     /// </summary>
-    internal class Channel
+    public class Channel
     {
         /// <summary>
         /// ID of this channel.

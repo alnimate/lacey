@@ -9,7 +9,7 @@ using Lacey.Medusa.Youtube.Scrap.Base.Models;
 
 namespace Lacey.Medusa.Youtube.Scrap.Base
 {
-    internal partial class YoutubeClient
+    public partial class YoutubeClient
     {
         private async Task<UserPageParser> GetUserPageParserAsync(string username)
         {

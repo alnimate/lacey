@@ -7,7 +7,7 @@ using AngleSharp.Parser.Html;
 
 namespace Lacey.Medusa.Youtube.Scrap.Base.Internal.Parsers
 {
-    internal partial class VideoWatchPageParser
+    public partial class VideoWatchPageParser
     {
         private readonly IHtmlDocument _root;
 
@@ -66,7 +66,7 @@ namespace Lacey.Medusa.Youtube.Scrap.Base.Internal.Parsers
             .StripNonDigit().ParseLongOrDefault();
     }
 
-    internal partial class VideoWatchPageParser
+    public partial class VideoWatchPageParser
     {
         public static VideoWatchPageParser Initialize(string raw)
         {

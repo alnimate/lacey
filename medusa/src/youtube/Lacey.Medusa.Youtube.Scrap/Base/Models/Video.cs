@@ -7,7 +7,7 @@ namespace Lacey.Medusa.Youtube.Scrap.Base.Models
     /// <summary>
     /// Information about a YouTube video.
     /// </summary>
-    internal class Video
+    public class Video
     {
         /// <summary>
         /// ID of this video.

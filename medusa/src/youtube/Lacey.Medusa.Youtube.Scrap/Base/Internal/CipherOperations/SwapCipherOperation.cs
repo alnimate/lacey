@@ -2,7 +2,7 @@
 
 namespace Lacey.Medusa.Youtube.Scrap.Base.Internal.CipherOperations
 {
-    internal class SwapCipherOperation : ICipherOperation
+    public class SwapCipherOperation : ICipherOperation
     {
         private readonly int _index;
 

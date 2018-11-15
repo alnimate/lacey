@@ -12,7 +12,7 @@ namespace Lacey.Medusa.Youtube.Scrap.Base
     /// <summary>
     /// Interface for <see cref="YoutubeClient"/>.
     /// </summary>
-    internal interface IYoutubeClient
+    public interface IYoutubeClient
     {
         #region Video
 

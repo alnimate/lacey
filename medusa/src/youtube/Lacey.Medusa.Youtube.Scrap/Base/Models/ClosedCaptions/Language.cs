@@ -5,7 +5,7 @@ namespace Lacey.Medusa.Youtube.Scrap.Base.Models.ClosedCaptions
     /// <summary>
     /// Language information.
     /// </summary>
-    internal class Language
+    public class Language
     {
         /// <summary>
         /// ISO 639-1 code of this language.

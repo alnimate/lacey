@@ -4,7 +4,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Lacey.Medusa.Youtube.Scrap.Base.Internal.Parsers
 {
-    internal partial class SearchResultsAjaxParser
+    public partial class SearchResultsAjaxParser
     {
         private readonly JToken _root;
 
@@ -21,7 +21,7 @@ namespace Lacey.Medusa.Youtube.Scrap.Base.Internal.Parsers
         }
     }
 
-    internal partial class SearchResultsAjaxParser
+    public partial class SearchResultsAjaxParser
     {
         public static SearchResultsAjaxParser Initialize(string raw)
         {

@@ -8,7 +8,7 @@ namespace Lacey.Medusa.Youtube.Scrap.Base.Models.MediaStreams
     /// <summary>
     /// Stream that contains raw media data.
     /// </summary>
-    internal class MediaStream : Stream
+    public class MediaStream : Stream
     {
         private readonly Stream _stream;
 

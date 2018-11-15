@@ -1,6 +1,6 @@
 ﻿namespace Lacey.Medusa.Youtube.Scrap.Base.Internal
 {
-    internal class PlayerContext
+    public class PlayerContext
     {
         public string SourceUrl { get; }
 

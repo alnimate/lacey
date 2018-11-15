@@ -7,7 +7,7 @@ namespace Lacey.Medusa.Youtube.Scrap.Base
     /// <summary>
     /// The entry point for <see cref="YoutubeExplode"/>.
     /// </summary>
-    internal partial class YoutubeClient : IYoutubeClient
+    public partial class YoutubeClient : IYoutubeClient
     {
         private readonly HttpClient _httpClient;
         private readonly Dictionary<string, PlayerSource> _playerSourceCache;

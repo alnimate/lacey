@@ -12,7 +12,7 @@ using Lacey.Medusa.Youtube.Scrap.Base.Models.MediaStreams;
 
 namespace Lacey.Medusa.Youtube.Scrap.Base
 {
-    internal partial class YoutubeClient
+    public partial class YoutubeClient
     {
         private async Task<VideoEmbedPageParser> GetVideoEmbedPageParserAsync(string videoId)
         {

@@ -10,7 +10,7 @@ using Lacey.Medusa.Youtube.Scrap.Base.Models.ClosedCaptions;
 
 namespace Lacey.Medusa.Youtube.Scrap.Base
 {
-    internal partial class YoutubeClient
+    public partial class YoutubeClient
     {
         private async Task<ClosedCaptionTrackAjaxParser> GetClosedCaptionTrackAjaxParserAsync(string url)
         {

@@ -6,7 +6,7 @@ namespace Lacey.Medusa.Youtube.Scrap.Base.Models.ClosedCaptions
     /// <summary>
     /// Text that gets displayed at specific time during video playback, as part of a <see cref="ClosedCaptionTrack"/>.
     /// </summary>
-    internal class ClosedCaption
+    public class ClosedCaption
     {
         /// <summary>
         /// Text displayed by this caption.

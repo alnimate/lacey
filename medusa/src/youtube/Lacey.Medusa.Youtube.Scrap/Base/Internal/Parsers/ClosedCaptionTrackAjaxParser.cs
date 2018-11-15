@@ -5,7 +5,7 @@ using System.Xml.Linq;
 
 namespace Lacey.Medusa.Youtube.Scrap.Base.Internal.Parsers
 {
-    internal partial class ClosedCaptionTrackAjaxParser
+    public partial class ClosedCaptionTrackAjaxParser
     {
         private readonly XElement _root;
 
@@ -20,9 +20,9 @@ namespace Lacey.Medusa.Youtube.Scrap.Base.Internal.Parsers
         }
     }
 
-    internal partial class ClosedCaptionTrackAjaxParser
+    public partial class ClosedCaptionTrackAjaxParser
     {
-        internal class ClosedCaptionParser
+        public class ClosedCaptionParser
         {
             private readonly XElement _root;
 
@@ -39,7 +39,7 @@ namespace Lacey.Medusa.Youtube.Scrap.Base.Internal.Parsers
         }
     }
 
-    internal partial class ClosedCaptionTrackAjaxParser
+    public partial class ClosedCaptionTrackAjaxParser
     {
         public static ClosedCaptionTrackAjaxParser Initialize(string raw)
         {

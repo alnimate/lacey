@@ -6,7 +6,7 @@ namespace Lacey.Medusa.Youtube.Scrap.Base.Exceptions
     /// <summary>
     /// Thrown when video is not available and cannot be processed.
     /// </summary>
-    internal class VideoUnavailableException : Exception
+    public class VideoUnavailableException : Exception
     {
         /// <summary>
         /// ID of the video.

@@ -3,7 +3,7 @@ using Lacey.Medusa.Youtube.Scrap.Base.Internal.CipherOperations;
 
 namespace Lacey.Medusa.Youtube.Scrap.Base.Internal
 {
-    internal class PlayerSource
+    public class PlayerSource
     {
         public IReadOnlyList<ICipherOperation> CipherOperations { get; }
 

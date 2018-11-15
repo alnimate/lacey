@@ -160,7 +160,7 @@ namespace Lacey.Medusa.Youtube.Scrap.Base.Internal
     /// </list>
     /// </remarks>
     /// <example><code>
-    /// internal class Foo : INotifyPropertyChanged {
+    /// public class Foo : INotifyPropertyChanged {
     ///   public event PropertyChangedEventHandler PropertyChanged;
     /// 
     ///   [NotifyPropertyChangedInvocator]

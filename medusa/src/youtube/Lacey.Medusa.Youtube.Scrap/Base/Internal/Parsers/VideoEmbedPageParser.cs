@@ -3,7 +3,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Lacey.Medusa.Youtube.Scrap.Base.Internal.Parsers
 {
-    internal partial class VideoEmbedPageParser
+    public partial class VideoEmbedPageParser
     {
         private readonly JToken _root;
 
@@ -37,7 +37,7 @@ namespace Lacey.Medusa.Youtube.Scrap.Base.Internal.Parsers
         public string ParseChannelLogoUrl() => _root["args"]["profile_picture"].Value<string>();
     }
 
-    internal partial class VideoEmbedPageParser
+    public partial class VideoEmbedPageParser
     {
         public static VideoEmbedPageParser Initialize(string raw)
         {

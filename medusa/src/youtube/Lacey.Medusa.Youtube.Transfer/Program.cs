@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using AutoMapper;
 using Lacey.Medusa.Common.Email.Services.Email;
 using Lacey.Medusa.Youtube.Services.Transfer.Services;
 using Lacey.Medusa.Youtube.Transfer.Configuration;
@@ -31,7 +30,6 @@ namespace Lacey.Medusa.Youtube.Transfer
                     logBuilder
                         .AddLog4Net()
                         .SetMinimumLevel(LogLevel.Trace))
-                .AddAutoMapper()
                 .AddAppServices(config)
                 .BuildServiceProvider();
 

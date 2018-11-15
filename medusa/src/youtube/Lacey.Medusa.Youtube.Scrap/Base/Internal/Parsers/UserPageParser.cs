@@ -3,7 +3,7 @@ using AngleSharp.Parser.Html;
 
 namespace Lacey.Medusa.Youtube.Scrap.Base.Internal.Parsers
 {
-    internal partial class UserPageParser
+    public partial class UserPageParser
     {
         private readonly IHtmlDocument _root;
 
@@ -16,7 +16,7 @@ namespace Lacey.Medusa.Youtube.Scrap.Base.Internal.Parsers
             .SubstringAfter("channel/");
     }
 
-    internal partial class UserPageParser
+    public partial class UserPageParser
     {
         public static UserPageParser Initialize(string raw)
         {

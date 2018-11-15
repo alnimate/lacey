@@ -5,7 +5,7 @@ using System.Xml.Linq;
 
 namespace Lacey.Medusa.Youtube.Scrap.Base.Internal.Parsers
 {
-    internal partial class DashManifestParser
+    public partial class DashManifestParser
     {
         private readonly XElement _root;
 
@@ -26,9 +26,9 @@ namespace Lacey.Medusa.Youtube.Scrap.Base.Internal.Parsers
         }
     }
 
-    internal partial class DashManifestParser
+    public partial class DashManifestParser
     {
-        internal class StreamInfoParser
+        public class StreamInfoParser
         {
             private readonly XElement _root;
 
@@ -55,7 +55,7 @@ namespace Lacey.Medusa.Youtube.Scrap.Base.Internal.Parsers
         }
     }
 
-    internal partial class DashManifestParser
+    public partial class DashManifestParser
     {
         public static DashManifestParser Initialize(string raw)
         {

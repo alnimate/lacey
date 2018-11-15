@@ -6,7 +6,6 @@
 
   <ItemGroup>
     <PackageReference Include="AngleSharp" Version="0.9.10" />
-    <PackageReference Include="AutoMapper" Version="6.2.2" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.1.1" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="2.1.1" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
@@ -15,7 +14,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\common\Lacey.Medusa.Common.Cli\Lacey.Medusa.Common.Cli.csproj" />
     <ProjectReference Include="..\..\common\Lacey.Medusa.Common.Extensions\Lacey.Medusa.Common.Extensions.csproj" />
-    <ProjectReference Include="..\Lacey.Medusa.Youtube.Common\Lacey.Medusa.Youtube.Common.csproj" />
   </ItemGroup>
 
   <ItemGroup>

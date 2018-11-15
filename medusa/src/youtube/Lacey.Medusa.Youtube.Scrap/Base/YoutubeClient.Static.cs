@@ -4,7 +4,7 @@ using Lacey.Medusa.Youtube.Scrap.Base.Internal;
 
 namespace Lacey.Medusa.Youtube.Scrap.Base
 {
-    internal partial class YoutubeClient
+    public partial class YoutubeClient
     {
         /// <summary>
         /// Verifies that the given string is syntactically a valid YouTube video ID.

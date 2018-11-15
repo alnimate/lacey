@@ -5,7 +5,7 @@ namespace Lacey.Medusa.Youtube.Scrap.Base.Models.ClosedCaptions
     /// <summary>
     /// Metadata associated with a certain <see cref="ClosedCaptionTrack"/>.
     /// </summary>
-    internal class ClosedCaptionTrackInfo
+    public class ClosedCaptionTrackInfo
     {
         /// <summary>
         /// Manifest URL of the associated track.
