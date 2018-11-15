@@ -5,8 +5,6 @@ namespace Lacey.Medusa.Youtube.Api.Services
 {
     public interface IYoutubeAuthProvider
     {
-        string GetApiKey();
-
         Task<UserCredential> GetUserCredentials();
     }
 }

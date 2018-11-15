@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using Lacey.Medusa.Common.Email.Services.Email;
 using Lacey.Medusa.Youtube.Services.Transfer.Services;
 using Lacey.Medusa.Youtube.Transfer.Configuration;
@@ -41,13 +40,11 @@ namespace Lacey.Medusa.Youtube.Transfer
 
             var transferService = serviceProvider.GetService<ITransferService>();
 
-            var sourceChannelId = config.SourceChannels.First();
-            var destChannelId = config.DestChannels.First();
             try
             {
                 transferService.TransferChannel(
-                    sourceChannelId,
-                    destChannelId).Wait();
+                    config.SourceChannelId,
+                    config.DestChannelId).Wait();
 
                 logger.LogTrace($"Transferring completed!{Environment.NewLine}");
             }
@@ -65,7 +62,7 @@ namespace Lacey.Medusa.Youtube.Transfer
                         config.Email.From,
                         config.Email.To,
                         config.Email.Subject,
-                        $"Channel https://www.youtube.com/channel/{sourceChannelId} was transferred to https://www.youtube.com/channel/{destChannelId}.",
+                        $"Channel https://www.youtube.com/channel/{config.SourceChannelId} was transferred to https://www.youtube.com/channel/{config.DestChannelId}.",
                         true,
                         new[]
                         {

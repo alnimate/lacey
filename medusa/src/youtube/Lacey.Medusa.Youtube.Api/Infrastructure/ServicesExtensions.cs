@@ -9,7 +9,6 @@ namespace Lacey.Medusa.Youtube.Api.Infrastructure
     {
         public static IServiceCollection AddYoutubeServices(
             this IServiceCollection services,
-            string apiKeyFile,
             string clientSecretsFilePath,
             string userName,
             string outputFolder)
@@ -17,7 +16,6 @@ namespace Lacey.Medusa.Youtube.Api.Infrastructure
             services
                 .AddTransient<IYoutubeAuthProvider, YoutubeAuthProvider>(
                     provider => new YoutubeAuthProvider(
-                        apiKeyFile,
                         clientSecretsFilePath,
                         userName))
                 .AddTransient<IYoutubeProvider, YoutubeProvider>(

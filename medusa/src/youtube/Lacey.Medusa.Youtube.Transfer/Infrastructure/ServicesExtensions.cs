@@ -21,7 +21,6 @@ namespace Lacey.Medusa.Youtube.Transfer.Infrastructure
                     config.Email.SmtpUsername,
                     Path.Combine(currentFolder, config.Email.SmtpSecretFile))
                 .AddYoutubeTransferServices(
-                    config.ApiKeyFile,
                     config.ClientSecretsFilePath,
                     config.UserName,
                     Path.Combine(currentFolder, config.TempFolder));

@@ -17,8 +17,6 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
     {
         private readonly YouTubeService youtube;
 
-        private readonly YouTubeService youtubeOAuth2;
-
         private readonly ILogger logger;
 
         private readonly string outputFolder;
@@ -30,17 +28,11 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
         {
             this.logger = logger;
             this.outputFolder = outputFolder;
-            var applicationName = GetType().ToString();
+
             this.youtube = new YouTubeService(new BaseClientService.Initializer
             {
-                ApiKey = youtubeAuthProvider.GetApiKey(),
-                ApplicationName = applicationName
-            });
-
-            this.youtubeOAuth2 = new YouTubeService(new BaseClientService.Initializer
-            {
                 HttpClientInitializer = youtubeAuthProvider.GetUserCredentials().Result,
-                ApplicationName = applicationName
+                ApplicationName = GetType().ToString()
             });
         }
 
@@ -59,7 +51,7 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
             channelUpdate.BrandingSettings = channel.BrandingSettings;
             channelUpdate.BrandingSettings.Channel.Title = string.Empty;
 
-            var request = this.youtubeOAuth2.Channels.Update(channelUpdate, ChannelPart.BrandingSettings);
+            var request = this.youtube.Channels.Update(channelUpdate, ChannelPart.BrandingSettings);
             return await request.ExecuteAsync();
         }
 
@@ -145,7 +137,7 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
                     VideoPart.Status,
                     VideoPart.RecordingDetails,
                 };
-                var request = this.youtubeOAuth2.Videos.Insert(videoUpdate, args.AsListParam(), fileStream, "video/*");
+                var request = this.youtube.Videos.Insert(videoUpdate, args.AsListParam(), fileStream, "video/*");
                 request.ProgressChanged += OnProgressChanged;
                 request.ResponseReceived += OnResponseReceived;
 
