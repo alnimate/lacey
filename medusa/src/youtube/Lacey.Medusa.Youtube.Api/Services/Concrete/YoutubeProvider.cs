@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Mime;
 using System.Threading.Tasks;
 using Lacey.Medusa.Common.Api.Base.Services;
 using Lacey.Medusa.Common.Api.Base.Upload;
@@ -17,6 +18,8 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
 {
     public sealed class YoutubeProvider : IYoutubeProvider
     {
+        #region properties/constructors
+
         private readonly YouTubeService youtube;
 
         private readonly ILogger logger;
@@ -38,6 +41,10 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
             });
         }
 
+        #endregion
+
+        #region get channel info
+
         public async Task<Channel> GetChannelInfo(string channelId)
         {
             var request = this.youtube.Channels.List(ChannelPart.AllAnonymous.AsListParam());
@@ -46,35 +53,48 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
             return response.Items.First();
         }
 
+        #endregion
+
+        #region update channel info
+
         public async Task<Channel> UpdateChannelInfo(Channel channel)
         {
+            // load max res channel banner
             var bannerImage = await this.youtube.HttpClient
                 .GetAsync(channel.BrandingSettings.Image.BannerTvHighImageUrl);
             using (var image = Image.Load(await bannerImage.Content.ReadAsStreamAsync()))
             using (var ms = new MemoryStream())
             {
+                // rescale banner. it is youtube requirements
                 image.Mutate(x => x
                     .Resize(2560, 1440));
                 image.SaveAsJpeg(ms);
 
+                // upload our banner to the youtube
                 var banner = new ChannelBannerResource();
                 var bannerRequest = this.youtube.ChannelBanners.Insert(
                     banner,
                     ms,
-                    "image/jpeg");
+                    MediaTypeNames.Image.Jpeg);
 
                 await bannerRequest.UploadAsync();
 
                 var channelUpdate = new Channel();
                 channelUpdate.Id = channel.Id;
                 channelUpdate.BrandingSettings = channel.BrandingSettings;
+                // we can't change channel title from brandingSettings request
                 channelUpdate.BrandingSettings.Channel.Title = string.Empty;
+                // set our uploader banner
                 channelUpdate.BrandingSettings.Image.BannerExternalUrl = bannerRequest.ResponseBody.Url;
 
                 var request = this.youtube.Channels.Update(channelUpdate, ChannelPart.BrandingSettings);
                 return await request.ExecuteAsync();
             }
         }
+
+        #endregion
+
+        #region get videos
 
         public async Task<IReadOnlyList<Base.Video>> GetChannelVideos(string channelId)
         {
@@ -121,6 +141,10 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
             return list;
         }
 
+        #endregion
+
+        #region download video
+
         public async Task<string> DownloadVideo(string videoId)
         {
             this.logger.LogTrace($"Downloading video [{videoId}]...");
@@ -133,14 +157,18 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
             });
 
             Directory.CreateDirectory(this.outputFolder);
-            var outputFilePath = Path.Combine(this.outputFolder,
+            var outputFilePath = Path.Combine(this.outputFolder, 
                 $"VID-{Guid.NewGuid()}{video.FileExtension}");
             File.WriteAllBytes(outputFilePath, video.GetBytes());
             this.logger.LogTrace($"Video [{videoId}] downloaded to [{outputFilePath}]");
             return outputFilePath;
         }
 
-        public async Task<IUploadProgress> UploadVideo(
+        #endregion
+
+        #region upload video
+
+        public async Task<Base.Video> UploadVideo(
             string channelId,
             Base.Video video,
             string filePath)
@@ -162,7 +190,19 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
                 request.ProgressChanged += OnProgressChanged;
                 request.ResponseReceived += OnResponseReceived;
 
-                return await request.UploadAsync();
+                await request.UploadAsync();
+
+                // load max res video thumbnail
+                var videoImage = await this.youtube.HttpClient
+                    .GetAsync(video.Snippet.Thumbnails.Maxres.Url);
+                var thumbnailsRequest = this.youtube.Thumbnails.Set(
+                    request.ResponseBody.Id,
+                    await videoImage.Content.ReadAsStreamAsync(),
+                    MediaTypeNames.Image.Jpeg);
+                // upload thumbnail for our video to the youtube
+                await thumbnailsRequest.UploadAsync();
+
+                return request.ResponseBody;
             }
         }
 
@@ -176,5 +216,7 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
         {
             this.logger.LogTrace($"Video [{video.Snippet.Title}] uploaded.");
         }
+
+        #endregion
     }
 }

@@ -24,7 +24,7 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
         {
             var channel = await this.youtubeProvider.GetChannelInfo(sourceChannelId);
             channel.Id = destChannelId;
-            var updatedChannel = await this.youtubeProvider.UpdateChannelInfo(channel);
+            await this.youtubeProvider.UpdateChannelInfo(channel);
 
             var sourceVideos = await this.youtubeProvider.GetChannelVideos(sourceChannelId);
             var destVideos = await this.youtubeProvider.GetChannelVideos(destChannelId);
@@ -32,7 +32,9 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
             foreach (var video in sourceVideos
                 .OrderBy(v => v.Snippet.PublishedAt))
             {
-                if (destVideos.Any(d => video.Snippet.Title == d.Snippet.Title))
+                if (destVideos.Any(d => 
+                    video.Snippet.Title == d.Snippet.Title &&
+                    video.ContentDetails.Duration == d.ContentDetails.Duration))
                 {
                     this.logger.LogTrace($"Video [{video.Snippet.Title}] skipped. Video already exists.");
                     continue;
@@ -41,17 +43,14 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                 var filePath = await this.youtubeProvider.DownloadVideo(video.Id);
                 try
                 {
-                    var uploadProgress = await this.youtubeProvider.UploadVideo(
+                    await this.youtubeProvider.UploadVideo(
                         destChannelId,
                         video, 
                         filePath);
-
-                    this.logger.LogTrace($"Bytes sent [{uploadProgress.BytesSent}]. Status [{uploadProgress.Status}].");
                 }
                 finally
                 {
                     File.Delete(filePath);
-                    this.logger.LogTrace($"File [{filePath}] deleted.");
                 }
             }
         }

@@ -9,7 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace Lacey.Medusa.Youtube.Transfer
+namespace Lacey.Medusa.Youtube.Transfer.Run
 {
     class Program
     {

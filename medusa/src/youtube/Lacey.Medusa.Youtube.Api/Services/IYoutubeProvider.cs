@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Lacey.Medusa.Common.Api.Base.Upload;
 using Lacey.Medusa.Youtube.Api.Base;
 
 namespace Lacey.Medusa.Youtube.Api.Services
@@ -15,6 +14,6 @@ namespace Lacey.Medusa.Youtube.Api.Services
 
         Task<string> DownloadVideo(string videoId);
 
-        Task<IUploadProgress> UploadVideo(string channelId, Base.Video video, string filePath);
+        Task<Base.Video> UploadVideo(string channelId, Base.Video video, string filePath);
     }
 }
