@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Text;
 using Lacey.Medusa.Common.Email.Services.Email;
 using Lacey.Medusa.Youtube.Services.Transfer.Services;
 using Lacey.Medusa.Youtube.Transfer.Configuration;
@@ -40,38 +41,44 @@ namespace Lacey.Medusa.Youtube.Transfer
 
             var transferService = serviceProvider.GetService<ITransferService>();
 
-            try
+            var sb = new StringBuilder();
+            for (var i = 0; i < config.SourceChannels.Length; i++)
             {
-                transferService.TransferChannel(
-                    config.SourceChannelId,
-                    config.DestChannelId).Wait();
-
-                logger.LogTrace($"Transferring completed!{Environment.NewLine}");
-            }
-            catch (Exception exc)
-            {
-                logger.LogError(exc.Message);
-            }
-            finally
-            {
-                if (config.Email.IsSendEmails)
+                var sourceChannelId = config.SourceChannels[i];
+                var destChannelId = config.DestChannels[i];
+                try
                 {
-                    var emailService = serviceProvider.GetService<IEmailProvider>();
-                    var currentFolder = Directory.GetCurrentDirectory();
-                    emailService.Send(
-                        config.Email.From,
-                        config.Email.To,
-                        config.Email.Subject,
-                        $"Channel https://www.youtube.com/channel/{config.SourceChannelId} was transferred to https://www.youtube.com/channel/{config.DestChannelId}.",
-                        true,
-                        new[]
-                        {
-                            Path.Combine(currentFolder, config.Logs.LogFile)
-                        });
+                    logger.LogTrace($"[{sourceChannelId}] => [{destChannelId}]...");
+                    transferService.TransferChannel(
+                        sourceChannelId,
+                        destChannelId).Wait();
+                    logger.LogTrace($"[{sourceChannelId}] => [{destChannelId}] completed.{Environment.NewLine}");
+                    sb.AppendLine(
+                        $"[https://www.youtube.com/channel/{sourceChannelId}] => [https://www.youtube.com/channel/{destChannelId}]");
                 }
-
-                serviceProvider.Dispose();
+                catch (Exception exc)
+                {
+                    logger.LogError(exc.Message);
+                }
             }
+
+            if (config.Email.IsSendEmails)
+            {
+                var emailService = serviceProvider.GetService<IEmailProvider>();
+                var currentFolder = Directory.GetCurrentDirectory();
+                emailService.Send(
+                    config.Email.From,
+                    config.Email.To,
+                    config.Email.Subject,
+                    sb.ToString(),
+                    true,
+                    new[]
+                    {
+                        Path.Combine(currentFolder, config.Logs.LogFile)
+                    });
+            }
+
+            serviceProvider.Dispose();
         }
     }
 }

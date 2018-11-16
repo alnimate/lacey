@@ -49,7 +49,7 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
             var bannerImage = await this.youtube.HttpClient
                 .GetAsync(channel.BrandingSettings.Image.BannerTvHighImageUrl);
             Directory.CreateDirectory(this.outputFolder);
-            var bannerFilePath = Path.Combine(this.outputFolder, $"BANNER-{Guid.NewGuid()}.jpg");
+            var bannerFilePath = Path.Combine(this.outputFolder, $"BNR-{Guid.NewGuid()}.jpg");
             using (var fileStream = new FileStream(
                 bannerFilePath,
                 FileMode.Create, 
