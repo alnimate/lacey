@@ -10,6 +10,8 @@ using Lacey.Medusa.Youtube.Api.Extensions;
 using Lacey.Medusa.Youtube.Api.Models.Enums;
 using Lacey.Medusa.Youtube.Api.Video.Base.Core;
 using Microsoft.Extensions.Logging;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
 
 namespace Lacey.Medusa.Youtube.Api.Services.Concrete
 {
@@ -48,20 +50,17 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
         {
             var bannerImage = await this.youtube.HttpClient
                 .GetAsync(channel.BrandingSettings.Image.BannerTvHighImageUrl);
-            Directory.CreateDirectory(this.outputFolder);
-            var bannerFilePath = Path.Combine(this.outputFolder, $"BNR-{Guid.NewGuid()}.jpg");
-            using (var fileStream = new FileStream(
-                bannerFilePath,
-                FileMode.Create, 
-                FileAccess.ReadWrite))
+            using (var image = Image.Load(await bannerImage.Content.ReadAsStreamAsync()))
+            using (var ms = new MemoryStream())
             {
-                var stream = await bannerImage.Content.ReadAsStreamAsync();
-                await stream.CopyToAsync(fileStream);
+                image.Mutate(x => x
+                    .Resize(2560, 1440));
+                image.SaveAsJpeg(ms);
 
                 var banner = new ChannelBannerResource();
                 var bannerRequest = this.youtube.ChannelBanners.Insert(
                     banner,
-                    fileStream,
+                    ms,
                     "image/jpeg");
 
                 await bannerRequest.UploadAsync();
