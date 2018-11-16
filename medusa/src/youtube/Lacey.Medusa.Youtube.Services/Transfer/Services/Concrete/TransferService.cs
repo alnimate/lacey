@@ -22,10 +22,15 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
 
         public async Task TransferChannel(string sourceChannelId, string destChannelId)
         {
-            var channel = await this.youtubeProvider.GetChannelInfo(sourceChannelId);
-            channel.Id = destChannelId;
-            await this.youtubeProvider.UpdateChannelInfo(channel);
+            // transfer channel metadata
+            var sourceChannel = await this.youtubeProvider.GetChannel(sourceChannelId);
+            await this.youtubeProvider.UpdateChannelMetadata(destChannelId, sourceChannel);
 
+            // transfer channel comments
+            var sourceChannelComments = await this.youtubeProvider.GetChannelComments(sourceChannelId);
+            await this.youtubeProvider.UploadChannelComments(destChannelId, sourceChannelComments);
+
+            // transfer videos
             var sourceVideos = await this.youtubeProvider.GetChannelVideos(sourceChannelId);
             var destVideos = await this.youtubeProvider.GetChannelVideos(destChannelId);
 

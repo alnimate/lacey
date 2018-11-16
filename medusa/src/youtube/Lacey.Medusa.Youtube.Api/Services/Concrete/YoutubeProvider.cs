@@ -43,9 +43,9 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
 
         #endregion
 
-        #region get channel info
+        #region get channel
 
-        public async Task<Channel> GetChannelInfo(string channelId)
+        public async Task<Channel> GetChannel(string channelId)
         {
             var request = this.youtube.Channels.List(ChannelPart.AllAnonymous.AsListParam());
             request.Id = channelId;
@@ -55,13 +55,30 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
 
         #endregion
 
-        #region update channel info
+        #region update channel metadata
 
-        public async Task<Channel> UpdateChannelInfo(Channel channel)
+        public async Task<Channel> UpdateChannelMetadata(string channelId, Channel channel)
+        {
+            var channelUpdate = new Channel();
+            channelUpdate.Id = channelId;
+            channelUpdate.BrandingSettings = channel.BrandingSettings;
+
+            // we can't change channel title from brandingSettings request
+            channelUpdate.BrandingSettings.Channel.Title = string.Empty;
+            
+            // set banner
+            // load max res channel banner
+            var banner = await this.UploadChannelBanner(channel.BrandingSettings.Image.BannerTvHighImageUrl);
+            channelUpdate.BrandingSettings.Image.BannerExternalUrl = banner.Url;
+
+            var request = this.youtube.Channels.Update(channelUpdate, ChannelPart.BrandingSettings);
+            return await request.ExecuteAsync();
+        }
+
+        private async Task<ChannelBannerResource> UploadChannelBanner(string bannerUrl)
         {
             // load max res channel banner
-            var bannerImage = await this.youtube.HttpClient
-                .GetAsync(channel.BrandingSettings.Image.BannerTvHighImageUrl);
+            var bannerImage = await this.youtube.HttpClient.GetAsync(bannerUrl);
             using (var image = Image.Load(await bannerImage.Content.ReadAsStreamAsync()))
             using (var ms = new MemoryStream())
             {
@@ -71,25 +88,53 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
                 image.SaveAsJpeg(ms);
 
                 // upload our banner to the youtube
-                var banner = new ChannelBannerResource();
                 var bannerRequest = this.youtube.ChannelBanners.Insert(
-                    banner,
+                    new ChannelBannerResource(),
                     ms,
                     MediaTypeNames.Image.Jpeg);
 
                 await bannerRequest.UploadAsync();
 
-                var channelUpdate = new Channel();
-                channelUpdate.Id = channel.Id;
-                channelUpdate.BrandingSettings = channel.BrandingSettings;
-                // we can't change channel title from brandingSettings request
-                channelUpdate.BrandingSettings.Channel.Title = string.Empty;
-                // set our uploader banner
-                channelUpdate.BrandingSettings.Image.BannerExternalUrl = bannerRequest.ResponseBody.Url;
-
-                var request = this.youtube.Channels.Update(channelUpdate, ChannelPart.BrandingSettings);
-                return await request.ExecuteAsync();
+                return bannerRequest.ResponseBody;
             }
+        }
+
+        #endregion
+
+        #region channel comments
+
+        public async Task<IList<CommentThread>> GetChannelComments(string channelId)
+        {
+            var request = this.youtube.CommentThreads.List(CommentPart.All.AsListParam());
+            request.ChannelId = channelId;
+            request.MaxResults = 50;
+
+            var list = new List<CommentThread>();
+            var nextPageToken = string.Empty;
+            while (nextPageToken != null)
+            {
+                request.PageToken = nextPageToken;
+                var response = await request.ExecuteAsync();
+
+                list.AddRange(response.Items);
+
+                nextPageToken = response.NextPageToken;
+            }
+
+            return list;
+        }
+
+        public async Task<IList<CommentThread>> UploadChannelComments(string channelId, IList<CommentThread> comments)
+        {
+            var list = new List<CommentThread>();
+            foreach (var comment in comments)
+            {
+                comment.Snippet.ChannelId = channelId;
+                var request = this.youtube.CommentThreads.Insert(comment, CommentPart.Snippet);
+                list.Add(await request.ExecuteAsync());
+            }
+
+            return list;
         }
 
         #endregion
@@ -179,6 +224,7 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
                 videoUpdate.Snippet = video.Snippet;
                 videoUpdate.Status = video.Status;
                 videoUpdate.RecordingDetails = video.RecordingDetails;
+                videoUpdate.Snippet.ChannelId = channelId;
 
                 var args = new []
                 {

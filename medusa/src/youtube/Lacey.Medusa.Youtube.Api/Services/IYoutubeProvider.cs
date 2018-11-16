@@ -6,9 +6,13 @@ namespace Lacey.Medusa.Youtube.Api.Services
 {
     public interface IYoutubeProvider
     {
-        Task<Channel> GetChannelInfo(string channelId);
+        Task<Channel> GetChannel(string channelId);
 
-        Task<Channel> UpdateChannelInfo(Channel channel);
+        Task<Channel> UpdateChannelMetadata(string channelId, Channel channel);
+
+        Task<IList<CommentThread>> GetChannelComments(string channelId);
+
+        Task<IList<CommentThread>> UploadChannelComments(string channelId, IList<CommentThread> comments);
 
         Task<IReadOnlyList<Base.Video>> GetChannelVideos(string channelId);
 
