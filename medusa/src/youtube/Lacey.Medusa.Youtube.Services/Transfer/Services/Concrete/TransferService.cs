@@ -1,6 +1,8 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Lacey.Medusa.Youtube.Api.Base;
 using Lacey.Medusa.Youtube.Api.Services;
 using Microsoft.Extensions.Logging;
 
@@ -28,7 +30,23 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
 
             // transfer channel comments
             var sourceChannelComments = await this.youtubeProvider.GetChannelComments(sourceChannelId);
-            await this.youtubeProvider.UploadChannelComments(destChannelId, sourceChannelComments);
+            var destChannelComments = await this.youtubeProvider.GetChannelComments(destChannelId);
+            // skip existing channel comments
+            var commentsList = new List<CommentThread>();
+            foreach (var comment in sourceChannelComments)
+            {
+                if (destChannelComments.Any(d => 
+                    comment.Snippet.TopLevelComment.Snippet.TextDisplay == d.Snippet.TopLevelComment.Snippet.TextDisplay))
+                {
+                    continue;
+                }
+
+                commentsList.Add(comment);
+            }
+            await this.youtubeProvider.UploadChannelComments(
+                destChannelId, 
+                commentsList
+                    .OrderBy(c => c.Snippet.TopLevelComment.Snippet.PublishedAt).ToList());
 
             // transfer videos
             var sourceVideos = await this.youtubeProvider.GetChannelVideos(sourceChannelId);
@@ -37,6 +55,7 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
             foreach (var video in sourceVideos
                 .OrderBy(v => v.Snippet.PublishedAt))
             {
+                // skip existing videos
                 if (destVideos.Any(d => 
                     video.Snippet.Title == d.Snippet.Title &&
                     video.ContentDetails.Duration == d.ContentDetails.Duration))
