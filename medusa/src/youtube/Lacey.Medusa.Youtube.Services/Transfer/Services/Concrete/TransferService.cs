@@ -24,17 +24,51 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
 
         public async Task TransferChannel(string sourceChannelId, string destChannelId)
         {
-            await this.TransferChannelMetadata(sourceChannelId, destChannelId);
+//            await this.TransferChannelMetadata(sourceChannelId, destChannelId);                
+
+            await this.TransferPlaylists(sourceChannelId, destChannelId);
 
 //            await this.TransferChannelComments(sourceChannelId, destChannelId);
 
-            await this.TransferVideos(sourceChannelId, destChannelId);
+//            await this.TransferVideos(sourceChannelId, destChannelId);
         }
 
         private async Task<Channel> TransferChannelMetadata(string sourceChannelId, string destChannelId)
         {
             var sourceChannel = await this.youtubeProvider.GetChannel(sourceChannelId);
             return await this.youtubeProvider.UpdateChannelMetadata(destChannelId, sourceChannel);
+        }
+
+        private async Task<IList<Playlist>> TransferPlaylists(string sourceChannelId, string destChannelId)
+        {
+            var sourceChannelPlaylists = await this.youtubeProvider.GetPlaylists(sourceChannelId);
+            var destChannelPlaylists = await this.youtubeProvider.GetPlaylists(destChannelId);
+
+            // skip existing channel playlists
+            var playlists = new List<Playlist>();
+            var i = 0;
+            foreach (var playlist in sourceChannelPlaylists)
+            {
+                if (i > 0)
+                {
+                    break;
+                }
+
+                if (destChannelPlaylists.Any(d =>
+                    playlist.Snippet.Title == d.Snippet.Title &&
+                    playlist.Snippet.Description == d.Snippet.Description))
+                {
+                    continue;
+                }
+
+                playlists.Add(playlist);
+                i++;
+            }
+
+            return await this.youtubeProvider.UploadPlaylists(
+                destChannelId,
+                playlists
+                    .OrderBy(c => c.Snippet.PublishedAt).ToList());
         }
 
         private async Task<IList<CommentThread>> TransferChannelComments(string sourceChannelId, string destChannelId)

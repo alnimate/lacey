@@ -1,20 +1,22 @@
 ﻿namespace Lacey.Medusa.Youtube.Api.Models.Enums
 {
-    public static class ChannelPart
+    public static class VideoParts
     {
-        public const string AuditDetails = "auditDetails";
-
-        public const string BrandingSettings = "brandingSettings";
-
         public const string ContentDetails = "contentDetails";
 
-        public const string ContentOwnerDetails = "contentOwnerDetails";
+        public const string FileDetails = "fileDetails";
 
         public const string Id = "id";
 
-        public const string InvideoPromotion = "invideoPromotion";
+        public const string LiveStreamingDetails = "liveStreamingDetails";
 
         public const string Localizations = "localizations";
+
+        public const string Player = "player";
+
+        public const string ProcessingDetails = "processingDetails";
+
+        public const string RecordingDetails = "recordingDetails";
 
         public const string Snippet = "snippet";
 
@@ -22,32 +24,34 @@
 
         public const string Status = "status";
 
+        public const string Suggestions = "suggestions";
+
         public const string TopicDetails = "topicDetails";
 
         public static readonly string[] All = {
-            AuditDetails,
-            BrandingSettings,
             ContentDetails,
-            ContentOwnerDetails,
+            FileDetails,
             Id,
-            InvideoPromotion,
+            LiveStreamingDetails,
             Localizations,
+            Player,
+            ProcessingDetails,
+            RecordingDetails,
             Snippet,
             Statistics,
-            Status,
+            Suggestions,
             TopicDetails
         };
 
         public static readonly string[] AllAnonymous = {
-            BrandingSettings,
             ContentDetails,
-            ContentOwnerDetails,
             Id,
-            InvideoPromotion,
+            LiveStreamingDetails,
             Localizations,
+            Player,
+            RecordingDetails,
             Snippet,
             Statistics,
-            Status,
             TopicDetails
         };
     }

@@ -1,6 +1,6 @@
 ﻿namespace Lacey.Medusa.Youtube.Api.Models.Enums
 {
-    public static class CommentPart
+    public static class CommentParts
     {
         public const string Id = "id";
 

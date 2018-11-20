@@ -10,6 +10,10 @@ namespace Lacey.Medusa.Youtube.Api.Services
 
         Task<Channel> UpdateChannelMetadata(string channelId, Channel channel);
 
+        Task<IList<Playlist>> GetPlaylists(string channelId);
+
+        Task<IList<Playlist>> UploadPlaylists(string channelId, IList<Playlist> playlists);
+
         Task<IList<CommentThread>> GetChannelComments(string channelId);
 
         Task<IList<CommentThread>> UploadChannelComments(string channelId, IList<CommentThread> comments);

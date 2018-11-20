@@ -47,7 +47,7 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
 
         public async Task<Channel> GetChannel(string channelId)
         {
-            var request = this.youtube.Channels.List(ChannelPart.AllAnonymous.AsListParam());
+            var request = this.youtube.Channels.List(ChannelParts.AllAnonymous.AsListParam());
             request.Id = channelId;
             var response = await request.ExecuteAsync();
             return response.Items.First();
@@ -71,7 +71,7 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
             var banner = await this.UploadChannelBanner(channel.BrandingSettings.Image.BannerTvHighImageUrl);
             channelUpdate.BrandingSettings.Image.BannerExternalUrl = banner.Url;
 
-            var request = this.youtube.Channels.Update(channelUpdate, ChannelPart.BrandingSettings);
+            var request = this.youtube.Channels.Update(channelUpdate, ChannelParts.BrandingSettings);
             return await request.ExecuteAsync();
         }
 
@@ -101,11 +101,70 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
 
         #endregion
 
+        #region playlists
+
+        public async Task<IList<Playlist>> GetPlaylists(string channelId)
+        {
+            var request = this.youtube.Playlists.List(PlaylistParts.All.AsListParam());
+            request.ChannelId = channelId;
+            request.MaxResults = 50;
+
+            var list = new List<Playlist>();
+            var nextPageToken = string.Empty;
+            while (nextPageToken != null)
+            {
+                request.PageToken = nextPageToken;
+                var response = await request.ExecuteAsync();
+
+                list.AddRange(response.Items);
+
+                nextPageToken = response.NextPageToken;
+            }
+
+            return list;
+        }
+
+        public async Task<IList<Playlist>> UploadPlaylists(string channelId, IList<Playlist> playlists)
+        {
+            var list = new List<Playlist>();
+            foreach (var playlist in playlists)
+            {
+                var playlistUpdate = new Playlist();
+                playlistUpdate.Snippet = playlist.Snippet;
+                playlistUpdate.Snippet.ChannelId = channelId;
+                playlistUpdate.Status = playlist.Status;
+
+                var parts = new[]
+                {
+                    PlaylistParts.Snippet,
+                    PlaylistParts.Status,
+                };
+                var request = this.youtube.Playlists.Insert(playlistUpdate, parts.AsListParam());
+                var uploadedPlaylist = await request.ExecuteAsync();
+
+                // load max res thumbnail
+                var image = await this.youtube.HttpClient
+                    .GetAsync(playlist.Snippet.Thumbnails.Maxres.Url);
+                var thumbnailsRequest = this.youtube.Thumbnails.Set(
+                    uploadedPlaylist.Id,
+                    await image.Content.ReadAsStreamAsync(),
+                    MediaTypeNames.Image.Jpeg);
+                // upload thumbnail to the youtube
+                await thumbnailsRequest.UploadAsync();
+
+                list.Add(uploadedPlaylist);
+            }
+
+            return list;
+        }
+
+        #endregion
+
         #region channel comments
 
         public async Task<IList<CommentThread>> GetChannelComments(string channelId)
         {
-            var request = this.youtube.CommentThreads.List(CommentPart.All.AsListParam());
+            var request = this.youtube.CommentThreads.List(CommentParts.All.AsListParam());
             request.ChannelId = channelId;
             request.MaxResults = 50;
 
@@ -130,7 +189,7 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
             foreach (var comment in comments)
             {
                 comment.Snippet.ChannelId = channelId;
-                var request = this.youtube.CommentThreads.Insert(comment, CommentPart.Snippet);
+                var request = this.youtube.CommentThreads.Insert(comment, CommentParts.Snippet);
                 list.Add(await request.ExecuteAsync());
             }
 
@@ -144,7 +203,7 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
         public async Task<IReadOnlyList<Base.Video>> GetChannelVideos(string channelId)
         {
             var channelVideosIds = await this.GetChannelVideoIds(channelId);
-            var request = this.youtube.Videos.List(VideoPart.AllAnonymous.AsListParam());
+            var request = this.youtube.Videos.List(VideoParts.AllAnonymous.AsListParam());
             request.Id = channelVideosIds.AsListParam();
             request.MaxResults = 50;
 
@@ -165,7 +224,7 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
 
         private async Task<IReadOnlyList<string>> GetChannelVideoIds(string channelId)
         {
-            var request = this.youtube.Search.List(VideoPart.Id);
+            var request = this.youtube.Search.List(VideoParts.Id);
             request.Order = SearchResource.ListRequest.OrderEnum.Date;
             request.MaxResults = 50;
             request.ChannelId = channelId;
@@ -228,9 +287,9 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
 
                 var args = new []
                 {
-                    VideoPart.Snippet,
-                    VideoPart.Status,
-                    VideoPart.RecordingDetails,
+                    VideoParts.Snippet,
+                    VideoParts.Status,
+                    VideoParts.RecordingDetails,
                 };
                 var request = this.youtube.Videos.Insert(videoUpdate, args.AsListParam(), fileStream, "video/*");
                 request.ProgressChanged += OnProgressChanged;
