@@ -24,18 +24,28 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
 
         public async Task TransferChannel(string sourceChannelId, string destChannelId)
         {
-            // transfer channel metadata
-            var sourceChannel = await this.youtubeProvider.GetChannel(sourceChannelId);
-            await this.youtubeProvider.UpdateChannelMetadata(destChannelId, sourceChannel);
+            await this.TransferChannelMetadata(sourceChannelId, destChannelId);
 
-            // transfer channel comments
+//            await this.TransferChannelComments(sourceChannelId, destChannelId);
+
+            await this.TransferVideos(sourceChannelId, destChannelId);
+        }
+
+        private async Task<Channel> TransferChannelMetadata(string sourceChannelId, string destChannelId)
+        {
+            var sourceChannel = await this.youtubeProvider.GetChannel(sourceChannelId);
+            return await this.youtubeProvider.UpdateChannelMetadata(destChannelId, sourceChannel);
+        }
+
+        private async Task<IList<CommentThread>> TransferChannelComments(string sourceChannelId, string destChannelId)
+        {
             var sourceChannelComments = await this.youtubeProvider.GetChannelComments(sourceChannelId);
             var destChannelComments = await this.youtubeProvider.GetChannelComments(destChannelId);
             // skip existing channel comments
             var commentsList = new List<CommentThread>();
             foreach (var comment in sourceChannelComments)
             {
-                if (destChannelComments.Any(d => 
+                if (destChannelComments.Any(d =>
                     comment.Snippet.TopLevelComment.Snippet.TextDisplay == d.Snippet.TopLevelComment.Snippet.TextDisplay))
                 {
                     continue;
@@ -43,20 +53,24 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
 
                 commentsList.Add(comment);
             }
-            await this.youtubeProvider.UploadChannelComments(
-                destChannelId, 
+
+            return await this.youtubeProvider.UploadChannelComments(
+                destChannelId,
                 commentsList
                     .OrderBy(c => c.Snippet.TopLevelComment.Snippet.PublishedAt).ToList());
+        }
 
-            // transfer videos
+        private async Task<IList<Video>> TransferVideos(string sourceChannelId, string destChannelId)
+        {
             var sourceVideos = await this.youtubeProvider.GetChannelVideos(sourceChannelId);
             var destVideos = await this.youtubeProvider.GetChannelVideos(destChannelId);
 
+            var transferredVideos = new List<Video>();
             foreach (var video in sourceVideos
                 .OrderBy(v => v.Snippet.PublishedAt))
             {
                 // skip existing videos
-                if (destVideos.Any(d => 
+                if (destVideos.Any(d =>
                     video.Snippet.Title == d.Snippet.Title &&
                     video.ContentDetails.Duration == d.ContentDetails.Duration))
                 {
@@ -67,16 +81,18 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                 var filePath = await this.youtubeProvider.DownloadVideo(video.Id);
                 try
                 {
-                    await this.youtubeProvider.UploadVideo(
+                    transferredVideos.Add(await this.youtubeProvider.UploadVideo(
                         destChannelId,
-                        video, 
-                        filePath);
+                        video,
+                        filePath));
                 }
                 finally
                 {
                     File.Delete(filePath);
                 }
             }
+
+            return transferredVideos;
         }
     }
 }
