@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -24,101 +25,165 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
 
         public async Task TransferChannel(string sourceChannelId, string destChannelId)
         {
-//            await this.TransferChannelMetadata(sourceChannelId, destChannelId);                
+            await this.TransferChannelMetadata(sourceChannelId, destChannelId);
+
+            await this.TransferSubscriptions(sourceChannelId, destChannelId);
 
             await this.TransferPlaylists(sourceChannelId, destChannelId);
 
-//            await this.TransferChannelComments(sourceChannelId, destChannelId);
+            await this.TransferChannelComments(sourceChannelId, destChannelId);
 
 //            await this.TransferVideos(sourceChannelId, destChannelId);
         }
 
         private async Task<Channel> TransferChannelMetadata(string sourceChannelId, string destChannelId)
         {
-            var sourceChannel = await this.youtubeProvider.GetChannel(sourceChannelId);
-            return await this.youtubeProvider.UpdateChannelMetadata(destChannelId, sourceChannel);
+            Channel uploaded = null;
+            try
+            {
+                var source = await this.youtubeProvider.GetChannel(sourceChannelId);
+                uploaded = await this.youtubeProvider.UpdateChannelMetadata(destChannelId, source);
+            }
+            catch (Exception exc)
+            {
+                this.logger.LogError(exc.Message);
+            }
+
+            return uploaded;
+        }
+
+        private async Task<IList<Subscription>> TransferSubscriptions(string sourceChannelId, string destChannelId)
+        {
+            IList<Subscription> uploaded = new List<Subscription>();
+            try
+            {
+                var source = await this.youtubeProvider.GetSubscriptions(sourceChannelId);
+                var dest = await this.youtubeProvider.GetSubscriptions(destChannelId);
+
+                // skip existing items
+                var toUpload = new List<Subscription>();
+                foreach (var item in source)
+                {
+                    if (dest.Any(d =>
+                        item.Snippet.ResourceId.ChannelId == d.Snippet.ResourceId.ChannelId))
+                    {
+                        continue;
+                    }
+
+                    toUpload.Add(item);
+                }
+
+                uploaded = await this.youtubeProvider.UploadSubscriptions(
+                    destChannelId,
+                    toUpload
+                        .OrderBy(c => c.Snippet.PublishedAt).ToList());
+            }
+            catch (Exception exc)
+            {
+                this.logger.LogError(exc.Message);
+            }
+
+            return uploaded;
         }
 
         private async Task<IList<Playlist>> TransferPlaylists(string sourceChannelId, string destChannelId)
         {
-            var sourceChannelPlaylists = await this.youtubeProvider.GetPlaylists(sourceChannelId);
-            var destChannelPlaylists = await this.youtubeProvider.GetPlaylists(destChannelId);
-
-            // skip existing channel playlists
-            var playlists = new List<Playlist>();
-            var i = 0;
-            foreach (var playlist in sourceChannelPlaylists)
+            IList<Playlist> uploaded = new List<Playlist>();
+            try
             {
-                if (i > 0)
+                var source = await this.youtubeProvider.GetPlaylists(sourceChannelId);
+                var dest = await this.youtubeProvider.GetPlaylists(destChannelId);
+
+                // skip existing items
+                var toUpload = new List<Playlist>();
+                foreach (var item in source.Take(1))
                 {
-                    break;
+                    if (dest.Any(d =>
+                        item.Snippet.Title == d.Snippet.Title &&
+                        item.Snippet.Description == d.Snippet.Description))
+                    {
+                        continue;
+                    }
+
+                    toUpload.Add(item);
                 }
 
-                if (destChannelPlaylists.Any(d =>
-                    playlist.Snippet.Title == d.Snippet.Title &&
-                    playlist.Snippet.Description == d.Snippet.Description))
-                {
-                    continue;
-                }
-
-                playlists.Add(playlist);
-                i++;
+                uploaded = await this.youtubeProvider.UploadPlaylists(
+                    destChannelId,
+                    toUpload
+                        .OrderBy(c => c.Snippet.PublishedAt).ToList());
+            }
+            catch (Exception exc)
+            {
+                this.logger.LogError(exc.Message);
             }
 
-            return await this.youtubeProvider.UploadPlaylists(
-                destChannelId,
-                playlists
-                    .OrderBy(c => c.Snippet.PublishedAt).ToList());
+            return uploaded;
         }
 
         private async Task<IList<CommentThread>> TransferChannelComments(string sourceChannelId, string destChannelId)
         {
-            var sourceChannelComments = await this.youtubeProvider.GetChannelComments(sourceChannelId);
-            var destChannelComments = await this.youtubeProvider.GetChannelComments(destChannelId);
-            // skip existing channel comments
-            var commentsList = new List<CommentThread>();
-            foreach (var comment in sourceChannelComments)
+            IList<CommentThread> uploaded = new List<CommentThread>();
+            try
             {
-                if (destChannelComments.Any(d =>
-                    comment.Snippet.TopLevelComment.Snippet.TextDisplay == d.Snippet.TopLevelComment.Snippet.TextDisplay))
+                var source = await this.youtubeProvider.GetChannelComments(sourceChannelId);
+                var dest = await this.youtubeProvider.GetChannelComments(destChannelId);
+
+                var toUpload = new List<CommentThread>();
+                foreach (var item in source)
                 {
-                    continue;
+                    // skip existing items
+                    if (dest.Any(d =>
+                        item.Snippet.TopLevelComment.Snippet.TextDisplay == d.Snippet.TopLevelComment.Snippet.TextDisplay))
+                    {
+                        continue;
+                    }
+
+                    toUpload.Add(item);
                 }
 
-                commentsList.Add(comment);
+                uploaded = await this.youtubeProvider.UploadChannelComments(
+                    destChannelId,
+                    toUpload
+                        .OrderBy(c => c.Snippet.TopLevelComment.Snippet.PublishedAt).ToList());
+            }
+            catch (Exception exc)
+            {
+                this.logger.LogError(exc.Message);
             }
 
-            return await this.youtubeProvider.UploadChannelComments(
-                destChannelId,
-                commentsList
-                    .OrderBy(c => c.Snippet.TopLevelComment.Snippet.PublishedAt).ToList());
+            return uploaded;
         }
 
         private async Task<IList<Video>> TransferVideos(string sourceChannelId, string destChannelId)
         {
-            var sourceVideos = await this.youtubeProvider.GetChannelVideos(sourceChannelId);
-            var destVideos = await this.youtubeProvider.GetChannelVideos(destChannelId);
+            var source = await this.youtubeProvider.GetChannelVideos(sourceChannelId);
+            var dest = await this.youtubeProvider.GetChannelVideos(destChannelId);
 
-            var transferredVideos = new List<Video>();
-            foreach (var video in sourceVideos
+            var uploaded = new List<Video>();
+            foreach (var item in source
                 .OrderBy(v => v.Snippet.PublishedAt))
             {
-                // skip existing videos
-                if (destVideos.Any(d =>
-                    video.Snippet.Title == d.Snippet.Title &&
-                    video.ContentDetails.Duration == d.ContentDetails.Duration))
+                // skip existing items
+                if (dest.Any(d =>
+                    item.Snippet.Title == d.Snippet.Title &&
+                    item.ContentDetails.Duration == d.ContentDetails.Duration))
                 {
-                    this.logger.LogTrace($"Video [{video.Snippet.Title}] skipped. Video already exists.");
+                    this.logger.LogTrace($"Video [{item.Snippet.Title}] skipped. Video already exists.");
                     continue;
                 }
 
-                var filePath = await this.youtubeProvider.DownloadVideo(video.Id);
+                var filePath = await this.youtubeProvider.DownloadVideo(item.Id);
                 try
                 {
-                    transferredVideos.Add(await this.youtubeProvider.UploadVideo(
+                    uploaded.Add(await this.youtubeProvider.UploadVideo(
                         destChannelId,
-                        video,
+                        item,
                         filePath));
+                }
+                catch (Exception exc)
+                {
+                    this.logger.LogError(exc.Message);
                 }
                 finally
                 {
@@ -126,7 +191,7 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                 }
             }
 
-            return transferredVideos;
+            return uploaded;
         }
     }
 }

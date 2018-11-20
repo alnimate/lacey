@@ -63,9 +63,10 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
             channelUpdate.Id = channelId;
             channelUpdate.BrandingSettings = channel.BrandingSettings;
 
-            // we can't change channel title from brandingSettings request
+            // we can't change some properties from brandingSettings request
             channelUpdate.BrandingSettings.Channel.Title = string.Empty;
-            
+            channelUpdate.BrandingSettings.Channel.UnsubscribedTrailer = string.Empty;
+
             // set banner
             // load max res channel banner
             var banner = await this.UploadChannelBanner(channel.BrandingSettings.Image.BannerTvHighImageUrl);
@@ -97,6 +98,51 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
 
                 return bannerRequest.ResponseBody;
             }
+        }
+
+        #endregion
+
+        #region subscriptions
+
+        public async Task<IList<Subscription>> GetSubscriptions(string channelId)
+        {
+            var request = this.youtube.Subscriptions.List(SubscriptionParts.All.AsListParam());
+            request.ChannelId = channelId;
+            request.MaxResults = 50;
+
+            var list = new List<Subscription>();
+            var nextPageToken = string.Empty;
+            while (nextPageToken != null)
+            {
+                request.PageToken = nextPageToken;
+                var response = await request.ExecuteAsync();
+
+                list.AddRange(response.Items);
+
+                nextPageToken = response.NextPageToken;
+            }
+
+            return list;
+        }
+
+        public async Task<IList<Subscription>> UploadSubscriptions(string channelId, IList<Subscription> subscriptions)
+        {
+            var list = new List<Subscription>();
+            foreach (var subscription in subscriptions)
+            {
+                var subscriptionUpdate = new Subscription();
+                subscriptionUpdate.Snippet = subscription.Snippet;
+                subscriptionUpdate.Snippet.ChannelId = channelId;
+
+                var parts = new[]
+                {
+                    SubscriptionParts.Snippet,
+                };
+                var request = this.youtube.Subscriptions.Insert(subscriptionUpdate, parts.AsListParam());
+                list.Add(await request.ExecuteAsync());
+            }
+
+            return list;
         }
 
         #endregion
@@ -140,19 +186,7 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
                     PlaylistParts.Status,
                 };
                 var request = this.youtube.Playlists.Insert(playlistUpdate, parts.AsListParam());
-                var uploadedPlaylist = await request.ExecuteAsync();
-
-                // load max res thumbnail
-                var image = await this.youtube.HttpClient
-                    .GetAsync(playlist.Snippet.Thumbnails.Maxres.Url);
-                var thumbnailsRequest = this.youtube.Thumbnails.Set(
-                    uploadedPlaylist.Id,
-                    await image.Content.ReadAsStreamAsync(),
-                    MediaTypeNames.Image.Jpeg);
-                // upload thumbnail to the youtube
-                await thumbnailsRequest.UploadAsync();
-
-                list.Add(uploadedPlaylist);
+                list.Add(await request.ExecuteAsync());
             }
 
             return list;
