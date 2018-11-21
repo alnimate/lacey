@@ -16,5 +16,12 @@
             Snippet,
             SubscriberSnippet
         };
+
+        public static readonly string[] AllAnonymous = {
+            ContentDetails,
+            Id,
+            Snippet,
+            SubscriberSnippet
+        };
     }
 }
