@@ -1,7 +1,6 @@
 ﻿using Lacey.Medusa.Youtube.Api.Services;
 using Lacey.Medusa.Youtube.Api.Services.Concrete;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 
 namespace Lacey.Medusa.Youtube.Api.Infrastructure
 {
@@ -10,19 +9,14 @@ namespace Lacey.Medusa.Youtube.Api.Infrastructure
         public static IServiceCollection AddYoutubeServices(
             this IServiceCollection services,
             string clientSecretsFilePath,
-            string userName,
-            string outputFolder)
+            string userName)
         {
             services
                 .AddTransient<IYoutubeAuthProvider, YoutubeAuthProvider>(
                     provider => new YoutubeAuthProvider(
                         clientSecretsFilePath,
                         userName))
-                .AddTransient<IYoutubeProvider, YoutubeProvider>(
-                    provider => new YoutubeProvider(
-                        provider.GetService<IYoutubeAuthProvider>(),
-                        provider.GetService<ILogger<YoutubeProvider>>(),
-                        outputFolder));
+                .AddTransient<IYoutubeProvider, YoutubeProvider>();
 
             return services;
         }

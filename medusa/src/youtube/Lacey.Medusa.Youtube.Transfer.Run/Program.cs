@@ -49,10 +49,12 @@ namespace Lacey.Medusa.Youtube.Transfer.Run
                 var destChannelId = config.DestChannels[i];
                 try
                 {
-                    if (config.ClearBeforeTransfer)
+                    if (config.ClearMode)
                     {
                         logger.LogTrace($"Clearing [{destChannelId}]...");
                         clearService.ClearChannel(destChannelId).Wait();
+                        logger.LogTrace($"Clearing [{destChannelId}] completed.");
+                        continue;
                     }
 
                     logger.LogTrace($"[{sourceChannelId}] => [{destChannelId}]...");

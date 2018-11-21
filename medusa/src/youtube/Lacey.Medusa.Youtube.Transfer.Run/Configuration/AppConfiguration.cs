@@ -8,7 +8,7 @@
 
         public string TempFolder { get; set; }
 
-        public bool ClearBeforeTransfer { get; set; }
+        public bool ClearMode { get; set; }
 
         public string[] SourceChannels { get; set; }
 

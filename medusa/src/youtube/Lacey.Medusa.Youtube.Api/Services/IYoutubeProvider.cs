@@ -6,6 +6,40 @@ namespace Lacey.Medusa.Youtube.Api.Services
 {
     public interface IYoutubeProvider
     {
+        #region videos
+
+        Task<IReadOnlyList<Base.Video>> GetVideos(string channelId);
+
+        Task<IReadOnlyList<string>> GetVideoIds(string channelId);
+
+        Task<string> DownloadVideo(string videoId, string outputFolder);
+
+        Task<Base.Video> UploadVideo(string channelId, Base.Video video, string filePath);
+
+        Task<string> DeleteVideo(string videoId);
+
+        #endregion
+
+        #region playlists
+
+        Task<IList<Playlist>> GetPlaylists(string channelId);
+
+        Task<IList<Playlist>> UploadPlaylists(string channelId, IList<Playlist> playlists);
+
+        Task DeletePlaylists(string channelId);
+
+        #endregion
+
+        #region subscriptions
+
+        Task<IList<Subscription>> GetSubscriptions(string channelId);
+
+        Task<IList<Subscription>> UploadSubscriptions(string channelId, IList<Subscription> subscriptions);
+
+        Task DeleteSubscriptions(string channelId);
+
+        #endregion
+
         #region comments
 
         Task<IList<CommentThread>> GetComments(string channelId);
@@ -24,39 +58,7 @@ namespace Lacey.Medusa.Youtube.Api.Services
 
         Task DeleteMetadata(string channelId);
 
-        #endregion
-
-        #region subscriptions
-
-        Task<IList<Subscription>> GetSubscriptions(string channelId);
-
-        Task<IList<Subscription>> UploadSubscriptions(string channelId, IList<Subscription> subscriptions);
-
-        Task DeleteSubscriptions(string channelId);
-
-        #endregion
-
-        #region videos
-
-        Task<IReadOnlyList<Base.Video>> GetVideos(string channelId);
-
-        Task<IReadOnlyList<string>> GetVideoIds(string channelId);
-
-        Task<string> DownloadVideo(string videoId);
-
-        Task<Base.Video> UploadVideo(string channelId, Base.Video video, string filePath);
-
-        Task<string> DeleteVideo(string videoId);
-
-        #endregion
-
-        #region playlists
-
-        Task<IList<Playlist>> GetPlaylists(string channelId);
-
-        Task<IList<Playlist>> UploadPlaylists(string channelId, IList<Playlist> playlists);
-
-        Task DeletePlaylists(string channelId);
+        Task<string> DownloadIcon(Channel channel, string outputFolder);
 
         #endregion
     }

@@ -17,24 +17,42 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
 
         public async Task ClearChannel(string channelId)
         {
-            await this.DeleteComments(channelId);
-
-            await this.DeleteSubscriptions(channelId);
+            await this.DeleteVideos(channelId);
 
             await this.DeletePlaylists(channelId);
 
-            await this.DeleteVideos(channelId);
+            await this.DeleteSubscriptions(channelId);
+
+            await this.DeleteComments(channelId);
 
             await this.DeleteMetadata(channelId);
         }
 
-        private async Task DeleteComments(string channelId)
+        private async Task DeleteVideos(string channelId)
+        {
+            var videoIds = await this.YoutubeProvider.GetVideoIds(channelId);
+            foreach (var videoId in videoIds)
+            {
+                this.Logger.LogTrace($"Deleting video [{videoId}]...");
+                try
+                {
+                    await this.YoutubeProvider.DeleteVideo(videoId);
+                    this.Logger.LogTrace($"Video [{videoId}] deleted.");
+                }
+                catch (Exception exc)
+                {
+                    this.Logger.LogError(exc.Message);
+                }
+            }
+        }
+
+        private async Task DeletePlaylists(string channelId)
         {
             try
             {
-                this.Logger.LogTrace($"Deleting comments for channel [{channelId}]...");
-                await this.YoutubeProvider.DeleteComments(channelId);
-                this.Logger.LogTrace($"Comments for channel [{channelId}] deleted.");
+                this.Logger.LogTrace($"Deleting playlists for channel [{channelId}]...");
+                await this.YoutubeProvider.DeletePlaylists(channelId);
+                this.Logger.LogTrace($"Playlists for channel [{channelId}] deleted.");
             }
             catch (Exception exc)
             {
@@ -56,35 +74,17 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
             }
         }
 
-        private async Task DeletePlaylists(string channelId)
+        private async Task DeleteComments(string channelId)
         {
             try
             {
-                this.Logger.LogTrace($"Deleting playlists for channel [{channelId}]...");
-                await this.YoutubeProvider.DeletePlaylists(channelId);
-                this.Logger.LogTrace($"Playlists for channel [{channelId}] deleted.");
+                this.Logger.LogTrace($"Deleting comments for channel [{channelId}]...");
+                await this.YoutubeProvider.DeleteComments(channelId);
+                this.Logger.LogTrace($"Comments for channel [{channelId}] deleted.");
             }
             catch (Exception exc)
             {
                 this.Logger.LogError(exc.Message);
-            }
-        }
-
-        private async Task DeleteVideos(string channelId)
-        {
-            var videoIds = await this.YoutubeProvider.GetVideoIds(channelId);
-            foreach (var videoId in videoIds)
-            {
-                this.Logger.LogTrace($"Deleting video [{videoId}]...");
-                try
-                {
-                    await this.YoutubeProvider.DeleteVideo(videoId);
-                    this.Logger.LogTrace($"Video [{videoId}] deleted.");
-                }
-                catch (Exception exc)
-                {
-                    this.Logger.LogError(exc.Message);
-                }
             }
         }
 
