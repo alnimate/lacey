@@ -40,6 +40,7 @@ namespace Lacey.Medusa.Youtube.Transfer.Run
             logger.LogTrace("Welcome to the YouTube transferring tool!");
 
             var transferService = serviceProvider.GetService<ITransferService>();
+            var clearService = serviceProvider.GetService<IClearService>();
 
             var sb = new StringBuilder();
             for (var i = 0; i < config.SourceChannels.Length; i++)
@@ -48,6 +49,12 @@ namespace Lacey.Medusa.Youtube.Transfer.Run
                 var destChannelId = config.DestChannels[i];
                 try
                 {
+                    if (config.ClearBeforeTransfer)
+                    {
+                        logger.LogTrace($"Clearing [{destChannelId}]...");
+                        clearService.ClearChannel(destChannelId).Wait();
+                    }
+
                     logger.LogTrace($"[{sourceChannelId}] => [{destChannelId}]...");
                     transferService.TransferChannel(
                         sourceChannelId,

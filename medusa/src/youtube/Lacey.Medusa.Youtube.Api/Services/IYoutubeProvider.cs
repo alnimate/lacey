@@ -6,26 +6,58 @@ namespace Lacey.Medusa.Youtube.Api.Services
 {
     public interface IYoutubeProvider
     {
+        #region comments
+
+        Task<IList<CommentThread>> GetComments(string channelId);
+
+        Task<IList<CommentThread>> UploadComments(string channelId, IList<CommentThread> comments);
+
+        Task DeleteComments(string channelId);
+
+        #endregion
+
+        #region metadata
+
         Task<Channel> GetChannel(string channelId);
 
-        Task<Channel> UpdateChannelMetadata(string channelId, Channel channel);
+        Task<Channel> UpdateMetadata(string channelId, Channel channel);
 
-        Task<IList<Playlist>> GetPlaylists(string channelId);
+        Task DeleteMetadata(string channelId);
 
-        Task<IList<Playlist>> UploadPlaylists(string channelId, IList<Playlist> playlists);
+        #endregion
+
+        #region subscriptions
 
         Task<IList<Subscription>> GetSubscriptions(string channelId);
 
         Task<IList<Subscription>> UploadSubscriptions(string channelId, IList<Subscription> subscriptions);
 
-        Task<IList<CommentThread>> GetChannelComments(string channelId);
+        Task DeleteSubscriptions(string channelId);
 
-        Task<IList<CommentThread>> UploadChannelComments(string channelId, IList<CommentThread> comments);
+        #endregion
 
-        Task<IReadOnlyList<Base.Video>> GetChannelVideos(string channelId);
+        #region videos
+
+        Task<IReadOnlyList<Base.Video>> GetVideos(string channelId);
+
+        Task<IReadOnlyList<string>> GetVideoIds(string channelId);
 
         Task<string> DownloadVideo(string videoId);
 
         Task<Base.Video> UploadVideo(string channelId, Base.Video video, string filePath);
+
+        Task<string> DeleteVideo(string videoId);
+
+        #endregion
+
+        #region playlists
+
+        Task<IList<Playlist>> GetPlaylists(string channelId);
+
+        Task<IList<Playlist>> UploadPlaylists(string channelId, IList<Playlist> playlists);
+
+        Task DeletePlaylists(string channelId);
+
+        #endregion
     }
 }

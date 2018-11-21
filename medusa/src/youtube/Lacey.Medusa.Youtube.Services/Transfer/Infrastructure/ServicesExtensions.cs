@@ -19,7 +19,8 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Infrastructure
                     userName,
                     outputFolder)
 
-                .AddTransient<ITransferService, TransferService>();
+                .AddTransient<ITransferService, TransferService>()
+                .AddTransient<IClearService, ClearService>();
 
             return services;
         }

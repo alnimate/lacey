@@ -43,7 +43,70 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
 
         #endregion
 
-        #region get channel
+        #region comments
+
+        public async Task<IList<CommentThread>> GetComments(string channelId)
+        {
+            var request = this.youtube.CommentThreads.List(CommentParts.All.AsListParam());
+            request.ChannelId = channelId;
+            request.MaxResults = 50;
+
+            var list = new List<CommentThread>();
+            var nextPageToken = string.Empty;
+            while (nextPageToken != null)
+            {
+                request.PageToken = nextPageToken;
+                var response = await request.ExecuteAsync();
+
+                list.AddRange(response.Items);
+
+                nextPageToken = response.NextPageToken;
+            }
+
+            return list;
+        }
+
+        public async Task<IList<CommentThread>> UploadComments(string channelId, IList<CommentThread> comments)
+        {
+            var list = new List<CommentThread>();
+            foreach (var comment in comments)
+            {
+                comment.Snippet.ChannelId = channelId;
+                var request = this.youtube.CommentThreads.Insert(comment, CommentParts.Snippet);
+                list.Add(await request.ExecuteAsync());
+            }
+
+            return list;
+        }
+
+        public async Task DeleteComments(string channelId)
+        {
+            var request = this.youtube.CommentThreads.List(CommentParts.Id);
+            request.ChannelId = channelId;
+            request.MaxResults = 50;
+
+            var items = new List<CommentThread>();
+            var nextPageToken = string.Empty;
+            while (nextPageToken != null)
+            {
+                request.PageToken = nextPageToken;
+                var response = await request.ExecuteAsync();
+
+                items.AddRange(response.Items);
+
+                nextPageToken = response.NextPageToken;
+            }
+
+            foreach (var item in items)
+            {
+                var deleteRequest = this.youtube.Comments.Delete(item.Id);
+                await deleteRequest.ExecuteAsync();
+            }
+        }
+
+        #endregion
+
+        #region metadata
 
         public async Task<Channel> GetChannel(string channelId)
         {
@@ -53,11 +116,7 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
             return response.Items.First();
         }
 
-        #endregion
-
-        #region update channel metadata
-
-        public async Task<Channel> UpdateChannelMetadata(string channelId, Channel channel)
+        public async Task<Channel> UpdateMetadata(string channelId, Channel channel)
         {
             var channelUpdate = new Channel();
             channelUpdate.Id = channelId;
@@ -74,6 +133,16 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
 
             var request = this.youtube.Channels.Update(channelUpdate, ChannelParts.BrandingSettings);
             return await request.ExecuteAsync();
+        }
+
+        public async Task DeleteMetadata(string channelId)
+        {
+            var channelUpdate = new Channel();
+            channelUpdate.Id = channelId;
+            channelUpdate.BrandingSettings = new ChannelBrandingSettings();
+
+            var request = this.youtube.Channels.Update(channelUpdate, ChannelParts.BrandingSettings);
+            await request.ExecuteAsync();
         }
 
         private async Task<ChannelBannerResource> UploadChannelBanner(string bannerUrl)
@@ -145,100 +214,40 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
             return list;
         }
 
-        #endregion
-
-        #region playlists
-
-        public async Task<IList<Playlist>> GetPlaylists(string channelId)
+        public async Task DeleteSubscriptions(string channelId)
         {
-            var request = this.youtube.Playlists.List(PlaylistParts.All.AsListParam());
+            var request = this.youtube.Subscriptions.List(SubscriptionParts.Id);
             request.ChannelId = channelId;
             request.MaxResults = 50;
 
-            var list = new List<Playlist>();
+            var items = new List<Subscription>();
             var nextPageToken = string.Empty;
             while (nextPageToken != null)
             {
                 request.PageToken = nextPageToken;
                 var response = await request.ExecuteAsync();
 
-                list.AddRange(response.Items);
+                items.AddRange(response.Items);
 
                 nextPageToken = response.NextPageToken;
             }
 
-            return list;
-        }
-
-        public async Task<IList<Playlist>> UploadPlaylists(string channelId, IList<Playlist> playlists)
-        {
-            var list = new List<Playlist>();
-            foreach (var playlist in playlists)
+            foreach (var item in items)
             {
-                var playlistUpdate = new Playlist();
-                playlistUpdate.Snippet = playlist.Snippet;
-                playlistUpdate.Snippet.ChannelId = channelId;
-                playlistUpdate.Status = playlist.Status;
-
-                var parts = new[]
-                {
-                    PlaylistParts.Snippet,
-                    PlaylistParts.Status,
-                };
-                var request = this.youtube.Playlists.Insert(playlistUpdate, parts.AsListParam());
-                list.Add(await request.ExecuteAsync());
+                var deleteRequest = this.youtube.Subscriptions.Delete(item.Id);
+                await deleteRequest.ExecuteAsync();
             }
-
-            return list;
         }
 
         #endregion
 
-        #region channel comments
+        #region videos
 
-        public async Task<IList<CommentThread>> GetChannelComments(string channelId)
+        public async Task<IReadOnlyList<Base.Video>> GetVideos(string channelId)
         {
-            var request = this.youtube.CommentThreads.List(CommentParts.All.AsListParam());
-            request.ChannelId = channelId;
-            request.MaxResults = 50;
-
-            var list = new List<CommentThread>();
-            var nextPageToken = string.Empty;
-            while (nextPageToken != null)
-            {
-                request.PageToken = nextPageToken;
-                var response = await request.ExecuteAsync();
-
-                list.AddRange(response.Items);
-
-                nextPageToken = response.NextPageToken;
-            }
-
-            return list;
-        }
-
-        public async Task<IList<CommentThread>> UploadChannelComments(string channelId, IList<CommentThread> comments)
-        {
-            var list = new List<CommentThread>();
-            foreach (var comment in comments)
-            {
-                comment.Snippet.ChannelId = channelId;
-                var request = this.youtube.CommentThreads.Insert(comment, CommentParts.Snippet);
-                list.Add(await request.ExecuteAsync());
-            }
-
-            return list;
-        }
-
-        #endregion
-
-        #region get videos
-
-        public async Task<IReadOnlyList<Base.Video>> GetChannelVideos(string channelId)
-        {
-            var channelVideosIds = await this.GetChannelVideoIds(channelId);
+            var videosIds = await this.GetVideoIds(channelId);
             var request = this.youtube.Videos.List(VideoParts.AllAnonymous.AsListParam());
-            request.Id = channelVideosIds.AsListParam();
+            request.Id = videosIds.AsListParam();
             request.MaxResults = 50;
 
             var list = new List<Base.Video>();
@@ -256,7 +265,7 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
             return list;
         }
 
-        private async Task<IReadOnlyList<string>> GetChannelVideoIds(string channelId)
+        public async Task<IReadOnlyList<string>> GetVideoIds(string channelId)
         {
             var request = this.youtube.Search.List(VideoParts.Id);
             request.Order = SearchResource.ListRequest.OrderEnum.Date;
@@ -279,10 +288,6 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
             return list;
         }
 
-        #endregion
-
-        #region download video
-
         public async Task<string> DownloadVideo(string videoId)
         {
             this.logger.LogTrace($"Downloading video [{videoId}]...");
@@ -301,10 +306,6 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
             this.logger.LogTrace($"Video [{videoId}] downloaded to [{outputFilePath}]");
             return outputFilePath;
         }
-
-        #endregion
-
-        #region upload video
 
         public async Task<Base.Video> UploadVideo(
             string channelId,
@@ -354,6 +355,84 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
         private void OnResponseReceived(Base.Video video)
         {
             this.logger.LogTrace($"Video [{video.Snippet.Title}] uploaded.");
+        }
+
+        public async Task<string> DeleteVideo(string videoId)
+        {
+            var request = this.youtube.Videos.Delete(videoId);
+            return await request.ExecuteAsync();
+        }
+
+        #endregion
+
+        #region playlists
+
+        public async Task<IList<Playlist>> GetPlaylists(string channelId)
+        {
+            var request = this.youtube.Playlists.List(PlaylistParts.All.AsListParam());
+            request.ChannelId = channelId;
+            request.MaxResults = 50;
+
+            var list = new List<Playlist>();
+            var nextPageToken = string.Empty;
+            while (nextPageToken != null)
+            {
+                request.PageToken = nextPageToken;
+                var response = await request.ExecuteAsync();
+
+                list.AddRange(response.Items);
+
+                nextPageToken = response.NextPageToken;
+            }
+
+            return list;
+        }
+
+        public async Task<IList<Playlist>> UploadPlaylists(string channelId, IList<Playlist> playlists)
+        {
+            var list = new List<Playlist>();
+            foreach (var playlist in playlists)
+            {
+                var playlistUpdate = new Playlist();
+                playlistUpdate.Snippet = playlist.Snippet;
+                playlistUpdate.Snippet.ChannelId = channelId;
+                playlistUpdate.Status = playlist.Status;
+
+                var parts = new[]
+                {
+                    PlaylistParts.Snippet,
+                    PlaylistParts.Status,
+                };
+                var request = this.youtube.Playlists.Insert(playlistUpdate, parts.AsListParam());
+                list.Add(await request.ExecuteAsync());
+            }
+
+            return list;
+        }
+
+        public async Task DeletePlaylists(string channelId)
+        {
+            var request = this.youtube.Playlists.List(PlaylistParts.Id);
+            request.ChannelId = channelId;
+            request.MaxResults = 50;
+
+            var items = new List<Playlist>();
+            var nextPageToken = string.Empty;
+            while (nextPageToken != null)
+            {
+                request.PageToken = nextPageToken;
+                var response = await request.ExecuteAsync();
+
+                items.AddRange(response.Items);
+
+                nextPageToken = response.NextPageToken;
+            }
+
+            foreach (var item in items)
+            {
+                var deleteRequest = this.youtube.Playlists.Delete(item.Id);
+                await deleteRequest.ExecuteAsync();
+            }
         }
 
         #endregion
