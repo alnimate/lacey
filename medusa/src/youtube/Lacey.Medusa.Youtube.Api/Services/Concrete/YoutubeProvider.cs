@@ -250,19 +250,21 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
             return list;
         }
 
-        public async Task<PlaylistItem> UploadPlaylistItem(string playlistId, PlaylistItem playlistItem)
+        public async Task<PlaylistItem> UploadPlaylistItem(
+            string channelId,
+            string playlistId, 
+            PlaylistItem playlistItem)
         {
             var update = new PlaylistItem();
             update.Snippet = playlistItem.Snippet;
+            update.Snippet.ChannelId = channelId;
             update.Snippet.PlaylistId = playlistId;
-            update.ContentDetails = playlistItem.ContentDetails;
             update.Status = playlistItem.Status;
 
             var parts = new[]
             {
                 PlaylistItemParts.Snippet,
-                PlaylistItemParts.ContentDetails,
-                PlaylistItemParts.Status,
+                PlaylistItemParts.Status
             };
             var request = this.youtube.PlaylistItems.Insert(update, parts.AsListParam());
             return await request.ExecuteAsync();

@@ -57,11 +57,13 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                     continue;
                 }
 
-                this.Logger.LogTrace($"Downloading video [{item.Id}]...");
-                var filePath = await this.YoutubeProvider.DownloadVideo(item.Id, this.outputFolder);
-                this.Logger.LogTrace($"Video [{item.Id}] downloaded to [{filePath}]");
+                string filePath = null;
                 try
                 {
+                    this.Logger.LogTrace($"Downloading video [{item.Id}]...");
+                    filePath = await this.YoutubeProvider.DownloadVideo(item.Id, this.outputFolder);
+                    this.Logger.LogTrace($"Video [{item.Id}] downloaded to [{filePath}]");
+
                     var video = await this.YoutubeProvider.UploadVideo(
                         destChannelId,
                         item,
@@ -76,7 +78,10 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                 }
                 finally
                 {
-                    File.Delete(filePath);
+                    if (!string.IsNullOrEmpty(filePath))
+                    {
+                        File.Delete(filePath);
+                    }
                 }
             }
 
@@ -117,12 +122,11 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                     {
                         var link = links.FirstOrDefault(
                             l => l.SourceVideoId == item.Snippet.ResourceId.VideoId);
-                        item.Snippet.PlaylistId = uploaded.Id;
                         if (link != null)
                         {
                             item.Snippet.ResourceId.VideoId = link.DestVideoId;
                         }
-                        await this.YoutubeProvider.UploadPlaylistItem(destChannelId, item);
+                        await this.YoutubeProvider.UploadPlaylistItem(destChannelId, uploaded.Id, item);
                     }
 
                     list.Add(uploaded);

@@ -34,7 +34,7 @@ namespace Lacey.Medusa.Youtube.Api.Services
 
         Task<IList<PlaylistItem>> GetPlaylistItems(string playlistId);
 
-        Task<PlaylistItem> UploadPlaylistItem(string playlistId, PlaylistItem playlistItem);
+        Task<PlaylistItem> UploadPlaylistItem(string channelId, string playlistId, PlaylistItem playlistItem);
 
         Task DeletePlaylistItems(string playlistId);
 
