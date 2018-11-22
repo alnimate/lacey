@@ -302,7 +302,7 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
 
         public async Task<IList<Subscription>> GetSubscriptions(string channelId)
         {
-            var request = this.youtube.Subscriptions.List(SubscriptionParts.All.AsListParam());
+            var request = this.youtube.Subscriptions.List(SubscriptionParts.AllAnonymous.AsListParam());
             request.ChannelId = channelId;
             request.MaxResults = ListConsts.MaxResults;
 
@@ -327,7 +327,8 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
             foreach (var subscription in subscriptions)
             {
                 var subscriptionUpdate = new Subscription();
-                subscriptionUpdate.Snippet = subscription.Snippet;
+                subscriptionUpdate.Snippet = new SubscriptionSnippet();
+                subscriptionUpdate.Snippet.ResourceId = subscription.Snippet.ResourceId;
                 subscriptionUpdate.Snippet.ChannelId = channelId;
 
                 var request = this.youtube.Subscriptions.Insert(subscriptionUpdate, SubscriptionParts.Snippet);
