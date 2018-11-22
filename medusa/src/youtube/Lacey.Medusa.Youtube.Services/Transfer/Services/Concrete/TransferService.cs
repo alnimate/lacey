@@ -117,12 +117,11 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                     {
                         var link = links.FirstOrDefault(
                             l => l.SourceVideoId == item.Snippet.ResourceId.VideoId);
-                        if (link == null)
-                        {
-                            continue;
-                        }
                         item.Snippet.PlaylistId = uploaded.Id;
-                        item.Snippet.ResourceId.VideoId = link.DestVideoId;
+                        if (link != null)
+                        {
+                            item.Snippet.ResourceId.VideoId = link.DestVideoId;
+                        }
                         await this.YoutubeProvider.UploadPlaylistItem(destChannelId, item);
                     }
 
