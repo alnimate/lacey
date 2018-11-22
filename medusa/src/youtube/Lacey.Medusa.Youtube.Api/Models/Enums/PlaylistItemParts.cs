@@ -1,14 +1,10 @@
 ﻿namespace Lacey.Medusa.Youtube.Api.Models.Enums
 {
-    internal static class PlaylistParts
+    internal static class PlaylistItemParts
     {
         public const string ContentDetails = "contentDetails";
 
         public const string Id = "id";
-
-        public const string Localizations = "localizations";
-
-        public const string Player = "player";
 
         public const string Snippet = "snippet";
 
@@ -17,8 +13,6 @@
         public static readonly string[] All = {
             ContentDetails,
             Id,
-            Localizations,
-            Player,
             Snippet,
             Status,
         };

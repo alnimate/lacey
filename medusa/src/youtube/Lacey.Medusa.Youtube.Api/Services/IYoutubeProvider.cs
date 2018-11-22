@@ -23,10 +23,20 @@ namespace Lacey.Medusa.Youtube.Api.Services
         #region playlists
 
         Task<IList<Playlist>> GetPlaylists(string channelId);
-
-        Task<IList<Playlist>> UploadPlaylists(string channelId, IList<Playlist> playlists);
+            
+        Task<Playlist> UploadPlaylist(string channelId, Playlist playlist);
 
         Task DeletePlaylists(string channelId);
+
+        #endregion
+
+        #region playlist items
+
+        Task<IList<PlaylistItem>> GetPlaylistItems(string playlistId);
+
+        Task<PlaylistItem> UploadPlaylistItem(string playlistId, PlaylistItem playlistItem);
+
+        Task DeletePlaylistItems(string playlistId);
 
         #endregion
 

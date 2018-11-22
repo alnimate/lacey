@@ -2,7 +2,7 @@
 
 namespace Lacey.Medusa.Youtube.Api.Extensions
 {
-    public static class ListExtensions
+    internal static class ListExtensions
     {
         public static string AsListParam(
             this string[] args)

@@ -51,6 +51,13 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
             try
             {
                 this.Logger.LogTrace($"Deleting playlists for channel [{channelId}]...");
+
+                var playlists = await this.YoutubeProvider.GetPlaylists(channelId);
+                foreach (var playlist in playlists)
+                {
+                    await this.YoutubeProvider.DeletePlaylistItems(playlist.Id);
+                }
+
                 await this.YoutubeProvider.DeletePlaylists(channelId);
                 this.Logger.LogTrace($"Playlists for channel [{channelId}] deleted.");
             }

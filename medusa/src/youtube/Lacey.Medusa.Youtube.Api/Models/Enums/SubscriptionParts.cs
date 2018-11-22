@@ -1,6 +1,6 @@
 ﻿namespace Lacey.Medusa.Youtube.Api.Models.Enums
 {
-    public static class SubscriptionParts
+    internal static class SubscriptionParts
     {
         public const string ContentDetails = "contentDetails";
 
@@ -11,13 +11,6 @@
         public const string SubscriberSnippet = "subscriberSnippet";
 
         public static readonly string[] All = {
-            ContentDetails,
-            Id,
-            Snippet,
-            SubscriberSnippet
-        };
-
-        public static readonly string[] AllAnonymous = {
             ContentDetails,
             Id,
             Snippet,

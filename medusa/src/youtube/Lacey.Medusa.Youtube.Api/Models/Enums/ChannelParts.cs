@@ -1,6 +1,6 @@
 ﻿namespace Lacey.Medusa.Youtube.Api.Models.Enums
 {
-    public static class ChannelParts
+    internal static class ChannelParts
     {
         public const string AuditDetails = "auditDetails";
 

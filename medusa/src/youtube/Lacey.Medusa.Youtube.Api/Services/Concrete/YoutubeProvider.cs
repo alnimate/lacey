@@ -8,6 +8,7 @@ using Lacey.Medusa.Common.Api.Base.Services;
 using Lacey.Medusa.Common.Api.Base.Upload;
 using Lacey.Medusa.Youtube.Api.Base;
 using Lacey.Medusa.Youtube.Api.Extensions;
+using Lacey.Medusa.Youtube.Api.Models.Const;
 using Lacey.Medusa.Youtube.Api.Models.Enums;
 using Lacey.Medusa.Youtube.Api.Video.Base.Core;
 using Microsoft.Extensions.Logging;
@@ -46,7 +47,7 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
             var videosIds = await this.GetVideoIds(channelId);
             var request = this.youtube.Videos.List(VideoParts.AllAnonymous.AsListParam());
             request.Id = videosIds.AsListParam();
-            request.MaxResults = 50;
+            request.MaxResults = ListConsts.MaxResults;
 
             var list = new List<Base.Video>();
             var nextPageToken = string.Empty;
@@ -67,7 +68,7 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
         {
             var request = this.youtube.Search.List(VideoParts.Id);
             request.Order = SearchResource.ListRequest.OrderEnum.Date;
-            request.MaxResults = 50;
+            request.MaxResults = ListConsts.MaxResults;
             request.ChannelId = channelId;
 
             var list = new List<string>();
@@ -77,7 +78,7 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
                 request.PageToken = nextPageToken;
                 var response = await request.ExecuteAsync();
 
-                list.AddRange(response.Items.Where(i => i.Id.Kind == SearchResultKind.Video)
+                list.AddRange(response.Items.Where(i => i.Id.Kind == ResourceKind.Video)
                         .Select(v => v.Id.VideoId));
 
                 nextPageToken = response.NextPageToken;
@@ -166,7 +167,7 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
         {
             var request = this.youtube.Playlists.List(PlaylistParts.All.AsListParam());
             request.ChannelId = channelId;
-            request.MaxResults = 50;
+            request.MaxResults = ListConsts.MaxResults;
 
             var list = new List<Playlist>();
             var nextPageToken = string.Empty;
@@ -183,33 +184,27 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
             return list;
         }
 
-        public async Task<IList<Playlist>> UploadPlaylists(string channelId, IList<Playlist> playlists)
+        public async Task<Playlist> UploadPlaylist(string channelId, Playlist playlist)
         {
-            var list = new List<Playlist>();
-            foreach (var playlist in playlists)
+            var playlistUpdate = new Playlist();
+            playlistUpdate.Snippet = playlist.Snippet;
+            playlistUpdate.Snippet.ChannelId = channelId;
+            playlistUpdate.Status = playlist.Status;
+
+            var parts = new[]
             {
-                var playlistUpdate = new Playlist();
-                playlistUpdate.Snippet = playlist.Snippet;
-                playlistUpdate.Snippet.ChannelId = channelId;
-                playlistUpdate.Status = playlist.Status;
-
-                var parts = new[]
-                {
-                    PlaylistParts.Snippet,
-                    PlaylistParts.Status,
-                };
-                var request = this.youtube.Playlists.Insert(playlistUpdate, parts.AsListParam());
-                list.Add(await request.ExecuteAsync());
-            }
-
-            return list;
+                PlaylistParts.Snippet,
+                PlaylistParts.Status,
+            };
+            var request = this.youtube.Playlists.Insert(playlistUpdate, parts.AsListParam());
+            return await request.ExecuteAsync();
         }
 
         public async Task DeletePlaylists(string channelId)
         {
             var request = this.youtube.Playlists.List(PlaylistParts.Id);
             request.ChannelId = channelId;
-            request.MaxResults = 50;
+            request.MaxResults = ListConsts.MaxResults;
 
             var items = new List<Playlist>();
             var nextPageToken = string.Empty;
@@ -232,13 +227,82 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
 
         #endregion
 
+        #region playlist items
+
+        public async Task<IList<PlaylistItem>> GetPlaylistItems(string playlistId)
+        {
+            var request = this.youtube.PlaylistItems.List(PlaylistItemParts.All.AsListParam());
+            request.PlaylistId = playlistId;
+            request.MaxResults = ListConsts.MaxResults;
+
+            var list = new List<PlaylistItem>();
+            var nextPageToken = string.Empty;
+            while (nextPageToken != null)
+            {
+                request.PageToken = nextPageToken;
+                var response = await request.ExecuteAsync();
+
+                list.AddRange(response.Items);
+
+                nextPageToken = response.NextPageToken;
+            }
+
+            return list;
+        }
+
+        public async Task<PlaylistItem> UploadPlaylistItem(string playlistId, PlaylistItem playlistItem)
+        {
+            var update = new PlaylistItem();
+            update.Snippet = playlistItem.Snippet;
+            update.Snippet.PlaylistId = playlistId;
+            update.ContentDetails = playlistItem.ContentDetails;
+            update.Status = playlistItem.Status;
+
+            var parts = new[]
+            {
+                PlaylistItemParts.Snippet,
+                PlaylistItemParts.ContentDetails,
+                PlaylistItemParts.Status,
+            };
+            var request = this.youtube.PlaylistItems.Insert(update, parts.AsListParam());
+            return await request.ExecuteAsync();
+        }
+
+        public async Task DeletePlaylistItems(string playlistId)
+        {
+            var request = this.youtube.PlaylistItems.List(PlaylistParts.Id);
+            request.PlaylistId = playlistId;
+            request.MaxResults = ListConsts.MaxResults;
+
+            var items = new List<PlaylistItem>();
+            var nextPageToken = string.Empty;
+            while (nextPageToken != null)
+            {
+                request.PageToken = nextPageToken;
+                var response = await request.ExecuteAsync();
+
+                items.AddRange(response.Items);
+
+                nextPageToken = response.NextPageToken;
+            }
+
+            foreach (var item in items)
+            {
+                var deleteRequest = this.youtube.Playlists.Delete(item.Id);
+                await deleteRequest.ExecuteAsync();
+            }
+        }
+
+
+        #endregion
+
         #region subscriptions
 
         public async Task<IList<Subscription>> GetSubscriptions(string channelId)
         {
-            var request = this.youtube.Subscriptions.List(SubscriptionParts.AllAnonymous.AsListParam());
+            var request = this.youtube.Subscriptions.List(SubscriptionParts.All.AsListParam());
             request.ChannelId = channelId;
-            request.MaxResults = 50;
+            request.MaxResults = ListConsts.MaxResults;
 
             var list = new List<Subscription>();
             var nextPageToken = string.Empty;
@@ -275,7 +339,7 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
         {
             var request = this.youtube.Subscriptions.List(SubscriptionParts.Id);
             request.ChannelId = channelId;
-            request.MaxResults = 50;
+            request.MaxResults = ListConsts.MaxResults;
 
             var items = new List<Subscription>();
             var nextPageToken = string.Empty;
@@ -304,7 +368,7 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
         {
             var request = this.youtube.CommentThreads.List(CommentParts.All.AsListParam());
             request.ChannelId = channelId;
-            request.MaxResults = 50;
+            request.MaxResults = ListConsts.MaxResults;
 
             var list = new List<CommentThread>();
             var nextPageToken = string.Empty;
@@ -338,7 +402,7 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
         {
             var request = this.youtube.CommentThreads.List(CommentParts.Id);
             request.ChannelId = channelId;
-            request.MaxResults = 50;
+            request.MaxResults = ListConsts.MaxResults;
 
             var items = new List<CommentThread>();
             var nextPageToken = string.Empty;
@@ -402,33 +466,8 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
 
         public async Task<string> DownloadIcon(Channel channel, string outputFolder)
         {
-            string iconUrl;
-            if (channel.Snippet.Thumbnails.Maxres != null)
-            {
-                iconUrl = channel.Snippet.Thumbnails.Maxres.Url;
-            }
-            else if (channel.Snippet.Thumbnails.High != null)
-            {
-                iconUrl = channel.Snippet.Thumbnails.High.Url;
-            }
-            else if (channel.Snippet.Thumbnails.Medium != null)
-            {
-                iconUrl = channel.Snippet.Thumbnails.Medium.Url;
-            }
-            else if (channel.Snippet.Thumbnails.Standard != null)
-            {
-                iconUrl = channel.Snippet.Thumbnails.Standard.Url;
-            }
-            else if (channel.Snippet.Thumbnails.Default__ != null)
-            {
-                iconUrl = channel.Snippet.Thumbnails.Default__.Url;
-            }
-            else
-            {
-                return null;
-            }
-
-            var icon = await this.youtube.HttpClient.GetAsync(iconUrl);
+            var icon = await this.youtube.HttpClient.GetAsync(
+                channel.Snippet.Thumbnails.GetMaxResUrl());
             Directory.CreateDirectory(outputFolder);
             var outputFilePath = Path.Combine(outputFolder, $"ICON-{Guid.NewGuid()}.jpg");
             File.WriteAllBytes(outputFilePath, await icon.Content.ReadAsByteArrayAsync());
