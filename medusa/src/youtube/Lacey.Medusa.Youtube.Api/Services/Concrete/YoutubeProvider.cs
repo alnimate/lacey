@@ -298,6 +298,60 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
 
         #endregion
 
+        #region sections
+
+        public async Task<IList<ChannelSection>> GetSections(string channelId)
+        {
+            var request = this.youtube.ChannelSections.List(SectionParts.All.AsListParam());
+            request.ChannelId = channelId;
+            var response = await request.ExecuteAsync();
+
+            return response.Items;
+        }
+
+        public async Task<IList<ChannelSection>> UploadSections(string channelId, IList<ChannelSection> sections)
+        {
+            var list = new List<ChannelSection>();
+            foreach (var section in sections)
+            {
+                var sectionUpdate = new ChannelSection();
+                sectionUpdate.Snippet = section.Snippet;
+                sectionUpdate.ContentDetails = section.ContentDetails;
+                sectionUpdate.Localizations = section.Localizations;
+                sectionUpdate.Targeting = section.Targeting;
+                sectionUpdate.Snippet.ChannelId = channelId;
+
+                var parts = new []
+                {
+                    SectionParts.Snippet,
+                    SectionParts.ContentDetails,
+                    SectionParts.Localizations,
+                    SectionParts.Targeting
+                };
+
+                var request = this.youtube.ChannelSections.Insert(sectionUpdate, parts.AsListParam());
+                list.Add(await request.ExecuteAsync());
+            }
+
+            return list;
+        }
+
+        public async Task DeleteSections(string channelId)
+        {
+            var request = this.youtube.ChannelSections.List(SectionParts.Id);
+            request.ChannelId = channelId;
+
+            var response = await request.ExecuteAsync();
+
+            foreach (var item in response.Items)
+            {
+                var deleteRequest = this.youtube.ChannelSections.Delete(item.Id);
+                await deleteRequest.ExecuteAsync();
+            }
+        }
+
+        #endregion
+
         #region subscriptions
 
         public async Task<IList<Subscription>> GetSubscriptions(string channelId)

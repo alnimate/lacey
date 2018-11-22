@@ -21,6 +21,8 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
 
             await this.DeletePlaylists(channelId);
 
+            await this.DeleteSections(channelId);
+
             await this.DeleteSubscriptions(channelId);
 
             await this.DeleteComments(channelId);
@@ -60,6 +62,20 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
 
                 await this.YoutubeProvider.DeletePlaylists(channelId);
                 this.Logger.LogTrace($"Playlists for channel [{channelId}] deleted.");
+            }
+            catch (Exception exc)
+            {
+                this.Logger.LogError(exc.Message);
+            }
+        }
+
+        private async Task DeleteSections(string channelId)
+        {
+            try
+            {
+                this.Logger.LogTrace($"Deleting sections for channel [{channelId}]...");
+                await this.YoutubeProvider.DeleteSections(channelId);
+                this.Logger.LogTrace($"Sections for channel [{channelId}] deleted.");
             }
             catch (Exception exc)
             {

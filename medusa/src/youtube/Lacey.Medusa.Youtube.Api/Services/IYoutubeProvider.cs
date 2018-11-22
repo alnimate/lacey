@@ -40,6 +40,16 @@ namespace Lacey.Medusa.Youtube.Api.Services
 
         #endregion
 
+        #region sections
+
+        Task<IList<ChannelSection>> GetSections(string channelId);
+
+        Task<IList<ChannelSection>> UploadSections(string channelId, IList<ChannelSection> sections);
+
+        Task DeleteSections(string channelId);
+
+        #endregion
+
         #region subscriptions
 
         Task<IList<Subscription>> GetSubscriptions(string channelId);
