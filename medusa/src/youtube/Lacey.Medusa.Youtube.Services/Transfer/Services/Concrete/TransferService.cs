@@ -166,7 +166,6 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                     toUpload.Add(item);
                 }
 
-                toUpload.Reverse();
                 uploaded = await this.YoutubeProvider.UploadSections(
                     destChannelId,
                     toUpload);
