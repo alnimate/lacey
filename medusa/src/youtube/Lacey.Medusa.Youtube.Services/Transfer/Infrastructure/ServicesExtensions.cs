@@ -1,5 +1,6 @@
 ﻿using Lacey.Medusa.Youtube.Api.Infrastructure;
 using Lacey.Medusa.Youtube.Api.Services;
+using Lacey.Medusa.Youtube.Dal.Infrastructure;
 using Lacey.Medusa.Youtube.Services.Transfer.Services;
 using Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,12 +14,15 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Infrastructure
             this IServiceCollection services,
             string clientSecretsFilePath,
             string userName,
-            string outputFolder)
+            string outputFolder,
+            string connectionString)
         {
             services
                 .AddYoutubeServices(
                     clientSecretsFilePath,
                     userName)
+
+                .AddYoutubeDalServices(connectionString)
 
                 .AddTransient<ITransferService, TransferService>(
                     provider => new TransferService(

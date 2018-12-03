@@ -4,7 +4,7 @@ using System.Text;
 using Lacey.Medusa.Common.Email.Services.Email;
 using Lacey.Medusa.Youtube.Services.Transfer.Services;
 using Lacey.Medusa.Youtube.Transfer.Configuration;
-using Lacey.Medusa.Youtube.Transfer.Infrastructure;
+using Lacey.Medusa.Youtube.Transfer.Run.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -23,6 +23,7 @@ namespace Lacey.Medusa.Youtube.Transfer.Run
 
             var configuration = builder.Build();
             var config = configuration.GetSection("App").Get<AppConfiguration>();
+            var connectionString = configuration.GetConnectionString("Default");
 
             //setup our DI
             var serviceProvider = new ServiceCollection()
@@ -30,7 +31,7 @@ namespace Lacey.Medusa.Youtube.Transfer.Run
                     logBuilder
                         .AddLog4Net()
                         .SetMinimumLevel(LogLevel.Trace))
-                .AddAppServices(config)
+                .AddAppServices(config, connectionString)
                 .BuildServiceProvider();
 
             //configure console logging

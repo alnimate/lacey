@@ -11,6 +11,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Lacey.Medusa.Youtube.Api\Lacey.Medusa.Youtube.Api.csproj" />
+    <ProjectReference Include="..\Lacey.Medusa.Youtube.Dal\Lacey.Medusa.Youtube.Dal.csproj" />
+    <ProjectReference Include="..\Lacey.Medusa.Youtube.Domain\Lacey.Medusa.Youtube.Domain.csproj" />
   </ItemGroup>
 
 </Project>

@@ -4,13 +4,14 @@ using Lacey.Medusa.Youtube.Services.Transfer.Infrastructure;
 using Lacey.Medusa.Youtube.Transfer.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Lacey.Medusa.Youtube.Transfer.Infrastructure
+namespace Lacey.Medusa.Youtube.Transfer.Run.Infrastructure
 {
     public static class ServicesExtensions
     {
         public static IServiceCollection AddAppServices(
             this IServiceCollection services,
-            AppConfiguration config)
+            AppConfiguration config,
+            string connectionString)
         {
             var currentFolder = Directory.GetCurrentDirectory();
 
@@ -23,7 +24,8 @@ namespace Lacey.Medusa.Youtube.Transfer.Infrastructure
                 .AddYoutubeTransferServices(
                     config.ClientSecretsFilePath,
                     config.UserName,
-                    Path.Combine(currentFolder, config.TempFolder));
+                    Path.Combine(currentFolder, config.TempFolder),
+                    connectionString);
 
             return services;
         }
