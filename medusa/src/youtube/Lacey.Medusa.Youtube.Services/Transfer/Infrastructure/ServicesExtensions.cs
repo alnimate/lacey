@@ -28,8 +28,7 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Infrastructure
                     provider => new TransferService(
                         provider.GetService<IYoutubeProvider>(),
                         provider.GetService<ILogger<TransferService>>(),
-                        outputFolder))
-                .AddTransient<IClearService, ClearService>();
+                        outputFolder));
 
             return services;
         }

@@ -16,6 +16,7 @@ BEGIN
 		[OriginalChannelId] NVARCHAR(30) NOT NULL,
 		[Title] NVARCHAR(MAX) NOT NULL,
 		[Description] NVARCHAR(MAX) NULL,
+		[PublishedAt] DATETIME NULL,
 		[CreatedAt] DATETIME NOT NULL
 CONSTRAINT [PK_Channels] PRIMARY KEY CLUSTERED 
 (
@@ -45,7 +46,7 @@ BEGIN
 		[OriginalVideoId] NVARCHAR(30) NOT NULL,
 		[Title] NVARCHAR(MAX) NOT NULL,
 		[Description] NVARCHAR(MAX) NULL,
-		[PublishedAt] DATETIME NOT NULL,
+		[PublishedAt] DATETIME NULL,
 		[ChannelId] INT NOT NULL,
 		[CreatedAt] DATETIME NOT NULL
 CONSTRAINT [PK_Videos] PRIMARY KEY CLUSTERED 
@@ -79,7 +80,7 @@ BEGIN
 		[OriginalPlaylistId] NVARCHAR(30) NOT NULL,
 		[Title] NVARCHAR(MAX) NOT NULL,
 		[Description] NVARCHAR(MAX) NULL,
-		[PublishedAt] DATETIME NOT NULL,
+		[PublishedAt] DATETIME NULL,
 		[ChannelId] INT NOT NULL,
 		[CreatedAt] DATETIME NOT NULL
 CONSTRAINT [PK_Playlists] PRIMARY KEY CLUSTERED 

@@ -6,26 +6,19 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="3.2.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.1.1" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.1.1" />
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="2.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="2.2.6" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\common\Lacey.Medusa.Common.Email\Lacey.Medusa.Common.Email.csproj" />
     <ProjectReference Include="..\Lacey.Medusa.Youtube.Services\Lacey.Medusa.Youtube.Services.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <None Update="appsettings.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="client_secrets.secret">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="email.secret">
+    <None Update="client_secrets.secret">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="log4net.config">

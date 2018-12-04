@@ -1,4 +1,4 @@
-﻿namespace Lacey.Medusa.Youtube.Transfer.Configuration
+﻿namespace Lacey.Medusa.Youtube.Transfer.Run.Configuration
 {
     public sealed class AppConfiguration
     {        
@@ -7,8 +7,6 @@
         public string UserName { get; set; }
 
         public string TempFolder { get; set; }
-
-        public bool ClearMode { get; set; }
 
         public string[] SourceChannels { get; set; }
 

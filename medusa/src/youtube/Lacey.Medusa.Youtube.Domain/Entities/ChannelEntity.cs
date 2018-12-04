@@ -15,6 +15,8 @@ namespace Lacey.Medusa.Youtube.Domain.Entities
 
         public string Description { get; set; }
 
+        public DateTime? PublishedAt { get; set; }
+
         public DateTime CreatedAt { get; set; }
 
         public virtual ICollection<VideoEntity> Videos { get; set; }

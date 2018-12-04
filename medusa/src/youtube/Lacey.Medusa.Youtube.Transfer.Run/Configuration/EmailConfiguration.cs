@@ -1,4 +1,4 @@
-﻿namespace Lacey.Medusa.Youtube.Transfer.Configuration
+﻿namespace Lacey.Medusa.Youtube.Transfer.Run.Configuration
 {
     public sealed class EmailConfiguration
     {

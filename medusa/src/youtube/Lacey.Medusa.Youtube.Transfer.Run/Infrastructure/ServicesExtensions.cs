@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using Lacey.Medusa.Common.Email.Infrastructure;
 using Lacey.Medusa.Youtube.Services.Transfer.Infrastructure;
-using Lacey.Medusa.Youtube.Transfer.Configuration;
+using Lacey.Medusa.Youtube.Transfer.Run.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Lacey.Medusa.Youtube.Transfer.Run.Infrastructure

@@ -1,9 +1,10 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+using AutoMapper;
 using Lacey.Medusa.Common.Email.Services.Email;
 using Lacey.Medusa.Youtube.Services.Transfer.Services;
-using Lacey.Medusa.Youtube.Transfer.Configuration;
+using Lacey.Medusa.Youtube.Transfer.Run.Configuration;
 using Lacey.Medusa.Youtube.Transfer.Run.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,6 +28,7 @@ namespace Lacey.Medusa.Youtube.Transfer.Run
 
             //setup our DI
             var serviceProvider = new ServiceCollection()
+                .AddAutoMapper()
                 .AddLogging(logBuilder => 
                     logBuilder
                         .AddLog4Net()
@@ -41,7 +43,6 @@ namespace Lacey.Medusa.Youtube.Transfer.Run
             logger.LogTrace("Welcome to the YouTube transferring tool!");
 
             var transferService = serviceProvider.GetService<ITransferService>();
-            var clearService = serviceProvider.GetService<IClearService>();
 
             var sb = new StringBuilder();
             for (var i = 0; i < config.SourceChannels.Length; i++)
@@ -50,14 +51,6 @@ namespace Lacey.Medusa.Youtube.Transfer.Run
                 var destChannelId = config.DestChannels[i];
                 try
                 {
-                    if (config.ClearMode)
-                    {
-                        logger.LogTrace($"Clearing [{destChannelId}]...");
-                        clearService.ClearChannel(destChannelId).Wait();
-                        logger.LogTrace($"Clearing [{destChannelId}] completed.");
-                        continue;
-                    }
-
                     logger.LogTrace($"[{sourceChannelId}] => [{destChannelId}]...");
                     transferService.TransferChannel(
                         sourceChannelId,

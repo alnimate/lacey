@@ -15,7 +15,7 @@ namespace Lacey.Medusa.Youtube.Domain.Entities
 
         public string Description { get; set; }
 
-        public DateTime PublishedAt { get; set; }
+        public DateTime? PublishedAt { get; set; }
 
         public int ChannelId { get; set; }
 
