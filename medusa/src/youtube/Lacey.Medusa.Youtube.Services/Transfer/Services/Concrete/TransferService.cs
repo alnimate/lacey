@@ -12,15 +12,26 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
 {
     public sealed class TransferService : YoutubeService, ITransferService
     {
+        private readonly IChannelsService channelsService;
+
+        private readonly IVideosService videosService;
+
+        private readonly IPlaylistsService playlistsService;
+
         private readonly string outputFolder;
 
         public TransferService(
             IYoutubeProvider youtubeProvider, 
             ILogger<TransferService> logger, 
-            string outputFolder) : 
-            base(youtubeProvider, logger)
+            string outputFolder, 
+            IChannelsService channelsService, 
+            IVideosService videosService, 
+            IPlaylistsService playlistsService) : base(youtubeProvider, logger)
         {
             this.outputFolder = outputFolder;
+            this.channelsService = channelsService;
+            this.videosService = videosService;
+            this.playlistsService = playlistsService;
         }
 
         public async Task TransferChannel(string sourceChannelId, string destChannelId)

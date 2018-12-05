@@ -23,12 +23,18 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Infrastructure
                     userName)
 
                 .AddYoutubeDalServices(connectionString)
+                .AddTransient<IChannelsService, ChannelsService>()
+                .AddTransient<IVideosService, VideosService>()
+                .AddTransient<IPlaylistsService, PlaylistsService>()
 
                 .AddTransient<ITransferService, TransferService>(
                     provider => new TransferService(
                         provider.GetService<IYoutubeProvider>(),
                         provider.GetService<ILogger<TransferService>>(),
-                        outputFolder));
+                        outputFolder,
+                        provider.GetService<IChannelsService>(),
+                        provider.GetService<IVideosService>(),
+                        provider.GetService<IPlaylistsService>()));
 
             return services;
         }

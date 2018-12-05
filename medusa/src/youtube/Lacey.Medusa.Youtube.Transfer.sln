@@ -25,7 +25,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Youtube.Domain
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Youtube.Dal", "Lacey.Medusa.Youtube.Dal\Lacey.Medusa.Youtube.Dal.csproj", "{2DCF8A1C-52FD-46DB-9B8C-0AE2F5547E81}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lacey.Medusa.Youtube.Transfer.Clean", "Lacey.Medusa.Youtube.Transfer.Clean\Lacey.Medusa.Youtube.Transfer.Clean.csproj", "{3E914BB7-1034-4FAA-92D5-D066E7A45373}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Youtube.Transfer.Clean", "Lacey.Medusa.Youtube.Transfer.Clean\Lacey.Medusa.Youtube.Transfer.Clean.csproj", "{3E914BB7-1034-4FAA-92D5-D066E7A45373}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Common.Services", "..\common\Lacey.Medusa.Common.Services\Lacey.Medusa.Common.Services.csproj", "{774AD636-384E-44D1-B1E3-7189981D5249}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Common.DataAnnotations", "..\common\Lacey.Medusa.Common.DataAnnotations\Lacey.Medusa.Common.DataAnnotations.csproj", "{F820C1CD-737A-4AFA-9B3E-6B94C5FE0436}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -81,6 +85,14 @@ Global
 		{3E914BB7-1034-4FAA-92D5-D066E7A45373}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3E914BB7-1034-4FAA-92D5-D066E7A45373}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3E914BB7-1034-4FAA-92D5-D066E7A45373}.Release|Any CPU.Build.0 = Release|Any CPU
+		{774AD636-384E-44D1-B1E3-7189981D5249}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{774AD636-384E-44D1-B1E3-7189981D5249}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{774AD636-384E-44D1-B1E3-7189981D5249}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{774AD636-384E-44D1-B1E3-7189981D5249}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F820C1CD-737A-4AFA-9B3E-6B94C5FE0436}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F820C1CD-737A-4AFA-9B3E-6B94C5FE0436}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F820C1CD-737A-4AFA-9B3E-6B94C5FE0436}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F820C1CD-737A-4AFA-9B3E-6B94C5FE0436}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
