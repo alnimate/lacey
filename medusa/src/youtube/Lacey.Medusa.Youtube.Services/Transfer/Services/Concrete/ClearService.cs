@@ -8,11 +8,23 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
 {
     public class ClearService : YoutubeService, IClearService
     {
+        private readonly IChannelsService channelsService;
+
+        private readonly IVideosService videosService;
+
+        private readonly IPlaylistsService playlistsService;
+
         public ClearService(
             IYoutubeProvider youtubeProvider, 
-            ILogger<ClearService> logger) : 
+            ILogger<ClearService> logger, 
+            IChannelsService channelsService, 
+            IVideosService videosService, 
+            IPlaylistsService playlistsService) : 
             base(youtubeProvider, logger)
         {
+            this.channelsService = channelsService;
+            this.videosService = videosService;
+            this.playlistsService = playlistsService;
         }
 
         public async Task ClearChannel(string channelId)
@@ -39,6 +51,7 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                 try
                 {
                     await this.YoutubeProvider.DeleteVideo(videoId);
+                    await this.videosService.DeleteVideo(videoId);
                     this.Logger.LogTrace($"Video [{videoId}] deleted.");
                 }
                 catch (Exception exc)
@@ -61,6 +74,7 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                 }
 
                 await this.YoutubeProvider.DeletePlaylists(channelId);
+                await this.playlistsService.DeleteChannelPlaylists(channelId);
                 this.Logger.LogTrace($"Playlists for channel [{channelId}] deleted.");
             }
             catch (Exception exc)
@@ -117,6 +131,7 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
             {
                 this.Logger.LogTrace($"Deleting metadata for channel [{channelId}]...");
                 await this.YoutubeProvider.DeleteMetadata(channelId);
+                await this.channelsService.DeleteChannel(channelId);
                 this.Logger.LogTrace($"Metadata for channel [{channelId}] deleted.");
             }
             catch (Exception exc)

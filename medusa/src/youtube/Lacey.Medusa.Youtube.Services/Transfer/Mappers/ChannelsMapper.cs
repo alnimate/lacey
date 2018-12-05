@@ -8,7 +8,7 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Mappers
 {
     internal static class ChannelsMapper
     {
-        internal static async Task<ChannelEntity> MapToChannel(
+        internal static async Task<ChannelEntity> MapToTransferMetadata(
             IQueryable<ChannelEntity> channels,
             string originalChannelId,
             string channelId)
@@ -16,6 +16,16 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Mappers
             var query = from c in channels
                     .GetByOriginalChannelId(originalChannelId)
                     .GetByChannelId(channelId)
+                select c;
+
+            return await query.FirstOrDefaultAsync();
+        }
+
+        internal static async Task<ChannelEntity> MapToChannelMetadata(
+            IQueryable<ChannelEntity> channels,
+            string channelId)
+        {
+            var query = from c in channels.GetByChannelId(channelId)
                 select c;
 
             return await query.FirstOrDefaultAsync();

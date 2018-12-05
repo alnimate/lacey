@@ -7,8 +7,16 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services
 {
     public interface IVideosService
     {
-        Task<IEnumerable<VideoEntity>> GetVideos(string originalChannelId, string channelId);
+        Task<IReadOnlyList<VideoEntity>> GetTransferVideos(string originalChannelId, string channelId);
+
+        Task<IReadOnlyList<VideoEntity>> GetChannelVideos(string channelId);
 
         Task<int> Add(string originalChannelId, string channelId, Video video);
+
+        Task DeleteTransferVideos(string originalChannelId, string channelId);
+
+        Task DeleteChannelVideos(string channelId);
+
+        Task DeleteVideo(string videoId);
     }
 }

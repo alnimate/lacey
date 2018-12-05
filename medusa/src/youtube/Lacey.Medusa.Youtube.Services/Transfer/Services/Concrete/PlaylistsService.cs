@@ -6,6 +6,7 @@ using Lacey.Medusa.Common.Services.Services.Common;
 using Lacey.Medusa.Youtube.Api.Base;
 using Lacey.Medusa.Youtube.Domain.Entities;
 using Lacey.Medusa.Youtube.Services.Transfer.Mappers;
+using Microsoft.EntityFrameworkCore;
 
 namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
 {
@@ -20,17 +21,31 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
             this.mapper = mapper;
         }
 
-        public async Task<IEnumerable<PlaylistEntity>> GetPlaylists(string originalChannelId, string channelId)
+        public async Task<IReadOnlyList<PlaylistEntity>> GetTransferPlaylists(string originalChannelId, string channelId)
         {
             using (var uow = this.CreateWithDisabledLazyLoading())
             {
                 var channelsRep = uow.GetRepository<ChannelEntity>();
                 var playlistsRep = uow.GetRepository<PlaylistEntity>();
 
-                return await PlaylistsMapper.MapToPlaylists(
+                return await PlaylistsMapper.MapToTransferPlaylists(
                     channelsRep.GetAll(),
                     playlistsRep.GetAll(),
                     originalChannelId,
+                    channelId);
+            }
+        }
+
+        public async Task<IReadOnlyList<PlaylistEntity>> GetChannelPlaylists(string channelId)
+        {
+            using (var uow = this.CreateWithDisabledLazyLoading())
+            {
+                var channelsRep = uow.GetRepository<ChannelEntity>();
+                var playlistsRep = uow.GetRepository<PlaylistEntity>();
+
+                return await PlaylistsMapper.MapToChannelPlaylists(
+                    channelsRep.GetAll(),
+                    playlistsRep.GetAll(),
                     channelId);
             }
         }
@@ -46,6 +61,53 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
 
                 await uow.SaveAsync();
                 return entity.Id;
+            }
+        }
+
+        public async Task DeleteTransferPlaylists(string originalChannelId, string channelId)
+        {
+            using (var uow = this.CreateWithDisabledLazyLoading())
+            {
+                var playlistsRep = uow.GetRepository<PlaylistEntity>();
+
+                var playlists = await this.GetTransferPlaylists(originalChannelId, channelId);
+                foreach (var playlist in playlists)
+                {
+                    playlistsRep.DeleteById(playlist.Id);
+                }
+
+                await uow.SaveAsync();
+            }
+        }
+
+        public async Task DeleteChannelPlaylists(string channelId)
+        {
+            using (var uow = this.CreateWithDisabledLazyLoading())
+            {
+                var playlistsRep = uow.GetRepository<PlaylistEntity>();
+
+                var playlists = await this.GetChannelPlaylists(channelId);
+                foreach (var playlist in playlists)
+                {
+                    playlistsRep.DeleteById(playlist.Id);
+                }
+
+                await uow.SaveAsync();
+            }
+        }
+
+        public async Task DeletePlaylist(string playlistId)
+        {
+            using (var uow = this.CreateWithDisabledLazyLoading())
+            {
+                var playlistsRep = uow.GetRepository<PlaylistEntity>();
+
+                var entity = await playlistsRep.GetAll(e => e.PlaylistId == playlistId).FirstOrDefaultAsync();
+                if (entity != null)
+                {
+                    playlistsRep.DeleteById(entity.Id);
+                    await uow.SaveAsync();
+                }
             }
         }
     }

@@ -19,15 +19,27 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
             this.mapper = mapper;
         }
 
-        public async Task<ChannelEntity> GetChannel(string originalChannelId, string channelId)
+        public async Task<ChannelEntity> GetTransferMetadata(string originalChannelId, string channelId)
         {
             using (var uow = this.CreateWithDisabledLazyLoading())
             {
                 var channelsRep = uow.GetRepository<ChannelEntity>();
 
-                return await ChannelsMapper.MapToChannel(
+                return await ChannelsMapper.MapToTransferMetadata(
                     channelsRep.GetAll(),
                     originalChannelId,
+                    channelId);
+            }
+        }
+
+        public async Task<ChannelEntity> GetChannelMetadata(string channelId)
+        {
+            using (var uow = this.CreateWithDisabledLazyLoading())
+            {
+                var channelsRep = uow.GetRepository<ChannelEntity>();
+
+                return await ChannelsMapper.MapToChannelMetadata(
+                    channelsRep.GetAll(),
                     channelId);
             }
         }
@@ -39,7 +51,7 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                 var channelsRep = uow.GetRepository<ChannelEntity>();
                 var entity = this.mapper.Map<ChannelEntity>(channel);
 
-                if (await this.GetChannel(originalChannelId, channelId) == null)
+                if (await this.GetTransferMetadata(originalChannelId, channelId) == null)
                 {
                     await channelsRep.AddAsync(entity);
                 }
@@ -50,6 +62,36 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
 
                 await uow.SaveAsync();
                 return entity.Id;
+            }
+        }
+
+        public async Task DeleteTransfer(string originalChannelId, string channelId)
+        {
+            using (var uow = this.CreateWithDisabledLazyLoading())
+            {
+                var channelsRep = uow.GetRepository<ChannelEntity>();
+
+                var channel = await this.GetTransferMetadata(originalChannelId, channelId);
+                if (channel != null)
+                {
+                    channelsRep.DeleteById(channel.Id);
+                    await uow.SaveAsync();
+                }
+            }
+        }
+
+        public async Task DeleteChannel(string channelId)
+        {
+            using (var uow = this.CreateWithDisabledLazyLoading())
+            {
+                var channelsRep = uow.GetRepository<ChannelEntity>();
+
+                var channel = await this.GetChannelMetadata(channelId);
+                if (channel != null)
+                {
+                    channelsRep.DeleteById(channel.Id);
+                    await uow.SaveAsync();
+                }
             }
         }
     }

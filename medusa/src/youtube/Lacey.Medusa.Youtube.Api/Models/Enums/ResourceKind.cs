@@ -7,5 +7,7 @@
         public const string Channel = "youtube#channel";
 
         public const string Playlist = "youtube#playlist";
+            
+        public const string ChannelSection = "youtube#channelSection";
     }
 }

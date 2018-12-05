@@ -38,5 +38,21 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Infrastructure
 
             return services;
         }
+
+        public static IServiceCollection AddCleaningServices(
+            this IServiceCollection services,
+            string clientSecretsFilePath,
+            string userName)
+        {
+            services
+                .AddYoutubeServices(clientSecretsFilePath, userName)
+
+                .AddTransient<IChannelsService, ChannelsService>()
+                .AddTransient<IVideosService, VideosService>()
+                .AddTransient<IPlaylistsService, PlaylistsService>()
+                .AddTransient<IClearService, ClearService>();
+
+            return services;
+        }
     }
 }

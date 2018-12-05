@@ -36,27 +36,26 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
 
         public async Task TransferChannel(string sourceChannelId, string destChannelId)
         {
-            var videoLinks = await this.TransferVideos(sourceChannelId, destChannelId);
+            await this.TransferMetadata(sourceChannelId, destChannelId);
 
-            await this.TransferPlaylists(sourceChannelId, destChannelId, videoLinks);
+            await this.TransferVideos(sourceChannelId, destChannelId);
+
+            await this.TransferPlaylists(sourceChannelId, destChannelId);
 
             await this.TransferSections(sourceChannelId, destChannelId);
 
             await this.TransferSubscriptions(sourceChannelId, destChannelId);
 
             await this.TransferComments(sourceChannelId, destChannelId);
-
-            await this.TransferMetadata(sourceChannelId, destChannelId);
         }
 
         #region videos
 
-        private async Task<IList<VideoLink>> TransferVideos(string sourceChannelId, string destChannelId)
+        private async Task TransferVideos(string sourceChannelId, string destChannelId)
         {
             var source = await this.YoutubeProvider.GetVideos(sourceChannelId);
             var dest = await this.YoutubeProvider.GetVideos(destChannelId);
 
-            var links = new List<VideoLink>();
             foreach (var item in source
                 .OrderBy(v => v.Snippet.PublishedAt))
             {
@@ -81,7 +80,7 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                         item,
                         filePath);
 
-                    links.Add(new VideoLink(item.Id, video.Id));
+                    await this.videosService.Add(sourceChannelId, destChannelId, video);
                 }
                 catch (Exception exc)
                 {
@@ -95,24 +94,19 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                     }
                 }
             }
-
-            return links;
         }
 
         #endregion
 
         #region playlists
 
-        private async Task<IList<Playlist>> TransferPlaylists(
-            string sourceChannelId, 
-            string destChannelId,
-            IList<VideoLink> links)
+        private async Task TransferPlaylists(string sourceChannelId, string destChannelId)
         {
-            IList<Playlist> list = new List<Playlist>();
             try
             {
                 var source = await this.YoutubeProvider.GetPlaylists(sourceChannelId);
                 var dest = await this.YoutubeProvider.GetPlaylists(destChannelId);
+                var destVideos = await this.videosService.GetTransferVideos(sourceChannelId, destChannelId);
 
                 // skip existing items
                 foreach (var playlist in source
@@ -126,42 +120,39 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                     }
 
                     var uploaded = await this.YoutubeProvider.UploadPlaylist(destChannelId, playlist);
+                    await this.playlistsService.Add(sourceChannelId, destChannelId, uploaded);
 
                     // insert playlist items
                     var playlistItems = await this.YoutubeProvider.GetPlaylistItems(playlist.Id);
                     foreach (var item in playlistItems)
                     {
-                        var link = links.FirstOrDefault(
-                            l => l.SourceVideoId == item.Snippet.ResourceId.VideoId);
-                        if (link != null)
+                        var destVideo = destVideos.FirstOrDefault(
+                            l => l.OriginalVideoId == item.Snippet.ResourceId.VideoId);
+                        if (destVideo != null)
                         {
-                            item.Snippet.ResourceId.VideoId = link.DestVideoId;
+                            item.Snippet.ResourceId.VideoId = destVideo.VideoId;
                         }
                         await this.YoutubeProvider.UploadPlaylistItem(destChannelId, uploaded.Id, item);
                     }
-
-                    list.Add(uploaded);
                 }
             }
             catch (Exception exc)
             {
                 this.Logger.LogError(exc.Message);
             }
-
-            return list;
         }
 
         #endregion
 
         #region sections
 
-        private async Task<IList<ChannelSection>> TransferSections(string sourceChannelId, string destChannelId)
+        private async Task TransferSections(string sourceChannelId, string destChannelId)
         {
-            IList<ChannelSection> uploaded = new List<ChannelSection>();
             try
             {
                 var source = await this.YoutubeProvider.GetSections(sourceChannelId);
                 var dest = await this.YoutubeProvider.GetSections(destChannelId);
+                var destPlaylists = await this.playlistsService.GetTransferPlaylists(sourceChannelId, destChannelId);
 
                 // skip existing items
                 var toUpload = new List<ChannelSection>();
@@ -174,28 +165,44 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                         continue;
                     }
 
+                    // change section playlists from source to dest
+                    if (item.ContentDetails.Playlists.Any())
+                    {
+                        var playlists = new List<string>();
+                        foreach (var playlist in item.ContentDetails.Playlists)
+                        {
+                            var destPlaylist = destPlaylists.FirstOrDefault(
+                                p => p.OriginalPlaylistId == playlist);
+                            if (destPlaylist != null)
+                            {
+                                playlists.Add(destPlaylist.PlaylistId);
+                            }
+                            else
+                            {
+                                playlists.Add(playlist);
+                            }
+                        }
+
+                        item.ContentDetails.Playlists = playlists;
+                    }
+
                     toUpload.Add(item);
                 }
 
-                uploaded = await this.YoutubeProvider.UploadSections(
-                    destChannelId,
-                    toUpload);
+                await this.YoutubeProvider.UploadSections(destChannelId, toUpload);
             }
             catch (Exception exc)
             {
                 this.Logger.LogError(exc.Message);
             }
-
-            return uploaded;
         }
 
         #endregion
 
         #region subscriptions
 
-        private async Task<IList<Subscription>> TransferSubscriptions(string sourceChannelId, string destChannelId)
+        private async Task TransferSubscriptions(string sourceChannelId, string destChannelId)
         {
-            IList<Subscription> uploaded = new List<Subscription>();
             try
             {
                 var source = await this.YoutubeProvider.GetSubscriptions(sourceChannelId);
@@ -214,7 +221,7 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                     toUpload.Add(item);
                 }
 
-                uploaded = await this.YoutubeProvider.UploadSubscriptions(
+                await this.YoutubeProvider.UploadSubscriptions(
                     destChannelId,
                     toUpload
                         .OrderBy(c => c.Snippet.PublishedAt).ToList());
@@ -223,17 +230,14 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
             {
                 this.Logger.LogError(exc.Message);
             }
-
-            return uploaded;
         }
 
         #endregion
 
         #region comments
 
-        private async Task<IList<CommentThread>> TransferComments(string sourceChannelId, string destChannelId)
+        private async Task TransferComments(string sourceChannelId, string destChannelId)
         {
-            IList<CommentThread> uploaded = new List<CommentThread>();
             try
             {
                 var source = await this.YoutubeProvider.GetComments(sourceChannelId);
@@ -252,7 +256,7 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                     toUpload.Add(item);
                 }
 
-                uploaded = await this.YoutubeProvider.UploadComments(
+                await this.YoutubeProvider.UploadComments(
                     destChannelId,
                     toUpload
                         .OrderBy(c => c.Snippet.TopLevelComment.Snippet.PublishedAt).ToList());
@@ -261,17 +265,14 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
             {
                 this.Logger.LogError(exc.Message);
             }
-
-            return uploaded;
         }
 
         #endregion
 
         #region metadata
 
-        private async Task<Channel> TransferMetadata(string sourceChannelId, string destChannelId)
+        private async Task TransferMetadata(string sourceChannelId, string destChannelId)
         {
-            Channel uploaded = null;
             try
             {
                 var source = await this.YoutubeProvider.GetChannel(sourceChannelId);
@@ -279,33 +280,13 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                 var iconFilePath = await this.YoutubeProvider.DownloadIcon(source, this.outputFolder);
                 this.Logger.LogTrace($"Icon downloaded to [{iconFilePath}].");
 
-                uploaded = await this.YoutubeProvider.UpdateMetadata(destChannelId, source);
+                var channel = await this.YoutubeProvider.UpdateMetadata(destChannelId, source);
+                await this.channelsService.AddOrUpdate(sourceChannelId, destChannelId, channel);
             }
             catch (Exception exc)
             {
                 this.Logger.LogError(exc.Message);
             }
-
-            return uploaded;
-        }
-
-        #endregion
-
-        #region private classes
-
-        private sealed class VideoLink
-        {
-            public VideoLink(
-                string sourceVideoId,
-                string destVideoId)
-            {
-                SourceVideoId = sourceVideoId;
-                DestVideoId = destVideoId;
-            }
-
-            public string SourceVideoId { get; private set; }
-
-            public string DestVideoId { get; private set; }
         }
 
         #endregion

@@ -1,6 +1,4 @@
-﻿using Lacey.Medusa.Youtube.Api.Infrastructure;
-using Lacey.Medusa.Youtube.Services.Transfer.Services;
-using Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete;
+﻿using Lacey.Medusa.Youtube.Services.Transfer.Infrastructure;
 using Lacey.Medusa.Youtube.Transfer.Clean.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -13,11 +11,9 @@ namespace Lacey.Medusa.Youtube.Transfer.Clean.Infrastructure
             AppConfiguration config)
         {
             services
-                .AddYoutubeServices(
+                .AddCleaningServices(
                     config.ClientSecretsFilePath,
-                    config.UserName)
-
-                .AddTransient<IClearService, ClearService>();
+                    config.UserName);
 
             return services;
         }

@@ -6,8 +6,14 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services
 {
     public interface IChannelsService
     {
-        Task<ChannelEntity> GetChannel(string originalChannelId, string channelId);
+        Task<ChannelEntity> GetTransferMetadata(string originalChannelId, string channelId);
+
+        Task<ChannelEntity> GetChannelMetadata(string channelId);
 
         Task<int> AddOrUpdate(string originalChannelId, string channelId, Channel channel);
+
+        Task DeleteTransfer(string originalChannelId, string channelId);
+
+        Task DeleteChannel(string channelId);
     }
 }
