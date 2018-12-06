@@ -18,5 +18,9 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services
         Task DeleteChannelPlaylists(string channelId);
 
         Task DeletePlaylist(string playlistId);
+
+        Task<PlaylistEntity> GetPlaylist(string playlistId);
+
+        Task AddVideoToPlaylist(string playlistId, string videoId);
     }
 }

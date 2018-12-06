@@ -42,14 +42,17 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Infrastructure
         public static IServiceCollection AddCleaningServices(
             this IServiceCollection services,
             string clientSecretsFilePath,
-            string userName)
+            string userName,
+            string connectionString)
         {
             services
                 .AddYoutubeServices(clientSecretsFilePath, userName)
 
+                .AddYoutubeDalServices(connectionString)
                 .AddTransient<IChannelsService, ChannelsService>()
                 .AddTransient<IVideosService, VideosService>()
                 .AddTransient<IPlaylistsService, PlaylistsService>()
+
                 .AddTransient<IClearService, ClearService>();
 
             return services;

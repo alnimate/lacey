@@ -36,6 +36,8 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
 
         public async Task TransferChannel(string sourceChannelId, string destChannelId)
         {
+            await this.TransferComments(sourceChannelId, destChannelId);
+
             await this.TransferMetadata(sourceChannelId, destChannelId);
 
             await this.TransferVideos(sourceChannelId, destChannelId);
@@ -45,8 +47,6 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
             await this.TransferSections(sourceChannelId, destChannelId);
 
             await this.TransferSubscriptions(sourceChannelId, destChannelId);
-
-            await this.TransferComments(sourceChannelId, destChannelId);
         }
 
         #region videos
@@ -133,6 +133,11 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                             item.Snippet.ResourceId.VideoId = destVideo.VideoId;
                         }
                         await this.YoutubeProvider.UploadPlaylistItem(destChannelId, uploaded.Id, item);
+
+                        if (destVideo != null)
+                        {
+                            await this.playlistsService.AddVideoToPlaylist(uploaded.Id, destVideo.VideoId);
+                        }
                     }
                 }
             }

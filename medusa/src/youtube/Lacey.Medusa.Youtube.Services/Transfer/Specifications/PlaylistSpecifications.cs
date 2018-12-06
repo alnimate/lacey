@@ -35,5 +35,28 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Specifications
 
             return query;
         }
+
+        internal static IQueryable<PlaylistEntity> GetByPlaylistId(
+            this IQueryable<PlaylistEntity> query,
+            string playlistId)
+        {
+            if (string.IsNullOrEmpty(playlistId))
+            {
+                return query;
+            }
+
+            query = query.Where(e => e.PlaylistId == playlistId);
+
+            return query;
+        }
+
+        internal static IQueryable<PlaylistVideoEntity> GetVideosByPlaylistId(
+            this IQueryable<PlaylistVideoEntity> query,
+            int playlistId)
+        {
+            query = query.Where(e => e.PlaylistId == playlistId);
+
+            return query;
+        }
     }
 }

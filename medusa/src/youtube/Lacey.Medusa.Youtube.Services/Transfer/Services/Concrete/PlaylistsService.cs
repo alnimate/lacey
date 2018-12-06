@@ -14,11 +14,15 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
     {
         private readonly IMapper mapper;
 
+        private readonly IVideosService videosService;
+
         public PlaylistsService(
             IUnitOfWorkFactory unitOfWorkFactory, 
-            IMapper mapper) : base(unitOfWorkFactory)
+            IMapper mapper, 
+            IVideosService videosService) : base(unitOfWorkFactory)
         {
             this.mapper = mapper;
+            this.videosService = videosService;
         }
 
         public async Task<IReadOnlyList<PlaylistEntity>> GetTransferPlaylists(string originalChannelId, string channelId)
@@ -85,10 +89,21 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
             using (var uow = this.CreateWithDisabledLazyLoading())
             {
                 var playlistsRep = uow.GetRepository<PlaylistEntity>();
+                var playlistVideosRep = uow.GetRepository<PlaylistVideoEntity>();
 
                 var playlists = await this.GetChannelPlaylists(channelId);
                 foreach (var playlist in playlists)
                 {
+                    var playlistVideos = await PlaylistsMapper.MapToPlaylistVideos(
+                        playlistVideosRep.GetAll(),
+                        playlist.Id);
+
+                    foreach (var playlistVideo in playlistVideos)
+                    {
+                        playlistVideosRep.DeleteWhere(e => e.PlaylistId == playlistVideo.PlaylistId &&
+                                                           e.VideoId == playlistVideo.VideoId);
+                    }
+
                     playlistsRep.DeleteById(playlist.Id);
                 }
 
@@ -108,6 +123,47 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                     playlistsRep.DeleteById(entity.Id);
                     await uow.SaveAsync();
                 }
+            }
+        }
+
+        public async Task<PlaylistEntity> GetPlaylist(string playlistId)
+        {
+            using (var uow = this.CreateWithDisabledLazyLoading())
+            {
+                var playlistsRep = uow.GetRepository<PlaylistEntity>();
+
+                return await PlaylistsMapper.MapToPlaylist(
+                    playlistsRep.GetAll(),
+                    playlistId);
+            }
+        }
+
+        public async Task AddVideoToPlaylist(string playlistId, string videoId)
+        {
+            using (var uow = this.CreateWithDisabledLazyLoading())
+            {
+                var playlistVideosRep = uow.GetRepository<PlaylistVideoEntity>();
+
+                var playlist = await this.GetPlaylist(playlistId);
+                if (playlist == null)
+                {
+                    return;
+                }
+
+                var video = this.videosService.GetVideo(videoId);
+                if (video == null)
+                {
+                    return;
+                }
+
+                var entity = new PlaylistVideoEntity
+                {
+                    PlaylistId = playlist.Id,
+                    VideoId = video.Id
+                };
+
+                playlistVideosRep.Add(entity);
+                await uow.SaveAsync();
             }
         }
     }

@@ -110,5 +110,17 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                 }
             }
         }
+
+        public async Task<VideoEntity> GetVideo(string videoId)
+        {
+            using (var uow = this.CreateWithDisabledLazyLoading())
+            {
+                var videosRep = uow.GetRepository<VideoEntity>();
+
+                return await VideosMapper.MapToVideo(
+                    videosRep.GetAll(),
+                    videoId);
+            }
+        }
     }
 }

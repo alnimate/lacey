@@ -35,5 +35,19 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Specifications
 
             return query;
         }
+
+        internal static IQueryable<VideoEntity> GetByVideoId(
+            this IQueryable<VideoEntity> query,
+            string videoId)
+        {
+            if (string.IsNullOrEmpty(videoId))
+            {
+                return query;
+            }
+
+            query = query.Where(e => e.VideoId == videoId);
+
+            return query;
+        }
     }
 }

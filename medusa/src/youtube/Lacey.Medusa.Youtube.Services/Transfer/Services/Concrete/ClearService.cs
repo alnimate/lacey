@@ -29,8 +29,6 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
 
         public async Task ClearChannel(string channelId)
         {
-            await this.DeleteVideos(channelId);
-
             await this.DeletePlaylists(channelId);
 
             await this.DeleteSections(channelId);
@@ -38,6 +36,8 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
             await this.DeleteSubscriptions(channelId);
 
             await this.DeleteComments(channelId);
+
+            await this.DeleteVideos(channelId);
 
             await this.DeleteMetadata(channelId);
         }
@@ -51,7 +51,6 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                 try
                 {
                     await this.YoutubeProvider.DeleteVideo(videoId);
-                    await this.videosService.DeleteVideo(videoId);
                     this.Logger.LogTrace($"Video [{videoId}] deleted.");
                 }
                 catch (Exception exc)
@@ -59,6 +58,8 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                     this.Logger.LogError(exc.Message);
                 }
             }
+
+            await this.videosService.DeleteChannelVideos(channelId);
         }
 
         private async Task DeletePlaylists(string channelId)

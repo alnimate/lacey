@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using AutoMapper;
 using Lacey.Medusa.Youtube.Services.Transfer.Services;
 using Lacey.Medusa.Youtube.Transfer.Clean.Configuration;
 using Lacey.Medusa.Youtube.Transfer.Clean.Infrastructure;
@@ -21,14 +22,16 @@ namespace Lacey.Medusa.Youtube.Transfer.Clean
 
             var configuration = builder.Build();
             var config = configuration.GetSection("App").Get<AppConfiguration>();
+            var connectionString = configuration.GetConnectionString("Default");
 
             //setup our DI
             var serviceProvider = new ServiceCollection()
+                .AddAutoMapper()
                 .AddLogging(logBuilder =>
                     logBuilder
                         .AddLog4Net()
                         .SetMinimumLevel(LogLevel.Trace))
-                .AddAppServices(config)
+                .AddAppServices(config, connectionString)
                 .BuildServiceProvider();
 
             //configure console logging

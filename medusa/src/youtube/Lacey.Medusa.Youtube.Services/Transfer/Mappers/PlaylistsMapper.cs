@@ -33,5 +33,25 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Mappers
 
             return await query.ToListAsync();
         }
+
+        internal static async Task<PlaylistEntity> MapToPlaylist(
+            IQueryable<PlaylistEntity> playlists,
+            string playlistId)
+        {
+            var query = from p in playlists.GetByPlaylistId(playlistId)
+                select p;
+
+            return await query.FirstOrDefaultAsync();
+        }
+
+        internal static async Task<IReadOnlyList<PlaylistVideoEntity>> MapToPlaylistVideos(
+            IQueryable<PlaylistVideoEntity> playlistVideos,
+            int playlistId)
+        {
+            var query = from p in playlistVideos.GetVideosByPlaylistId(playlistId)
+                select p;
+
+            return await query.ToListAsync();
+        }
     }
 }

@@ -8,12 +8,14 @@ namespace Lacey.Medusa.Youtube.Transfer.Clean.Infrastructure
     {
         public static IServiceCollection AddAppServices(
             this IServiceCollection services,
-            AppConfiguration config)
+            AppConfiguration config,
+            string connectionString)
         {
             services
                 .AddCleaningServices(
                     config.ClientSecretsFilePath,
-                    config.UserName);
+                    config.UserName,
+                    connectionString);
 
             return services;
         }
