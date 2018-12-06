@@ -53,34 +53,31 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
 
         private async Task TransferVideos(string sourceChannelId, string destChannelId)
         {
-            var source = await this.YoutubeProvider.GetVideos(sourceChannelId);
+            var sourceVideos = await this.YoutubeProvider.GetVideos(sourceChannelId);
             var dest = await this.YoutubeProvider.GetVideos(destChannelId);
+            var destChannel = await this.channelsService.GetChannelMetadata(destChannelId);
 
-            foreach (var item in source
+            foreach (var sourceVideo in sourceVideos
                 .OrderBy(v => v.Snippet.PublishedAt))
             {
                 // skip existing items
                 if (dest.Any(d =>
-                    item.Snippet.Title == d.Snippet.Title &&
-                    item.ContentDetails.Duration == d.ContentDetails.Duration))
+                    sourceVideo.Snippet.Title == d.Snippet.Title &&
+                    sourceVideo.ContentDetails.Duration == d.ContentDetails.Duration))
                 {
-                    this.Logger.LogTrace($"Video [{item.Snippet.Title}] skipped. Video already exists.");
+                    this.Logger.LogTrace($"Video [{sourceVideo.Snippet.Title}] skipped. Video already exists.");
                     continue;
                 }
 
                 string filePath = null;
                 try
                 {
-                    this.Logger.LogTrace($"Downloading video [{item.Id}]...");
-                    filePath = await this.YoutubeProvider.DownloadVideo(item.Id, this.outputFolder);
-                    this.Logger.LogTrace($"Video [{item.Id}] downloaded to [{filePath}]");
+                    this.Logger.LogTrace($"Downloading video [{sourceVideo.Id}]...");
+                    filePath = await this.YoutubeProvider.DownloadVideo(sourceVideo.Id, this.outputFolder);
+                    this.Logger.LogTrace($"Video [{sourceVideo.Id}] downloaded to [{filePath}]");
 
-                    var video = await this.YoutubeProvider.UploadVideo(
-                        destChannelId,
-                        item,
-                        filePath);
-
-                    await this.videosService.Add(sourceChannelId, destChannelId, video);
+                    var uploadedVideo = await this.YoutubeProvider.UploadVideo(destChannelId, sourceVideo, filePath);
+                    await this.videosService.Add(destChannel.Id, sourceVideo.Id, uploadedVideo);
                 }
                 catch (Exception exc)
                 {
@@ -104,26 +101,27 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
         {
             try
             {
-                var source = await this.YoutubeProvider.GetPlaylists(sourceChannelId);
+                var sourcePlaylists = await this.YoutubeProvider.GetPlaylists(sourceChannelId);
                 var dest = await this.YoutubeProvider.GetPlaylists(destChannelId);
+                var destChannel = await this.channelsService.GetChannelMetadata(destChannelId);
                 var destVideos = await this.videosService.GetTransferVideos(sourceChannelId, destChannelId);
 
                 // skip existing items
-                foreach (var playlist in source
+                foreach (var sourcePlaylist in sourcePlaylists
                     .OrderBy(s => s.Snippet.PublishedAt))
                 {
                     if (dest.Any(d =>
-                        playlist.Snippet.Title == d.Snippet.Title &&
-                        playlist.Snippet.Description == d.Snippet.Description))
+                        sourcePlaylist.Snippet.Title == d.Snippet.Title &&
+                        sourcePlaylist.Snippet.Description == d.Snippet.Description))
                     {
                         continue;
                     }
 
-                    var uploaded = await this.YoutubeProvider.UploadPlaylist(destChannelId, playlist);
-                    await this.playlistsService.Add(sourceChannelId, destChannelId, uploaded);
+                    var uploadedPlaylist = await this.YoutubeProvider.UploadPlaylist(destChannelId, sourcePlaylist);
+                    await this.playlistsService.Add(destChannel.Id, sourcePlaylist.Id, uploadedPlaylist);
 
                     // insert playlist items
-                    var playlistItems = await this.YoutubeProvider.GetPlaylistItems(playlist.Id);
+                    var playlistItems = await this.YoutubeProvider.GetPlaylistItems(sourcePlaylist.Id);
                     foreach (var item in playlistItems)
                     {
                         var destVideo = destVideos.FirstOrDefault(
@@ -132,11 +130,11 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                         {
                             item.Snippet.ResourceId.VideoId = destVideo.VideoId;
                         }
-                        await this.YoutubeProvider.UploadPlaylistItem(destChannelId, uploaded.Id, item);
+                        await this.YoutubeProvider.UploadPlaylistItem(destChannelId, uploadedPlaylist.Id, item);
 
                         if (destVideo != null)
                         {
-                            await this.playlistsService.AddVideoToPlaylist(uploaded.Id, destVideo.VideoId);
+                            await this.playlistsService.AddVideoToPlaylist(uploadedPlaylist.Id, destVideo.VideoId);
                         }
                     }
                 }
@@ -285,8 +283,8 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                 var iconFilePath = await this.YoutubeProvider.DownloadIcon(source, this.outputFolder);
                 this.Logger.LogTrace($"Icon downloaded to [{iconFilePath}].");
 
-                var channel = await this.YoutubeProvider.UpdateMetadata(destChannelId, source);
-                await this.channelsService.AddOrUpdate(sourceChannelId, destChannelId, channel);
+                await this.YoutubeProvider.UpdateMetadata(destChannelId, source);
+                await this.channelsService.AddOrUpdate(sourceChannelId, destChannelId, source);
             }
             catch (Exception exc)
             {

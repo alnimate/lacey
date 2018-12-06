@@ -50,12 +50,14 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
             }
         }
 
-        public async Task<int> Add(string originalChannelId, string channelId, Video video)
+        public async Task<int> Add(int channelId, string originalVideoId, Video video)
         {
             using (var uow = this.CreateWithDisabledLazyLoading())
             {
                 var videosRep = uow.GetRepository<VideoEntity>();
                 var entity = this.mapper.Map<VideoEntity>(video);
+                entity.ChannelId = channelId;
+                entity.OriginalVideoId = originalVideoId;
 
                 await videosRep.AddAsync(entity);
 

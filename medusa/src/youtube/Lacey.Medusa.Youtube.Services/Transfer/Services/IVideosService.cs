@@ -11,7 +11,7 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services
 
         Task<IReadOnlyList<VideoEntity>> GetChannelVideos(string channelId);
 
-        Task<int> Add(string originalChannelId, string channelId, Video video);
+        Task<int> Add(int channelId, string originalVideoId, Video video);
 
         Task DeleteTransferVideos(string originalChannelId, string channelId);
 

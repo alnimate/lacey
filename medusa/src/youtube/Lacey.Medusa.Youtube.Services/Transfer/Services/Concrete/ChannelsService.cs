@@ -50,6 +50,8 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
             {
                 var channelsRep = uow.GetRepository<ChannelEntity>();
                 var entity = this.mapper.Map<ChannelEntity>(channel);
+                entity.OriginalChannelId = originalChannelId;
+                entity.ChannelId = channelId;
 
                 if (await this.GetTransferMetadata(originalChannelId, channelId) == null)
                 {

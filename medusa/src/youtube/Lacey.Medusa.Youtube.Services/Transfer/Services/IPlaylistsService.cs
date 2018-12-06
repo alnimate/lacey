@@ -11,7 +11,7 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services
 
         Task<IReadOnlyList<PlaylistEntity>> GetChannelPlaylists(string channelId);
 
-        Task<int> Add(string originalChannelId, string channelId, Playlist playlist);
+        Task<int> Add(int channelId, string originalPlaylistId, Playlist playlist);
 
         Task DeleteTransferPlaylists(string originalChannelId, string channelId);
 

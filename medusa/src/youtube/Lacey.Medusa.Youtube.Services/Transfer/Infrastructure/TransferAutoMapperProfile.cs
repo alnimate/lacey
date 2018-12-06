@@ -9,6 +9,7 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Infrastructure
         public TransferAutoMapperProfile()
         {
             this.CreateMap<Channel, ChannelEntity>()
+                .ForMember(e => e.Id, opt => opt.Ignore())
                 .ConstructUsing(m => new ChannelEntity
                 {
                     ChannelId = m.Id,
@@ -18,6 +19,7 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Infrastructure
                 });
 
             this.CreateMap<Video, VideoEntity>()
+                .ForMember(e => e.Id, opt => opt.Ignore())
                 .ConstructUsing(m => new VideoEntity
                 {
                     VideoId = m.Id,
@@ -27,6 +29,7 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Infrastructure
                 });
 
             this.CreateMap<Playlist, PlaylistEntity>()
+                .ForMember(e => e.Id, opt => opt.Ignore())
                 .ConstructUsing(m => new PlaylistEntity
                 {
                     PlaylistId = m.Id,
