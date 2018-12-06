@@ -102,7 +102,7 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
             try
             {
                 var sourcePlaylists = await this.YoutubeProvider.GetPlaylists(sourceChannelId);
-                var dest = await this.YoutubeProvider.GetPlaylists(destChannelId);
+                var destPlaylists = await this.YoutubeProvider.GetPlaylists(destChannelId);
                 var destChannel = await this.channelsService.GetChannelMetadata(destChannelId);
                 var destVideos = await this.videosService.GetTransferVideos(sourceChannelId, destChannelId);
 
@@ -110,7 +110,7 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                 foreach (var sourcePlaylist in sourcePlaylists
                     .OrderBy(s => s.Snippet.PublishedAt))
                 {
-                    if (dest.Any(d =>
+                    if (destPlaylists.Any(d =>
                         sourcePlaylist.Snippet.Title == d.Snippet.Title &&
                         sourcePlaylist.Snippet.Description == d.Snippet.Description))
                     {

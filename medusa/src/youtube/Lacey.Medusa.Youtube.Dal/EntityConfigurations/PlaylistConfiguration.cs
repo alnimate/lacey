@@ -10,8 +10,8 @@ namespace Lacey.Medusa.Youtube.Dal.EntityConfigurations
         {
             builder.HasKey(e => e.Id);
 
-            builder.Property(e => e.PlaylistId).HasMaxLength(30).IsRequired();
-            builder.Property(e => e.OriginalPlaylistId).HasMaxLength(30).IsRequired();
+            builder.Property(e => e.PlaylistId).HasMaxLength(50).IsRequired();
+            builder.Property(e => e.OriginalPlaylistId).HasMaxLength(50).IsRequired();
             builder.Property(e => e.Name).HasColumnName("Title").IsRequired();
             builder.Property(e => e.Description).IsRequired(false);
             builder.Property(e => e.PublishedAt).IsRequired(false);

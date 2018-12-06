@@ -64,8 +64,8 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                 entity.OriginalPlaylistId = originalPlaylistId;
 
                 await playlistsRep.AddAsync(entity);
-
                 await uow.SaveAsync();
+
                 return entity.Id;
             }
         }

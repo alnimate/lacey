@@ -12,8 +12,8 @@ IF OBJECT_ID (N'Channels', N'U') IS NULL
 BEGIN
 	CREATE TABLE [dbo].[Channels](
 		[Id] INT IDENTITY(1,1) NOT NULL,		
-		[ChannelId] NVARCHAR(30) NOT NULL,
-		[OriginalChannelId] NVARCHAR(30) NOT NULL,
+		[ChannelId] NVARCHAR(50) NOT NULL,
+		[OriginalChannelId] NVARCHAR(50) NOT NULL,
 		[Title] NVARCHAR(MAX) NOT NULL,
 		[Description] NVARCHAR(MAX) NULL,
 		[PublishedAt] DATETIME NULL,
@@ -42,8 +42,8 @@ IF OBJECT_ID (N'Videos', N'U') IS NULL
 BEGIN
 	CREATE TABLE [dbo].[Videos](
 		[Id] INT IDENTITY(1,1) NOT NULL,		
-		[VideoId] NVARCHAR(30) NOT NULL,
-		[OriginalVideoId] NVARCHAR(30) NOT NULL,
+		[VideoId] NVARCHAR(50) NOT NULL,
+		[OriginalVideoId] NVARCHAR(50) NOT NULL,
 		[Title] NVARCHAR(MAX) NOT NULL,
 		[Description] NVARCHAR(MAX) NULL,
 		[PublishedAt] DATETIME NULL,
@@ -76,8 +76,8 @@ IF OBJECT_ID (N'Playlists', N'U') IS NULL
 BEGIN
 	CREATE TABLE [dbo].[Playlists](
 		[Id] INT IDENTITY(1,1) NOT NULL,		
-		[PlaylistId] NVARCHAR(30) NOT NULL,
-		[OriginalPlaylistId] NVARCHAR(30) NOT NULL,
+		[PlaylistId] NVARCHAR(50) NOT NULL,
+		[OriginalPlaylistId] NVARCHAR(50) NOT NULL,
 		[Title] NVARCHAR(MAX) NOT NULL,
 		[Description] NVARCHAR(MAX) NULL,
 		[PublishedAt] DATETIME NULL,
