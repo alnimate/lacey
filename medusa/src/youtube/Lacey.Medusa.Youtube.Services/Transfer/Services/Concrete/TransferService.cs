@@ -169,7 +169,7 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                     }
 
                     // change section playlists from source to dest
-                    if (item.ContentDetails.Playlists.Any())
+                    if (item.ContentDetails != null && item.ContentDetails.Playlists.Any())
                     {
                         var playlists = new List<string>();
                         foreach (var playlist in item.ContentDetails.Playlists)
