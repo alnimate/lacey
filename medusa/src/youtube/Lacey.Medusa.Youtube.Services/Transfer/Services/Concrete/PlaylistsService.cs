@@ -152,7 +152,7 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                     return;
                 }
 
-                var video = this.videosService.GetVideo(videoId);
+                var video = await this.videosService.GetVideo(videoId);
                 if (video == null)
                 {
                     return;

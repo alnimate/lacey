@@ -290,7 +290,7 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
 
             foreach (var item in items)
             {
-                var deleteRequest = this.youtube.Playlists.Delete(item.Id);
+                var deleteRequest = this.youtube.PlaylistItems.Delete(item.Id);
                 await deleteRequest.ExecuteAsync();
             }
         }
