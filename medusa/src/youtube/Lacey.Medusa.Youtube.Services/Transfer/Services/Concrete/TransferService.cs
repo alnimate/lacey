@@ -58,12 +58,13 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
             var destChannel = await this.channelsService.GetChannelMetadata(destChannelId);
 
             foreach (var sourceVideo in sourceVideos
+                .Where(v => v.Snippet != null)
                 .OrderBy(v => v.Snippet.PublishedAt))
             {
                 // skip existing items
                 if (dest.Any(d =>
                     sourceVideo.Snippet.Title == d.Snippet.Title &&
-                    sourceVideo.ContentDetails.Duration == d.ContentDetails.Duration))
+                    sourceVideo.Snippet.Description == d.Snippet.Description))
                 {
                     this.Logger.LogTrace($"Video [{sourceVideo.Snippet.Title}] skipped. Video already exists.");
                     continue;
@@ -108,7 +109,8 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
 
                 // skip existing items
                 foreach (var sourcePlaylist in sourcePlaylists
-                    .OrderBy(s => s.Snippet.PublishedAt))
+                    .Where(p => p.Snippet != null)
+                    .OrderBy(p => p.Snippet.PublishedAt))
                 {
                     if (destPlaylists.Any(d =>
                         sourcePlaylist.Snippet.Title == d.Snippet.Title &&
@@ -124,6 +126,11 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                     var playlistItems = await this.YoutubeProvider.GetPlaylistItems(sourcePlaylist.Id);
                     foreach (var item in playlistItems)
                     {
+                        if (item.Snippet.ResourceId == null)
+                        {
+                            continue;
+                        }
+
                         var destVideo = destVideos.FirstOrDefault(
                             l => l.OriginalVideoId == item.Snippet.ResourceId.VideoId);
                         if (destVideo != null)
@@ -159,7 +166,8 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
 
                 // skip existing items
                 var toUpload = new List<ChannelSection>();
-                foreach (var item in source)
+                foreach (var item in source
+                    .Where(s => s.Snippet != null))
                 {
                     if (dest.Any(d =>
                         item.Snippet.Title == d.Snippet.Title &&
@@ -169,7 +177,7 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                     }
 
                     // change section playlists from source to dest
-                    if (item.ContentDetails != null && item.ContentDetails.Playlists.Any())
+                    if (item.ContentDetails?.Playlists != null && item.ContentDetails.Playlists.Any())
                     {
                         var playlists = new List<string>();
                         foreach (var playlist in item.ContentDetails.Playlists)
@@ -213,7 +221,8 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
 
                 // skip existing items
                 var toUpload = new List<Subscription>();
-                foreach (var item in source)
+                foreach (var item in source
+                    .Where(s => s.Snippet?.ResourceId != null))
                 {
                     if (dest.Any(d =>
                         item.Snippet.ResourceId.ChannelId == d.Snippet.ResourceId.ChannelId))
@@ -247,7 +256,8 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                 var dest = await this.YoutubeProvider.GetComments(destChannelId);
 
                 var toUpload = new List<CommentThread>();
-                foreach (var item in source)
+                foreach (var item in source
+                    .Where(c => c.Snippet?.TopLevelComment?.Snippet != null))
                 {
                     // skip existing items
                     if (dest.Any(d =>
