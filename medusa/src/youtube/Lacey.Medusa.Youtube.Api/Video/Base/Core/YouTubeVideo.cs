@@ -6,8 +6,6 @@ namespace Lacey.Medusa.Youtube.Api.Video.Base.Core
 {
     public partial class YouTubeVideo : Video
     {
-        private readonly string jsPlayer;
-
         private string uri;
         private bool encrypted;
 
@@ -24,14 +22,13 @@ namespace Lacey.Medusa.Youtube.Api.Video.Base.Core
         public override string Title { get; }
         public override WebSites WebSite => WebSites.YouTube;
 
-        public override string Uri =>
-            GetUriAsync().GetAwaiter().GetResult();
+        [Obsolete("Uri property is deprecated, please use the method GetUri() instead.")]
+        public override string Uri => GetUri();
 
-        public string GetUri(Func<DelegatingClient> makeClient) =>
-            GetUriAsync(makeClient).GetAwaiter().GetResult();
-
-        public override Task<string> GetUriAsync() =>
-            GetUriAsync(() => new DelegatingClient());
+        public override Task<string> GetUriAsync()
+        {
+            return GetUriAsync(() => new DelegatingClient());
+        }
 
         public async Task<string> GetUriAsync(Func<DelegatingClient> makeClient)
         {

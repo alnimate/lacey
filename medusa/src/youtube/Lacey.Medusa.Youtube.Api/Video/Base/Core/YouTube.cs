@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -58,14 +59,27 @@ namespace Lacey.Medusa.Youtube.Api.Video.Base.Core
         {
             string title = Html.GetNode("title", source);
 
-            string jsPlayer = ParseJsPlayer(source);
-            if (jsPlayer == null)
+            string jsPlayer;
+            string basejsPlayer = Json.GetKey("js", source).Replace(@"\/", "/");
+            if (basejsPlayer.StartsWith("//"))
             {
-                yield break;
+                jsPlayer = "https:" + basejsPlayer;
+            }
+            else if (basejsPlayer.StartsWith("/"))
+            {
+                jsPlayer = "https://www.youtube.com" + basejsPlayer;
+            }
+            else if (basejsPlayer.StartsWith("http"))
+            {
+                jsPlayer = basejsPlayer;
+            }
+            else
+            {
+                jsPlayer = "https://youtube.com/" + basejsPlayer;
             }
 
             string map = Json.GetKey("url_encoded_fmt_stream_map", source);
-            var queries = map.Split(',').Select(Unscramble);
+            var queries = map.Split(new[] { ',' },StringSplitOptions.RemoveEmptyEntries).Select(Unscramble).ToList();
 
             foreach (var query in queries)
                 yield return new YouTubeVideo(title, query, jsPlayer);
@@ -75,55 +89,47 @@ namespace Lacey.Medusa.Youtube.Api.Video.Base.Core
             // If there is no adaptive_fmts key, then in the file
             // will be dashmpd key containing link to a XML
             // file containing links and other data
-            if (adaptiveMap == String.Empty)
+            if (String.IsNullOrEmpty(adaptiveMap))
             {
                 using (HttpClient hc = new HttpClient())
                 {
-                    string temp = Json.GetKey("dashmpd", source);
-                    temp = WebUtility.UrlDecode(temp).Replace(@"\/", "/");
+                    IEnumerable<string> uris = null;
+                    try
+                    {
+                        string temp = Json.GetKey("dashmpd", source);
+                        temp = WebUtility.UrlDecode(temp).Replace(@"\/", "/");
 
-                    var manifest = hc.GetStringAsync(temp)
+                        var manifest = hc.GetStringAsync(temp)
                         .GetAwaiter().GetResult()
                         .Replace(@"\/", "/");
 
-                    var uris = Html.GetUrisFromManifest(manifest);
-
-                    foreach (var v in uris)
+                        uris = Html.GetUrisFromManifest(manifest);
+                    }
+                    catch (Exception e)
                     {
-                        yield return new YouTubeVideo(title,
+                        Debug.WriteLine(e);
+                    }
+
+                    if (uris != null)
+                    {
+                        foreach (var v in uris)
+                        {
+                            yield return new YouTubeVideo(title,
                             UnscrambleManifestUri(v),
                             jsPlayer);
+                        }
                     }
                 }
             }
             else
             {
-                queries = adaptiveMap.Split(',').Select(Unscramble);
-                foreach (var query in queries)
-                    yield return new YouTubeVideo(title, query, jsPlayer);
-            }
-        }
-
-        private string ParseJsPlayer(string source)
-        {
-            string jsPlayer = Json.GetKey("js", source).Replace(@"\/", "/");
-            if (string.IsNullOrWhiteSpace(jsPlayer))
-            {
-                return null;
+                var queries2 = adaptiveMap.Split(new[] { ',' },StringSplitOptions.RemoveEmptyEntries).Select(Unscramble).ToList();
+                foreach (var query in queries2)
+                    yield return new YouTubeVideo(title,query,jsPlayer);
             }
 
-            if (jsPlayer.StartsWith("/yts"))
-            {
-                return $"https://www.youtube.com{jsPlayer}";
-            }
 
-            // Fall back on old implementation (not sure it's needed)
-            if (!jsPlayer.StartsWith("http"))
-            {
-                jsPlayer = $"https:{jsPlayer}";
-            }
-            
-            return jsPlayer;
+
         }
 
         // TODO: Consider making this static...

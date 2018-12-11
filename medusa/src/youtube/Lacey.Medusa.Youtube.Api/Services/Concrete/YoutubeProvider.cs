@@ -89,18 +89,14 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
 
         public async Task<string> DownloadVideo(string videoId, string outputFolder)
         {
-            var video = await Task.Run(() =>
+            using (var service = Client.For(YouTube.Default))
             {
-                using (var service = Client.For(YouTube.Default))
-                {
-                    return service.GetVideo("https://youtube.com/watch?v=" + videoId);
-                }
-            });
-
-            Directory.CreateDirectory(outputFolder);
-            var outputFilePath = Path.Combine(outputFolder, $"VID-{Guid.NewGuid()}{video.FileExtension}");
-            File.WriteAllBytes(outputFilePath, video.GetBytes());
-            return outputFilePath;
+                var video = await service.GetVideoAsync("https://youtube.com/watch?v=" + videoId);
+                Directory.CreateDirectory(outputFolder);
+                var outputFilePath = Path.Combine(outputFolder, $"VID-{Guid.NewGuid()}{video.FileExtension}");
+                File.WriteAllBytes(outputFilePath, await video.GetBytesAsync());
+                return outputFilePath;
+            }
         }
 
         public async Task<Base.Video> UploadVideo(
