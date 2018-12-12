@@ -496,7 +496,6 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
 
             // we can't change some properties from brandingSettings request
             channelUpdate.BrandingSettings.Channel.Title = string.Empty;
-            channelUpdate.BrandingSettings.Channel.UnsubscribedTrailer = string.Empty;
 
             // set banner
             // load max res channel banner

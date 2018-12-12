@@ -293,6 +293,12 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                 var iconFilePath = await this.YoutubeProvider.DownloadIcon(source, this.outputFolder);
                 this.Logger.LogTrace($"Icon downloaded to [{iconFilePath}].");
 
+                var destVideos = await this.videosService.GetTransferVideos(sourceChannelId, destChannelId);
+                var unsubscribedTrailer = destVideos.FirstOrDefault(v => 
+                    v.OriginalVideoId == source.BrandingSettings.Channel.UnsubscribedTrailer);
+                source.BrandingSettings.Channel.UnsubscribedTrailer = unsubscribedTrailer != null ? 
+                    unsubscribedTrailer.VideoId : string.Empty;
+
                 await this.YoutubeProvider.UpdateMetadata(destChannelId, source);
                 await this.channelsService.AddOrUpdate(sourceChannelId, destChannelId, source);
             }
