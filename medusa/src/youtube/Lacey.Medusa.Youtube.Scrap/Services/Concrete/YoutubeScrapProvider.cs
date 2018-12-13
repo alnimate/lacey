@@ -10,7 +10,7 @@ using Lacey.Medusa.Youtube.Scrap.Base.Models.MediaStreams;
 using Lacey.Medusa.Youtube.Scrap.Utils;
 using Microsoft.Extensions.Logging;
 
-namespace Lacey.Medusa.Youtube.Scrap.Services
+namespace Lacey.Medusa.Youtube.Scrap.Services.Concrete
 {
     public sealed class YoutubeScrapProvider
     {

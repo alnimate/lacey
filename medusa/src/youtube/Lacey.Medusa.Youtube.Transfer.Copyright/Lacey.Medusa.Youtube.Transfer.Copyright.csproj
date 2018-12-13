@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Lacey.Medusa.Youtube.Scrap\Lacey.Medusa.Youtube.Scrap.csproj" />
+    <ProjectReference Include="..\Lacey.Medusa.Youtube.Services\Lacey.Medusa.Youtube.Services.csproj" />
   </ItemGroup>
 
   <ItemGroup>
