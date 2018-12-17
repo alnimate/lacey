@@ -57,5 +57,19 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Infrastructure
 
             return services;
         }
+
+        public static IServiceCollection AddCopyrightServices(
+            this IServiceCollection services,
+            string clientSecretsFilePath,
+            string userName,
+            string connectionString)
+        {
+            services
+                .AddYoutubeServices(clientSecretsFilePath, userName)
+                .AddYoutubeDalServices(connectionString)
+                .AddTransient<ICopyrightService, CopyrightService>();
+
+            return services;
+        }
     }
 }

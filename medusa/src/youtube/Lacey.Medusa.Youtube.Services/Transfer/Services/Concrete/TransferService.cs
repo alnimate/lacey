@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
 {
-    public sealed class TransferService : YoutubeService, ITransferService
+    public sealed class TransferService : YoutubeApiService, ITransferService
     {
         private readonly IChannelsService channelsService;
 

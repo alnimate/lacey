@@ -3,15 +3,15 @@ using Microsoft.Extensions.Logging;
 
 namespace Lacey.Medusa.Youtube.Services.Common.Services
 {
-    public abstract class YoutubeService
+    public abstract class YoutubeApiService
     {
         protected IYoutubeProvider YoutubeProvider;
 
         protected readonly ILogger Logger;
 
-        protected YoutubeService(
+        protected YoutubeApiService(
             IYoutubeProvider youtubeProvider, 
-            ILogger<YoutubeService> logger)
+            ILogger<YoutubeApiService> logger)
         {
             this.YoutubeProvider = youtubeProvider;
             this.Logger = logger;

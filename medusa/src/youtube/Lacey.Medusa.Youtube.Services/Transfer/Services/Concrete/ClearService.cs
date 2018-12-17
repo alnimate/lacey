@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
 {
-    public class ClearService : YoutubeService, IClearService
+    public class ClearService : YoutubeApiService, IClearService
     {
         private readonly IChannelsService channelsService;
 

@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using AutoMapper;
+using Lacey.Medusa.Youtube.Services.Transfer.Services;
 using Lacey.Medusa.Youtube.Transfer.Copyright.Configuration;
 using Lacey.Medusa.Youtube.Transfer.Copyright.Infrastructure;
 using Microsoft.Extensions.Configuration;
@@ -37,6 +38,12 @@ namespace Lacey.Medusa.Youtube.Transfer.Copyright
                 .CreateLogger<Program>();
 
             logger.LogTrace("Welcome to the YouTube copyright tool!");
+
+            var copyrightService = serviceProvider.GetService<ICopyrightService>();
+
+            var copynotice = copyrightService.GetVideoCopynotice("dJblZLEYPXE")
+                                            .GetAwaiter()
+                                            .GetResult();
 
             serviceProvider.Dispose();
         }
