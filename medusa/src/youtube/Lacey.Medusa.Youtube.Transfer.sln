@@ -33,6 +33,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Common.DataAnn
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Youtube.Transfer.Copyright", "Lacey.Medusa.Youtube.Transfer.Copyright\Lacey.Medusa.Youtube.Transfer.Copyright.csproj", "{0B675975-63BC-481E-84DD-E72D6C618BF9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lacey.Medusa.Common.Browser", "..\common\Lacey.Medusa.Common.Browser\Lacey.Medusa.Common.Browser.csproj", "{10B2E4D4-CC1F-425B-BB27-51277FE266EE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -99,6 +101,10 @@ Global
 		{0B675975-63BC-481E-84DD-E72D6C618BF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0B675975-63BC-481E-84DD-E72D6C618BF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0B675975-63BC-481E-84DD-E72D6C618BF9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10B2E4D4-CC1F-425B-BB27-51277FE266EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10B2E4D4-CC1F-425B-BB27-51277FE266EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10B2E4D4-CC1F-425B-BB27-51277FE266EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10B2E4D4-CC1F-425B-BB27-51277FE266EE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

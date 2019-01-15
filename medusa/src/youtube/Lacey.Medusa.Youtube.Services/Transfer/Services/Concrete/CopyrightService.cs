@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Lacey.Medusa.Common.Browser.Utils;
 using Lacey.Medusa.Youtube.Api.Services;
 using Lacey.Medusa.Youtube.Services.Common.Services;
 using Lacey.Medusa.Youtube.Services.Transfer.Models.Copyright;
@@ -15,8 +16,7 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
         {
             var copynoticeUrl = $"https://www.youtube.com/video_copynotice?v={videoId}";
 
-            var responce = await this.HttpClient.GetAsync(copynoticeUrl);
-            var html = await responce.Content.ReadAsStringAsync();
+            var html = WebUtils.GetHtml(copynoticeUrl);
 
             return null;
         }
