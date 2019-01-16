@@ -1,8 +1,8 @@
 ﻿namespace Lacey.Medusa.Youtube.Services.Transfer.Models.Copyright
 {
-    public sealed class CopynoyiceClaim
+    public sealed class CopyrightNoyiceClaim
     {
-        public CopynoyiceClaim(
+        public CopyrightNoyiceClaim(
             ClaimContent content, 
             ClaimClaimnants claimnants, 
             ClaimPolicy policy)

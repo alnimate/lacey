@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Linq;
 using AutoMapper;
 using Lacey.Medusa.Youtube.Services.Transfer.Services;
 using Lacey.Medusa.Youtube.Transfer.Copyright.Configuration;
@@ -41,9 +42,12 @@ namespace Lacey.Medusa.Youtube.Transfer.Copyright
 
             var copyrightService = serviceProvider.GetService<ICopyrightService>();
 
-            var copynotice = copyrightService.GetVideoCopynotice("dJblZLEYPXE")
-                                            .GetAwaiter()
-                                            .GetResult();
+            foreach (var channel in config.Channels)
+            {
+                var copyrightNotices = copyrightService.GetCopyrightNotices(channel)
+                                                .GetAwaiter()
+                                                .GetResult();
+            }
 
             serviceProvider.Dispose();
         }

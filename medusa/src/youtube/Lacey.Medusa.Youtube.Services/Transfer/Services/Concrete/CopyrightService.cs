@@ -1,5 +1,6 @@
-﻿using System.Threading.Tasks;
-using Lacey.Medusa.Common.Browser.Utils;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using Lacey.Medusa.Common.Browser.Browsers;
 using Lacey.Medusa.Youtube.Api.Services;
 using Lacey.Medusa.Youtube.Services.Common.Services;
 using Lacey.Medusa.Youtube.Services.Transfer.Models.Copyright;
@@ -12,13 +13,26 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
         {
         }
 
-        public async Task<Copynotice> GetVideoCopynotice(string videoId)
+        public async Task<IReadOnlyList<CopyrightNotice>> GetCopyrightNotices(string channelId)
         {
-            var copynoticeUrl = $"https://www.youtube.com/video_copynotice?v={videoId}";
+            var copyrightNotices = new List<CopyrightNotice>();
 
-            var html = WebUtils.GetHtml(copynoticeUrl);
+            using (var browser = new ChromeBrowser())
+            {
+                var videoIds = new[]
+                {
+                    "dJblZLEYPXE",
+                    "FWxgbcGF6hg",
+                    "N5E23EcuNmQ"
+                };
 
-            return null;
+                foreach (var videoId in videoIds)
+                {
+                    var pageSource = browser.GetPageSource($"https://www.youtube.com/video_copynotice?v={videoId}");
+                }
+            }
+
+            return copyrightNotices;
         }
     }
 }
