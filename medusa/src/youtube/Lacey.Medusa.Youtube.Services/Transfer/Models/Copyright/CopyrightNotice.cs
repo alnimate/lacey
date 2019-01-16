@@ -6,7 +6,7 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Models.Copyright
     {
         public CopyrightNotice(
             string videoId, 
-            IReadOnlyList<CopyrightNoyiceClaim> claims)
+            IReadOnlyList<CopyrightNoticeClaim> claims)
         {
             VideoId = videoId;
             Claims = claims;
@@ -14,6 +14,6 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Models.Copyright
 
         public string VideoId { get; private set; }
 
-        public IReadOnlyList<CopyrightNoyiceClaim> Claims { get; private set; }
+        public IReadOnlyList<CopyrightNoticeClaim> Claims { get; private set; }
     }
 }

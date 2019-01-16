@@ -2,17 +2,17 @@
 
 namespace Lacey.Medusa.Youtube.Services.Transfer.Models.Copyright
 {
-    public sealed class ClaimClaimnants
+    public sealed class ClaimClaimants
     {
-        public ClaimClaimnants(
-            IReadOnlyList<string> claimnants, 
+        public ClaimClaimants(
+            IReadOnlyList<string> claimants, 
             string onBehalfOf)
         {
-            Claimnants = claimnants;
+            Claimants = claimants;
             OnBehalfOf = onBehalfOf;
         }
 
-        public IReadOnlyList<string> Claimnants { get; private set; }
+        public IReadOnlyList<string> Claimants { get; private set; }
 
         public string OnBehalfOf { get; private set; }
     }
