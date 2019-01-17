@@ -21,18 +21,20 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
 
             using (var browser = new ChromeBrowser())
             {
-                var videoIds = new[]
-                {
-                    "dJblZLEYPXE",
-//                    "FWxgbcGF6hg",
-//                    "N5E23EcuNmQ"
-                };
+//                var videoUrls = new[]
+//                {
+//                    "/video_copynotice?v=dJblZLEYPXE"
+//                };
 
                 var parser = new CopyrightNoticesParser();
-                foreach (var videoId in videoIds)
+                var videosPageSource = browser.GetPageSource("https://www.youtube.com/my_videos_copyright");
+                var videoUrls = await parser.ParseVideosCopyright(videosPageSource);
+
+                foreach (var videoUrl in videoUrls)
                 {
-                    var pageSource = browser.GetPageSource($"https://www.youtube.com/video_copynotice?v={videoId}");
-                    var copyrightNotices = await parser.ParseCopyrightNotices(pageSource);
+                    var pageSource = browser.GetPageSource($"https://www.youtube.com/{videoUrl}");
+                    var videoId = videoUrl.Replace("/video_copynotice?v=", string.Empty);
+                    var copyrightNotices = await parser.ParseCopyrightNotices(videoId, pageSource);
                     if (copyrightNotices != null && copyrightNotices.Any())
                     {
                         notices.AddRange(copyrightNotices);
