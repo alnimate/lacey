@@ -7,5 +7,7 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services
     public interface ICopyrightService
     {
         Task<IReadOnlyList<CopyrightNotice>> GetCopyrightNotices(string channelId);
+
+        Task FixCopyrightIssues(string channelId, IReadOnlyList<CopyrightNotice> notices);
     }
 }

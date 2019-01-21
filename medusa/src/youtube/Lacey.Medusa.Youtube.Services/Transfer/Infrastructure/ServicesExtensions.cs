@@ -62,12 +62,22 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Infrastructure
             this IServiceCollection services,
             string clientSecretsFilePath,
             string userName,
+            string outputFolder,
             string connectionString)
         {
             services
                 .AddYoutubeServices(clientSecretsFilePath, userName)
                 .AddYoutubeDalServices(connectionString)
-                .AddTransient<ICopyrightService, CopyrightService>();
+                .AddTransient<IChannelsService, ChannelsService>()
+                .AddTransient<IVideosService, VideosService>()
+                .AddTransient<ICopyrightService, CopyrightService>(
+                    provider => new CopyrightService(
+                        provider.GetService<IYoutubeAuthProvider>(),
+                        provider.GetService<IYoutubeProvider>(),
+                        provider.GetService<ILogger<CopyrightService>>(),
+                        outputFolder,
+                        provider.GetService<IChannelsService>(),
+                        provider.GetService<IVideosService>()));
 
             return services;
         }

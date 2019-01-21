@@ -6,6 +6,8 @@
 
         public string UserName { get; set; }
 
+        public string TempFolder { get; set; }
+
         public string[] Channels { get; set; }
     }
 }
