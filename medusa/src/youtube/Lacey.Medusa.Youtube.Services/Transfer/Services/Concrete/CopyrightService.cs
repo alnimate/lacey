@@ -67,11 +67,12 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
         public async Task FixCopyrightIssues(string channelId, IReadOnlyList<CopyrightNotice> notices)
         {
 //            var channel = await this.channelsService.GetChannelMetadata(channelId);
-            var videos = await this.youtubeProvider.GetVideos(channelId);
+            var youtubeVideos = await this.youtubeProvider.GetVideos(channelId);
 
-            foreach (var video in videos)
+            foreach (var notice in notices)
             {
-                if (notices.All(n => n.VideoId != video.Id))
+                var youtubeVideo = youtubeVideos.FirstOrDefault(v => v.Id == notice.VideoId);
+                if (youtubeVideo == null)
                 {
                     continue;
                 }
@@ -79,12 +80,14 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                 string filePath = null;
                 try
                 {
-                    this.logger.LogTrace($"Downloading video [{video.Id}]...");
-                    filePath = await this.youtubeProvider.DownloadVideo(video.Id, this.outputFolder);
-                    this.logger.LogTrace($"Video [{video.Id}] downloaded to [{filePath}]");
+                    var videoId = youtubeVideo.Id;
 
-//                    var uploadedVideo = await this.youtubeProvider.UploadVideo(channelId, video, filePath);
-//                    await this.videosService.Add(channel.Id, video.Id, uploadedVideo);
+                    this.logger.LogTrace($"Downloading video [{videoId}]...");
+                    filePath = await this.youtubeProvider.DownloadVideo(videoId, this.outputFolder);
+                    this.logger.LogTrace($"Video [{videoId}] downloaded to [{filePath}]");
+
+//                    var uploadedVideo = await this.youtubeProvider.UploadVideo(channelId, youtubeVideo, filePath);
+//                    await this.videosService.Add(channel.Id, videoId, uploadedVideo);
                 }
                 catch (Exception exc)
                 {
