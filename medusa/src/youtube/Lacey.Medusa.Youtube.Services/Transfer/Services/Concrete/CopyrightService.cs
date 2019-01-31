@@ -2,12 +2,16 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Lacey.Medusa.Common.Browser.Browsers;
 using Lacey.Medusa.Youtube.Api.Services;
 using Lacey.Medusa.Youtube.Services.Common.Services;
 using Lacey.Medusa.Youtube.Services.Transfer.Models.Copyright;
 using Lacey.Medusa.Youtube.Services.Transfer.Utils;
+using MediaToolkit;
+using MediaToolkit.Model;
+using MediaToolkit.Options;
 using Microsoft.Extensions.Logging;
 
 namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
@@ -66,7 +70,26 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
 
         public async Task FixCopyrightIssues(string channelId, IReadOnlyList<CopyrightNotice> notices)
         {
-//            var channel = await this.channelsService.GetChannelMetadata(channelId);
+            var currentFolder = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+            var videosFolder = Path.Combine(currentFolder, "temp");
+            var inputFile = new MediaFile { Filename = Path.Combine(videosFolder, "03.mp4") };
+            var outputFile = new MediaFile { Filename = Path.Combine(videosFolder, $"{Guid.NewGuid()}.mp4") };
+
+            using (var engine = new Engine(Path.Combine(currentFolder, "ffmpeg.exe")))
+            {
+                engine.GetMetadata(inputFile);
+
+                var options = new ConversionOptions();
+
+                //// First parameter requests the starting frame to cut the media from.
+                //// Second parameter requests how long to cut the video.
+                var start = notices[2].Claims[1].Content.MatchStart;
+                options.CutMedia(start, start.Add(TimeSpan.FromSeconds(1)));
+
+                engine.Convert(inputFile, outputFile, options);
+            }
+
+            //            var channel = await this.channelsService.GetChannelMetadata(channelId);
             var videos = await this.videosService.GetChannelVideos(channelId);
 
             foreach (var notice in notices)
