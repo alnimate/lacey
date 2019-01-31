@@ -67,21 +67,20 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
         public async Task FixCopyrightIssues(string channelId, IReadOnlyList<CopyrightNotice> notices)
         {
 //            var channel = await this.channelsService.GetChannelMetadata(channelId);
-            var youtubeVideos = await this.youtubeProvider.GetVideos(channelId);
+            var videos = await this.videosService.GetChannelVideos(channelId);
 
             foreach (var notice in notices)
             {
-                var youtubeVideo = youtubeVideos.FirstOrDefault(v => v.Id == notice.VideoId);
-                if (youtubeVideo == null)
-                {
-                    continue;
-                }
-
                 string filePath = null;
                 try
                 {
-                    var videoId = youtubeVideo.Id;
+                    var video = videos.FirstOrDefault(v => v.VideoId == notice.VideoId);
+                    if (video == null)
+                    {
+                        continue;
+                    }
 
+                    var videoId = video.OriginalVideoId;
                     this.logger.LogTrace($"Downloading video [{videoId}]...");
                     filePath = await this.youtubeProvider.DownloadVideo(videoId, this.outputFolder);
                     this.logger.LogTrace($"Video [{videoId}] downloaded to [{filePath}]");
@@ -93,13 +92,13 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                 {
                     this.logger.LogError(exc.Message);
                 }
-                finally
-                {
-                    if (!string.IsNullOrEmpty(filePath))
-                    {
-                        File.Delete(filePath);
-                    }
-                }
+//                finally
+//                {
+//                    if (!string.IsNullOrEmpty(filePath))
+//                    {
+//                        File.Delete(filePath);
+//                    }
+//                }
             }
         }
     }
