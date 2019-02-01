@@ -126,7 +126,7 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
 
                 // load max res video thumbnail
                 var videoImage = await this.youtube.HttpClient
-                    .GetAsync(video.Snippet.Thumbnails.Maxres.Url);
+                    .GetAsync(video.Snippet.Thumbnails.GetMaxResUrl());
                 var thumbnailsRequest = this.youtube.Thumbnails.Set(
                     request.ResponseBody.Id,
                     await videoImage.Content.ReadAsStreamAsync(),

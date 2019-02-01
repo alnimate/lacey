@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Lacey.Medusa.Youtube.Api.Services;
 using Lacey.Medusa.Youtube.Services.Common.Services;
@@ -45,7 +47,19 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
         private async Task DeleteVideos(string channelId)
         {
             var videoIds = await this.YoutubeProvider.GetVideoIds(channelId);
-            foreach (var videoId in videoIds)
+            var uploadedVideoIds = (await this.videosService.GetChannelVideos(channelId))
+                .Select(v => v.VideoId);
+
+            var videosToDelete = new List<string>(videoIds);
+            foreach (var uploadedVideoId in uploadedVideoIds)
+            {
+                if (!videosToDelete.Contains(uploadedVideoId))
+                {
+                    videosToDelete.Add(uploadedVideoId);
+                }
+            }
+
+            foreach (var videoId in videosToDelete)
             {
                 this.Logger.LogTrace($"Deleting video [{videoId}]...");
                 try

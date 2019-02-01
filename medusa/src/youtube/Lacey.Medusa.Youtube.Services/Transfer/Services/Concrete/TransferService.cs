@@ -56,13 +56,16 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
             var sourceVideos = await this.YoutubeProvider.GetVideos(sourceChannelId);
             var dest = await this.YoutubeProvider.GetVideos(destChannelId);
             var destChannel = await this.channelsService.GetChannelMetadata(destChannelId);
+            var uploadedVideos = await this.videosService.GetChannelVideos(destChannelId);
 
             foreach (var sourceVideo in sourceVideos
                 .Where(v => v.Snippet != null)
                 .OrderBy(v => v.Snippet.PublishedAt))
             {
                 // skip existing items
-                if (dest.Any(d =>
+                if ((uploadedVideos != null && 
+                     uploadedVideos.Any(u => u.OriginalVideoId == sourceVideo.Id)) ||                    
+                    dest.Any(d =>
                     sourceVideo.Snippet.Title == d.Snippet.Title &&
                     sourceVideo.Snippet.Description == d.Snippet.Description))
                 {
