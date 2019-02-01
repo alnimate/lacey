@@ -53,16 +53,20 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                 entity.OriginalChannelId = originalChannelId;
                 entity.ChannelId = channelId;
 
-                if (await this.GetTransferMetadata(originalChannelId, channelId) == null)
+                var metadata = await this.GetTransferMetadata(originalChannelId, channelId);
+                if (metadata == null)
                 {
                     await channelsRep.AddAsync(entity);
                 }
                 else
                 {
+                    entity.Id = metadata.Id;
+                    entity.CreatedAt = metadata.CreatedAt;
                     channelsRep.Update(entity);
                 }
 
                 await uow.SaveAsync();
+
                 return entity.Id;
             }
         }

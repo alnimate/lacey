@@ -36,7 +36,7 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
 
         public async Task TransferChannel(string sourceChannelId, string destChannelId)
         {
-            await this.TransferComments(sourceChannelId, destChannelId);
+//            await this.TransferComments(sourceChannelId, destChannelId);
 
             await this.TransferMetadata(sourceChannelId, destChannelId);
 
