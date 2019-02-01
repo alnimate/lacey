@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Mime;
+using System.Threading;
 using System.Threading.Tasks;
 using Lacey.Medusa.Common.Api.Base.Services;
 using Lacey.Medusa.Common.Api.Base.Upload;
@@ -44,21 +45,27 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
 
         public async Task<IReadOnlyList<Base.Video>> GetVideos(string channelId)
         {
-            var videosIds = await this.GetVideoIds(channelId);
-            var request = this.youtube.Videos.List(VideoParts.AllAnonymous.AsListParam());
-            request.Id = videosIds.AsListParam();
-            request.MaxResults = ListConsts.MaxResults;
-
             var list = new List<Base.Video>();
-            var nextPageToken = string.Empty;
-            while (nextPageToken != null)
+            var videosIds = await this.GetVideoIds(channelId);
+            var i = 0;
+            while (i < videosIds.Count)
             {
-                request.PageToken = nextPageToken;
-                var response = await request.ExecuteAsync();
+                var request = this.youtube.Videos.List(VideoParts.AllAnonymous.AsListParam());
+                request.Id = videosIds.Skip(i).Take((int)ListConsts.MaxResults).ToArray().AsListParam();
+                request.MaxResults = ListConsts.MaxResults;
 
-                list.AddRange(response.Items);
+                var nextPageToken = string.Empty;
+                while (nextPageToken != null)
+                {
+                    request.PageToken = nextPageToken;
+                    var response = await request.ExecuteAsync();
 
-                nextPageToken = response.NextPageToken;
+                    list.AddRange(response.Items);
+
+                    nextPageToken = response.NextPageToken;
+                }
+
+                i += (int)ListConsts.MaxResults;
             }
 
             return list;
@@ -124,6 +131,7 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
 
                 await request.UploadAsync();
 
+                Thread.Sleep(TimeSpan.FromSeconds(60));
                 // load max res video thumbnail
                 var videoImage = await this.youtube.HttpClient
                     .GetAsync(video.Snippet.Thumbnails.GetMaxResUrl());
