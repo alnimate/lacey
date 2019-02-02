@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Mime;
-using System.Threading;
 using System.Threading.Tasks;
 using Lacey.Medusa.Common.Api.Base.Services;
 using Lacey.Medusa.Common.Api.Base.Upload;
@@ -131,19 +130,25 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
 
                 await request.UploadAsync();
 
-                Thread.Sleep(TimeSpan.FromSeconds(60));
-                // load max res video thumbnail
-                var videoImage = await this.youtube.HttpClient
-                    .GetAsync(video.Snippet.Thumbnails.GetMaxResUrl());
-                var thumbnailsRequest = this.youtube.Thumbnails.Set(
-                    request.ResponseBody.Id,
-                    await videoImage.Content.ReadAsStreamAsync(),
-                    MediaTypeNames.Image.Jpeg);
-                // upload thumbnail for our video to the youtube
-                await thumbnailsRequest.UploadAsync();
+                await this.UploadThumbnail(
+                    request.ResponseBody.Id, 
+                    video.Snippet.Thumbnails.GetMaxResUrl());
 
                 return request.ResponseBody;
             }
+        }
+
+        public async Task UploadThumbnail(string videoId, string imageUrl)
+        {
+            // load max res video thumbnail
+            var videoImage = await this.youtube.HttpClient
+                .GetAsync(imageUrl);
+            var thumbnailsRequest = this.youtube.Thumbnails.Set(
+                videoId,
+                await videoImage.Content.ReadAsStreamAsync(),
+                MediaTypeNames.Image.Jpeg);
+            // upload thumbnail for our video to the youtube
+            await thumbnailsRequest.UploadAsync();
         }
 
         private void OnProgressChanged(IUploadProgress progress)

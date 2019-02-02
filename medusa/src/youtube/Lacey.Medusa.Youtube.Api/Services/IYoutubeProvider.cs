@@ -16,6 +16,8 @@ namespace Lacey.Medusa.Youtube.Api.Services
 
         Task<Base.Video> UploadVideo(string channelId, Base.Video video, string filePath);
 
+        Task UploadThumbnail(string videoId, string imageUrl);
+
         Task<string> DeleteVideo(string videoId);
 
         #endregion

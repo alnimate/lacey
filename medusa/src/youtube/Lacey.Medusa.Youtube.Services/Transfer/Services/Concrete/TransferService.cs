@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Lacey.Medusa.Youtube.Api.Base;
+using Lacey.Medusa.Youtube.Api.Extensions;
 using Lacey.Medusa.Youtube.Api.Services;
 using Lacey.Medusa.Youtube.Services.Common.Services;
 using Microsoft.Extensions.Logging;
@@ -47,6 +48,34 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
             await this.TransferSections(sourceChannelId, destChannelId);
 
             await this.TransferSubscriptions(sourceChannelId, destChannelId);
+        }
+
+        public async Task SetThumbnails(string sourceChannelId, string destChannelId)
+        {
+            var sourceVideos = await this.YoutubeProvider.GetVideos(sourceChannelId);
+            var destVideos = await this.videosService.GetChannelVideos(destChannelId);
+
+            foreach (var destVideo in destVideos)
+            {
+                var sourceVideo = sourceVideos.FirstOrDefault(s => s.Id == destVideo.OriginalVideoId);
+                if (sourceVideo == null)
+                {
+                    continue;
+                }
+
+                try
+                {
+                    this.Logger.LogTrace($"Uploading thumbnail for [\"{sourceVideo.Snippet.Title}\"]...");
+                    await this.YoutubeProvider.UploadThumbnail(
+                        destVideo.VideoId,
+                        sourceVideo.Snippet.Thumbnails.GetMaxResUrl());
+                    this.Logger.LogTrace($"Thumbnail uploaded.");
+                }
+                catch (Exception exc)
+                {
+                    this.Logger.LogError(exc.Message);
+                }
+            }
         }
 
         #region videos

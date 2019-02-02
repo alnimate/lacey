@@ -41,6 +41,8 @@ namespace Lacey.Medusa.Youtube.Transfer.Run
                 .CreateLogger<Program>();
 
             logger.LogTrace("Welcome to the YouTube transferring tool!");
+            Console.WriteLine("Please select action. (1 - Transfer; 2 - Upload thumbnails.)");
+            var answer = Console.ReadLine();
 
             var transferService = serviceProvider.GetService<ITransferService>();
 
@@ -51,13 +53,22 @@ namespace Lacey.Medusa.Youtube.Transfer.Run
                 var destChannelId = config.DestChannels[i];
                 try
                 {
-                    logger.LogTrace($"[{sourceChannelId}] => [{destChannelId}]...");
-                    transferService.TransferChannel(
-                        sourceChannelId,
-                        destChannelId).Wait();
-                    logger.LogTrace($"[{sourceChannelId}] => [{destChannelId}] completed.{Environment.NewLine}");
-                    sb.AppendLine(
-                        $"[https://www.youtube.com/channel/{sourceChannelId}] => [https://www.youtube.com/channel/{destChannelId}]");
+                    if (answer == "1")
+                    {
+                        logger.LogTrace($"[{sourceChannelId}] => [{destChannelId}]...");
+                        transferService.TransferChannel(
+                            sourceChannelId,
+                            destChannelId).Wait();
+                        logger.LogTrace($"[{sourceChannelId}] => [{destChannelId}] completed.{Environment.NewLine}");
+                        sb.AppendLine(
+                            $"[https://www.youtube.com/channel/{sourceChannelId}] => [https://www.youtube.com/channel/{destChannelId}]");
+                    }
+                    else if (answer == "2")
+                    {
+                        logger.LogTrace($"Uploading thumbnails for [{destChannelId}]...");
+                        transferService.SetThumbnails(sourceChannelId, destChannelId).Wait();
+                        logger.LogTrace($"Thumbnails for [{destChannelId}] uploaded.");
+                    }
                 }
                 catch (Exception exc)
                 {

@@ -2,7 +2,7 @@
 
 namespace Lacey.Medusa.Youtube.Api.Extensions
 {
-    internal static class ThumbnailExtensions
+    public static class ThumbnailExtensions
     {
         public static string GetMaxResUrl(
             this ThumbnailDetails thumbnails)
