@@ -63,6 +63,11 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                     continue;
                 }
 
+                if ((DateTime.UtcNow - destVideo.CreatedAt).TotalHours >= 8)
+                {
+                    continue;
+                }
+
                 try
                 {
                     this.Logger.LogTrace($"Uploading thumbnail for [\"{sourceVideo.Snippet.Title}\"]...");

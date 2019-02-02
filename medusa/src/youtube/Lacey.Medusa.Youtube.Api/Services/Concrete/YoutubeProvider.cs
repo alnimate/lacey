@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Mime;
+using System.Threading;
 using System.Threading.Tasks;
 using Lacey.Medusa.Common.Api.Base.Services;
 using Lacey.Medusa.Common.Api.Base.Upload;
@@ -130,9 +131,17 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
 
                 await request.UploadAsync();
 
-//                await this.UploadThumbnail(
-//                    request.ResponseBody.Id, 
-//                    video.Snippet.Thumbnails.GetMaxResUrl());
+                try
+                {
+                    Thread.Sleep(TimeSpan.FromSeconds(5));
+                    await this.UploadThumbnail(
+                        request.ResponseBody.Id,
+                        video.Snippet.Thumbnails.GetMaxResUrl());
+                }
+                catch (Exception exc)
+                {
+                    this.logger.LogTrace($"Thumbnail upload failed - \"{exc.Message}\"");
+                }
 
                 return request.ResponseBody;
             }
