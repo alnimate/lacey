@@ -130,9 +130,9 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
 
                 await request.UploadAsync();
 
-                await this.UploadThumbnail(
-                    request.ResponseBody.Id, 
-                    video.Snippet.Thumbnails.GetMaxResUrl());
+//                await this.UploadThumbnail(
+//                    request.ResponseBody.Id, 
+//                    video.Snippet.Thumbnails.GetMaxResUrl());
 
                 return request.ResponseBody;
             }

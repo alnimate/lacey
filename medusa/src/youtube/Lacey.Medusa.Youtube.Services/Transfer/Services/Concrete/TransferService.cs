@@ -93,8 +93,8 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
             {
                 // skip existing items
                 if ((uploadedVideos != null && 
-                     uploadedVideos.Any(u => u.OriginalVideoId == sourceVideo.Id)) ||                    
-                    dest.Any(d =>
+                     uploadedVideos.Any(u => u.OriginalVideoId == sourceVideo.Id))                   
+                    || dest.Any(d =>
                     sourceVideo.Snippet.Title == d.Snippet.Title &&
                     sourceVideo.Snippet.Description == d.Snippet.Description))
                 {
