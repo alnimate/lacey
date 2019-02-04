@@ -50,6 +50,8 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
             await this.TransferSubscriptions(sourceChannelId, destChannelId);
         }
 
+        #region Thumbnails
+
         public async Task SetThumbnails(string sourceChannelId, string destChannelId)
         {
             var sourceVideos = await this.YoutubeProvider.GetVideos(sourceChannelId);
@@ -83,9 +85,11 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
             }
         }
 
+        #endregion
+
         #region videos
 
-        private async Task TransferVideos(string sourceChannelId, string destChannelId)
+        public async Task TransferVideos(string sourceChannelId, string destChannelId)
         {
             var sourceVideos = await this.YoutubeProvider.GetVideos(sourceChannelId);
             var dest = await this.YoutubeProvider.GetVideos(destChannelId);
@@ -135,7 +139,7 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
 
         #region playlists
 
-        private async Task TransferPlaylists(string sourceChannelId, string destChannelId)
+        public async Task TransferPlaylists(string sourceChannelId, string destChannelId)
         {
             try
             {
@@ -193,7 +197,7 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
 
         #region sections
 
-        private async Task TransferSections(string sourceChannelId, string destChannelId)
+        public async Task TransferSections(string sourceChannelId, string destChannelId)
         {
             try
             {
@@ -249,7 +253,7 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
 
         #region subscriptions
 
-        private async Task TransferSubscriptions(string sourceChannelId, string destChannelId)
+        public async Task TransferSubscriptions(string sourceChannelId, string destChannelId)
         {
             try
             {
@@ -285,7 +289,7 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
 
         #region comments
 
-        private async Task TransferComments(string sourceChannelId, string destChannelId)
+        public async Task TransferComments(string sourceChannelId, string destChannelId)
         {
             try
             {
@@ -321,7 +325,7 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
 
         #region metadata
 
-        private async Task TransferMetadata(string sourceChannelId, string destChannelId)
+        public async Task TransferMetadata(string sourceChannelId, string destChannelId)
         {
             try
             {
