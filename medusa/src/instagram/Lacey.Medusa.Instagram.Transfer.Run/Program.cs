@@ -41,7 +41,7 @@ namespace Lacey.Medusa.Instagram.Transfer.Run
                 .CreateLogger<Program>();
 
             logger.LogTrace("Welcome to the Instagram transferring tool!");
-            Console.WriteLine("0 - Full Transfer;");
+            Console.WriteLine("1 - Media;");
             var answer = Console.ReadLine();
 
             var transferService = serviceProvider.GetService<ITransferService>();
@@ -53,11 +53,11 @@ namespace Lacey.Medusa.Instagram.Transfer.Run
                 var destChannelId = config.DestChannels[i];
                 try
                 {
-                    if (answer == "0")
+                    if (answer == "1")
                     {
-                        logger.LogTrace($"[{sourceChannelId}] => [{destChannelId}]...");
-                        transferService.Transfer(sourceChannelId, destChannelId).Wait();
-                        logger.LogTrace($"[{sourceChannelId}] => [{destChannelId}] completed.{Environment.NewLine}");
+                        logger.LogTrace($"Media [{sourceChannelId}] => [{destChannelId}]...");
+                        transferService.TransferAllMedia(sourceChannelId, destChannelId).Wait();
+                        logger.LogTrace($"Media [{sourceChannelId}] => [{destChannelId}] Completed.{Environment.NewLine}");
                         sb.AppendLine($"[https://www.instagram.com/{sourceChannelId}] => [https://www.instagram.com/{destChannelId}]");
                     }
                 }

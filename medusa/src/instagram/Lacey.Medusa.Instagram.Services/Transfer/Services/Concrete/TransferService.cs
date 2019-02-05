@@ -17,9 +17,9 @@ namespace Lacey.Medusa.Instagram.Services.Transfer.Services.Concrete
             this.outputFolder = outputFolder;
         }
 
-        public async Task Transfer(string sourceChannelId, string destChannelId)
+        public async Task TransferAllMedia(string sourceChannelId, string destChannelId)
         {
-            var mediaList = await this.InstagramProvider.GetUserMediaAsync(sourceChannelId);
+            var mediaList = await this.InstagramProvider.GetUserMediaAll(sourceChannelId);
             foreach (var media in mediaList)
             {
                 await this.InstagramProvider.DownloadMedia(media, this.outputFolder);

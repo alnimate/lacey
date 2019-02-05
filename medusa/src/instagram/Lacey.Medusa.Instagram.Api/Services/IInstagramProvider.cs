@@ -5,8 +5,12 @@ namespace Lacey.Medusa.Instagram.Api.Services
 {
     public interface IInstagramProvider
     {
-        Task<InstaMediaList> GetUserMediaAsync(string userName);
+        #region Media
+
+        Task<InstaMediaList> GetUserMediaAll(string userName);
 
         Task DownloadMedia(InstaMedia media, string outputFolder);
+
+        #endregion
     }
 }

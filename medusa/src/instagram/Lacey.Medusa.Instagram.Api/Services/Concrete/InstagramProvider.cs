@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Reflection;
 using System.Threading.Tasks;
 using InstagramApiSharp;
 using InstagramApiSharp.API;
@@ -15,6 +16,9 @@ namespace Lacey.Medusa.Instagram.Api.Services.Concrete
 {
     public sealed class InstagramProvider : IInstagramProvider
     {
+
+        #region Fields/Constructors
+
         private readonly IInstaApi instagram;
 
         private readonly ILogger logger;
@@ -33,6 +37,24 @@ namespace Lacey.Medusa.Instagram.Api.Services.Concrete
                 .SetRequestDelay(delay)
                 .Build();
 
+            var currentFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            var stateFile = Path.Combine(currentFolder, "state.bin");
+            try
+            {
+                if (File.Exists(stateFile))
+                {
+                    this.logger.LogTrace("Loading state from file.");
+                    using (var fs = File.OpenRead(stateFile))
+                    {
+                        this.instagram.LoadStateDataFromString(new StreamReader(fs).ReadToEnd());
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                this.logger.LogTrace(e.ToString());
+            }
+
             if (!this.instagram.IsUserAuthenticated)
             {
                 this.logger.LogTrace($"Logging in as {userSession.UserName}");
@@ -44,14 +66,21 @@ namespace Lacey.Medusa.Instagram.Api.Services.Concrete
                     this.logger.LogTrace($"Unable to login: {logInResult.Info.Message}");
                 }
             }
+
+            var state = this.instagram.GetStateDataAsString();
+            File.WriteAllText(stateFile, state);
         }
 
-        public async Task<InstaMediaList> GetUserMediaAsync(string userName)
+        #endregion
+
+        #region Media
+
+        public async Task<InstaMediaList> GetUserMediaAll(string userName)
         {
-            var currentUserMedia = await this.instagram.UserProcessor.GetUserMediaAsync(
+            var userMedia = await this.instagram.UserProcessor.GetUserMediaAsync(
                 userName, PaginationParameters.MaxPagesToLoad(1));
 
-            return currentUserMedia.Value;
+            return userMedia.Value;
         }
 
         public async Task DownloadMedia(InstaMedia media, string outputFolder)
@@ -81,5 +110,7 @@ namespace Lacey.Medusa.Instagram.Api.Services.Concrete
                 }
             }
         }
+
+        #endregion
     }
 }
