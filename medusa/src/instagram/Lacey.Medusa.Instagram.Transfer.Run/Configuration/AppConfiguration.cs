@@ -4,8 +4,6 @@
     {        
         public string ClientSecretsFilePath { get; set; }
 
-        public string UserName { get; set; }
-
         public string TempFolder { get; set; }
 
         public string[] SourceChannels { get; set; }

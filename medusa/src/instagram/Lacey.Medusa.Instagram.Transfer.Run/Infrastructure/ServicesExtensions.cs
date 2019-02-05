@@ -23,7 +23,6 @@ namespace Lacey.Medusa.Instagram.Transfer.Run.Infrastructure
                     Path.Combine(currentFolder, config.Email.SmtpSecretFile))
                 .AddInstagramTransferServices(
                     config.ClientSecretsFilePath,
-                    config.UserName,
                     Path.Combine(currentFolder, config.TempFolder),
                     connectionString);
 

@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.136
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lacey.Medusa.Instagram.Transfer.Run", "Lacey.Medusa.Instagram.Transfer.Run\Lacey.Medusa.Instagram.Transfer.Run.csproj", "{4787B383-F28A-42EC-9DE6-9591BD112988}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Instagram.Transfer.Run", "Lacey.Medusa.Instagram.Transfer.Run\Lacey.Medusa.Instagram.Transfer.Run.csproj", "{4787B383-F28A-42EC-9DE6-9591BD112988}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lacey.Medusa.Instagram.Services", "Lacey.Medusa.Instagram.Services\Lacey.Medusa.Instagram.Services.csproj", "{BAB39E3B-AE5F-4D64-BF33-A3B808874F3C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Instagram.Services", "Lacey.Medusa.Instagram.Services\Lacey.Medusa.Instagram.Services.csproj", "{BAB39E3B-AE5F-4D64-BF33-A3B808874F3C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Common.Email", "..\common\Lacey.Medusa.Common.Email\Lacey.Medusa.Common.Email.csproj", "{E88BDD38-91F2-4C59-8746-EE02D8E79AB2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lacey.Medusa.Instagram.Api", "Lacey.Medusa.Instagram.Api\Lacey.Medusa.Instagram.Api.csproj", "{0F719790-63BA-4DFB-8645-616F1A4ABB86}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{E88BDD38-91F2-4C59-8746-EE02D8E79AB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E88BDD38-91F2-4C59-8746-EE02D8E79AB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E88BDD38-91F2-4C59-8746-EE02D8E79AB2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F719790-63BA-4DFB-8645-616F1A4ABB86}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F719790-63BA-4DFB-8645-616F1A4ABB86}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F719790-63BA-4DFB-8645-616F1A4ABB86}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F719790-63BA-4DFB-8645-616F1A4ABB86}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
