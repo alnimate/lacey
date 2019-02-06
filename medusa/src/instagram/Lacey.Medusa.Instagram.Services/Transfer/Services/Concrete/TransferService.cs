@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Lacey.Medusa.Instagram.Api.Services;
 using Lacey.Medusa.Instagram.Services.Common.Services;
@@ -49,7 +51,7 @@ namespace Lacey.Medusa.Instagram.Services.Transfer.Services.Concrete
             var channel = await this.channelsService.GetChannelMetadata(destChannelId);
             var saved = await this.mediaService.GetTransferMedias(sourceChannelId, destChannelId);
             var mediaList = await this.InstagramProvider.GetUserMediaAll(sourceChannelId);
-            foreach (var media in mediaList)
+            foreach (var media in mediaList.OrderBy(m => m.DeviceTimeStamp))
             {
                 if (saved.Any(m => m.OriginalMediaId == media.Code))
                 {
@@ -73,6 +75,7 @@ namespace Lacey.Medusa.Instagram.Services.Transfer.Services.Concrete
                     await this.mediaService.Add(channel.Id, media.Code, media);
                     this.Logger.LogTrace($"\"{name}\" saved.");
                 }
+                Thread.Sleep(TimeSpan.FromSeconds(2));
             }
         }
     }
