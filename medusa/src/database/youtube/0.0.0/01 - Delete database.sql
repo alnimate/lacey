@@ -14,6 +14,6 @@ IF EXISTS
      FROM [sys].[server_principals]
      WHERE [name] = 'Medusa')
 BEGIN
-	DROP LOGIN [Medusae]
+	DROP LOGIN [Medusa]
 END 
 GO

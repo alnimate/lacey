@@ -9,7 +9,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Instagram.Serv
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Common.Email", "..\common\Lacey.Medusa.Common.Email\Lacey.Medusa.Common.Email.csproj", "{E88BDD38-91F2-4C59-8746-EE02D8E79AB2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lacey.Medusa.Instagram.Api", "Lacey.Medusa.Instagram.Api\Lacey.Medusa.Instagram.Api.csproj", "{0F719790-63BA-4DFB-8645-616F1A4ABB86}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Instagram.Api", "Lacey.Medusa.Instagram.Api\Lacey.Medusa.Instagram.Api.csproj", "{0F719790-63BA-4DFB-8645-616F1A4ABB86}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Common.Domain", "..\common\Lacey.Medusa.Common.Domain\Lacey.Medusa.Common.Domain.csproj", "{E89570D9-1897-4EF6-8EF7-88A54E45BE44}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lacey.Medusa.Instagram.Domain", "Lacey.Medusa.Instagram.Domain\Lacey.Medusa.Instagram.Domain.csproj", "{45DC8A1A-D0AD-40E4-B9DC-C3CFDF74DE00}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lacey.Medusa.Instagram.Dal", "Lacey.Medusa.Instagram.Dal\Lacey.Medusa.Instagram.Dal.csproj", "{205118E5-78AB-4729-B721-0E302ACE7F72}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Common.Dal", "..\common\Lacey.Medusa.Common.Dal\Lacey.Medusa.Common.Dal.csproj", "{7EB717F4-51C6-491E-9622-EC1FF56A7D54}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Common.Services", "..\common\Lacey.Medusa.Common.Services\Lacey.Medusa.Common.Services.csproj", "{4308227F-294C-4C56-BEDE-C869F6252FB9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Common.DataAnnotations", "..\common\Lacey.Medusa.Common.DataAnnotations\Lacey.Medusa.Common.DataAnnotations.csproj", "{3A407487-AC2E-4CF7-895E-FA4012588649}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +45,30 @@ Global
 		{0F719790-63BA-4DFB-8645-616F1A4ABB86}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0F719790-63BA-4DFB-8645-616F1A4ABB86}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0F719790-63BA-4DFB-8645-616F1A4ABB86}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E89570D9-1897-4EF6-8EF7-88A54E45BE44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E89570D9-1897-4EF6-8EF7-88A54E45BE44}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E89570D9-1897-4EF6-8EF7-88A54E45BE44}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E89570D9-1897-4EF6-8EF7-88A54E45BE44}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45DC8A1A-D0AD-40E4-B9DC-C3CFDF74DE00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45DC8A1A-D0AD-40E4-B9DC-C3CFDF74DE00}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45DC8A1A-D0AD-40E4-B9DC-C3CFDF74DE00}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45DC8A1A-D0AD-40E4-B9DC-C3CFDF74DE00}.Release|Any CPU.Build.0 = Release|Any CPU
+		{205118E5-78AB-4729-B721-0E302ACE7F72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{205118E5-78AB-4729-B721-0E302ACE7F72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{205118E5-78AB-4729-B721-0E302ACE7F72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{205118E5-78AB-4729-B721-0E302ACE7F72}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7EB717F4-51C6-491E-9622-EC1FF56A7D54}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7EB717F4-51C6-491E-9622-EC1FF56A7D54}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7EB717F4-51C6-491E-9622-EC1FF56A7D54}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7EB717F4-51C6-491E-9622-EC1FF56A7D54}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4308227F-294C-4C56-BEDE-C869F6252FB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4308227F-294C-4C56-BEDE-C869F6252FB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4308227F-294C-4C56-BEDE-C869F6252FB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4308227F-294C-4C56-BEDE-C869F6252FB9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A407487-AC2E-4CF7-895E-FA4012588649}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A407487-AC2E-4CF7-895E-FA4012588649}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A407487-AC2E-4CF7-895E-FA4012588649}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A407487-AC2E-4CF7-895E-FA4012588649}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

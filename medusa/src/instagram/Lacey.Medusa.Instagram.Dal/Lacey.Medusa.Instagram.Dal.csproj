@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\common\Lacey.Medusa.Common.Dal\Lacey.Medusa.Common.Dal.csproj" />
+    <ProjectReference Include="..\Lacey.Medusa.Instagram.Domain\Lacey.Medusa.Instagram.Domain.csproj" />
+  </ItemGroup>
+
+</Project>
