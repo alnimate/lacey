@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Models;
 
 namespace Lacey.Medusa.Instagram.Api.Services
@@ -9,7 +10,7 @@ namespace Lacey.Medusa.Instagram.Api.Services
 
         Task<InstaMediaList> GetUserMediaAll(string userName);
 
-        Task DownloadMedia(InstaMedia media, string outputFolder);
+        Task<IResult<InstaMedia>> UploadMedia(InstaMedia media, string outputFolder);
 
         #endregion
     }

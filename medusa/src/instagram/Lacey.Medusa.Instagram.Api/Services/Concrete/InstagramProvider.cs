@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Reflection;
@@ -83,32 +84,97 @@ namespace Lacey.Medusa.Instagram.Api.Services.Concrete
             return userMedia.Value;
         }
 
-        public async Task DownloadMedia(InstaMedia media, string outputFolder)
+        public async Task<IResult<InstaMedia>> UploadMedia(InstaMedia media, string outputFolder)
         {
-            Directory.CreateDirectory(outputFolder);
-            if (media.Images != null)
+            var images = new List<InstaImageUpload>();
+            var videos = new List<InstaVideoUpload>();
+            var files = new List<string>();
+
+            using (var client = new WebClient())
             {
-                foreach (var image in media.Images)
+                Directory.CreateDirectory(outputFolder);
+                if (media.Images != null)
                 {
-                    var outputFilePath = Path.Combine(outputFolder, $"IMG-{Guid.NewGuid()}.jpg");
-                    using (var client = new WebClient())
+                    foreach (var image in media.Images)
                     {
+                        var outputFilePath = Path.Combine(outputFolder, $"IMG-{Guid.NewGuid()}.jpg");
                         client.DownloadFile(image.Uri, outputFilePath);
+                        files.Add(outputFilePath);
+
+                        var imageUpload = new InstaImageUpload(outputFilePath, image.Width, image.Height);
+                        var tagsUpload = new List<InstaUserTagUpload>();
+                        if (media.UserTags != null)
+                        {
+                            foreach (var tag in media.UserTags)
+                            {
+                                var tagUpload = new InstaUserTagUpload();
+                                if (tag.User != null)
+                                {
+                                    tagUpload.Username = tag.User.UserName;
+                                }
+
+                                if (tag.Position != null)
+                                {
+                                    tagUpload.X = tag.Position.X;
+                                    tagUpload.Y = tag.Position.Y;
+                                }
+
+                                tagsUpload.Add(tagUpload);
+                            }
+                        }
+                        imageUpload.UserTags.AddRange(tagsUpload);
+                        images.Add(imageUpload);
+                    }
+                }
+
+                if (media.Videos != null)
+                {
+                    foreach (var video in media.Videos)
+                    {
+                        var outputFilePath = Path.Combine(outputFolder, $"VID-{Guid.NewGuid()}.mp4");
+                        client.DownloadFile(video.Uri, outputFilePath);
+                        video.VideoBytes = File.ReadAllBytes(outputFilePath);
+                        files.Add(outputFilePath);
+
+                        var thumbnail = new InstaImage();
+                        var videoUpload = new InstaVideoUpload(video, thumbnail);
+                        videos.Add(videoUpload);
                     }
                 }
             }
 
-            if (media.Videos != null)
+            IResult<InstaMedia> result = null;
+            try
             {
-                foreach (var video in media.Videos)
+                result = await this.instagram.MediaProcessor.UploadAlbumAsync(this.UploadProgress,
+                    images.ToArray(),
+                    videos.ToArray(),
+                    media.Caption?.Text,
+                    media.Location);
+            }
+            catch (Exception e)
+            {
+                this.logger.LogTrace(e.Message);
+            }
+            finally
+            {
+                foreach (var file in files)
                 {
-                    var outputFilePath = Path.Combine(outputFolder, $"VID-{Guid.NewGuid()}.mp4");
-                    using (var client = new WebClient())
+                    if (File.Exists(file))
                     {
-                        client.DownloadFile(video.Uri, outputFilePath);
+                        File.Delete(file);
                     }
                 }
             }
+
+            return result;
+        }
+
+        private void UploadProgress(InstaUploaderProgress progress)
+        {
+            if (progress == null)
+                return;
+            this.logger.LogTrace($"{progress.Name} {progress.UploadState}");
         }
 
         #endregion
