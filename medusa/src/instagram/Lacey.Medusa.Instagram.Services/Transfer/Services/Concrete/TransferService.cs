@@ -24,11 +24,13 @@ namespace Lacey.Medusa.Instagram.Services.Transfer.Services.Concrete
             foreach (var media in mediaList.Take(1))
             {
                 this.Logger.LogTrace($"Uploading \"{media.Caption?.Text}\"...");
-                var result = await this.InstagramProvider.UploadMedia(media, this.outputFolder);
-                if (!result.Succeeded)
+                var results = await this.InstagramProvider.UploadMedia(media, this.outputFolder);
+                foreach (var result in results)
                 {
-                    this.Logger.LogTrace($"{result.Info.Message}");
-                    continue;
+                    if (!result.Succeeded)
+                    {
+                        this.Logger.LogTrace($"{result.Info?.Message}");
+                    }
                 }
 
                 this.Logger.LogTrace($"\"{media.Caption?.Text}\" uploaded.");

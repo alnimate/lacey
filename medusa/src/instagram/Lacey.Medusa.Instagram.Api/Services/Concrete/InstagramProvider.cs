@@ -10,6 +10,7 @@ using InstagramApiSharp.API.Builder;
 using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Logger;
+using Lacey.Medusa.Instagram.Api.Extensions;
 using Microsoft.Extensions.Logging;
 using LogLevel = InstagramApiSharp.Logger.LogLevel;
 
@@ -84,7 +85,7 @@ namespace Lacey.Medusa.Instagram.Api.Services.Concrete
             return userMedia.Value;
         }
 
-        public async Task<IResult<InstaMedia>> UploadMedia(InstaMedia media, string outputFolder)
+        public async Task<IReadOnlyList<IResult<InstaMedia>>> UploadMedia(InstaMedia media, string outputFolder)
         {
             var images = new List<InstaImageUpload>();
             var videos = new List<InstaVideoUpload>();
@@ -93,81 +94,68 @@ namespace Lacey.Medusa.Instagram.Api.Services.Concrete
             using (var client = new WebClient())
             {
                 Directory.CreateDirectory(outputFolder);
-                if (media.Images != null)
+                foreach (var image in media.GetOriginalImages())
                 {
-                    foreach (var image in media.Images)
-                    {
-                        var outputFilePath = Path.Combine(outputFolder, $"IMG-{Guid.NewGuid()}.jpg");
-                        client.DownloadFile(image.Uri, outputFilePath);
-                        files.Add(outputFilePath);
-
-                        var imageUpload = new InstaImageUpload(outputFilePath, image.Width, image.Height);
-                        var tagsUpload = new List<InstaUserTagUpload>();
-                        if (media.UserTags != null)
-                        {
-                            foreach (var tag in media.UserTags)
-                            {
-                                var tagUpload = new InstaUserTagUpload();
-                                if (tag.User != null)
-                                {
-                                    tagUpload.Username = tag.User.UserName;
-                                }
-
-                                if (tag.Position != null)
-                                {
-                                    tagUpload.X = tag.Position.X;
-                                    tagUpload.Y = tag.Position.Y;
-                                }
-
-                                tagsUpload.Add(tagUpload);
-                            }
-                        }
-                        imageUpload.UserTags.AddRange(tagsUpload);
-                        images.Add(imageUpload);
-                    }
+                    var outputFilePath = Path.Combine(outputFolder, $"IMG-{Guid.NewGuid()}.jpg");
+                    client.DownloadFile(image.Uri, outputFilePath);
+                    files.Add(outputFilePath);
+                    images.Add(image.AsUpload(media, outputFilePath));
                 }
 
-                if (media.Videos != null)
+                foreach (var video in media.GetOriginalVideos())
                 {
-                    foreach (var video in media.Videos)
-                    {
-                        var outputFilePath = Path.Combine(outputFolder, $"VID-{Guid.NewGuid()}.mp4");
-                        client.DownloadFile(video.Uri, outputFilePath);
-                        video.VideoBytes = File.ReadAllBytes(outputFilePath);
-                        files.Add(outputFilePath);
-
-                        var thumbnail = new InstaImage();
-                        var videoUpload = new InstaVideoUpload(video, thumbnail);
-                        videos.Add(videoUpload);
-                    }
+                    var outputFilePath = Path.Combine(outputFolder, $"VID-{Guid.NewGuid()}.mp4");
+                    client.DownloadFile(video.Uri, outputFilePath);
+                    files.Add(outputFilePath);
+                    videos.Add(video.AsUpload(outputFilePath));
                 }
             }
 
-            IResult<InstaMedia> result = null;
-            try
+            var results = new List<IResult<InstaMedia>>();
+            var caption = media.Caption?.Text;
+            var location = media.Location;
+
+            foreach (var image in images)
             {
-                result = await this.instagram.MediaProcessor.UploadAlbumAsync(this.UploadProgress,
-                    images.ToArray(),
-                    videos.ToArray(),
-                    media.Caption?.Text,
-                    media.Location);
-            }
-            catch (Exception e)
-            {
-                this.logger.LogTrace(e.Message);
-            }
-            finally
-            {
-                foreach (var file in files)
+                try
                 {
-                    if (File.Exists(file))
-                    {
-                        File.Delete(file);
-                    }
+                    results.Add(await this.instagram.MediaProcessor.UploadPhotoAsync(
+                        this.UploadProgress,
+                        image,
+                        caption,
+                        location));
+                }
+                catch (Exception e)
+                {
+                    this.logger.LogTrace(e.Message);
                 }
             }
 
-            return result;
+            foreach (var video in videos)
+            {
+                try
+                {
+                    results.Add(await this.instagram.MediaProcessor.UploadVideoAsync(
+                        this.UploadProgress,
+                        video,
+                        caption,
+                        location));
+                }
+                catch (Exception e)
+                {
+                    this.logger.LogTrace(e.Message);
+                }
+            }
+
+            foreach (var file in files)
+            {
+                if (File.Exists(file))
+                {
+                    File.Delete(file);
+                }
+            }
+
+            return results;
         }
 
         private void UploadProgress(InstaUploaderProgress progress)
