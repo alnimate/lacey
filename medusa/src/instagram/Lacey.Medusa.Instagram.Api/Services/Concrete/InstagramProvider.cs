@@ -88,7 +88,7 @@ namespace Lacey.Medusa.Instagram.Api.Services.Concrete
         public async Task<IReadOnlyList<IResult<InstaMedia>>> UploadMedia(InstaMedia media, string outputFolder)
         {
             var images = new List<InstaImageUpload>();
-            var videos = new List<InstaVideoUpload>();
+//            var videos = new List<InstaVideoUpload>();
             var files = new List<string>();
 
             using (var client = new WebClient())
@@ -102,6 +102,7 @@ namespace Lacey.Medusa.Instagram.Api.Services.Concrete
                     images.Add(image.AsUpload(media, outputFilePath));
                 }
 
+                /*
                 foreach (var video in media.GetOriginalVideos())
                 {
                     var outputFilePath = Path.Combine(outputFolder, $"VID-{Guid.NewGuid()}.mp4");
@@ -109,6 +110,7 @@ namespace Lacey.Medusa.Instagram.Api.Services.Concrete
                     files.Add(outputFilePath);
                     videos.Add(video.AsUpload(outputFilePath));
                 }
+                */
             }
 
             var results = new List<IResult<InstaMedia>>();
@@ -131,7 +133,7 @@ namespace Lacey.Medusa.Instagram.Api.Services.Concrete
                 }
             }
 
-            foreach (var video in videos)
+            /*foreach (var video in videos)
             {
                 try
                 {
@@ -145,7 +147,7 @@ namespace Lacey.Medusa.Instagram.Api.Services.Concrete
                 {
                     this.logger.LogTrace(e.Message);
                 }
-            }
+            }*/
 
             foreach (var file in files)
             {
