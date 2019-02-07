@@ -66,7 +66,7 @@ namespace Lacey.Medusa.Instagram.Services.Transfer.Services.Concrete
                     if (!result.Succeeded)
                     {
                         this.Logger.LogTrace($"{result.Info?.Message}");
-                        continue;
+                        throw new Exception("Something wrong with Instagram service. Please try again later.");
                     }
 
                     this.Logger.LogTrace($"\"{name}\" uploaded.");
