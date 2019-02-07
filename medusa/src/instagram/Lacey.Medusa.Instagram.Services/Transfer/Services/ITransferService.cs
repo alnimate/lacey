@@ -4,8 +4,10 @@ namespace Lacey.Medusa.Instagram.Services.Transfer.Services
 {
     public interface ITransferService
     {
-        Task SaveAllMedia(string sourceChannelId, string destChannelId);
+        Task SaveMedia(string sourceChannelId, string destChannelId);
 
-        Task TransferAllMedia(string sourceChannelId, string destChannelId);
+        Task UploadMedia(string sourceChannelId, string destChannelId);
+
+        Task TransferMedia(string sourceChannelId, string destChannelId);
     }
 }

@@ -41,7 +41,7 @@ namespace Lacey.Medusa.Instagram.Transfer.Run
                 .CreateLogger<Program>();
 
             logger.LogTrace("Welcome to the Instagram transferring tool!");
-            Console.WriteLine("0 - Save Media; 1 - Transfer Media;");
+            Console.WriteLine("0 - Save Media; 1 - Upload Media; 2 - Transfer Media;");
             var answer = Console.ReadLine();
 
             var transferService = serviceProvider.GetService<ITransferService>();
@@ -56,14 +56,21 @@ namespace Lacey.Medusa.Instagram.Transfer.Run
                     if (answer == "0")
                     {
                         logger.LogTrace($"Save Media [{sourceChannelId}] => [{destChannelId}]...");
-                        transferService.SaveAllMedia(sourceChannelId, destChannelId).Wait();
+                        transferService.SaveMedia(sourceChannelId, destChannelId).Wait();
                         logger.LogTrace($"Save Media [{sourceChannelId}] => [{destChannelId}] Completed.{Environment.NewLine}");
                         sb.AppendLine($"[https://www.instagram.com/{sourceChannelId}] => [https://www.instagram.com/{destChannelId}]");
                     }
                     else if (answer == "1")
                     {
+                        logger.LogTrace($"Upload Media [{sourceChannelId}] => [{destChannelId}]...");
+                        transferService.UploadMedia(sourceChannelId, destChannelId).Wait();
+                        logger.LogTrace($"Upload Media [{sourceChannelId}] => [{destChannelId}] Completed.{Environment.NewLine}");
+                        sb.AppendLine($"[https://www.instagram.com/{sourceChannelId}] => [https://www.instagram.com/{destChannelId}]");
+                    }
+                    else if (answer == "2")
+                    {
                         logger.LogTrace($"Transfer Media [{sourceChannelId}] => [{destChannelId}]...");
-                        transferService.TransferAllMedia(sourceChannelId, destChannelId).Wait();
+                        transferService.TransferMedia(sourceChannelId, destChannelId).Wait();
                         logger.LogTrace($"Transfer Media [{sourceChannelId}] => [{destChannelId}] Completed.{Environment.NewLine}");
                         sb.AppendLine($"[https://www.instagram.com/{sourceChannelId}] => [https://www.instagram.com/{destChannelId}]");
                     }

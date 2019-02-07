@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -21,7 +22,9 @@ namespace Lacey.Medusa.Instagram.Api.Services.Concrete
 
         #region Fields/Constructors
 
-        private readonly IInstaApi instagram;
+        private readonly IInstagramAuthProvider instagramAuthProvider;
+
+        private IInstaApi instagram;
 
         private readonly ILogger logger;
 
@@ -29,8 +32,16 @@ namespace Lacey.Medusa.Instagram.Api.Services.Concrete
             IInstagramAuthProvider instagramAuthProvider,
             ILogger<InstagramProvider> logger)
         {
+            this.instagramAuthProvider = instagramAuthProvider;
             this.logger = logger;
+        }
 
+        #endregion
+
+        #region Login
+
+        public async Task Login()
+        {
             var userSession = instagramAuthProvider.GetUserSessionData();
             var delay = RequestDelay.FromSeconds(2, 2);
             this.instagram = InstaApiBuilder.CreateBuilder()
@@ -61,20 +72,20 @@ namespace Lacey.Medusa.Instagram.Api.Services.Concrete
             {
                 this.logger.LogTrace($"Logging in as {userSession.UserName}");
                 delay.Disable();
-                var logInResult = this.instagram.LoginAsync().Result;
+                var logInResult = await this.instagram.LoginAsync();
                 delay.Enable();
                 if (!logInResult.Succeeded)
                 {
                     if (logInResult.Value == InstaLoginResult.ChallengeRequired)
                     {
-                        var challenge = this.instagram.GetChallengeRequireVerifyMethodAsync().Result;
+                        var challenge = await this.instagram.GetChallengeRequireVerifyMethodAsync();
                         if (challenge.Succeeded)
                         {
-                            var request = this.instagram.RequestVerifyCodeToEmailForChallengeRequireAsync().Result;
+                            var request = await this.instagram.RequestVerifyCodeToEmailForChallengeRequireAsync();
                             if (request.Succeeded)
                             {
                                 var code = File.ReadAllLines(Path.Combine(currentFolder, "code.secret"))[0];
-                                var verifyLogin = this.instagram.VerifyCodeForChallengeRequireAsync(code).Result;
+                                var verifyLogin = await this.instagram.VerifyCodeForChallengeRequireAsync(code);
                                 if (verifyLogin.Succeeded)
                                 {
                                     var s = this.instagram.GetStateDataAsString();
@@ -93,7 +104,9 @@ namespace Lacey.Medusa.Instagram.Api.Services.Concrete
             File.WriteAllText(stateFile, state);
         }
 
+
         #endregion
+
 
         #region Media
 
@@ -103,6 +116,23 @@ namespace Lacey.Medusa.Instagram.Api.Services.Concrete
                 userName, PaginationParameters.MaxPagesToLoad(int.MaxValue));
 
             return userMedia.Value;
+        }
+
+        public async Task<string> DownloadMedia(InstaMedia media, string outputFolder)
+        {
+            using (var client = new WebClient())
+            {
+                Directory.CreateDirectory(outputFolder);
+                var image = media.GetOriginalImages().FirstOrDefault();
+                if (image != null)
+                {
+                    var outputFilePath = Path.Combine(outputFolder, $"{media.Code}.jpg");
+                    client.DownloadFile(image.Uri, outputFilePath);
+                    return outputFilePath;
+                }
+            }
+
+            return null;
         }
 
         public async Task<IReadOnlyList<IResult<InstaMedia>>> UploadMedia(InstaMedia media, string outputFolder)
