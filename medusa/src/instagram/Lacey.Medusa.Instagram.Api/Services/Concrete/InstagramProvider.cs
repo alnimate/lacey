@@ -65,7 +65,27 @@ namespace Lacey.Medusa.Instagram.Api.Services.Concrete
                 delay.Enable();
                 if (!logInResult.Succeeded)
                 {
-                    this.logger.LogTrace($"Unable to login: {logInResult.Info.Message}");
+                    if (logInResult.Value == InstaLoginResult.ChallengeRequired)
+                    {
+                        var challenge = this.instagram.GetChallengeRequireVerifyMethodAsync().Result;
+                        if (challenge.Succeeded)
+                        {
+                            var request = this.instagram.RequestVerifyCodeToEmailForChallengeRequireAsync().Result;
+                            if (request.Succeeded)
+                            {
+                                var code = File.ReadAllLines(Path.Combine(currentFolder, "code.secret"))[0];
+                                var verifyLogin = this.instagram.VerifyCodeForChallengeRequireAsync(code).Result;
+                                if (verifyLogin.Succeeded)
+                                {
+                                    var s = this.instagram.GetStateDataAsString();
+                                    File.WriteAllText(stateFile, s);
+                                    throw new Exception("Login state saved. Please try again later.");
+                                }
+                            }
+                        }
+                    }
+                    else
+                        this.logger.LogTrace($"Unable to login: {logInResult.Info.Message}");
                 }
             }
 

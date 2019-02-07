@@ -51,6 +51,10 @@ namespace Lacey.Medusa.Instagram.Services.Transfer.Services.Concrete
             var channel = await this.channelsService.GetChannelMetadata(destChannelId);
             var saved = await this.mediaService.GetTransferMedias(sourceChannelId, destChannelId);
             var mediaList = await this.InstagramProvider.GetUserMediaAll(sourceChannelId);
+            if (mediaList == null)
+            {
+                throw new Exception("Can't get media from the Instagram.");
+            }
             foreach (var media in mediaList.OrderBy(m => m.DeviceTimeStamp))
             {
                 if (saved.Any(m => m.OriginalMediaId == media.Code))
