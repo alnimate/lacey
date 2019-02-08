@@ -91,8 +91,29 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
 
         public async Task UpdateInstagram(string channelId, string originalInstagram, string newInstagram)
         {
+            var list = new List<Video>();
             var videos = await this.YoutubeProvider.GetVideos(channelId);
-            foreach (var video in videos
+            list.AddRange(videos);
+
+            var localVideos = await this.videosService.GetChannelVideos(channelId);
+            var ids = new List<string>();
+            foreach (var localVideo in localVideos)
+            {
+                if (localVideo.Description.Contains(originalInstagram, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    ids.Add(localVideo.VideoId);
+                }
+            }
+            var videos1 = await this.YoutubeProvider.GetVideos(ids);
+            foreach (var video1 in videos1)
+            {
+                if (list.All(v => v.Id != video1.Id))
+                {
+                    list.Add(video1);
+                }
+            }
+
+            foreach (var video in list
                 .Where(v => v.Snippet != null)
                 .OrderByDescending(v => v.Snippet.PublishedAt))
             {

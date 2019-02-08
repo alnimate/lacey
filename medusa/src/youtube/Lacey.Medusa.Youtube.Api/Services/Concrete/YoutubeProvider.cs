@@ -43,10 +43,9 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
 
         #region videos
 
-        public async Task<IReadOnlyList<Base.Video>> GetVideos(string channelId)
+        public async Task<IReadOnlyList<Base.Video>> GetVideos(IReadOnlyList<string> videosIds)
         {
             var list = new List<Base.Video>();
-            var videosIds = await this.GetVideoIds(channelId);
             var i = 0;
             while (i < videosIds.Count)
             {
@@ -69,6 +68,13 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
             }
 
             return list;
+        }
+
+        public async Task<IReadOnlyList<Base.Video>> GetVideos(string channelId)
+        {
+            var videosIds = await this.GetVideoIds(channelId);
+
+            return await this.GetVideos(videosIds);
         }
 
         public async Task<IReadOnlyList<string>> GetVideoIds(string channelId)

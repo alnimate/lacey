@@ -8,6 +8,8 @@ namespace Lacey.Medusa.Youtube.Api.Services
     {
         #region videos
 
+        Task<IReadOnlyList<Base.Video>> GetVideos(IReadOnlyList<string> videosIds);
+
         Task<IReadOnlyList<Base.Video>> GetVideos(string channelId);
 
         Task<IReadOnlyList<string>> GetVideoIds(string channelId);
