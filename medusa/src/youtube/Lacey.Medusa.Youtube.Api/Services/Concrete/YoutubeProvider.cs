@@ -106,6 +106,24 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
             }
         }
 
+        public async Task<Base.Video> UpdateVideoDescription(
+            Base.Video video,
+            string oldPhrase,
+            string newPhrase)
+        {
+            if (video.Snippet?.Description == null)
+            {
+                return video;
+            }
+
+            video.Snippet.Description = video.Snippet.Description
+                .Replace(oldPhrase, newPhrase, StringComparison.InvariantCultureIgnoreCase);
+
+            var request = this.youtube.Videos.Update(video, VideoParts.AllAnonymous.AsListParam());
+            var response = await request.ExecuteAsync();
+            return response;
+        }
+
         public async Task<Base.Video> UploadVideo(
             string channelId,
             Base.Video video,

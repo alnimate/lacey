@@ -89,6 +89,38 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
 
         #region videos
 
+        public async Task UpdateInstagram(string channelId, string originalInstagram, string newInstagram)
+        {
+            var videos = await this.YoutubeProvider.GetVideos(channelId);
+            foreach (var video in videos
+                .Where(v => v.Snippet != null)
+                .OrderByDescending(v => v.Snippet.PublishedAt))
+            {
+                var description = video.Snippet.Description;
+                if (description == null)
+                {
+                    continue;
+                }
+
+                if (!video.Snippet.Description.Contains(originalInstagram, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    continue;
+                }
+
+                this.Logger.LogTrace($"Updating \"{video.Snippet.Title}\" description.");
+                var updatedvideo = await this.YoutubeProvider.UpdateVideoDescription(
+                    video, originalInstagram, newInstagram);
+
+                if (updatedvideo == null)
+                {
+                    continue;
+                }
+
+                await this.videosService.UpdateDescription(video.Id, updatedvideo.Snippet.Description);
+                this.Logger.LogTrace($"Updated \"{video.Snippet.Title}\".");
+            }
+        }
+
         public async Task TransferVideos(string sourceChannelId, string destChannelId)
         {
             var sourceVideos = await this.YoutubeProvider.GetVideos(sourceChannelId);

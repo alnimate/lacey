@@ -20,5 +20,7 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services
         Task DeleteVideo(string videoId);
 
         Task<VideoEntity> GetVideo(string videoId);
+
+        Task UpdateDescription(string videoId, string description);
     }
 }

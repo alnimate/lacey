@@ -20,6 +20,11 @@ namespace Lacey.Medusa.Youtube.Api.Services
 
         Task<string> DeleteVideo(string videoId);
 
+        Task<Base.Video> UpdateVideoDescription(
+            Base.Video video,
+            string oldPhrase,
+            string newPhrase);
+
         #endregion
 
         #region playlists

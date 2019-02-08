@@ -66,6 +66,22 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
             }
         }
 
+        public async Task UpdateDescription(string videoId, string description)
+        {
+            using (var uow = this.CreateWithDisabledLazyLoading())
+            {
+                var videosRep = uow.GetRepository<VideoEntity>();
+
+                var entity = await VideosMapper.MapToVideo(
+                                                videosRep.GetAll(),
+                                                videoId);
+                entity.Description = description;
+                videosRep.Update(entity);
+
+                await uow.SaveAsync();
+            }
+        }
+
         public async Task DeleteTransferVideos(string originalChannelId, string channelId)
         {
             using (var uow = this.CreateWithDisabledLazyLoading())

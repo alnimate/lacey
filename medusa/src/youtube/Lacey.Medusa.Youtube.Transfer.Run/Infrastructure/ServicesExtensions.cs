@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Lacey.Medusa.Youtube.Transfer.Run.Infrastructure
 {
-    public static class ServicesExtensions
+    internal static class ServicesExtensions
     {
         public static IServiceCollection AddAppServices(
             this IServiceCollection services,

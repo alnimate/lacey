@@ -41,7 +41,7 @@ namespace Lacey.Medusa.Youtube.Transfer.Run
                 .CreateLogger<Program>();
 
             logger.LogTrace("Welcome to the YouTube transferring tool!");
-            Console.WriteLine("1 - Channel Info; 2 - Videos; 3 - Thumbnails; 4 - Playlists; 5 - Sections; 6 - Subscriptions; 0 - Full Transfer;");
+            Console.WriteLine("1 - Channel Info; 2 - Videos; 3 - Thumbnails; 4 - Playlists; 5 - Sections; 6 - Subscriptions; 7 - Instagram; 0 - Full Transfer;");
             var answer = Console.ReadLine();
 
             var transferService = serviceProvider.GetService<ITransferService>();
@@ -49,8 +49,12 @@ namespace Lacey.Medusa.Youtube.Transfer.Run
             var sb = new StringBuilder();
             for (var i = 0; i < config.SourceChannels.Length; i++)
             {
-                var sourceChannelId = config.SourceChannels[i];
-                var destChannelId = config.DestChannels[i];
+                var sourceChannelId = config.SourceChannels[i].ChannelId;
+                var destChannelId = config.DestChannels[i].ChannelId;
+
+                var sourceInstagram = config.SourceChannels[i].Instagram;
+                var destInstagram = config.DestChannels[i].Instagram;
+
                 try
                 {
                     if (answer == "0")
@@ -100,6 +104,13 @@ namespace Lacey.Medusa.Youtube.Transfer.Run
                         logger.LogTrace($"Subscriptions [{sourceChannelId}] => [{destChannelId}]...");
                         transferService.TransferSubscriptions(sourceChannelId, destChannelId).Wait();
                         logger.LogTrace($"Subscriptions [{sourceChannelId}] => [{destChannelId}] Completed.{Environment.NewLine}");
+                        sb.AppendLine($"[https://www.youtube.com/channel/{sourceChannelId}] => [https://www.youtube.com/channel/{destChannelId}]");
+                    }
+                    else if (answer == "7")
+                    {
+                        logger.LogTrace($"Instagram [{sourceChannelId}] => [{destChannelId}]...");
+                        transferService.UpdateInstagram(destChannelId, sourceInstagram, destInstagram).Wait();
+                        logger.LogTrace($"Instagram [{sourceChannelId}] => [{destChannelId}] Completed.{Environment.NewLine}");
                         sb.AppendLine($"[https://www.youtube.com/channel/{sourceChannelId}] => [https://www.youtube.com/channel/{destChannelId}]");
                     }
                 }
