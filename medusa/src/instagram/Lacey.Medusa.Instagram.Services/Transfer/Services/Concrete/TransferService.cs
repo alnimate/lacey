@@ -46,13 +46,9 @@ namespace Lacey.Medusa.Instagram.Services.Transfer.Services.Concrete
                     continue;
                 }
 
-                var file = await this.InstagramProvider.DownloadMedia(media, this.outputFolder);
-                if (!string.IsNullOrEmpty(file))
-                {
-                    this.Logger.LogTrace($"Saving \"{media.Caption?.Text}\"...");
-                    await this.mediaService.Add(channel.Id, media.Code, media);
-                    this.Logger.LogTrace($"\"{media.Caption?.Text}\" saved.");
-                }
+                this.Logger.LogTrace($"Saving \"{media.Caption?.Text}\"...");
+                await this.mediaService.Add(channel.Id, media.Code, media);
+                this.Logger.LogTrace($"\"{media.Caption?.Text}\" saved.");
             }
         }
 
