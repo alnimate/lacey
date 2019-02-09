@@ -104,11 +104,27 @@ namespace Lacey.Medusa.Instagram.Services.Transfer.Services.Concrete
             }
         }
 
+        public async Task TransferMediaLast(string sourceChannelId, string destChannelId)
+        {
+            var mediaList = await this.InstagramProvider.GetUserMediaLast(sourceChannelId);
+
+            this.DoTransferMedia(sourceChannelId, destChannelId, mediaList).Wait();
+        }
+
         public async Task TransferMedia(string sourceChannelId, string destChannelId)
+        {
+            var mediaList = await this.InstagramProvider.GetUserMediaAll(sourceChannelId);
+
+            this.DoTransferMedia(sourceChannelId, destChannelId, mediaList).Wait();
+        }
+
+        private async Task DoTransferMedia(
+            string sourceChannelId, 
+            string destChannelId,
+            InstaMediaList mediaList)
         {
             var channel = await this.channelsService.GetChannelMetadata(destChannelId);
             var saved = await this.mediaService.GetTransferMedias(sourceChannelId, destChannelId);
-            var mediaList = await this.InstagramProvider.GetUserMediaAll(sourceChannelId);
             if (mediaList == null)
             {
                 throw new Exception("Can't get media from the Instagram.");

@@ -8,6 +8,8 @@ namespace Lacey.Medusa.Instagram.Services.Transfer.Services
 
         Task UploadMedia(string sourceChannelId, string destChannelId);
 
+        Task TransferMediaLast(string sourceChannelId, string destChannelId);
+
         Task TransferMedia(string sourceChannelId, string destChannelId);
     }
 }

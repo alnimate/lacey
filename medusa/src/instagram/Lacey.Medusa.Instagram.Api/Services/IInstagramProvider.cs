@@ -17,6 +17,8 @@ namespace Lacey.Medusa.Instagram.Api.Services
 
         Task<string> DownloadMedia(InstaMedia media, string outputFolder);
 
+        Task<InstaMediaList> GetUserMediaLast(string userName);
+
         Task<InstaMediaList> GetUserMediaAll(string userName);
 
         Task<IReadOnlyList<IResult<InstaMedia>>> UploadMedia(InstaMedia media, string outputFolder);

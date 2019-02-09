@@ -40,8 +40,11 @@ namespace Lacey.Medusa.Instagram.Transfer.Run
             logger = serviceProvider.GetService<ILoggerFactory>()
                 .CreateLogger<Program>();
 
-            logger.LogTrace("Welcome to the Instagram transferring tool!");
-            Console.WriteLine("0 - Save Media; 1 - Upload Media; 2 - Transfer Media;");
+            logger.LogTrace("Welcome to the Instagram tool!");
+            Console.WriteLine("0 - Transfer last media.");
+            Console.WriteLine("1 - Transfer all media.");
+            Console.WriteLine("2 - Save media to database.");
+            Console.WriteLine("3 - Upload media from database.");
             var answer = Console.ReadLine();
 
             var transferService = serviceProvider.GetService<ITransferService>();
@@ -51,35 +54,36 @@ namespace Lacey.Medusa.Instagram.Transfer.Run
             {
                 var sourceChannelId = config.SourceChannels[i];
                 var destChannelId = config.DestChannels[i];
+                logger.LogTrace($"[{sourceChannelId}] => [{destChannelId}]...");
+
                 try
                 {
                     if (answer == "0")
                     {
-                        logger.LogTrace($"Save Media [{sourceChannelId}] => [{destChannelId}]...");
-                        transferService.SaveMedia(sourceChannelId, destChannelId).Wait();
-                        logger.LogTrace($"Save Media [{sourceChannelId}] => [{destChannelId}] Completed.{Environment.NewLine}");
-                        sb.AppendLine($"[https://www.instagram.com/{sourceChannelId}] => [https://www.instagram.com/{destChannelId}]");
+                        transferService.TransferMediaLast(sourceChannelId, destChannelId).Wait();
                     }
                     else if (answer == "1")
                     {
-                        logger.LogTrace($"Upload Media [{sourceChannelId}] => [{destChannelId}]...");
-                        transferService.UploadMedia(sourceChannelId, destChannelId).Wait();
-                        logger.LogTrace($"Upload Media [{sourceChannelId}] => [{destChannelId}] Completed.{Environment.NewLine}");
-                        sb.AppendLine($"[https://www.instagram.com/{sourceChannelId}] => [https://www.instagram.com/{destChannelId}]");
+                        transferService.TransferMedia(sourceChannelId, destChannelId).Wait();
                     }
                     else if (answer == "2")
                     {
-                        logger.LogTrace($"Transfer Media [{sourceChannelId}] => [{destChannelId}]...");
-                        transferService.TransferMedia(sourceChannelId, destChannelId).Wait();
-                        logger.LogTrace($"Transfer Media [{sourceChannelId}] => [{destChannelId}] Completed.{Environment.NewLine}");
-                        sb.AppendLine($"[https://www.instagram.com/{sourceChannelId}] => [https://www.instagram.com/{destChannelId}]");
+                        transferService.SaveMedia(sourceChannelId, destChannelId).Wait();
+                    }
+                    else if (answer == "3")
+                    {
+                        transferService.UploadMedia(sourceChannelId, destChannelId).Wait();
                     }
                 }
                 catch (Exception exc)
                 {
                     logger.LogError(exc.Message);
                 }
+
+                logger.LogTrace($"[{sourceChannelId}] => [{destChannelId}] completed.{Environment.NewLine}");
+                sb.AppendLine($"[https://www.instagram.com/{sourceChannelId}] => [https://www.instagram.com/{destChannelId}]");
             }
+
 
             if (config.Email.IsSendEmails)
             {

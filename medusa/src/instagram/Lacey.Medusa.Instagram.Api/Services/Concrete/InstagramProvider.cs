@@ -110,6 +110,14 @@ namespace Lacey.Medusa.Instagram.Api.Services.Concrete
 
         #region Media
 
+        public async Task<InstaMediaList> GetUserMediaLast(string userName)
+        {
+            var userMedia = await this.instagram.UserProcessor.GetUserMediaAsync(
+                userName, PaginationParameters.MaxPagesToLoad(3));
+
+            return userMedia.Value;
+        }
+
         public async Task<InstaMediaList> GetUserMediaAll(string userName)
         {
             var userMedia = await this.instagram.UserProcessor.GetUserMediaAsync(
