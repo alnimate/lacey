@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using AutoMapper;
@@ -40,8 +41,18 @@ namespace Lacey.Medusa.Youtube.Transfer.Run
             logger = serviceProvider.GetService<ILoggerFactory>()
                 .CreateLogger<Program>();
 
-            logger.LogTrace("Welcome to the YouTube transferring tool!");
-            Console.WriteLine("1 - Channel Info; 2 - Videos; 3 - Thumbnails; 4 - Playlists; 5 - Sections; 6 - Subscriptions; 7 - Instagram; 0 - Full Transfer;");
+            logger.LogTrace("Welcome to the YouTube tool!");
+
+            Console.WriteLine("0 - Update Last Videos");
+            Console.WriteLine("1 - Update Last Thumbnails");
+            Console.WriteLine("2 - Channel Info");
+            Console.WriteLine("3 - Videos");
+            Console.WriteLine("4 - Thumbnails");
+            Console.WriteLine("5 - Playlists");
+            Console.WriteLine("6 - Sections");
+            Console.WriteLine("7 - Subscriptions");
+            Console.WriteLine("8 - Instagram");
+
             var answer = Console.ReadLine();
 
             var transferService = serviceProvider.GetService<ITransferService>();
@@ -55,69 +66,62 @@ namespace Lacey.Medusa.Youtube.Transfer.Run
                 var sourceInstagram = config.SourceChannels[i].Instagram;
                 var destInstagram = config.DestChannels[i].Instagram;
 
+                var replacements = new Dictionary<string, string>
+                {
+                    [sourceInstagram] = destInstagram
+                };
+
+                logger.LogTrace($"[{sourceChannelId}] => [{destChannelId}]...");
+
                 try
                 {
                     if (answer == "0")
                     {
-                        logger.LogTrace($"[{sourceChannelId}] => [{destChannelId}]...");
-                        transferService.TransferChannel(sourceChannelId, destChannelId).Wait();
-                        logger.LogTrace($"[{sourceChannelId}] => [{destChannelId}] completed.{Environment.NewLine}");
-                        sb.AppendLine($"[https://www.youtube.com/channel/{sourceChannelId}] => [https://www.youtube.com/channel/{destChannelId}]");
+                        transferService.TransferVideosLast(
+                            sourceChannelId, 
+                            destChannelId,
+                            replacements).Wait();
                     }
                     else if (answer == "1")
                     {
-                        logger.LogTrace($"Channel Info [{sourceChannelId}] => [{destChannelId}]...");
-                        transferService.TransferMetadata(sourceChannelId, destChannelId).Wait();
-                        logger.LogTrace($"Channel Info [{sourceChannelId}] => [{destChannelId}] Completed.{Environment.NewLine}");
-                        sb.AppendLine($"[https://www.youtube.com/channel/{sourceChannelId}] => [https://www.youtube.com/channel/{destChannelId}]");
+                        transferService.SetThumbnailsLast(sourceChannelId, destChannelId).Wait();
                     }
                     else if (answer == "2")
                     {
-                        logger.LogTrace($"Videos [{sourceChannelId}] => [{destChannelId}]...");
-                        transferService.TransferVideos(sourceChannelId, destChannelId).Wait();
-                        logger.LogTrace($"Videos [{sourceChannelId}] => [{destChannelId}] Completed.{Environment.NewLine}");
-                        sb.AppendLine($"[https://www.youtube.com/channel/{sourceChannelId}] => [https://www.youtube.com/channel/{destChannelId}]");
+                        transferService.TransferMetadata(sourceChannelId, destChannelId).Wait();
                     }
                     else if (answer == "3")
                     {
-                        logger.LogTrace($"Thumbnails [{sourceChannelId}] => [{destChannelId}]...");
-                        transferService.SetThumbnails(sourceChannelId, destChannelId).Wait();
-                        logger.LogTrace($"Thumbnails [{sourceChannelId}] => [{destChannelId}] Completed.{Environment.NewLine}");
-                        sb.AppendLine($"[https://www.youtube.com/channel/{sourceChannelId}] => [https://www.youtube.com/channel/{destChannelId}]");
+                        transferService.TransferVideos(sourceChannelId, destChannelId).Wait();
                     }
                     else if (answer == "4")
                     {
-                        logger.LogTrace($"Playlists [{sourceChannelId}] => [{destChannelId}]...");
-                        transferService.TransferPlaylists(sourceChannelId, destChannelId).Wait();
-                        logger.LogTrace($"Playlists [{sourceChannelId}] => [{destChannelId}] Completed.{Environment.NewLine}");
-                        sb.AppendLine($"[https://www.youtube.com/channel/{sourceChannelId}] => [https://www.youtube.com/channel/{destChannelId}]");
+                        transferService.SetThumbnails(sourceChannelId, destChannelId).Wait();
                     }
                     else if (answer == "5")
                     {
-                        logger.LogTrace($"Sections [{sourceChannelId}] => [{destChannelId}]...");
-                        transferService.TransferSections(sourceChannelId, destChannelId).Wait();
-                        logger.LogTrace($"Sections [{sourceChannelId}] => [{destChannelId}] Completed.{Environment.NewLine}");
-                        sb.AppendLine($"[https://www.youtube.com/channel/{sourceChannelId}] => [https://www.youtube.com/channel/{destChannelId}]");
+                        transferService.TransferPlaylists(sourceChannelId, destChannelId).Wait();
                     }
                     else if (answer == "6")
                     {
-                        logger.LogTrace($"Subscriptions [{sourceChannelId}] => [{destChannelId}]...");
-                        transferService.TransferSubscriptions(sourceChannelId, destChannelId).Wait();
-                        logger.LogTrace($"Subscriptions [{sourceChannelId}] => [{destChannelId}] Completed.{Environment.NewLine}");
-                        sb.AppendLine($"[https://www.youtube.com/channel/{sourceChannelId}] => [https://www.youtube.com/channel/{destChannelId}]");
+                        transferService.TransferSections(sourceChannelId, destChannelId).Wait();
                     }
                     else if (answer == "7")
                     {
-                        logger.LogTrace($"Instagram [{sourceChannelId}] => [{destChannelId}]...");
+                        transferService.TransferSubscriptions(sourceChannelId, destChannelId).Wait();
+                    }
+                    else if (answer == "8")
+                    {
                         transferService.UpdateInstagram(destChannelId, sourceInstagram, destInstagram).Wait();
-                        logger.LogTrace($"Instagram [{sourceChannelId}] => [{destChannelId}] Completed.{Environment.NewLine}");
-                        sb.AppendLine($"[https://www.youtube.com/channel/{sourceChannelId}] => [https://www.youtube.com/channel/{destChannelId}]");
                     }
                 }
                 catch (Exception exc)
                 {
                     logger.LogError(exc.Message);
                 }
+
+                logger.LogTrace($"[{sourceChannelId}] => [{destChannelId}] completed.{Environment.NewLine}");
+                sb.AppendLine($"[https://www.youtube.com/channel/{sourceChannelId}] => [https://www.youtube.com/channel/{destChannelId}]");
             }
 
             if (config.Email.IsSendEmails)

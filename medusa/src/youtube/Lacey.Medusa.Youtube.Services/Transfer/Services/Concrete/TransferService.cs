@@ -6,13 +6,17 @@ using System.Threading.Tasks;
 using Lacey.Medusa.Youtube.Api.Base;
 using Lacey.Medusa.Youtube.Api.Extensions;
 using Lacey.Medusa.Youtube.Api.Services;
+using Lacey.Medusa.Youtube.Domain.Entities;
 using Lacey.Medusa.Youtube.Services.Common.Services;
+using Lacey.Medusa.Youtube.Services.Transfer.Extensions;
 using Microsoft.Extensions.Logging;
 
 namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
 {
     public sealed class TransferService : YoutubeApiService, ITransferService
     {
+        #region Fields/Constructors
+
         private readonly IChannelsService channelsService;
 
         private readonly IVideosService videosService;
@@ -22,11 +26,11 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
         private readonly string outputFolder;
 
         public TransferService(
-            IYoutubeProvider youtubeProvider, 
-            ILogger<TransferService> logger, 
-            string outputFolder, 
-            IChannelsService channelsService, 
-            IVideosService videosService, 
+            IYoutubeProvider youtubeProvider,
+            ILogger<TransferService> logger,
+            string outputFolder,
+            IChannelsService channelsService,
+            IVideosService videosService,
             IPlaylistsService playlistsService) : base(youtubeProvider, logger)
         {
             this.outputFolder = outputFolder;
@@ -35,9 +39,13 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
             this.playlistsService = playlistsService;
         }
 
+        #endregion
+
+        #region Full Transfer
+
         public async Task TransferChannel(string sourceChannelId, string destChannelId)
         {
-//            await this.TransferComments(sourceChannelId, destChannelId);
+            //            await this.TransferComments(sourceChannelId, destChannelId);
 
             await this.TransferMetadata(sourceChannelId, destChannelId);
 
@@ -50,13 +58,31 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
             await this.TransferSubscriptions(sourceChannelId, destChannelId);
         }
 
+        #endregion
+
         #region Thumbnails
+
+        public async Task SetThumbnailsLast(string sourceChannelId, string destChannelId)
+        {
+            var sourceVideos = await this.YoutubeProvider.GetVideosLast(sourceChannelId);
+            var destVideos = await this.videosService.GetChannelVideos(destChannelId);
+
+            await this.SetThumbnails(sourceVideos, destVideos);
+        }
 
         public async Task SetThumbnails(string sourceChannelId, string destChannelId)
         {
             var sourceVideos = await this.YoutubeProvider.GetVideos(sourceChannelId);
             var destVideos = await this.videosService.GetChannelVideos(destChannelId);
 
+            await this.SetThumbnails(sourceVideos, destVideos);
+        }
+
+        private async Task SetThumbnails(
+            IReadOnlyList<Video> sourceVideos,
+            IReadOnlyList<VideoEntity> destVideos)
+        {
+            var now = DateTime.UtcNow;
             foreach (var destVideo in destVideos)
             {
                 var sourceVideo = sourceVideos.FirstOrDefault(s => s.Id == destVideo.OriginalVideoId);
@@ -65,7 +91,7 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                     continue;
                 }
 
-                if ((DateTime.UtcNow - destVideo.CreatedAt).TotalHours >= 8)
+                if ((now - destVideo.CreatedAt).TotalHours >= 8)
                 {
                     continue;
                 }
@@ -88,6 +114,59 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
         #endregion
 
         #region videos
+
+        public async Task TransferVideosLast(
+            string sourceChannelId, 
+            string destChannelId,
+            Dictionary<string, string> replacements)
+        {
+            var sourceVideos = await this.YoutubeProvider.GetVideosLast(sourceChannelId);
+            var dest = await this.YoutubeProvider.GetVideos(destChannelId);
+            var destChannel = await this.channelsService.GetChannelMetadata(destChannelId);
+            var uploadedVideos = await this.videosService.GetChannelVideos(destChannelId);
+
+            foreach (var sourceVideo in sourceVideos
+                .Where(v => v.Snippet != null)
+                .OrderBy(v => v.Snippet.PublishedAt))
+            {
+                // skip existing items
+                if ((uploadedVideos != null &&
+                     uploadedVideos.Any(u => u.OriginalVideoId == sourceVideo.Id))
+                    || dest.Any(d =>
+                    sourceVideo.Snippet.Title == d.Snippet.Title &&
+                    sourceVideo.Snippet.Description == d.Snippet.Description))
+                {
+                    this.Logger.LogTrace($"Video [{sourceVideo.Snippet.Title}] skipped. Video already exists.");
+                    continue;
+                }
+
+                string filePath = null;
+                try
+                {
+                    this.Logger.LogTrace($"Downloading video [{sourceVideo.Id}]...");
+                    filePath = await this.YoutubeProvider.DownloadVideo(sourceVideo.Id, this.outputFolder);
+                    this.Logger.LogTrace($"Video [{sourceVideo.Id}] downloaded to [{filePath}]");
+
+                    var uploadedVideo = await this.YoutubeProvider.UploadVideo(
+                        destChannelId, 
+                        sourceVideo.ReplaceDescription(replacements), 
+                        filePath);
+                    await this.videosService.Add(destChannel.Id, sourceVideo.Id, uploadedVideo);
+                }
+                catch (Exception exc)
+                {
+                    this.Logger.LogError(exc.Message);
+                }
+                finally
+                {
+                    if (!string.IsNullOrEmpty(filePath))
+                    {
+                        File.Delete(filePath);
+                    }
+                }
+            }
+        }
+
 
         public async Task UpdateInstagram(string channelId, string originalInstagram, string newInstagram)
         {

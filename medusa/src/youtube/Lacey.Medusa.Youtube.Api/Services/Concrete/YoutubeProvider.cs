@@ -43,6 +43,28 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
 
         #region videos
 
+        public async Task<IReadOnlyList<string>> GetVideoIdsLast(string channelId)
+        {
+            var request = this.youtube.Search.List(VideoParts.Id);
+            request.Order = SearchResource.ListRequest.OrderEnum.Date;
+            request.MaxResults = ListConsts.MaxResults;
+            request.ChannelId = channelId;
+
+            var response = await request.ExecuteAsync();
+
+            return response.Items.Where(i => i.Id.Kind == ResourceKind.Video)
+                .Select(v => v.Id.VideoId)
+                .ToList();
+        }
+
+        public async Task<IReadOnlyList<Base.Video>> GetVideosLast(string channelId)
+        {
+            var videosIds = await this.GetVideoIdsLast(channelId);
+
+            return await this.GetVideos(videosIds);
+        }
+
+
         public async Task<IReadOnlyList<Base.Video>> GetVideos(IReadOnlyList<string> videosIds)
         {
             var list = new List<Base.Video>();
