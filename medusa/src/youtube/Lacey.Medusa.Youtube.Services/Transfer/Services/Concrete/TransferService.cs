@@ -277,44 +277,74 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
             {
                 var sourcePlaylists = await this.YoutubeProvider.GetPlaylists(sourceChannelId);
                 var destPlaylists = await this.YoutubeProvider.GetPlaylists(destChannelId);
-                var destChannel = await this.channelsService.GetChannelMetadata(destChannelId);
-                var destVideos = await this.videosService.GetTransferVideos(sourceChannelId, destChannelId);
+                var localChannel = await this.channelsService.GetChannelMetadata(destChannelId);
+                var localVideos = await this.videosService.GetTransferVideos(sourceChannelId, destChannelId);
+                var localPlaylists = await this.playlistsService.GetChannelPlaylists(destChannelId);
 
+                var now = DateTime.UtcNow;
                 // skip existing items
                 foreach (var sourcePlaylist in sourcePlaylists
                     .Where(p => p.Snippet != null)
                     .OrderBy(p => p.Snippet.PublishedAt))
                 {
-                    if (destPlaylists.Any(d =>
-                        sourcePlaylist.Snippet.Title == d.Snippet.Title &&
-                        sourcePlaylist.Snippet.Description == d.Snippet.Description))
+                    var destPlaylist = destPlaylists.FirstOrDefault(d =>
+                        sourcePlaylist.Snippet.Title == d.Snippet.Title);
+
+                    PlaylistEntity localPlaylist;
+                    if (destPlaylist == null)
+                    {
+                        destPlaylist = await this.YoutubeProvider.UploadPlaylist(destChannelId, sourcePlaylist);
+                        var localPlaylistId = await this.playlistsService.Add(localChannel.Id, sourcePlaylist.Id, destPlaylist);
+                        localPlaylist = await this.playlistsService.GetPlaylist(localPlaylistId);
+                    }
+                    else
+                    {
+                        localPlaylist = localPlaylists.FirstOrDefault(p => p.PlaylistId == destPlaylist.Id);
+                    }
+
+                    if (localPlaylist == null)
                     {
                         continue;
                     }
 
-                    var uploadedPlaylist = await this.YoutubeProvider.UploadPlaylist(destChannelId, sourcePlaylist);
-                    await this.playlistsService.Add(destChannel.Id, sourcePlaylist.Id, uploadedPlaylist);
+                    var localPlaylistVideos = 
+                        await this.playlistsService.GetPlaylistVideos(localPlaylist.Id);
 
                     // insert playlist items
-                    var playlistItems = await this.YoutubeProvider.GetPlaylistItems(sourcePlaylist.Id);
-                    foreach (var item in playlistItems)
+                    var sourceItems = await this.YoutubeProvider.GetPlaylistItems(sourcePlaylist.Id);
+                    foreach (var sourceItem in sourceItems)
                     {
-                        if (item.Snippet.ResourceId == null)
+                        if (sourceItem.Snippet.ResourceId == null)
                         {
                             continue;
                         }
 
-                        var destVideo = destVideos.FirstOrDefault(
-                            l => l.OriginalVideoId == item.Snippet.ResourceId.VideoId);
-                        if (destVideo != null)
-                        {
-                            item.Snippet.ResourceId.VideoId = destVideo.VideoId;
-                        }
-                        await this.YoutubeProvider.UploadPlaylistItem(destChannelId, uploadedPlaylist.Id, item);
+                        var localVideo = localVideos.FirstOrDefault(
+                            l => l.OriginalVideoId == sourceItem.Snippet.ResourceId.VideoId);
 
-                        if (destVideo != null)
+                        if (localVideo != null)
                         {
-                            await this.playlistsService.AddVideoToPlaylist(uploadedPlaylist.Id, destVideo.VideoId);
+                            // if we already have this video in playlist
+                            if (localPlaylistVideos.Any(v => v.VideoId == localVideo.Id))
+                            {
+                                continue;
+                            }
+
+                            sourceItem.Snippet.ResourceId.VideoId = localVideo.VideoId;
+                        }
+
+                        // skip old videos
+                        if (sourceItem.Snippet.PublishedAt == null
+                            || (now - sourceItem.Snippet.PublishedAt.Value).TotalDays > 10)
+                        {
+                            continue;
+                        }
+
+                        await this.YoutubeProvider.UploadPlaylistItem(destChannelId, destPlaylist.Id, sourceItem);
+
+                        if (localVideo != null)
+                        {
+                            await this.playlistsService.AddVideoToPlaylist(destPlaylist.Id, localVideo.VideoId);
                         }
                     }
                 }

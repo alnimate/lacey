@@ -22,5 +22,9 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services
         Task<PlaylistEntity> GetPlaylist(string playlistId);
 
         Task AddVideoToPlaylist(string playlistId, string videoId);
+
+        Task<IReadOnlyList<PlaylistVideoEntity>> GetPlaylistVideos(int playlistId);
+
+        Task<PlaylistEntity> GetPlaylist(int id);
     }
 }

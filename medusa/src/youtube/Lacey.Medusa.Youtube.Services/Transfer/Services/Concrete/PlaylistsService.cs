@@ -54,6 +54,18 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
             }
         }
 
+        public async Task<IReadOnlyList<PlaylistVideoEntity>> GetPlaylistVideos(int playlistId)
+        {
+            using (var uow = this.CreateWithDisabledLazyLoading())
+            {
+                var playlistVideosRep = uow.GetRepository<PlaylistVideoEntity>();
+
+                return await PlaylistsMapper.MapToPlaylistVideos(
+                    playlistVideosRep.GetAll(),
+                    playlistId);
+            }
+        }
+
         public async Task<int> Add(int channelId, string originalPlaylistId, Playlist playlist)
         {
             using (var uow = this.CreateWithDisabledLazyLoading())
@@ -125,6 +137,16 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                     playlistsRep.DeleteById(entity.Id);
                     await uow.SaveAsync();
                 }
+            }
+        }
+
+        public async Task<PlaylistEntity> GetPlaylist(int id)
+        {
+            using (var uow = this.CreateWithDisabledLazyLoading())
+            {
+                var playlistsRep = uow.GetRepository<PlaylistEntity>();
+
+                return await playlistsRep.GetByIdAsync(id);
             }
         }
 
