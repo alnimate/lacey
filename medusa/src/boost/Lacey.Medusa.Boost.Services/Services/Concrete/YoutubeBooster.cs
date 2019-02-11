@@ -61,6 +61,7 @@ namespace Lacey.Medusa.Boost.Services.Services.Concrete
                 try
                 {
                     var comment = await this.youtubeProvider.AddComment(
+                        similarVideo.Snippet.ChannelId,
                         similarVideo.Id.VideoId,
                         video.GetBoostText());
                     this.logger.LogTrace($"{similarVideo.GetYoutubeUrl()}");

@@ -10,6 +10,9 @@ namespace Lacey.Medusa.Boost.Services.Services
 
         Task<Video> GetVideo(string videoId);
 
-        Task<CommentThread> AddComment(string videoId, string text);
+        Task<CommentThread> AddComment(
+            string channelId,
+            string videoId,
+            string text);
     }
 }

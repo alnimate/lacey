@@ -23,11 +23,15 @@ namespace Lacey.Medusa.Boost.Services.Services.Concrete
             this.logger = logger;
         }
 
-        public async Task<CommentThread> AddComment(string videoId, string text)
+        public async Task<CommentThread> AddComment(
+            string channelId, 
+            string videoId, 
+            string text)
         {
             var comment = new CommentThread();
             var snippet = new CommentThreadSnippet
             {
+                ChannelId = channelId,
                 VideoId = videoId,
                 IsPublic = true,
                 TopLevelComment = new Comment
