@@ -6,8 +6,10 @@ namespace Lacey.Medusa.Boost.Services.Services
 {
     public interface IYoutubeBoostProvider
     {
-        Task<IReadOnlyList<SearchResult>> FindVideosByTags(string[] tags);
+        Task<IReadOnlyList<SearchResult>> FindVideosByTags(string[] tags, long maxResults);
 
         Task<Video> GetVideo(string videoId);
+
+        Task<CommentThread> AddComment(string videoId, string text);
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Lacey.Medusa.Boost.Services.Extensions;
 using Lacey.Medusa.Youtube.Services.Transfer.Services;
@@ -47,12 +48,23 @@ namespace Lacey.Medusa.Boost.Services.Services.Concrete
                     continue;
                 }
 
-                var similarVideos = await this.youtubeProvider.FindVideosByTags(video.Snippet.Tags.ToArray());
+                var similarVideos = await this.youtubeProvider.FindVideosByTags(video.Snippet.Tags.ToArray(), 3);
                 foreach (var similarVideo in similarVideos)
                 {
                     if (similarVideo.Snippet.ChannelId == channel.OriginalChannelId)
                     {
                         continue;
+                    }
+
+                    try
+                    {
+                        var comment = await this.youtubeProvider.AddComment(
+                            similarVideo.Id.VideoId,
+                            video.GetBoostText());
+                    }
+                    catch (Exception e)
+                    {
+                        this.logger.LogTrace(e.Message);
                     }
                 }
             }

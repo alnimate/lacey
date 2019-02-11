@@ -23,11 +23,34 @@ namespace Lacey.Medusa.Boost.Services.Services.Concrete
             this.logger = logger;
         }
 
-        public async Task<IReadOnlyList<SearchResult>> FindVideosByTags(string[] tags)
+        public async Task<CommentThread> AddComment(string videoId, string text)
+        {
+            var comment = new CommentThread();
+            var snippet = new CommentThreadSnippet
+            {
+                VideoId = videoId,
+                IsPublic = true,
+                TopLevelComment = new Comment
+                {
+                    Snippet = new CommentSnippet
+                    {
+                        TextOriginal = text
+                    }
+                }
+            };
+            comment.Snippet = snippet;
+
+            var request = this.Youtube.CommentThreads.Insert(comment, CommentParts.Snippet);
+            var response = await request.ExecuteAsync();
+
+            return response;
+        }
+
+        public async Task<IReadOnlyList<SearchResult>> FindVideosByTags(string[] tags, long maxResults)
         {
             var request = this.Youtube.Search.List(VideoParts.Snippet);
             request.Q = tags.ToQuery();
-            request.MaxResults = 3;
+            request.MaxResults = maxResults;
 
             var response = await request.ExecuteAsync();
             var videos = response.Items.Where(i => i.Id.Kind == ResourceKind.Video).ToList();
