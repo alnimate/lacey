@@ -71,7 +71,8 @@ namespace Lacey.Medusa.Boost.Services.Services.Concrete
                     this.logger.LogError(e.Message);
                 }
 
-                ConsoleUtils.WaitMin(interval);
+                var sec = (interval - 1) * 60 + RandomUtils.GetRandom(0, 60);
+                ConsoleUtils.WaitSec(sec);
             }
         }
     }
