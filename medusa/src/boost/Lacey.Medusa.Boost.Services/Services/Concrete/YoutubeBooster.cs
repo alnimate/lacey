@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Lacey.Medusa.Boost.Services.Extensions;
 using Lacey.Medusa.Boost.Services.Utils;
+using Lacey.Medusa.Youtube.Api.Models.Const;
 using Lacey.Medusa.Youtube.Services.Transfer.Services;
 using Microsoft.Extensions.Logging;
 
@@ -50,7 +51,7 @@ namespace Lacey.Medusa.Boost.Services.Services.Concrete
                 }
 
                 var similarVideo = (await this.youtubeProvider.FindVideosByTags(
-                    video.Snippet.Tags.ToArray(), 1)).FirstOrDefault();
+                    video.Snippet.Tags.ToArray(), 10)).PickRandom();
 
                 if (similarVideo == null ||
                     similarVideo.Snippet.ChannelId == channel.OriginalChannelId)
