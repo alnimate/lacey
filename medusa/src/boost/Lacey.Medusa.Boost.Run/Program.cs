@@ -41,11 +41,8 @@ namespace Lacey.Medusa.Boost.Run
                 .CreateLogger<Program>();
 
             Console.WriteLine("Welcome to the Boost tool!");
-            Console.WriteLine("0 - Boost");
 
-            var answer = Console.ReadLine();
-
-            var boostService = serviceProvider.GetService<IBoostService>();
+            var youtubeBooster = serviceProvider.GetService<IYoutubeBooster>();
 
             var sb = new StringBuilder();
             for (var i = 0; i < config.YoutubeChannels.Length; i++)
@@ -56,10 +53,7 @@ namespace Lacey.Medusa.Boost.Run
 
                 try
                 {
-                    if (answer == "0")
-                    {
-                        boostService.Boost().Wait();
-                    }
+                    youtubeBooster.Boost(youtubeChannel.ChannelId).Wait();
                 }
                 catch (Exception exc)
                 {

@@ -18,7 +18,7 @@ using SixLabors.ImageSharp.Processing;
 
 namespace Lacey.Medusa.Youtube.Api.Services.Concrete
 {
-    public sealed class YoutubeProvider : IYoutubeProvider
+    public class YoutubeProvider : IYoutubeProvider
     {
         #region properties/constructors
 
@@ -38,6 +38,8 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
                 ApplicationName = GetType().ToString()
             });
         }
+
+        protected YouTubeService Youtube => this.youtube;
 
         #endregion
 

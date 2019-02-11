@@ -1,6 +1,6 @@
 ﻿namespace Lacey.Medusa.Youtube.Api.Models.Enums
 {
-    internal static class ResourceKind
+    public static class ResourceKind
     {
         public const string Video = "youtube#video";
 

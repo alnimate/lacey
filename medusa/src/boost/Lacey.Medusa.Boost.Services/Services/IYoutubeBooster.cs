@@ -2,8 +2,8 @@
 
 namespace Lacey.Medusa.Boost.Services.Services
 {
-    public interface IBoostService
+    public interface IYoutubeBooster
     {
-        Task Boost();
+        Task Boost(string channelId);
     }
 }
