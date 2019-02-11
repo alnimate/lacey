@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Lacey.Medusa.Boost.Services.Extensions;
+using Lacey.Medusa.Boost.Services.Utils;
 using Lacey.Medusa.Youtube.Services.Transfer.Services;
 using Microsoft.Extensions.Logging;
 
@@ -70,7 +70,7 @@ namespace Lacey.Medusa.Boost.Services.Services.Concrete
                     this.logger.LogError(e.Message);
                 }
 
-                Thread.Sleep(TimeSpan.FromMinutes(interval));
+                ConsoleUtils.WaitMin(interval);
             }
         }
     }

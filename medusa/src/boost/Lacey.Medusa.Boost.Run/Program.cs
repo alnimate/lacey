@@ -48,9 +48,6 @@ namespace Lacey.Medusa.Boost.Run
             for (var i = 0; i < config.YoutubeChannels.Length; i++)
             {
                 var youtubeChannel = config.YoutubeChannels[i];
-
-                logger.LogTrace($"[{youtubeChannel.ChannelId}]...");
-
                 try
                 {
                     youtubeBooster.Boost(
@@ -62,7 +59,6 @@ namespace Lacey.Medusa.Boost.Run
                     logger.LogError(exc.Message);
                 }
 
-                logger.LogTrace($"[{youtubeChannel.ChannelId}] completed.{Environment.NewLine}");
                 sb.AppendLine($"[{youtubeChannel.ChannelId}]");
             }
 
