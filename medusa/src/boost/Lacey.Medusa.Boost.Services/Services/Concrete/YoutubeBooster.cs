@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Lacey.Medusa.Boost.Services.Extensions;
 using Lacey.Medusa.Youtube.Services.Transfer.Services;
@@ -33,40 +34,43 @@ namespace Lacey.Medusa.Boost.Services.Services.Concrete
             this.videosService = videosService;
         }
 
-        public async Task Boost(string channelId)
+        public async Task Boost(string channelId, int interval)
         {
             var channel = await this.channelsService.GetChannelMetadata(channelId);
             var localVideos = await this.videosService.GetChannelVideos(channelId);
 
-            var randomVideos = localVideos.PickRandom(3);
-            foreach (var localVideo in randomVideos)
+            while (true)
             {
-                var video = await this.youtubeProvider.GetVideo(localVideo.VideoId);
-                if (video.Snippet == null || 
+                var randomVideo = localVideos.PickRandom();
+                var video = await this.youtubeProvider.GetVideo(randomVideo.VideoId);
+                if (video?.Snippet == null || 
                     video.Snippet.Tags?.Count == 0)
                 {
                     continue;
                 }
 
-                var similarVideos = await this.youtubeProvider.FindVideosByTags(video.Snippet.Tags.ToArray(), 3);
-                foreach (var similarVideo in similarVideos)
-                {
-                    if (similarVideo.Snippet.ChannelId == channel.OriginalChannelId)
-                    {
-                        continue;
-                    }
+                var similarVideo = (await this.youtubeProvider.FindVideosByTags(
+                    video.Snippet.Tags.ToArray(), 1)).FirstOrDefault();
 
-                    try
-                    {
-                        var comment = await this.youtubeProvider.AddComment(
-                            similarVideo.Id.VideoId,
-                            video.GetBoostText());
-                    }
-                    catch (Exception e)
-                    {
-                        this.logger.LogTrace(e.Message);
-                    }
+                if (similarVideo == null ||
+                    similarVideo.Snippet.ChannelId == channel.OriginalChannelId)
+                {
+                    continue;
                 }
+
+                try
+                {
+                    var comment = await this.youtubeProvider.AddComment(
+                        similarVideo.Id.VideoId,
+                        video.GetBoostText());
+                    this.logger.LogTrace($"{similarVideo.GetYoutubeUrl()}");
+                }
+                catch (Exception e)
+                {
+                    this.logger.LogError(e.Message);
+                }
+
+                Thread.Sleep(TimeSpan.FromMinutes(interval));
             }
         }
     }

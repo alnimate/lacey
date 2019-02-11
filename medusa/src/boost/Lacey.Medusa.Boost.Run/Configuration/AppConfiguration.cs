@@ -10,6 +10,8 @@ namespace Lacey.Medusa.Boost.Run.Configuration
 
         public string TempFolder { get; set; }
 
+        public int BoostInterval { get; set; }
+
         public YoutubeChannel[] YoutubeChannels { get; set; }
 
         public EmailConfiguration Email { get; set; }

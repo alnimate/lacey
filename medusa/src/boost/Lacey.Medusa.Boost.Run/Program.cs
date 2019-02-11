@@ -53,7 +53,9 @@ namespace Lacey.Medusa.Boost.Run
 
                 try
                 {
-                    youtubeBooster.Boost(youtubeChannel.ChannelId).Wait();
+                    youtubeBooster.Boost(
+                        youtubeChannel.ChannelId, 
+                        config.BoostInterval).Wait();
                 }
                 catch (Exception exc)
                 {
