@@ -33,13 +33,10 @@ namespace Lacey.Medusa.Boost.Services.Services.Concrete
             {
                 ChannelId = channelId,
                 VideoId = videoId,
-                IsPublic = true,                
                 TopLevelComment = new Comment
                 {
                     Snippet = new CommentSnippet
                     {
-                        ChannelId = channelId,
-                        VideoId = videoId,                        
                         TextOriginal = text
                     }
                 }
