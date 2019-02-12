@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Lacey.Medusa.Boost.Services.Extensions;
 using Lacey.Medusa.Boost.Services.Utils;
-using Lacey.Medusa.Youtube.Api.Models.Const;
+using Lacey.Medusa.Youtube.Domain.Entities;
 using Lacey.Medusa.Youtube.Services.Transfer.Services;
 using Microsoft.Extensions.Logging;
 
@@ -37,31 +38,47 @@ namespace Lacey.Medusa.Boost.Services.Services.Concrete
 
         public async Task Boost(string channelId, int interval)
         {
-            var channel = await this.channelsService.GetChannelMetadata(channelId);
-            var localVideos = await this.videosService.GetChannelVideos(channelId);
+            ChannelEntity channel;
+            IReadOnlyList<VideoEntity> localVideos;
+            while (true)
+            {
+                try
+                {
+                    channel = await this.channelsService.GetChannelMetadata(channelId);
+                    localVideos = await this.videosService.GetChannelVideos(channelId);
+                    break;
+                }
+                catch (Exception e)
+                {
+                    this.logger.LogError(e.Message);
+                    ConsoleUtils.WaitSec(60);
+                }
+            }
 
             while (true)
             {
-                var randomVideo = localVideos.PickRandom();
-                var video = await this.youtubeProvider.GetVideo(randomVideo.VideoId);
-                if (video?.Snippet == null || 
-                    video.Snippet.Tags?.Count == 0)
-                {
-                    continue;
-                }
-
-                var similarVideo = (await this.youtubeProvider.FindVideosByTags(
-                    video.Snippet.Tags.ToArray(), 10)).PickRandom();
-
-                if (similarVideo == null ||
-                    similarVideo.Snippet.ChannelId == channel.OriginalChannelId)
-                {
-                    continue;
-                }
-
                 try
                 {
-                    var comment = await this.youtubeProvider.AddComment(
+                    var randomVideo = localVideos.PickRandom();
+                    var video = await this.youtubeProvider.GetVideo(randomVideo.VideoId);
+                    if (video?.Snippet == null ||
+                        video.Snippet.Tags?.Count == 0)
+                    {
+                        continue;
+                    }
+
+                    var similarVideo = (await this.youtubeProvider.FindVideosByTags(
+                            video.Snippet.Tags.ToArray(), 20))
+                        .Skip(10)
+                        .PickRandom();
+
+                    if (similarVideo == null ||
+                        similarVideo.Snippet.ChannelId == channel.OriginalChannelId)
+                    {
+                        continue;
+                    }
+
+                    await this.youtubeProvider.AddComment(
                         similarVideo.Snippet.ChannelId,
                         similarVideo.Id.VideoId,
                         video.GetBoostText());
