@@ -15,16 +15,27 @@ namespace Lacey.Medusa.Boost.Services.Extensions
             }
 
             var list = new List<string>();
-            foreach (var tag in tags.Take(2))
+            const int wordsLimit = 5;
+            var i = 0;
+            foreach (var tag in tags.Take(3))
             {
-                var arr = tag.Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries);
-                if (arr.Length > 3)
+                var words = tag.Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries);
+                var tagWords = string.Empty;
+                foreach (var word in words)
                 {
-                    arr = arr.Take(3).ToArray();
+                    tagWords += $"{word} ";
+                    i++;
+                    if (i >= wordsLimit)
+                    {
+                        break;
+                    }
                 }
 
-                var tagToAdd = string.Join(' ', arr);
-                list.Add(tagToAdd);
+                list.Add(tagWords.Trim());
+                if (i >= wordsLimit)
+                {
+                    break;
+                }
             }
 
             return string.Join("|", list);

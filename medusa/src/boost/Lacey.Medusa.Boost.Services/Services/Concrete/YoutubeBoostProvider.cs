@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Lacey.Medusa.Boost.Services.Extensions;
 using Lacey.Medusa.Youtube.Api.Base;
 using Lacey.Medusa.Youtube.Api.Extensions;
+using Lacey.Medusa.Youtube.Api.Models.Const;
 using Lacey.Medusa.Youtube.Api.Models.Enums;
 using Lacey.Medusa.Youtube.Api.Services;
 using Lacey.Medusa.Youtube.Api.Services.Concrete;
@@ -52,8 +53,11 @@ namespace Lacey.Medusa.Boost.Services.Services.Concrete
         public async Task<IReadOnlyList<SearchResult>> FindVideosByTags(string[] tags, long maxResults)
         {
             var request = this.Youtube.Search.List(VideoParts.Snippet);
-            request.Order = SearchResource.ListRequest.OrderEnum.Date;
             request.Q = tags.ToQuery();
+            request.Order = SearchResource.ListRequest.OrderEnum.Date;
+            request.RegionCode = CountryCodes.Us;
+            request.RelevanceLanguage = Language.Us;
+            request.Type = ResourceType.Video;
             request.MaxResults = maxResults;
 
             var response = await request.ExecuteAsync();

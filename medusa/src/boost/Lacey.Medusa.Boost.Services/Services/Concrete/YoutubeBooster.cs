@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Lacey.Medusa.Boost.Services.Extensions;
 using Lacey.Medusa.Boost.Services.Utils;
+using Lacey.Medusa.Youtube.Api.Models.Const;
+using Lacey.Medusa.Youtube.Api.Models.Enums;
 using Lacey.Medusa.Youtube.Domain.Entities;
 using Lacey.Medusa.Youtube.Services.Transfer.Services;
 using Microsoft.Extensions.Logging;
@@ -81,6 +83,16 @@ namespace Lacey.Medusa.Boost.Services.Services.Concrete
                         }
 
                         var video = await this.youtubeProvider.GetVideo(similarVideo.Id.VideoId);
+                        if (video.Snippet.LiveBroadcastContent != LiveBroadcastContent.None)
+                        {
+                            continue;
+                        }
+
+                        if (video.ContentDetails.LicensedContent == true)
+                        {
+                            continue;
+                        }
+
                         if (video.Statistics.ViewCount > 100000 ||
                             video.Statistics.CommentCount > 1000)
                         {
