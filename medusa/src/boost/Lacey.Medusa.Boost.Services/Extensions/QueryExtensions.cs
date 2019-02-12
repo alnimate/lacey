@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Lacey.Medusa.Boost.Services.Extensions
 {
@@ -12,7 +14,20 @@ namespace Lacey.Medusa.Boost.Services.Extensions
                 return string.Empty;
             }
 
-            return string.Join("|", tags.Take(3));
+            var list = new List<string>();
+            foreach (var tag in tags.Take(2))
+            {
+                var arr = tag.Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries);
+                if (arr.Length > 3)
+                {
+                    arr = arr.Take(3).ToArray();
+                }
+
+                var tagToAdd = string.Join(' ', arr);
+                list.Add(tagToAdd);
+            }
+
+            return string.Join("|", list);
         }
     }
 }

@@ -38,13 +38,13 @@ namespace Lacey.Medusa.Boost.Services.Services.Concrete
 
         public async Task Boost(string channelId, int interval)
         {
-            ChannelEntity channel;
+            ChannelEntity localChannel;
             IReadOnlyList<VideoEntity> localVideos;
             while (true)
             {
                 try
                 {
-                    channel = await this.channelsService.GetChannelMetadata(channelId);
+                    localChannel = await this.channelsService.GetChannelMetadata(channelId);
                     localVideos = await this.videosService.GetChannelVideos(channelId);
                     break;
                 }
@@ -60,31 +60,40 @@ namespace Lacey.Medusa.Boost.Services.Services.Concrete
                 try
                 {
                     var randomVideo = localVideos.PickRandom();
-                    var video = await this.youtubeProvider.GetVideo(randomVideo.VideoId);
-                    if (video?.Snippet == null ||
-                        video.Snippet.Tags?.Count == 0)
+                    var localVideo = await this.youtubeProvider.GetVideo(randomVideo.VideoId);
+                    if (localVideo?.Snippet == null ||
+                        localVideo.Snippet.Tags?.Count == 0)
                     {
                         continue;
                     }
 
-                    var similarVideos = await this.youtubeProvider.FindVideosByTags(
-                        video.Snippet.Tags.ToArray(), 20);
+                    var similarVideos = (await this.youtubeProvider.FindVideosByTags(
+                        localVideo.Snippet.Tags.ToArray(), 20))
+                        .Shuffle();
 
-                    var similarVideo = similarVideos
-                        .Skip(10)
-                        .PickRandom();
-
-                    if (similarVideo == null ||
-                        similarVideo.Snippet.ChannelId == channel.OriginalChannelId)
+                    foreach (var similarVideo in similarVideos)
                     {
-                        continue;
-                    }
+                        if (similarVideo == null
+                            || similarVideo.Snippet.ChannelId == localChannel.OriginalChannelId
+                            || similarVideo.Snippet.ChannelId == localChannel.ChannelId)
+                        {
+                            continue;
+                        }
 
-                    await this.youtubeProvider.AddComment(
-                        similarVideo.Snippet.ChannelId,
-                        similarVideo.Id.VideoId,
-                        video.GetBoostText());
-                    this.logger.LogTrace($"{similarVideo.GetYoutubeUrl()}");
+                        var video = await this.youtubeProvider.GetVideo(similarVideo.Id.VideoId);
+                        if (video.Statistics.ViewCount > 100000 ||
+                            video.Statistics.CommentCount > 1000)
+                        {
+                            continue;
+                        }
+
+                        await this.youtubeProvider.AddComment(
+                            similarVideo.Snippet.ChannelId,
+                            similarVideo.Id.VideoId,
+                            localVideo.GetBoostText());
+                        this.logger.LogTrace($"{similarVideo.GetYoutubeUrl()}");
+                        break;
+                    }
                 }
                 catch (Exception e)
                 {

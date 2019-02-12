@@ -52,6 +52,7 @@ namespace Lacey.Medusa.Boost.Services.Services.Concrete
         public async Task<IReadOnlyList<SearchResult>> FindVideosByTags(string[] tags, long maxResults)
         {
             var request = this.Youtube.Search.List(VideoParts.Snippet);
+            request.Order = SearchResource.ListRequest.OrderEnum.Date;
             request.Q = tags.ToQuery();
             request.MaxResults = maxResults;
 
