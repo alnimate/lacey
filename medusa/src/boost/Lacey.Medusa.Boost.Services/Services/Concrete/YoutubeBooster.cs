@@ -67,8 +67,10 @@ namespace Lacey.Medusa.Boost.Services.Services.Concrete
                         continue;
                     }
 
-                    var similarVideo = (await this.youtubeProvider.FindVideosByTags(
-                            video.Snippet.Tags.ToArray(), 20))
+                    var similarVideos = await this.youtubeProvider.FindVideosByTags(
+                        video.Snippet.Tags.ToArray(), 20);
+
+                    var similarVideo = similarVideos
                         .Skip(10)
                         .PickRandom();
 
