@@ -1,12 +1,11 @@
 ﻿using System.Text;
+using Lacey.Medusa.Boost.Services.Const;
 using Lacey.Medusa.Youtube.Api.Base;
 
 namespace Lacey.Medusa.Boost.Services.Extensions
 {
     internal static class VideoExtensions
     {
-        private const string YoutubeVideoUrl = "https://www.youtube.com/watch?v=";
-
         public static string GetBoostText(
             this Video video)
         {
@@ -31,7 +30,7 @@ namespace Lacey.Medusa.Boost.Services.Extensions
                 return string.Empty;
             }
 
-            return $"{YoutubeVideoUrl}{video.Id}";
+            return $"{YoutubeConst.YoutubeVideoUrl}{video.Id}";
         }
 
         public static string GetYoutubeUrl(
@@ -43,7 +42,7 @@ namespace Lacey.Medusa.Boost.Services.Extensions
                 return string.Empty;
             }
 
-            return $"{YoutubeVideoUrl}{video.Id.VideoId}";
+            return $"{YoutubeConst.YoutubeVideoUrl}{video.Id.VideoId}";
         }
     }
 }

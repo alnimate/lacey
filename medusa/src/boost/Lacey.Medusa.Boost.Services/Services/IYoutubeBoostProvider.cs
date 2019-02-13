@@ -14,5 +14,9 @@ namespace Lacey.Medusa.Boost.Services.Services
             string channelId,
             string videoId,
             string text);
+
+        bool AddCommentManually(
+            string videoId,
+            string text);
     }
 }

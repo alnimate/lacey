@@ -1,7 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Lacey.Medusa.Boost.Services.Const;
 using Lacey.Medusa.Boost.Services.Extensions;
+using Lacey.Medusa.Common.Browser.Browsers;
+using Lacey.Medusa.Common.Browser.Extensions;
 using Lacey.Medusa.Youtube.Api.Base;
 using Lacey.Medusa.Youtube.Api.Extensions;
 using Lacey.Medusa.Youtube.Api.Models.Const;
@@ -9,6 +13,7 @@ using Lacey.Medusa.Youtube.Api.Models.Enums;
 using Lacey.Medusa.Youtube.Api.Services;
 using Lacey.Medusa.Youtube.Api.Services.Concrete;
 using Microsoft.Extensions.Logging;
+using OpenQA.Selenium;
 
 namespace Lacey.Medusa.Boost.Services.Services.Concrete
 {
@@ -22,6 +27,58 @@ namespace Lacey.Medusa.Boost.Services.Services.Concrete
             : base(youtubeAuthProvider, logger)
         {
             this.logger = logger;
+        }
+
+        public bool AddCommentManually(string videoId, string text)
+        {
+            ChromeBrowser browser = null;
+            try
+            {
+                using (browser = new ChromeBrowser())
+                {
+                    browser.Driver.Navigate().GoToUrl($"{YoutubeConst.YoutubeVideoUrl}{videoId}");
+
+                    const int timeout = 20;
+                    var comment = browser.Driver.WaitUntilElementVisible(
+                        By.Id("simplebox-placeholder"),
+                        timeout);
+                    if (comment == null)
+                    {
+                        return false;
+                    }
+
+                    comment.Click();
+                    comment = browser.Driver.WaitUntilElementVisible(
+                        By.Id("contenteditable-textarea"),
+                        timeout);
+
+                    if (comment == null)
+                    {
+                        return false;
+                    }
+                    comment.SendKeys(text);
+
+                    var button = browser.Driver.WaitUntilElementVisible(
+                        By.Id("submit-button"),
+                        timeout);
+
+                    if (button == null)
+                    {
+                        return false;
+                    }
+
+                    button.Click();
+
+                    return true;
+                }
+            }
+            catch (Exception e)
+            {
+                this.logger.LogError(e.Message);
+                browser?.Dispose();
+            }
+
+            return false;
         }
 
         public async Task<CommentThread> AddComment(

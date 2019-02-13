@@ -10,6 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\common\Lacey.Medusa.Common.Browser\Lacey.Medusa.Common.Browser.csproj" />
     <ProjectReference Include="..\..\youtube\Lacey.Medusa.Youtube.Api\Lacey.Medusa.Youtube.Api.csproj" />
     <ProjectReference Include="..\..\youtube\Lacey.Medusa.Youtube.Services\Lacey.Medusa.Youtube.Services.csproj" />
   </ItemGroup>

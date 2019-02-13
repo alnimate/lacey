@@ -8,8 +8,6 @@ namespace Lacey.Medusa.Common.Browser.Browsers
 {
     public sealed class ChromeBrowser : IDisposable
     {
-        private readonly IWebDriver driver;
-
         public ChromeBrowser()
         {
             var userProfile = Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.System)) +
@@ -17,26 +15,29 @@ namespace Lacey.Medusa.Common.Browser.Browsers
                               Environment.UserName +
                               @"\AppData\Local\Google\Chrome\User Data";
             var options = new ChromeOptions();
-            options.AddArguments("headless");
-            options.AddArguments("no-sandbox");
-            options.AddArguments("disable-dev-shm-usage");
+//            options.AddArgument("headless");
+            options.AddArgument("no-sandbox");
+            options.AddArgument("disable-dev-shm-usage");
+            options.AddArgument("start-maximized");
+
             options.AddArguments($"user-data-dir={userProfile}");
-            this.driver = new ChromeDriver(
+            this.Driver = new ChromeDriver(
                 Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
                 options);
         }
 
+        public IWebDriver Driver { get; }
 
         public string GetPageSource(string url)
         {
-            this.driver.Navigate().GoToUrl(url);
-            return this.driver.PageSource;
+            this.Driver.Navigate().GoToUrl(url);
+            return this.Driver.PageSource;
         }
 
         public void Dispose()
         {
-            this.driver.Quit();
-            this.driver.Dispose();
+            this.Driver.Quit();
+            this.Driver.Dispose();
         }
     }
 }

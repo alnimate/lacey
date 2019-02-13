@@ -100,10 +100,18 @@ namespace Lacey.Medusa.Boost.Services.Services.Concrete
                             continue;
                         }
 
-                        await this.youtubeProvider.AddComment(
-                            similarVideo.Snippet.ChannelId,
+                        var added = this.youtubeProvider.AddCommentManually(
                             similarVideo.Id.VideoId,
                             localVideo.GetBoostText());
+
+                        if (!added)
+                        {
+                            await this.youtubeProvider.AddComment(
+                                similarVideo.Snippet.ChannelId,
+                                similarVideo.Id.VideoId,
+                                localVideo.GetBoostText());
+                        }
+
                         this.logger.LogTrace($"{similarVideo.GetYoutubeUrl()}");
                         boostCompleted = true;
                         break;
