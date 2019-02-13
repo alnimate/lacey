@@ -100,17 +100,14 @@ namespace Lacey.Medusa.Boost.Services.Services.Concrete
                             continue;
                         }
 
-                        var added = this.youtubeProvider.AddCommentManually(
+//                        var added = this.youtubeProvider.AddCommentManually(
+//                            similarVideo.Id.VideoId,
+//                            localVideo.GetBoostText());
+
+                        await this.youtubeProvider.AddComment(
+                            similarVideo.Snippet.ChannelId,
                             similarVideo.Id.VideoId,
                             localVideo.GetBoostText());
-
-                        if (!added)
-                        {
-                            await this.youtubeProvider.AddComment(
-                                similarVideo.Snippet.ChannelId,
-                                similarVideo.Id.VideoId,
-                                localVideo.GetBoostText());
-                        }
 
                         this.logger.LogTrace($"{similarVideo.GetYoutubeUrl()}");
                         boostCompleted = true;

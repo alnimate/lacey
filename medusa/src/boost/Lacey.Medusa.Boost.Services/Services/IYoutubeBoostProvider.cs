@@ -19,5 +19,7 @@ namespace Lacey.Medusa.Boost.Services.Services
         bool AddCommentManually(
             string videoId,
             string text);
+
+        void EnableBrowser();
     }
 }
