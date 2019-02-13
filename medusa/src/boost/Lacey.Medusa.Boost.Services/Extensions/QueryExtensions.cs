@@ -15,7 +15,7 @@ namespace Lacey.Medusa.Boost.Services.Extensions
             }
 
             var list = new List<string>();
-            const int wordsLimit = 5;
+            const int wordsLimit = 3;
             var i = 0;
             foreach (var tag in tags.Take(3))
             {
@@ -38,7 +38,7 @@ namespace Lacey.Medusa.Boost.Services.Extensions
                 }
             }
 
-            return string.Join("|", list);
+            return string.Join(" ", list);
         }
     }
 }

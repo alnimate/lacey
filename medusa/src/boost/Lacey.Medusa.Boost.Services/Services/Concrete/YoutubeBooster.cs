@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Lacey.Medusa.Boost.Services.Extensions;
 using Lacey.Medusa.Boost.Services.Utils;
 using Lacey.Medusa.Youtube.Api.Models.Const;
-using Lacey.Medusa.Youtube.Api.Models.Enums;
 using Lacey.Medusa.Youtube.Domain.Entities;
 using Lacey.Medusa.Youtube.Services.Transfer.Services;
 using Microsoft.Extensions.Logging;
@@ -59,15 +58,17 @@ namespace Lacey.Medusa.Boost.Services.Services.Concrete
 
             while (true)
             {
+                bool boostCompleted = false;
                 try
                 {
                     var randomVideo = localVideos.PickRandom();
                     var localVideo = await this.youtubeProvider.GetVideo(randomVideo.VideoId);
-                    if (localVideo?.Snippet == null ||
-                        localVideo.Snippet.Tags?.Count == 0)
+                    if (localVideo?.Snippet?.Tags == null)
                     {
                         continue;
                     }
+
+                    localVideo.Snippet.Tags.RemoveAll(new []{ localChannel.Name });
 
                     var similarVideos = (await this.youtubeProvider.FindVideosByTags(
                         localVideo.Snippet.Tags.ToArray(), 20))
@@ -83,18 +84,18 @@ namespace Lacey.Medusa.Boost.Services.Services.Concrete
                         }
 
                         var video = await this.youtubeProvider.GetVideo(similarVideo.Id.VideoId);
-                        if (video.Snippet.LiveBroadcastContent != LiveBroadcastContent.None)
-                        {
-                            continue;
-                        }
-
                         if (video.ContentDetails.LicensedContent == true)
                         {
                             continue;
                         }
 
-                        if (video.Statistics.ViewCount > 100000 ||
-                            video.Statistics.CommentCount > 1000)
+                        if (video.Snippet.LiveBroadcastContent != LiveBroadcastContent.None)
+                        {
+                            continue;
+                        }
+
+                        if (video.Statistics.ViewCount > 10000 ||
+                            video.Statistics.CommentCount > 100)
                         {
                             continue;
                         }
@@ -104,6 +105,7 @@ namespace Lacey.Medusa.Boost.Services.Services.Concrete
                             similarVideo.Id.VideoId,
                             localVideo.GetBoostText());
                         this.logger.LogTrace($"{similarVideo.GetYoutubeUrl()}");
+                        boostCompleted = true;
                         break;
                     }
                 }
@@ -112,7 +114,14 @@ namespace Lacey.Medusa.Boost.Services.Services.Concrete
                     this.logger.LogError(e.Message);
                 }
 
-                var sec = (interval - 1) * 60 + RandomUtils.GetRandom(0, 60);
+                if (!boostCompleted)
+                {
+                    ConsoleUtils.WaitSec(60);
+                    continue;
+                }
+
+                var sec = (interval + RandomUtils.GetRandom(0, 1) - 2 * RandomUtils.GetRandom(0, 1)) * 60 
+                          + RandomUtils.GetRandom(0, 60);
                 ConsoleUtils.WaitSec(sec);
             }
         }
