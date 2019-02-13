@@ -21,61 +21,60 @@ namespace Lacey.Medusa.Boost.Services.Services.Concrete
     {
         private readonly ILogger logger;
 
+        private readonly ChromeBrowser browser;
+
         public YoutubeBoostProvider(
             IYoutubeAuthProvider youtubeAuthProvider,
             ILogger<YoutubeBoostProvider> logger) 
             : base(youtubeAuthProvider, logger)
         {
             this.logger = logger;
+
+            this.browser = new ChromeBrowser();
         }
 
         public bool AddCommentManually(string videoId, string text)
         {
-            ChromeBrowser browser = null;
             try
             {
-                using (browser = new ChromeBrowser())
+                browser.Driver.Navigate().GoToUrl($"{YoutubeConst.YoutubeVideoUrl}{videoId}");
+
+                const int timeout = 20;
+                var comment = browser.Driver.WaitUntilElementVisible(
+                    By.Id("simplebox-placeholder"),
+                    timeout);
+                if (comment == null)
                 {
-                    browser.Driver.Navigate().GoToUrl($"{YoutubeConst.YoutubeVideoUrl}{videoId}");
-
-                    const int timeout = 20;
-                    var comment = browser.Driver.WaitUntilElementVisible(
-                        By.Id("simplebox-placeholder"),
-                        timeout);
-                    if (comment == null)
-                    {
-                        return false;
-                    }
-
-                    comment.Click();
-                    comment = browser.Driver.WaitUntilElementVisible(
-                        By.Id("contenteditable-textarea"),
-                        timeout);
-
-                    if (comment == null)
-                    {
-                        return false;
-                    }
-                    comment.SendKeys(text);
-
-                    var button = browser.Driver.WaitUntilElementVisible(
-                        By.Id("submit-button"),
-                        timeout);
-
-                    if (button == null)
-                    {
-                        return false;
-                    }
-
-                    button.Click();
-
-                    return true;
+                    return false;
                 }
+
+                comment.Click();
+                comment = browser.Driver.WaitUntilElementVisible(
+                    By.Id("contenteditable-textarea"),
+                    timeout);
+
+                if (comment == null)
+                {
+                    return false;
+                }
+                comment.SendKeys(text.RemoveEmoji());
+
+                var button = browser.Driver.WaitUntilElementVisible(
+                    By.Id("submit-button"),
+                    timeout);
+
+                if (button == null)
+                {
+                    return false;
+                }
+
+                button.Click();
+
+                return true;
             }
             catch (Exception e)
             {
                 this.logger.LogError(e.Message);
-                browser?.Dispose();
             }
 
             return false;
@@ -132,6 +131,11 @@ namespace Lacey.Medusa.Boost.Services.Services.Concrete
             var response = await request.ExecuteAsync();
 
             return response.Items.First();
+        }
+
+        public void Dispose()
+        {
+            this.browser.Dispose();
         }
     }
 }

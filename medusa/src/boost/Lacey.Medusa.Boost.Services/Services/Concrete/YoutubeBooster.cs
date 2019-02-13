@@ -133,5 +133,10 @@ namespace Lacey.Medusa.Boost.Services.Services.Concrete
                 ConsoleUtils.WaitSec(sec);
             }
         }
+
+        public void Dispose()
+        {
+            this.youtubeProvider.Dispose();
+        }
     }
 }

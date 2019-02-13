@@ -78,6 +78,7 @@ namespace Lacey.Medusa.Boost.Run
                     });
             }
 
+            youtubeBooster.Dispose();
             serviceProvider.Dispose();
         }
     }
