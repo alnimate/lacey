@@ -22,7 +22,7 @@ namespace Lacey.Medusa.Instagram.Services.Transfer.Infrastructure
                 .ForMember(e => e.Id, opt => opt.Ignore())
                 .ConstructUsing(m => new MediaEntity
                 {
-                    OriginalMediaId = m.Code,
+                    OriginalMediaId = m.Caption != null ? m.Caption.MediaId : string.Empty,
                     Name = m.Caption != null ? m.Caption.Text : null,
                     Description = JsonConvert.SerializeObject(m),
                     PublishedAt = m.DeviceTimeStamp

@@ -56,8 +56,13 @@ namespace Lacey.Medusa.Instagram.Services.Transfer.Services.Concrete
             string destChannelId,
             bool isOnlyLast)
         {
+            var channel = await this.channelsService.GetChannelMetadata(destChannelId);
             var medias = await this.mediaService.GetTransferMedias(sourceChannelId, destChannelId);
             var now = DateTime.UtcNow;
+
+            var mediaList = isOnlyLast
+                ? await this.InstagramProvider.GetUserMediaLast(channel.ChannelId)
+                : await this.InstagramProvider.GetUserMediaAll(channel.ChannelId);
 
             foreach (var localMedia in medias.OrderByDescending(m => m.CreatedAt))
             {
@@ -68,40 +73,27 @@ namespace Lacey.Medusa.Instagram.Services.Transfer.Services.Concrete
 
                 try
                 {
-                    var media = localMedia.Description.Deserialize<InstaMedia>();
-                    if (media.Caption == null ||
+                    var media = mediaList.FirstOrDefault(m => 
+                        m.Caption?.MediaId == localMedia.MediaId ||
+                        m.Caption?.Text == localMedia.Name);
+                    if (media?.Caption == null || 
                         string.IsNullOrEmpty(media.Caption.MediaId))
                     {
                         continue;
                     }
 
-                    var tags = new InstaUserTagUpload[0];
-                    if (media.UserTags != null)
+                    var originalMedia = localMedia.Description.Deserialize<InstaMedia>();
+                    if (originalMedia.Caption == null ||
+                        originalMedia.Location == null)
                     {
-                        tags = media.UserTags.Select(t =>
-                        {
-                            var tag = new InstaUserTagUpload();
-
-                            if (t.User != null)
-                            {
-                                tag.Username = t.User.UserName;
-                            }
-
-                            if (t.Position != null)
-                            {
-                                tag.X = t.Position.X;
-                                tag.Y = t.Position.Y;
-                            }
-
-                            return tag;
-                        }).ToArray();
+                        continue;
                     }
 
                     var result = await this.InstagramProvider.EditMediaAsync(
                         media.Caption.MediaId,
-                        media.Caption.Text,
-                        media.Location,
-                        tags);
+                        originalMedia.Caption.Text,
+                        originalMedia.Location,
+                        originalMedia.UserTags.AsUpload(channel.ChannelId));
 
                     if (!result.Succeeded)
                     {
@@ -109,7 +101,7 @@ namespace Lacey.Medusa.Instagram.Services.Transfer.Services.Concrete
                         continue;
                     }
 
-                    this.Logger.LogTrace($"\"{media.Caption.Text}\" updated.");
+                    this.Logger.LogTrace($"\"{originalMedia.Caption.Text}\" updated.");
                     Thread.Sleep(TimeSpan.FromSeconds(2));
                 }
                 catch (Exception e)
@@ -150,7 +142,8 @@ namespace Lacey.Medusa.Instagram.Services.Transfer.Services.Concrete
             }
             foreach (var media in mediaList.OrderBy(m => m.DeviceTimeStamp))
             {
-                if (saved.Any(m => m.OriginalMediaId == media.Code))
+                if (saved.Any(m => m.OriginalMediaId == media.Caption.MediaId || 
+                                   m.OriginalMediaId == media.Code))
                 {
                     continue;
                 }
@@ -163,13 +156,35 @@ namespace Lacey.Medusa.Instagram.Services.Transfer.Services.Concrete
                     if (!result.Succeeded)
                     {
                         this.Logger.LogTrace($"{result.Info?.Message}");
-                        throw new Exception("Something wrong with Instagram service. Please try again later.");
+                        continue;
                     }
 
                     this.Logger.LogTrace($"\"{name}\" uploaded.");
 
+                    var uploaded = result.Value;
+                    if (uploaded?.Caption == null ||
+                        media.Caption == null)
+                    {
+                        continue;
+                    }
+
+                    this.Logger.LogTrace($"Editing \"{name}\"...");
+                    var editResult = await this.InstagramProvider.EditMediaAsync(
+                        uploaded.Caption.MediaId,
+                        media.Caption.Text,
+                        media.Location,
+                        media.UserTags.AsUpload(channel.ChannelId));
+                    if (!editResult.Succeeded)
+                    {
+                        this.Logger.LogTrace($"{editResult.Info?.Message}");
+                    }
+                    else
+                    {
+                        this.Logger.LogTrace($"\"{name}\" edited.");
+                    }
+
                     this.Logger.LogTrace($"Saving \"{name}\"...");
-                    await this.mediaService.Add(channel.Id, media.Code, media);
+                    await this.mediaService.Add(channel.Id, result.Value.Caption.MediaId, media);
                     this.Logger.LogTrace($"\"{name}\" saved.");
                 }
                 Thread.Sleep(TimeSpan.FromSeconds(2));
@@ -187,14 +202,16 @@ namespace Lacey.Medusa.Instagram.Services.Transfer.Services.Concrete
             var mediaList = await this.InstagramProvider.GetUserMediaAll(sourceChannelId);
             foreach (var media in mediaList.OrderBy(m => m.DeviceTimeStamp))
             {
-                if (saved.Any(m => m.OriginalMediaId == media.Code))
+                if (media.Caption == null ||
+                    string.IsNullOrEmpty(media.Caption.MediaId) ||
+                    saved.Any(m => m.OriginalMediaId == media.Caption.MediaId))
                 {
                     continue;
                 }
 
-                this.Logger.LogTrace($"Saving \"{media.Caption?.Text}\"...");
-                await this.mediaService.Add(channel.Id, media.Code, media);
-                this.Logger.LogTrace($"\"{media.Caption?.Text}\" saved.");
+                this.Logger.LogTrace($"Saving \"{media.Caption.Text}\"...");
+                await this.mediaService.Add(channel.Id, media.Caption.MediaId, media);
+                this.Logger.LogTrace($"\"{media.Caption.Text}\" saved.");
             }
         }
 
