@@ -63,15 +63,15 @@ namespace Lacey.Medusa.Boost.Services.Services.Concrete
                 {
                     var randomVideo = localVideos.PickRandom();
                     var localVideo = await this.youtubeProvider.GetVideo(randomVideo.VideoId);
-                    if (localVideo?.Snippet?.Tags == null)
+
+                    var tags = localVideo.Snippet?.Tags.RemoveAll(new[] { localChannel.Name });
+                    if (tags == null || !tags.Any())
                     {
                         continue;
                     }
 
-                    localVideo.Snippet.Tags.RemoveAll(new []{ localChannel.Name });
-
                     var similarVideos = (await this.youtubeProvider.FindVideosByTags(
-                        localVideo.Snippet.Tags.ToArray(), 20))
+                        tags.ToArray(), 20))
                         .Shuffle();
 
                     foreach (var similarVideo in similarVideos)
