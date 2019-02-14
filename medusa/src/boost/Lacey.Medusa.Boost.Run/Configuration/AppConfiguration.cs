@@ -4,7 +4,9 @@ namespace Lacey.Medusa.Boost.Run.Configuration
 {
     internal sealed class AppConfiguration
     {        
-        public string ClientSecretsFilePath { get; set; }
+        public string YoutubeSecretsFile { get; set; }
+
+        public string InstagramSecretsFile { get; set; }
 
         public string UserName { get; set; }
 

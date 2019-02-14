@@ -19,6 +19,8 @@ namespace Lacey.Medusa.Boost.Services.Services.Concrete
 {
     public sealed class YoutubeBoostProvider : YoutubeProvider, IYoutubeBoostProvider
     {
+        #region Properties/Constructors
+
         private readonly ILogger logger;
 
         private ChromeBrowser browser;
@@ -31,36 +33,7 @@ namespace Lacey.Medusa.Boost.Services.Services.Concrete
             this.logger = logger;
         }
 
-        public void EnableBrowser()
-        {
-            this.browser = new ChromeBrowser();
-        }
-
-        public async Task<CommentThread> AddComment(
-            string channelId, 
-            string videoId, 
-            string text)
-        {
-            var comment = new CommentThread();
-            var snippet = new CommentThreadSnippet
-            {
-                ChannelId = channelId,
-                VideoId = videoId,
-                TopLevelComment = new Comment
-                {
-                    Snippet = new CommentSnippet
-                    {
-                        TextOriginal = text
-                    }
-                }
-            };
-            comment.Snippet = snippet;
-
-            var request = this.Youtube.CommentThreads.Insert(comment, CommentParts.Snippet);
-            var response = await request.ExecuteAsync();
-
-            return response;
-        }
+        #endregion
 
         public async Task<IReadOnlyList<SearchResult>> FindVideosByTags(string[] tags, long maxResults)
         {
@@ -78,6 +51,35 @@ namespace Lacey.Medusa.Boost.Services.Services.Concrete
             return videos;
         }
 
+        public async Task<CommentThread> AddComment(
+            string channelId, 
+            string videoId, 
+            string text)
+        {
+            var comment = new CommentThread();
+            var snippet = new CommentThreadSnippet
+            {
+                ChannelId = channelId,
+                VideoId = videoId,
+                IsPublic = true,
+                TopLevelComment = new Comment
+                {
+                    Snippet = new CommentSnippet
+                    {
+                        ChannelId = channelId,
+                        VideoId = videoId,
+                        TextOriginal = text
+                    }
+                }
+            };
+            comment.Snippet = snippet;
+
+            var request = this.Youtube.CommentThreads.Insert(comment, CommentParts.Snippet);
+            var response = await request.ExecuteAsync();
+
+            return response;
+        }
+
         public async Task<Video> GetVideo(string videoId)
         {
             var request = this.Youtube.Videos.List(VideoParts.AllAnonymous.AsListParam());
@@ -87,6 +89,13 @@ namespace Lacey.Medusa.Boost.Services.Services.Concrete
             var response = await request.ExecuteAsync();
 
             return response.Items.First();
+        }
+
+        #region Manual actions
+
+        public void EnableBrowser()
+        {
+            this.browser = new ChromeBrowser();
         }
 
         public bool AddCommentManually(string videoId, string text)
@@ -141,9 +150,15 @@ namespace Lacey.Medusa.Boost.Services.Services.Concrete
             return false;
         }
 
+        #endregion
+
+        #region IDisposable
+
         public void Dispose()
         {
             browser?.Dispose();
         }
+
+        #endregion
     }
 }

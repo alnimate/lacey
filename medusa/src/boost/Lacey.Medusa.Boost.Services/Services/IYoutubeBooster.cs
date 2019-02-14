@@ -5,6 +5,6 @@ namespace Lacey.Medusa.Boost.Services.Services
 {
     public interface IYoutubeBooster : IDisposable
     {
-        Task Boost(string channelId, int interval);
+        Task Boost(string channelId, string instagramChannelId, int interval);
     }
 }

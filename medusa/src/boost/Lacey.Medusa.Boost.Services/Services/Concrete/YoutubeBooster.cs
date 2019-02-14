@@ -4,16 +4,23 @@ using System.Linq;
 using System.Threading.Tasks;
 using Lacey.Medusa.Boost.Services.Extensions;
 using Lacey.Medusa.Boost.Services.Utils;
+using Lacey.Medusa.Instagram.Services.Transfer.Services;
+using Lacey.Medusa.Youtube.Api.Base;
 using Lacey.Medusa.Youtube.Api.Models.Const;
 using Lacey.Medusa.Youtube.Domain.Entities;
 using Lacey.Medusa.Youtube.Services.Transfer.Services;
 using Microsoft.Extensions.Logging;
+using IChannelsService = Lacey.Medusa.Youtube.Services.Transfer.Services.IChannelsService;
 
 namespace Lacey.Medusa.Boost.Services.Services.Concrete
 {
     public sealed class YoutubeBooster : IYoutubeBooster
     {
+        #region Properties/Constructors
+
         private readonly IYoutubeBoostProvider youtubeProvider;
+
+        private readonly IInstagramBoostProvider instagramProvider;
 
         private readonly ILogger logger;
 
@@ -23,21 +30,36 @@ namespace Lacey.Medusa.Boost.Services.Services.Concrete
 
         private readonly string outputFolder;
 
+        private readonly Instagram.Services.Transfer.Services.IChannelsService instagramChannelService;
+
+        private readonly IMediaService instagramMediaService;
+
         public YoutubeBooster(
             IYoutubeBoostProvider youtubeProvider,
+            IInstagramBoostProvider instagramProvider,
             ILogger<YoutubeBooster> logger,
             string outputFolder,
             IChannelsService channelsService,
-            IVideosService videosService)
+            IVideosService videosService,
+            Instagram.Services.Transfer.Services.IChannelsService instagramChannelService,
+            IMediaService instagramMediaService)
         {
             this.youtubeProvider = youtubeProvider;
+            this.instagramProvider = instagramProvider;
             this.logger = logger;
             this.outputFolder = outputFolder;
             this.channelsService = channelsService;
             this.videosService = videosService;
+            this.instagramChannelService = instagramChannelService;
+            this.instagramMediaService = instagramMediaService;
         }
 
-        public async Task Boost(string channelId, int interval)
+        #endregion
+
+        public async Task Boost(
+            string channelId,
+            string instagramChannelId,
+            int interval)
         {
             ChannelEntity localChannel;
             IReadOnlyList<VideoEntity> localVideos;
@@ -56,84 +78,110 @@ namespace Lacey.Medusa.Boost.Services.Services.Concrete
                 }
             }
 
+            var youtubeBoosted = false;
+            var instagramBoosted = false;
             while (true)
             {
-                bool boostCompleted = false;
                 try
                 {
+                    if (youtubeBoosted || instagramBoosted)
+                    {
+                        var sec = (interval + RandomUtils.GetRandom(0, 1) - 2 * RandomUtils.GetRandom(0, 1)) * 60
+                                  + RandomUtils.GetRandom(0, 60);
+                        ConsoleUtils.WaitSec(sec);
+                    }
+
                     var randomVideo = localVideos.PickRandom();
                     var localVideo = await this.youtubeProvider.GetVideo(randomVideo.VideoId);
 
-                    var tags = localVideo.Snippet?.Tags.RemoveAll(new[] { localChannel.Name });
-                    if (tags == null || !tags.Any())
+                    instagramBoosted = await this.BoostOnInstagram(instagramChannelId, localChannel, localVideo);
+                    if (!instagramBoosted)
                     {
-                        continue;
+                        ConsoleUtils.WaitSec(60);
                     }
 
-                    var similarVideos = (await this.youtubeProvider.FindVideosByTags(
-                        tags.ToArray(), 20))
-                        .Shuffle();
-
-                    foreach (var similarVideo in similarVideos)
+                    youtubeBoosted = await this.BoostOnYoutube(localChannel, localVideo);
+                    if (!youtubeBoosted)
                     {
-                        if (similarVideo == null
-                            || similarVideo.Snippet.ChannelId == localChannel.OriginalChannelId
-                            || similarVideo.Snippet.ChannelId == localChannel.ChannelId)
-                        {
-                            continue;
-                        }
-
-                        var video = await this.youtubeProvider.GetVideo(similarVideo.Id.VideoId);
-                        if (video.ContentDetails.LicensedContent == true)
-                        {
-                            continue;
-                        }
-
-                        if (video.Snippet.LiveBroadcastContent != LiveBroadcastContent.None)
-                        {
-                            continue;
-                        }
-
-                        if (video.Statistics.ViewCount > 10000 ||
-                            video.Statistics.CommentCount > 100)
-                        {
-                            continue;
-                        }
-
-//                        var added = this.youtubeProvider.AddCommentManually(
-//                            similarVideo.Id.VideoId,
-//                            localVideo.GetBoostText());
-
-                        await this.youtubeProvider.AddComment(
-                            similarVideo.Snippet.ChannelId,
-                            similarVideo.Id.VideoId,
-                            localVideo.GetBoostText());
-
-                        this.logger.LogTrace($"{similarVideo.GetYoutubeUrl()}");
-                        boostCompleted = true;
-                        break;
+                        ConsoleUtils.WaitSec(60);
                     }
                 }
                 catch (Exception e)
                 {
                     this.logger.LogError(e.Message);
                 }
+            }
+        }
 
-                if (!boostCompleted)
+        private async Task<bool> BoostOnInstagram(
+            string instagramChannelId,
+            ChannelEntity localChannel,
+            Video localVideo)
+        {
+            var instagramChannel = await this.instagramChannelService.GetChannelMetadata(instagramChannelId);
+
+            return true;
+        }
+
+        private async Task<bool> BoostOnYoutube(
+            ChannelEntity localChannel, 
+            Video localVideo)
+        {
+            var tags = localVideo.Snippet?.Tags.RemoveAll(new[] { localChannel.Name });
+            if (tags == null || !tags.Any())
+            {
+                return false;
+            }
+
+            var similarVideos = (await this.youtubeProvider.FindVideosByTags(
+                    tags.ToArray(), 20))
+                .Shuffle();
+
+            foreach (var similarVideo in similarVideos)
+            {
+                if (similarVideo == null
+                    || similarVideo.Snippet.ChannelId == localChannel.OriginalChannelId
+                    || similarVideo.Snippet.ChannelId == localChannel.ChannelId)
                 {
-                    ConsoleUtils.WaitSec(60);
                     continue;
                 }
 
-                var sec = (interval + RandomUtils.GetRandom(0, 1) - 2 * RandomUtils.GetRandom(0, 1)) * 60 
-                          + RandomUtils.GetRandom(0, 60);
-                ConsoleUtils.WaitSec(sec);
+                var video = await this.youtubeProvider.GetVideo(similarVideo.Id.VideoId);
+                if (video.ContentDetails.LicensedContent == true)
+                {
+                    continue;
+                }
+
+                if (video.Snippet.LiveBroadcastContent != LiveBroadcastContent.None)
+                {
+                    continue;
+                }
+
+                if (video.Statistics.ViewCount > 10000 ||
+                    video.Statistics.CommentCount > 100)
+                {
+                    continue;
+                }
+
+                await this.youtubeProvider.AddComment(
+                    similarVideo.Snippet.ChannelId,
+                    similarVideo.Id.VideoId,
+                    localVideo.GetBoostText());
+
+                this.logger.LogTrace($"{similarVideo.GetYoutubeUrl()}");
+                return true;
             }
+
+            return false;
         }
+
+        #region IDisposable
 
         public void Dispose()
         {
             this.youtubeProvider.Dispose();
         }
+
+        #endregion
     }
 }

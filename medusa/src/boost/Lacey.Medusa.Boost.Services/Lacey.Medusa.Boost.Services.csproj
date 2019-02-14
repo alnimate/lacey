@@ -11,6 +11,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\common\Lacey.Medusa.Common.Browser\Lacey.Medusa.Common.Browser.csproj" />
+    <ProjectReference Include="..\..\instagram\Lacey.Medusa.Instagram.Api\Lacey.Medusa.Instagram.Api.csproj" />
+    <ProjectReference Include="..\..\instagram\Lacey.Medusa.Instagram.Services\Lacey.Medusa.Instagram.Services.csproj" />
     <ProjectReference Include="..\..\youtube\Lacey.Medusa.Youtube.Api\Lacey.Medusa.Youtube.Api.csproj" />
     <ProjectReference Include="..\..\youtube\Lacey.Medusa.Youtube.Services\Lacey.Medusa.Youtube.Services.csproj" />
   </ItemGroup>

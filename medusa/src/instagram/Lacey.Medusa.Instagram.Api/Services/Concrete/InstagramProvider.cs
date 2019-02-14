@@ -17,7 +17,7 @@ using LogLevel = InstagramApiSharp.Logger.LogLevel;
 
 namespace Lacey.Medusa.Instagram.Api.Services.Concrete
 {
-    public sealed class InstagramProvider : IInstagramProvider
+    public class InstagramProvider : IInstagramProvider
     {
 
         #region Fields/Constructors

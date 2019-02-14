@@ -24,7 +24,8 @@ namespace Lacey.Medusa.Boost.Run
 
             var configuration = builder.Build();
             var config = configuration.GetSection("App").Get<AppConfiguration>();
-            var connectionString = configuration.GetConnectionString("Default");
+            var youtubeConnectionString = configuration.GetConnectionString("YoutubeConnectionString");
+            var instagramConnectionString = configuration.GetConnectionString("InstagramConnectionString");
 
             //setup our DI
             var serviceProvider = new ServiceCollection()
@@ -33,7 +34,9 @@ namespace Lacey.Medusa.Boost.Run
                     logBuilder
                         .AddLog4Net()
                         .SetMinimumLevel(LogLevel.Trace))
-                .AddAppServices(config, connectionString)
+                .AddAppServices(config, 
+                    youtubeConnectionString,
+                    instagramConnectionString)
                 .BuildServiceProvider();
 
             //configure console logging
@@ -52,6 +55,7 @@ namespace Lacey.Medusa.Boost.Run
                 {
                     youtubeBooster.Boost(
                         youtubeChannel.ChannelId, 
+                        youtubeChannel.Instagram,
                         config.BoostInterval).Wait();
                 }
                 catch (Exception exc)

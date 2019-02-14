@@ -11,7 +11,8 @@ namespace Lacey.Medusa.Boost.Run.Infrastructure
         public static IServiceCollection AddAppServices(
             this IServiceCollection services,
             AppConfiguration config,
-            string connectionString)
+            string youtubeConnectionString,
+            string instagramConnectionString)
         {
             var currentFolder = Directory.GetCurrentDirectory();
 
@@ -22,10 +23,12 @@ namespace Lacey.Medusa.Boost.Run.Infrastructure
                     config.Email.SmtpUsername,
                     Path.Combine(currentFolder, config.Email.SmtpSecretFile))
                 .AddBoostServices(
-                    config.ClientSecretsFilePath,
+                    config.YoutubeSecretsFile,
+                    config.InstagramSecretsFile,
                     config.UserName,
                     Path.Combine(currentFolder, config.TempFolder),
-                    connectionString);
+                    youtubeConnectionString,
+                    instagramConnectionString);
 
             return services;
         }
