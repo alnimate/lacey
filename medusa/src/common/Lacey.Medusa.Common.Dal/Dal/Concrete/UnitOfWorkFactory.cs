@@ -1,6 +1,6 @@
 ﻿namespace Lacey.Medusa.Common.Dal.Dal.Concrete
 {
-    public sealed class UnitOfWorkFactory : IUnitOfWorkFactory
+    public class UnitOfWorkFactory : IUnitOfWorkFactory
     {
         private readonly ISessionFactory sessionFactory;
 

@@ -28,13 +28,13 @@ namespace Lacey.Medusa.Boost.Services.Infrastructure
         {
             services
                 .AddYoutubeServices(youtubeClientSecretsFile, userName)
-                .AddYoutubeDalServices(youtubeConnectionString)
+                .AddYoutubeDalServicesMultiple(youtubeConnectionString)
                 .AddTransient<IChannelsService, ChannelsService>()
                 .AddTransient<IVideosService, VideosService>()
                 .AddTransient<IYoutubeBoostProvider, YoutubeBoostProvider>()
 
                 .AddInstagramServices(instagramClientSecretsFile)
-                .AddInstagramDalServices(instagramConnectionString)
+                .AddInstagramDalServicesMultiple(instagramConnectionString)
                 .AddTransient<Instagram.Services.Transfer.Services.IChannelsService, Instagram.Services.Transfer.Services.Concrete.ChannelsService>()
                 .AddTransient<IMediaService, MediaService>()
                 .AddTransient<IInstagramBoostProvider, InstagramBoostProvider>()

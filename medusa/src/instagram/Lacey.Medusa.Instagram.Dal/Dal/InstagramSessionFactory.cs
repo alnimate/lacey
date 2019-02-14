@@ -2,7 +2,7 @@
 
 namespace Lacey.Medusa.Instagram.Dal.Dal
 {
-    public class InstagramSessionFactory : ISessionFactory
+    public class InstagramSessionFactory : IInstagramSessionFactory
     {
         private readonly string connectionString;
 

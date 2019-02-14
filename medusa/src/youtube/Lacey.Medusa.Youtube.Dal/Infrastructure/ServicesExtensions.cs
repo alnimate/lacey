@@ -1,6 +1,9 @@
 ﻿using Lacey.Medusa.Common.Dal.Dal;
+using Lacey.Medusa.Common.Dal.Dal.Concrete;
 using Lacey.Medusa.Common.Dal.Infrastructure;
 using Lacey.Medusa.Youtube.Dal.Dal;
+using Lacey.Medusa.Youtube.Dal.Dal.Concrete;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Lacey.Medusa.Youtube.Dal.Infrastructure
@@ -20,6 +23,24 @@ namespace Lacey.Medusa.Youtube.Dal.Infrastructure
             services
                 .AddCommonDalServices<YoutubeSqlServerDbContext>(connectionString)
                 .AddTransient<ISessionFactory, YoutubeSessionFactory>(
+                    provider => new YoutubeSessionFactory(connectionString));
+
+            return services;
+        }
+
+        public static IServiceCollection AddYoutubeDalServicesMultiple(
+            this IServiceCollection services,
+            string connectionString)
+        {
+            services
+                .AddEntityFrameworkSqlServer()
+                .AddDbContext<YoutubeSqlServerDbContext>(options =>
+                    options.UseSqlServer(connectionString))
+
+                .AddScoped<IUnitOfWork, UnitOfWork>()
+                .AddScoped<IYoutubeUnitOfWorkFactory, YoutubeUnitOfWorkFactory>()
+
+                .AddTransient<IYoutubeSessionFactory, YoutubeSessionFactory>(
                     provider => new YoutubeSessionFactory(connectionString));
 
             return services;

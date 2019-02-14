@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
-using Lacey.Medusa.Common.Dal.Dal;
 using Lacey.Medusa.Common.Services.Services.Common;
 using Lacey.Medusa.Youtube.Api.Base;
+using Lacey.Medusa.Youtube.Dal.Dal;
 using Lacey.Medusa.Youtube.Domain.Entities;
 using Lacey.Medusa.Youtube.Services.Transfer.Mappers;
 using Microsoft.EntityFrameworkCore;
@@ -15,7 +15,7 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
         private readonly IMapper mapper;
 
         public VideosService(
-            IUnitOfWorkFactory unitOfWorkFactory, 
+            IYoutubeUnitOfWorkFactory unitOfWorkFactory, 
             IMapper mapper) : base(unitOfWorkFactory)
         {
             this.mapper = mapper;

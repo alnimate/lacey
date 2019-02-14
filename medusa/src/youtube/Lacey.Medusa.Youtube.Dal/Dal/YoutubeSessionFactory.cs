@@ -2,7 +2,7 @@
 
 namespace Lacey.Medusa.Youtube.Dal.Dal
 {
-    public class YoutubeSessionFactory : ISessionFactory
+    public class YoutubeSessionFactory : IYoutubeSessionFactory
     {
         private readonly string connectionString;
 

@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 using AutoMapper;
 using InstagramApiSharp.Classes.Models;
-using Lacey.Medusa.Common.Dal.Dal;
 using Lacey.Medusa.Common.Services.Services.Common;
+using Lacey.Medusa.Instagram.Dal.Dal;
 using Lacey.Medusa.Instagram.Domain.Entities;
 using Lacey.Medusa.Instagram.Services.Transfer.Mappers;
 
@@ -13,7 +13,7 @@ namespace Lacey.Medusa.Instagram.Services.Transfer.Services.Concrete
         private readonly IMapper mapper;
 
         public ChannelsService(
-            IUnitOfWorkFactory unitOfWorkFactory, 
+            IInstagramUnitOfWorkFactory unitOfWorkFactory, 
             IMapper mapper) : base(unitOfWorkFactory)
         {
             this.mapper = mapper;
