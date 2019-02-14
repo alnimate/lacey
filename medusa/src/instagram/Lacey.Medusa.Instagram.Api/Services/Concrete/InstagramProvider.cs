@@ -107,8 +107,34 @@ namespace Lacey.Medusa.Instagram.Api.Services.Concrete
 
         #endregion
 
+        #region Apply metadata
 
-        #region Media
+        public async Task<IResult<bool>> UnArchiveMediaAsync(string mediaId)
+        {
+            return await this.instagram.MediaProcessor.UnArchiveMediaAsync(mediaId);
+        }
+
+        public async Task<IResult<bool>> UnSaveMediaAsync(string mediaId)
+        {
+            return await this.instagram.MediaProcessor.UnSaveMediaAsync(mediaId);
+        }
+
+        public async Task<IResult<InstaMedia>> EditMediaAsync(
+            string mediaId,
+            string caption,
+            InstaLocationShort location = null,
+            InstaUserTagUpload[] userTags = null)
+        {
+            return await this.instagram.MediaProcessor.EditMediaAsync(
+                mediaId,
+                caption,
+                location,
+                userTags);
+        }
+
+        #endregion
+
+        #region Transfer media
 
         public async Task<InstaMediaList> GetUserMediaLast(string userName)
         {

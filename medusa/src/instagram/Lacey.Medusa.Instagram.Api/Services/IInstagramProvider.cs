@@ -13,7 +13,21 @@ namespace Lacey.Medusa.Instagram.Api.Services
 
         #endregion
 
-        #region Media
+        #region Apply metadata
+
+        Task<IResult<bool>> UnArchiveMediaAsync(string mediaId);
+
+        Task<IResult<bool>> UnSaveMediaAsync(string mediaId);
+
+        Task<IResult<InstaMedia>> EditMediaAsync(
+            string mediaId,
+            string caption,
+            InstaLocationShort location = null,
+            InstaUserTagUpload[] userTags = null);
+
+        #endregion
+
+        #region Transfer media
 
         Task<string> DownloadMedia(InstaMedia media, string outputFolder);
 

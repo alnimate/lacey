@@ -42,9 +42,11 @@ namespace Lacey.Medusa.Instagram.Transfer.Run
 
             logger.LogTrace("Welcome to the Instagram tool!");
             Console.WriteLine("0 - Transfer last media.");
-            Console.WriteLine("1 - Transfer all media.");
-            Console.WriteLine("2 - Save media to database.");
-            Console.WriteLine("3 - Upload media from database.");
+            Console.WriteLine("1 - Apply last metadata.");
+            Console.WriteLine("2 - Transfer all media.");
+            Console.WriteLine("3 - Apply all metadata.");
+            Console.WriteLine("4 - Save media to database.");
+            Console.WriteLine("5 - Upload media from database.");
             var answer = Console.ReadLine();
 
             var transferService = serviceProvider.GetService<ITransferService>();
@@ -64,13 +66,21 @@ namespace Lacey.Medusa.Instagram.Transfer.Run
                     }
                     else if (answer == "1")
                     {
-                        transferService.TransferMedia(sourceChannelId, destChannelId).Wait();
+                        transferService.ApplyMediaMetadataLast(sourceChannelId, destChannelId).Wait();
                     }
                     else if (answer == "2")
                     {
-                        transferService.SaveMedia(sourceChannelId, destChannelId).Wait();
+                        transferService.TransferMedia(sourceChannelId, destChannelId).Wait();
                     }
                     else if (answer == "3")
+                    {
+                        transferService.ApplyMediaMetadataAll(sourceChannelId, destChannelId).Wait();
+                    }
+                    else if (answer == "4")
+                    {
+                        transferService.SaveMedia(sourceChannelId, destChannelId).Wait();
+                    }
+                    else if (answer == "5")
                     {
                         transferService.UploadMedia(sourceChannelId, destChannelId).Wait();
                     }
