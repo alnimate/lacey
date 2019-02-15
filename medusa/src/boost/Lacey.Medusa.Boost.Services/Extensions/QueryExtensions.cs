@@ -65,7 +65,7 @@ namespace Lacey.Medusa.Boost.Services.Extensions
                 return string.Empty;
             }
 
-            return $"#{queryTag}";
+            return $"{queryTag}";
         }
     }
 }

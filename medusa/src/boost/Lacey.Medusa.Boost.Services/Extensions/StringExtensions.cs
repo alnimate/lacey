@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Lacey.Medusa.Boost.Services.Extensions
 {
@@ -13,6 +14,25 @@ namespace Lacey.Medusa.Boost.Services.Extensions
             }
 
             return Regex.Replace(text, @"[^\u0000-\u007F]+", string.Empty);
+        }
+
+        public static string[] DivideBySentences(
+            this string text)
+        {
+            if (string.IsNullOrEmpty(text))
+            {
+                return new string[]{};
+            }
+
+            return Regex.Split(text, @"(?<=[\.!\?])\s+");
+        }
+
+        public static string GetFirstSentence(
+            this string text)
+        {            
+            var sentences = text.DivideBySentences();
+
+            return sentences.FirstOrDefault();
         }
     }
 }

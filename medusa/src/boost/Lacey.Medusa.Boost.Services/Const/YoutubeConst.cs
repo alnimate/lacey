@@ -3,5 +3,7 @@
     internal static class YoutubeConst
     {
         public const string YoutubeVideoUrl = "https://www.youtube.com/watch?v=";
+
+        public const string YoutubeShortVideoUrl = "youtu.be/";
     }
 }

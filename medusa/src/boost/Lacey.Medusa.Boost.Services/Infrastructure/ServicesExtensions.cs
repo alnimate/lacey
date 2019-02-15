@@ -49,6 +49,7 @@ namespace Lacey.Medusa.Boost.Services.Infrastructure
                         provider.GetService<ILogger<YoutubeBooster>>(),
                         provider.GetService<IChannelsService>(),
                         provider.GetService<IVideosService>(),
+                        provider.GetService<Instagram.Services.Transfer.Services.IChannelsService>(),
                         provider.GetService<YoutubeOnYoutubeBooster>(),
                         provider.GetService<YoutubeOnInstagramBooster>()));
 

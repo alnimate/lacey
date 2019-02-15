@@ -23,6 +23,8 @@ namespace Lacey.Medusa.Boost.Services.Boosters.Concrete
 
         private readonly IVideosService videosService;
 
+        private readonly Instagram.Services.Transfer.Services.IChannelsService instagramChannelsService;
+
         private readonly YoutubeOnYoutubeBooster youtubeBooster;
 
         private readonly YoutubeOnInstagramBooster instagramBooster;
@@ -32,12 +34,14 @@ namespace Lacey.Medusa.Boost.Services.Boosters.Concrete
             ILogger<YoutubeBooster> logger,
             IChannelsService channelsService,
             IVideosService videosService,
+            Instagram.Services.Transfer.Services.IChannelsService instagramChannelsService,
             YoutubeOnYoutubeBooster youtubeBooster, 
             YoutubeOnInstagramBooster instagramBooster)
         {
             this.youtubeProvider = youtubeProvider;
             this.logger = logger;
             this.channelsService = channelsService;
+            this.instagramChannelsService = instagramChannelsService;
             this.videosService = videosService;
             this.youtubeBooster = youtubeBooster;
             this.instagramBooster = instagramBooster;
@@ -50,14 +54,16 @@ namespace Lacey.Medusa.Boost.Services.Boosters.Concrete
             string instagramChannelId,
             int interval)
         {
-            ChannelEntity localChannel;
-            IReadOnlyList<VideoEntity> localVideos;
+            ChannelEntity youtubeChannel;
+            IReadOnlyList<VideoEntity> youtubeVideos;
+            Instagram.Domain.Entities.ChannelEntity instagramChannel;
             while (true)
             {
                 try
                 {
-                    localChannel = await this.channelsService.GetChannelMetadata(channelId);
-                    localVideos = await this.videosService.GetChannelVideos(channelId);
+                    youtubeChannel = await this.channelsService.GetChannelMetadata(channelId);
+                    youtubeVideos = await this.videosService.GetChannelVideos(channelId);
+                    instagramChannel = await this.instagramChannelsService.GetChannelMetadata(instagramChannelId);
                     break;
                 }
                 catch (Exception e)
@@ -80,17 +86,17 @@ namespace Lacey.Medusa.Boost.Services.Boosters.Concrete
                         ConsoleUtils.WaitSec(sec);
                     }
 
-                    var randomVideo = localVideos.PickRandom();
-                    var localVideo = await this.youtubeProvider.GetVideo(randomVideo.VideoId);
+                    var randomVideo = youtubeVideos.PickRandom();
+                    var video = await this.youtubeProvider.GetVideo(randomVideo.VideoId);
 
-                    instagramBoosted = await this.instagramBooster.Boost(instagramChannelId, localChannel, localVideo);
-                    if (!instagramBoosted)
+                    youtubeBoosted = await this.youtubeBooster.Boost(youtubeChannel, video);
+                    if (!youtubeBoosted)
                     {
                         ConsoleUtils.WaitSec(60);
                     }
 
-                    youtubeBoosted = await this.youtubeBooster.Boost(localChannel, localVideo);
-                    if (!youtubeBoosted)
+                    instagramBoosted = await this.instagramBooster.Boost(instagramChannel, youtubeChannel, video);
+                    if (!instagramBoosted)
                     {
                         ConsoleUtils.WaitSec(60);
                     }

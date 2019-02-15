@@ -24,10 +24,10 @@ namespace Lacey.Medusa.Boost.Services.Boosters.Concrete
         }
 
         public async Task<bool> Boost(
-            ChannelEntity localChannel,
+            ChannelEntity channel,
             Video localVideo)
         {
-            var query = localVideo.GetYoutubeQuery(new[] { localChannel.Name });
+            var query = localVideo.GetYoutubeQuery(new[] { channel.Name });
             if (string.IsNullOrEmpty(query))
             {
                 return false;
@@ -40,8 +40,8 @@ namespace Lacey.Medusa.Boost.Services.Boosters.Concrete
             foreach (var similarVideo in similarVideos)
             {
                 if (similarVideo?.Snippet == null || 
-                    similarVideo.Snippet.ChannelId == localChannel.OriginalChannelId || 
-                    similarVideo.Snippet.ChannelId == localChannel.ChannelId)
+                    similarVideo.Snippet.ChannelId == channel.OriginalChannelId || 
+                    similarVideo.Snippet.ChannelId == channel.ChannelId)
                 {
                     continue;
                 }
@@ -63,10 +63,15 @@ namespace Lacey.Medusa.Boost.Services.Boosters.Concrete
                     continue;
                 }
 
-                await this.youtubeProvider.AddComment(
+                var comment = await this.youtubeProvider.AddComment(
                     similarVideo.Snippet.ChannelId,
                     similarVideo.Id.VideoId,
-                    localVideo.GetBoostText());
+                    localVideo.GetYoutubeBoostText());
+
+                if (comment == null)
+                {
+                    return false;
+                }
 
                 this.logger.LogTrace($"{similarVideo.GetYoutubeUrl()}");
                 return true;

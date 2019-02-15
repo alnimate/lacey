@@ -7,7 +7,7 @@ namespace Lacey.Medusa.Boost.Services.Extensions
 {
     internal static class VideoExtensions
     {
-        public static string GetBoostText(
+        public static string GetYoutubeBoostText(
             this Video video)
         {
             if (video == null)
@@ -21,6 +21,33 @@ namespace Lacey.Medusa.Boost.Services.Extensions
             sb.AppendLine(video.Snippet.Description);
 
             return sb.ToString();
+        }
+
+        public static string GetInstagramBoostText(
+            this Video video)
+        {
+            if (video == null)
+            {
+                return string.Empty;
+            }
+
+            var sb = new StringBuilder();
+            sb.AppendLine($"❤️{video.Snippet.Title}❤️");
+            sb.AppendLine($"    {video.GetYoutubeShortUrl()}    ");
+            sb.AppendLine($"❤️{video.Snippet.Description.GetFirstSentence()}");
+
+            return sb.ToString();
+        }
+
+        public static string GetYoutubeShortUrl(
+            this Video video)
+        {
+            if (video == null)
+            {
+                return string.Empty;
+            }
+
+            return $"{YoutubeConst.YoutubeShortVideoUrl}{video.Id}";
         }
 
         public static string GetYoutubeUrl(
