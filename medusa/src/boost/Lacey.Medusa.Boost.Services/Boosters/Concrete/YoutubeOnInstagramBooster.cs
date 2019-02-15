@@ -71,10 +71,7 @@ namespace Lacey.Medusa.Boost.Services.Boosters.Concrete
                     continue;
                 }
 
-                var media = mediaList
-                    .Take(3)
-                    .Shuffle()
-                    .FirstOrDefault();
+                var media = mediaList.First();
                 if (media?.Caption == null ||
                     string.IsNullOrEmpty(media.Caption.MediaId))
                 {
