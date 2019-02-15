@@ -1,11 +1,9 @@
 ﻿using System;
 using System.IO;
-using System.Text;
 using AutoMapper;
 using Lacey.Medusa.Boost.Run.Configuration;
 using Lacey.Medusa.Boost.Run.Infrastructure;
-using Lacey.Medusa.Boost.Services.Services;
-using Lacey.Medusa.Common.Email.Services.Email;
+using Lacey.Medusa.Boost.Services.Boosters;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -46,8 +44,6 @@ namespace Lacey.Medusa.Boost.Run
             Console.WriteLine("Welcome to the Boost tool!");
 
             var youtubeBooster = serviceProvider.GetService<IYoutubeBooster>();
-
-            var sb = new StringBuilder();
             for (var i = 0; i < config.YoutubeChannels.Length; i++)
             {
                 var youtubeChannel = config.YoutubeChannels[i];
@@ -63,25 +59,7 @@ namespace Lacey.Medusa.Boost.Run
                     logger.LogError(exc.Message);
                 }
 
-                sb.AppendLine($"[{youtubeChannel.ChannelId}]");
             }
-
-            if (config.Email.IsSendEmails)
-            {
-                var emailService = serviceProvider.GetService<IEmailProvider>();
-                var currentFolder = Directory.GetCurrentDirectory();
-                emailService.Send(
-                    config.Email.From,
-                    config.Email.To,
-                    config.Email.Subject,
-                    sb.ToString(),
-                    true,
-                    new[]
-                    {
-                        Path.Combine(currentFolder, config.Logs.LogFile)
-                    });
-            }
-
             youtubeBooster.Dispose();
             serviceProvider.Dispose();
         }

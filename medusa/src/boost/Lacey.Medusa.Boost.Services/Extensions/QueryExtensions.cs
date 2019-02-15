@@ -6,8 +6,8 @@ namespace Lacey.Medusa.Boost.Services.Extensions
 {
     internal static class QueryExtensions
     {
-        public static string ToQuery(
-            this string[] tags)
+        public static string ToYoutubeQuery(
+            this IList<string> tags)
         {
             if (tags == null)
             {
@@ -39,6 +39,33 @@ namespace Lacey.Medusa.Boost.Services.Extensions
             }
 
             return string.Join(" ", list);
+        }
+
+        public static string ToInstagramQuery(
+            this IList<string> tags)
+        {
+            if (tags == null || !tags.Any())
+            {
+                return string.Empty;
+            }
+
+            var queryTag = string.Empty;
+            foreach (var tag in tags)
+            {
+                var words = tag.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                if (words.Length == 1)
+                {
+                    queryTag = tag;
+                    break;
+                }
+            }
+
+            if (string.IsNullOrEmpty(queryTag))
+            {
+                return string.Empty;
+            }
+
+            return $"#{queryTag}";
         }
     }
 }

@@ -1,5 +1,7 @@
-﻿using Lacey.Medusa.Boost.Services.Services;
-using Lacey.Medusa.Boost.Services.Services.Concrete;
+﻿using Lacey.Medusa.Boost.Services.Boosters;
+using Lacey.Medusa.Boost.Services.Boosters.Concrete;
+using Lacey.Medusa.Boost.Services.Providers;
+using Lacey.Medusa.Boost.Services.Providers.Concrete;
 using Lacey.Medusa.Instagram.Api.Infrastructure;
 using Lacey.Medusa.Instagram.Dal.Infrastructure;
 using Lacey.Medusa.Instagram.Services.Transfer.Services;
@@ -32,23 +34,23 @@ namespace Lacey.Medusa.Boost.Services.Infrastructure
                 .AddTransient<IChannelsService, ChannelsService>()
                 .AddTransient<IVideosService, VideosService>()
                 .AddTransient<IYoutubeBoostProvider, YoutubeBoostProvider>()
+                .AddTransient<YoutubeOnYoutubeBooster, YoutubeOnYoutubeBooster>()
 
                 .AddInstagramServices(instagramClientSecretsFile)
                 .AddInstagramDalServices(instagramConnectionString)
                 .AddTransient<Instagram.Services.Transfer.Services.IChannelsService, Instagram.Services.Transfer.Services.Concrete.ChannelsService>()
                 .AddTransient<IMediaService, MediaService>()
                 .AddTransient<IInstagramBoostProvider, InstagramBoostProvider>()
+                .AddTransient<YoutubeOnInstagramBooster, YoutubeOnInstagramBooster>()
 
                 .AddTransient<IYoutubeBooster, YoutubeBooster>(
                     provider => new YoutubeBooster(
                         provider.GetService<IYoutubeBoostProvider>(),
-                        provider.GetService<IInstagramBoostProvider>(),
                         provider.GetService<ILogger<YoutubeBooster>>(),
-                        outputFolder,
                         provider.GetService<IChannelsService>(),
                         provider.GetService<IVideosService>(),
-                        provider.GetService<Instagram.Services.Transfer.Services.IChannelsService>(),
-                        provider.GetService<IMediaService>()));
+                        provider.GetService<YoutubeOnYoutubeBooster>(),
+                        provider.GetService<YoutubeOnInstagramBooster>()));
 
             return services;
         }

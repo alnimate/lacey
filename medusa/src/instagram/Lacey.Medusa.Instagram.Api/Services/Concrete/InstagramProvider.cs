@@ -36,6 +36,8 @@ namespace Lacey.Medusa.Instagram.Api.Services.Concrete
             this.logger = logger;
         }
 
+        protected IInstaApi Instagram => instagram;
+
         #endregion
 
         #region Login

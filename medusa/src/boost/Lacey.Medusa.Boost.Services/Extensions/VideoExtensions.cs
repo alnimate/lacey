@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Linq;
+using System.Text;
 using Lacey.Medusa.Boost.Services.Const;
 using Lacey.Medusa.Youtube.Api.Base;
 
@@ -43,6 +44,42 @@ namespace Lacey.Medusa.Boost.Services.Extensions
             }
 
             return $"{YoutubeConst.YoutubeVideoUrl}{video.Id.VideoId}";
+        }
+
+        public static string GetYoutubeQuery(
+            this Video video,
+            string[] excludes)
+        {
+            var tags = video?.Snippet?.Tags;
+            if (tags == null)
+            {
+                return string.Empty;
+            }
+
+            if (excludes != null && excludes.Any())
+            {
+                tags = tags.RemoveAll(excludes.ToArray());
+            }
+
+            return tags.ToYoutubeQuery();
+        }
+
+        public static string GetInstagramQuery(
+            this Video video,
+            string[] excludes)
+        {
+            var tags = video?.Snippet?.Tags;
+            if (tags == null)
+            {
+                return string.Empty;
+            }
+
+            if (excludes != null && excludes.Any())
+            {
+                tags = tags.RemoveAll(excludes.ToArray());
+            }
+
+            return tags.ToInstagramQuery();
         }
     }
 }

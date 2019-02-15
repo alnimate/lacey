@@ -15,7 +15,7 @@ using Lacey.Medusa.Youtube.Api.Services.Concrete;
 using Microsoft.Extensions.Logging;
 using OpenQA.Selenium;
 
-namespace Lacey.Medusa.Boost.Services.Services.Concrete
+namespace Lacey.Medusa.Boost.Services.Providers.Concrete
 {
     public sealed class YoutubeBoostProvider : YoutubeProvider, IYoutubeBoostProvider
     {
@@ -35,10 +35,10 @@ namespace Lacey.Medusa.Boost.Services.Services.Concrete
 
         #endregion
 
-        public async Task<IReadOnlyList<SearchResult>> FindVideosByTags(string[] tags, long maxResults)
+        public async Task<IReadOnlyList<SearchResult>> FindVideos(string query, long maxResults)
         {
             var request = this.Youtube.Search.List(VideoParts.Snippet);
-            request.Q = tags.ToQuery();
+            request.Q = query;
             request.Order = SearchResource.ListRequest.OrderEnum.Date;
             request.RegionCode = CountryCodes.Us;
             request.RelevanceLanguage = Language.Us;

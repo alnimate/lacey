@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Lacey.Medusa.Boost.Services.Services
+namespace Lacey.Medusa.Boost.Services.Boosters
 {
     public interface IYoutubeBooster : IDisposable
     {
