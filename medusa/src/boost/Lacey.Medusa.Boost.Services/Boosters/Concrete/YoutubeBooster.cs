@@ -73,33 +73,18 @@ namespace Lacey.Medusa.Boost.Services.Boosters.Concrete
                 }
             }
 
-            var youtubeBoosted = false;
-            var instagramBoosted = false;
             while (true)
             {
                 try
                 {
-                    if (youtubeBoosted || instagramBoosted)
-                    {
-                        var sec = (interval + RandomUtils.GetRandom(0, 1) - 2 * RandomUtils.GetRandom(0, 1)) * 60
-                                  + RandomUtils.GetRandom(0, 60);
-                        ConsoleUtils.WaitSec(sec);
-                    }
-
                     var randomVideo = youtubeVideos.PickRandom();
                     var video = await this.youtubeProvider.GetVideo(randomVideo.VideoId);
 
-                    youtubeBoosted = await this.youtubeBooster.Boost(youtubeChannel, video);
-                    if (!youtubeBoosted)
-                    {
-                        ConsoleUtils.WaitSec(60);
-                    }
+                    await this.youtubeBooster.Boost(youtubeChannel, video);
+                    this.WaitNext(interval);
 
-                    instagramBoosted = await this.instagramBooster.Boost(instagramChannel, youtubeChannel, video);
-                    if (!instagramBoosted)
-                    {
-                        ConsoleUtils.WaitSec(60);
-                    }
+                    await this.instagramBooster.Boost(instagramChannel, youtubeChannel, video);
+                    this.WaitNext(interval);
                 }
                 catch (Exception e)
                 {
@@ -107,6 +92,13 @@ namespace Lacey.Medusa.Boost.Services.Boosters.Concrete
                 }
             }
             // ReSharper disable once FunctionNeverReturns
+        }
+
+        private void WaitNext(int interval)
+        {
+            var sec = 60 * (interval / 2 - RandomUtils.GetRandom(0, 1))
+                      + RandomUtils.GetRandom(0, 60);
+            ConsoleUtils.WaitSec(sec);
         }
 
         #region IDisposable

@@ -58,7 +58,7 @@ namespace Lacey.Medusa.Instagram.Api.Services.Concrete
             {
                 if (File.Exists(stateFile))
                 {
-                    this.logger.LogTrace("Loading state from file.");
+                    Console.WriteLine("Loading state from file.");
                     using (var fs = File.OpenRead(stateFile))
                     {
                         this.instagram.LoadStateDataFromString(new StreamReader(fs).ReadToEnd());

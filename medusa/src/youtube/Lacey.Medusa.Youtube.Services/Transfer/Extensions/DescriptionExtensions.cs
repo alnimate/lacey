@@ -29,8 +29,7 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Extensions
             this Video video,
             Dictionary<string, string> replacements)
         {
-            if (video?.Snippet == null || 
-                string.IsNullOrEmpty(video.Snippet.Description))
+            if (video?.Snippet == null)
             {
                 return video;
             }
