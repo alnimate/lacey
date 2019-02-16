@@ -1,5 +1,7 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using InstagramApiSharp.Classes.Models;
 using Lacey.Medusa.Boost.Services.Extensions;
 using Lacey.Medusa.Boost.Services.Providers;
 using Lacey.Medusa.Instagram.Domain.Entities;
@@ -39,25 +41,37 @@ namespace Lacey.Medusa.Boost.Services.Boosters.Concrete
                 return false;
             }
 
-            var result = await this.instagramProvider.SearchPeopleAsync(query);
-            if (!result.Succeeded)
+            var usersCount = 10;
+            var users = new List<InstaUser>();
+            while (usersCount <= 100)
             {
-                this.logger.LogError($"{result.Info?.Message}");
-                return false;
-            }
+                var result = await this.instagramProvider.SearchPeopleAsync(query, usersCount);
+                if (!result.Succeeded)
+                {
+                    this.logger.LogError($"{result.Info?.Message}");
+                    return false;
+                }
 
-            var users = result.Value.Users
-                .OrderBy(u => u.FollowersCount)
-                .Take(20)
-                .Shuffle()
-                .ToList();
+                users = result.Value.Users
+                    .Where(u => 
+                        !u.IsPrivate &&
+                        u.FollowersCount < 1000)
+                    .ToList();
+
+                if (users.Any())
+                {
+                    break;
+                }
+
+                usersCount += 10;
+            }
 
             if (!users.Any()) 
             {
                 return false;
             }
 
-            foreach (var user in users)
+            foreach (var user in users.Shuffle())
             {
                 if (user.UserName == channel.OriginalChannelId ||
                     user.UserName == channel.ChannelId)
@@ -71,24 +85,37 @@ namespace Lacey.Medusa.Boost.Services.Boosters.Concrete
                     continue;
                 }
 
-                var media = mediaList.First();
-                if (media?.Caption == null ||
-                    string.IsNullOrEmpty(media.Caption.MediaId))
+                foreach (var media in mediaList)
                 {
-                    continue;
-                }
+                    if (media?.Caption == null ||
+                        string.IsNullOrEmpty(media.Caption.MediaId) ||
+                        media.IsCommentsDisabled)
+                    {
+                        continue;
+                    }
 
-                var res = await this.instagramProvider.CommentMediaAsync(
-                    media.Caption.MediaId,
-                    video.GetInstagramBoostText());
-                if (!res.Succeeded)
-                {
-                    this.logger.LogError($"{res.Info?.Message}");
-                    continue;
+                    if (!int.TryParse(media.CommentsCount, out var commentsCount))
+                    {
+                        continue;
+                    }
+
+                    if (commentsCount > 3)
+                    {
+                        continue;
+                    }
+
+                    var res = await this.instagramProvider.CommentMediaAsync(
+                        media.Caption.MediaId,
+                        video.GetInstagramBoostText());
+                    if (!res.Succeeded)
+                    {
+                        this.logger.LogError($"{res.Info?.Message}");
+                        continue;
+                    }
+
+                    this.logger.LogTrace($"{media.GetInstagramUrl()}");
+                    return true;
                 }
-                
-                this.logger.LogTrace($"{media.GetInstagramUrl()}");
-                return true;
             }
 
             return false;
