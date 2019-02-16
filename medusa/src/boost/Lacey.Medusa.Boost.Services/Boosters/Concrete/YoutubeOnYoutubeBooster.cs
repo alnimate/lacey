@@ -34,7 +34,7 @@ namespace Lacey.Medusa.Boost.Services.Boosters.Concrete
             }
 
             var similarVideos = (await this.youtubeProvider.FindVideos(
-                    query, 20))
+                    query, ListConsts.MaxResults))
                 .Shuffle();
 
             foreach (var similarVideo in similarVideos)
@@ -57,8 +57,8 @@ namespace Lacey.Medusa.Boost.Services.Boosters.Concrete
                     continue;
                 }
 
-                if (video.Statistics?.ViewCount > 10000 ||
-                    video.Statistics?.CommentCount > 100)
+                if (video.Statistics?.ViewCount > 1000 ||
+                    video.Statistics?.CommentCount > 3)
                 {
                     continue;
                 }
