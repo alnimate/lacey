@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using InstagramApiSharp.Classes.Models;
@@ -19,17 +18,17 @@ namespace Lacey.Medusa.Boost.Services.Boosters.Concrete
 
         private readonly ILogger logger;
 
-        private readonly IReadOnlyList<string> firstNames;
+        private readonly IReadOnlyList<string> lastNames;
 
         public YoutubeOnInstagramBooster(
             IInstagramBoostProvider instagramProvider, 
             ILogger<YoutubeOnInstagramBooster> logger, 
-            IFirstNamesGenerator generator)
+            INamesGenerator generator)
         {
             this.instagramProvider = instagramProvider;
             this.logger = logger;
 
-            this.firstNames = generator.Generate();
+            this.lastNames = generator.GenerateLastNames();
 
             this.instagramProvider.Login().Wait();
         }
@@ -39,15 +38,8 @@ namespace Lacey.Medusa.Boost.Services.Boosters.Concrete
             Youtube.Domain.Entities.ChannelEntity youtubeChannel,
             Video video)
         {
-            var query = this.firstNames[RandomUtils.GetRandom(0, this.firstNames.Count - 1)];
-            if (string.IsNullOrEmpty(query) ||
-                string.Compare(query, channel.OriginalChannelId, StringComparison.InvariantCultureIgnoreCase) == 0 ||
-                string.Compare(query, youtubeChannel.Name, StringComparison.InvariantCultureIgnoreCase) == 0)
-            {
-                return false;
-            }
-
-            query = query.Trim().ToLower();
+            var lastName = this.lastNames[RandomUtils.GetRandom(0, this.lastNames.Count - 1)];
+            var query = $"{lastName.Replace(" ", string.Empty).ToLower()}";
 
             var usersCount = 10;
             var users = new List<InstaUser>();
@@ -82,7 +74,8 @@ namespace Lacey.Medusa.Boost.Services.Boosters.Concrete
             foreach (var user in users.Shuffle())
             {
                 if (user.UserName == channel.OriginalChannelId ||
-                    user.UserName == channel.ChannelId)
+                    user.UserName == channel.ChannelId ||
+                    user.UserName == youtubeChannel.Name)
                 {
                     continue;
                 }

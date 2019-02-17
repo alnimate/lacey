@@ -48,7 +48,7 @@ namespace Lacey.Medusa.Boost.Services.Infrastructure
                 .AddTransient<YoutubeOnInstagramBooster, YoutubeOnInstagramBooster>()
 
                 // generators
-                .AddSingleton<IFirstNamesGenerator, FirstNamesGenerator>()
+                .AddSingleton<INamesGenerator, NamesGenerator>()
 
                 // boost
                 .AddTransient<IYoutubeBooster, YoutubeBooster>(
