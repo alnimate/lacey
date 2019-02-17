@@ -2,6 +2,8 @@
 using Lacey.Medusa.Boost.Services.Boosters.Concrete;
 using Lacey.Medusa.Boost.Services.Providers;
 using Lacey.Medusa.Boost.Services.Providers.Concrete;
+using Lacey.Medusa.Common.Generators.Generators;
+using Lacey.Medusa.Common.Generators.Generators.Concrete;
 using Lacey.Medusa.Instagram.Api.Infrastructure;
 using Lacey.Medusa.Instagram.Dal.Infrastructure;
 using Lacey.Medusa.Instagram.Services.Transfer.Services;
@@ -29,6 +31,7 @@ namespace Lacey.Medusa.Boost.Services.Infrastructure
             string instagramConnectionString)
         {
             services
+                // youtube
                 .AddYoutubeServices(youtubeClientSecretsFile, userName)
                 .AddYoutubeDalServices(youtubeConnectionString)
                 .AddTransient<IChannelsService, ChannelsService>()
@@ -36,6 +39,7 @@ namespace Lacey.Medusa.Boost.Services.Infrastructure
                 .AddTransient<IYoutubeBoostProvider, YoutubeBoostProvider>()
                 .AddTransient<YoutubeOnYoutubeBooster, YoutubeOnYoutubeBooster>()
 
+                // instagram
                 .AddInstagramServices(instagramClientSecretsFile)
                 .AddInstagramDalServices(instagramConnectionString)
                 .AddTransient<Instagram.Services.Transfer.Services.IChannelsService, Instagram.Services.Transfer.Services.Concrete.ChannelsService>()
@@ -43,6 +47,10 @@ namespace Lacey.Medusa.Boost.Services.Infrastructure
                 .AddTransient<IInstagramBoostProvider, InstagramBoostProvider>()
                 .AddTransient<YoutubeOnInstagramBooster, YoutubeOnInstagramBooster>()
 
+                // generators
+                .AddSingleton<IFirstNamesGenerator, FirstNamesGenerator>()
+
+                // boost
                 .AddTransient<IYoutubeBooster, YoutubeBooster>(
                     provider => new YoutubeBooster(
                         provider.GetService<IYoutubeBoostProvider>(),

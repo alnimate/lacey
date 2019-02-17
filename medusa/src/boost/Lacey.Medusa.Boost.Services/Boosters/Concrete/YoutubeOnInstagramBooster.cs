@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using InstagramApiSharp.Classes.Models;
 using Lacey.Medusa.Boost.Services.Extensions;
 using Lacey.Medusa.Boost.Services.Providers;
+using Lacey.Medusa.Boost.Services.Utils;
+using Lacey.Medusa.Common.Generators.Generators;
 using Lacey.Medusa.Instagram.Domain.Entities;
 using Lacey.Medusa.Youtube.Api.Base;
 using Microsoft.Extensions.Logging;
@@ -16,12 +19,17 @@ namespace Lacey.Medusa.Boost.Services.Boosters.Concrete
 
         private readonly ILogger logger;
 
+        private readonly IReadOnlyList<string> firstNames;
+
         public YoutubeOnInstagramBooster(
             IInstagramBoostProvider instagramProvider, 
-            ILogger<YoutubeOnInstagramBooster> logger)
+            ILogger<YoutubeOnInstagramBooster> logger, 
+            IFirstNamesGenerator generator)
         {
             this.instagramProvider = instagramProvider;
             this.logger = logger;
+
+            this.firstNames = generator.Generate();
 
             this.instagramProvider.Login().Wait();
         }
@@ -31,15 +39,15 @@ namespace Lacey.Medusa.Boost.Services.Boosters.Concrete
             Youtube.Domain.Entities.ChannelEntity youtubeChannel,
             Video video)
         {
-            var query = video.GetInstagramQuery(new[]
-            {
-                channel.OriginalChannelId,
-                youtubeChannel.Name
-            });
-            if (string.IsNullOrEmpty(query))
+            var query = this.firstNames[RandomUtils.GetRandom(0, this.firstNames.Count - 1)];
+            if (string.IsNullOrEmpty(query) ||
+                string.Compare(query, channel.OriginalChannelId, StringComparison.InvariantCultureIgnoreCase) == 0 ||
+                string.Compare(query, youtubeChannel.Name, StringComparison.InvariantCultureIgnoreCase) == 0)
             {
                 return false;
             }
+
+            query = query.Trim().ToLower();
 
             var usersCount = 10;
             var users = new List<InstaUser>();
