@@ -69,7 +69,7 @@ namespace Lacey.Medusa.Boost.Services.Boosters.Concrete
                 catch (Exception e)
                 {
                     this.logger.LogError(e.Message);
-                    ConsoleUtils.WaitSec(60);
+                    this.WaitNext(interval);
                 }
             }
 
@@ -89,6 +89,7 @@ namespace Lacey.Medusa.Boost.Services.Boosters.Concrete
                 catch (Exception e)
                 {
                     this.logger.LogError(e.Message);
+                    this.WaitNext(interval);
                 }
             }
             // ReSharper disable once FunctionNeverReturns
