@@ -18,7 +18,7 @@ namespace Lacey.Medusa.Boost.Services.Boosters.Concrete
 
         private readonly ILogger logger;
 
-        private readonly IReadOnlyList<string> lastNames;
+        private readonly IReadOnlyList<string> names;
 
         public YoutubeOnInstagramBooster(
             IInstagramBoostProvider instagramProvider, 
@@ -28,7 +28,7 @@ namespace Lacey.Medusa.Boost.Services.Boosters.Concrete
             this.instagramProvider = instagramProvider;
             this.logger = logger;
 
-            this.lastNames = generator.GenerateLastNames();
+            this.names = generator.GenerateFirstNames();
 
             this.instagramProvider.Login().Wait();
         }
@@ -38,8 +38,8 @@ namespace Lacey.Medusa.Boost.Services.Boosters.Concrete
             Youtube.Domain.Entities.ChannelEntity youtubeChannel,
             Video video)
         {
-            var lastName = this.lastNames[RandomUtils.GetRandom(0, this.lastNames.Count - 1)];
-            var query = $"{lastName.Replace(" ", string.Empty).ToLower()}";
+            var name = this.names[RandomUtils.GetRandom(0, this.names.Count - 1)];
+            var query = $"{name.Replace(" ", string.Empty).ToLower()}";
 
             var usersCount = 10;
             var users = new List<InstaUser>();
