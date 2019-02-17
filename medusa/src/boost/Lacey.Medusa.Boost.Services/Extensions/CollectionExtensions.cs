@@ -1,27 +1,37 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Lacey.Medusa.Boost.Services.Extensions
 {
     internal static class CollectionExtensions
     {
-        public static IList<T> RemoveAll<T>(
-            this IList<T> list,
-            T[] removes)
+        public static IList<string> RemoveSimilar(
+            this IList<string> list,
+            string[] similar)
         {
-            if (removes == null ||
-                removes.Length == 0)
+            if (list == null ||
+                !list.Any())
             {
                 return list;
             }
 
-            foreach (var remove in removes)
+            if (similar == null ||
+                similar.Length == 0)
             {
-                while (list.Remove(remove))
-                {
-                }
+                return list;
             }
 
-            return list;
+            var result = new List<string>();
+            foreach (var item in list)
+            {
+                if (!similar.Any(r => r.Replace(" ", string.Empty).ToLower()
+                    .Contains(item.Replace(" ", string.Empty).ToLower())))
+                {
+                    result.Add(item);
+                }
+            }
+            
+            return result;
         }
     }
 }

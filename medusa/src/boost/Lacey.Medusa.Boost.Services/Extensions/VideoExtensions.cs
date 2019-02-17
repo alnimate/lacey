@@ -85,7 +85,7 @@ namespace Lacey.Medusa.Boost.Services.Extensions
 
             if (excludes != null && excludes.Any())
             {
-                tags = tags.RemoveAll(excludes.ToArray());
+                tags = tags.RemoveSimilar(excludes.ToArray());
             }
 
             return tags.ToYoutubeQuery();
@@ -103,7 +103,7 @@ namespace Lacey.Medusa.Boost.Services.Extensions
 
             if (excludes != null && excludes.Any())
             {
-                tags = tags.RemoveAll(excludes.ToArray());
+                tags = tags.RemoveSimilar(excludes.ToArray());
             }
 
             return tags.ToInstagramQuery();
