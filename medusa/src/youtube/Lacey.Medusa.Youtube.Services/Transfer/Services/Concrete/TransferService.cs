@@ -100,7 +100,7 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                         destChannelId,
                         sourceVideo.ReplaceDescription(replacements),
                         filePath);
-                    uploadedSourceVideos.Add(uploadedVideo);
+                    uploadedSourceVideos.Add(sourceVideo);
                     this.Logger.LogTrace($"\"{name}\" uploaded.");
 
                     this.Logger.LogTrace($"Saving \"{name}\" to the database...");
