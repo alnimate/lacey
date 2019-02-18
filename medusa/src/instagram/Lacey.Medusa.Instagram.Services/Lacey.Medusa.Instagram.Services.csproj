@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\common\Lacey.Medusa.Common.Cli\Lacey.Medusa.Common.Cli.csproj" />
     <ProjectReference Include="..\..\common\Lacey.Medusa.Common.Services\Lacey.Medusa.Common.Services.csproj" />
     <ProjectReference Include="..\Lacey.Medusa.Instagram.Api\Lacey.Medusa.Instagram.Api.csproj" />
     <ProjectReference Include="..\Lacey.Medusa.Instagram.Dal\Lacey.Medusa.Instagram.Dal.csproj" />

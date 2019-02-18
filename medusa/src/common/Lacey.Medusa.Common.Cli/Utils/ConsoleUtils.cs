@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading;
 
-namespace Lacey.Medusa.Boost.Services.Utils
+namespace Lacey.Medusa.Common.Cli.Utils
 {
-    internal static class ConsoleUtils
+    public static class ConsoleUtils
     {
         public static void WaitSec(int interval)
         {

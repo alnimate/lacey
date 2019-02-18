@@ -5,7 +5,7 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services
 {
     public interface ITransferService
     {
-        Task TransferVideosLast(
+        Task UpdateVideos(
             string sourceChannelId,
             string destChannelId,
             Dictionary<string, string> replacements);

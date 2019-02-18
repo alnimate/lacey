@@ -6,7 +6,7 @@ namespace Lacey.Medusa.Youtube.Api.Services
 {
     public interface IYoutubeProvider
     {
-        #region videos
+        #region get videos
 
         Task<IReadOnlyList<string>> GetVideoIdsLast(string channelId);
 
@@ -18,18 +18,30 @@ namespace Lacey.Medusa.Youtube.Api.Services
 
         Task<IReadOnlyList<string>> GetVideoIds(string channelId);
 
+        #endregion
+
+        #region download video
+
         Task<string> DownloadVideo(string videoId, string outputFolder);
+
+        #endregion
+
+        #region update video
 
         Task<Base.Video> UploadVideo(string channelId, Base.Video video, string filePath);
 
         Task UploadThumbnail(string videoId, string imageUrl);
 
-        Task<string> DeleteVideo(string videoId);
-
         Task<Base.Video> UpdateVideoDescription(
             Base.Video video,
             string oldPhrase,
             string newPhrase);
+
+        #endregion
+
+        #region delete video
+
+        Task<string> DeleteVideo(string videoId);
 
         #endregion
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Text;
 using AutoMapper;
 using Lacey.Medusa.Common.Email.Services.Email;
@@ -16,7 +17,7 @@ namespace Lacey.Medusa.Instagram.Transfer.Run
     {
         private static ILogger<Program> logger;
 
-        static void Main()
+        static void Main(string[] args)
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
@@ -40,14 +41,22 @@ namespace Lacey.Medusa.Instagram.Transfer.Run
             logger = serviceProvider.GetService<ILoggerFactory>()
                 .CreateLogger<Program>();
 
-            logger.LogTrace("Welcome to the Instagram tool!");
-            Console.WriteLine("0 - Transfer last media.");
-            Console.WriteLine("1 - Apply last metadata.");
-            Console.WriteLine("2 - Transfer all media.");
-            Console.WriteLine("3 - Apply all metadata.");
-            Console.WriteLine("4 - Save media to database.");
-            Console.WriteLine("5 - Upload media from database.");
-            var answer = Console.ReadLine();
+            string action;
+            if (args != null && args.Any())
+            {
+                action = args[0];
+            }
+            else
+            {
+                Console.WriteLine("Welcome to the Instagram tool!");
+                Console.WriteLine("0 - Transfer last media.");
+                Console.WriteLine("1 - Apply last metadata.");
+                Console.WriteLine("2 - Transfer all media.");
+                Console.WriteLine("3 - Apply all metadata.");
+                Console.WriteLine("4 - Save media to database.");
+                Console.WriteLine("5 - Upload media from database.");
+                action = Console.ReadLine();
+            }            
 
             var transferService = serviceProvider.GetService<ITransferService>();
 
@@ -60,27 +69,27 @@ namespace Lacey.Medusa.Instagram.Transfer.Run
 
                 try
                 {
-                    if (answer == "0")
+                    if (action == "0")
                     {
                         transferService.TransferMediaLast(sourceChannelId, destChannelId).Wait();
                     }
-                    else if (answer == "1")
+                    else if (action == "1")
                     {
                         transferService.ApplyMediaMetadataLast(sourceChannelId, destChannelId).Wait();
                     }
-                    else if (answer == "2")
+                    else if (action == "2")
                     {
                         transferService.TransferMedia(sourceChannelId, destChannelId).Wait();
                     }
-                    else if (answer == "3")
+                    else if (action == "3")
                     {
                         transferService.ApplyMediaMetadataAll(sourceChannelId, destChannelId).Wait();
                     }
-                    else if (answer == "4")
+                    else if (action == "4")
                     {
                         transferService.SaveMedia(sourceChannelId, destChannelId).Wait();
                     }
-                    else if (answer == "5")
+                    else if (action == "5")
                     {
                         transferService.UploadMedia(sourceChannelId, destChannelId).Wait();
                     }

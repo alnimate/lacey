@@ -4,7 +4,9 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using InstagramApiSharp.Classes.Models;
+using Lacey.Medusa.Common.Cli.Utils;
 using Lacey.Medusa.Instagram.Api.Services;
+using Lacey.Medusa.Instagram.Domain.Entities;
 using Lacey.Medusa.Instagram.Services.Common.Services;
 using Lacey.Medusa.Instagram.Services.Extensions;
 using Microsoft.Extensions.Logging;
@@ -117,7 +119,20 @@ namespace Lacey.Medusa.Instagram.Services.Transfer.Services.Concrete
 
         public async Task TransferMediaLast(string sourceChannelId, string destChannelId)
         {
-            var mediaList = await this.InstagramProvider.GetUserMediaLast(sourceChannelId);
+            InstaMediaList mediaList;
+            while (true)
+            {
+                try
+                {
+                    mediaList = await this.InstagramProvider.GetUserMediaLast(sourceChannelId);
+                    break;
+                }
+                catch (Exception e)
+                {
+                    this.Logger.LogError(e.Message);
+                    ConsoleUtils.WaitSec(5 * 60);
+                }
+            }
 
             this.DoTransferMedia(sourceChannelId, destChannelId, mediaList).Wait();
         }
@@ -134,60 +149,74 @@ namespace Lacey.Medusa.Instagram.Services.Transfer.Services.Concrete
             string destChannelId,
             InstaMediaList mediaList)
         {
-            var channel = await this.channelsService.GetChannelMetadata(destChannelId);
-            var saved = await this.mediaService.GetTransferMedias(sourceChannelId, destChannelId);
-            if (mediaList == null)
+            ChannelEntity channel;
+            IReadOnlyList<MediaEntity> saved;
+
+            while (true)
             {
-                throw new Exception("Can't get media from the Instagram.");
+                try
+                {
+                    channel = await this.channelsService.GetChannelMetadata(destChannelId);
+                    saved = await this.mediaService.GetTransferMedias(sourceChannelId, destChannelId);
+                    break;
+                }
+                catch (Exception e)
+                {
+                    this.Logger.LogError(e.Message);
+                    ConsoleUtils.WaitSec(5 * 60);
+                }
             }
+
             foreach (var media in mediaList.OrderBy(m => m.DeviceTimeStamp))
             {
-                if (saved.Any(m => m.OriginalMediaId == media.Caption.MediaId || 
+                if (media.Caption?.MediaId == null ||
+                    saved.Any(m => m.OriginalMediaId == media.Caption.MediaId || 
                                    m.OriginalMediaId == media.Code))
                 {
                     continue;
                 }
 
-                var name = media.Caption != null ? media.Caption.Text : media.Code;
-                this.Logger.LogTrace($"Uploading \"{name}\"...");
-                var results = await this.InstagramProvider.UploadMedia(media, this.outputFolder);
-                foreach (var result in results)
+                try
                 {
-                    if (!result.Succeeded)
+                    var name = media.Caption.Text;
+                    this.Logger.LogTrace($"Uploading \"{name}\"...");
+                    var results = await this.InstagramProvider.UploadMedia(media, this.outputFolder);
+                    foreach (var result in results)
                     {
-                        this.Logger.LogTrace($"{result.Info?.Message}");
-                        continue;
+                        if (!result.Succeeded)
+                        {
+                            this.Logger.LogTrace($"{result.Info?.Message}");
+                            continue;
+                        }
+                        this.Logger.LogTrace($"\"{name}\" uploaded.");
+
+                        this.Logger.LogTrace($"Editing \"{name}\"...");
+                        var editResult = await this.InstagramProvider.EditMediaAsync(
+                            result.Value.Caption.MediaId,
+                            media.Caption.Text,
+                            media.Location,
+                            media.UserTags.AsUpload(channel.ChannelId));
+                        if (!editResult.Succeeded)
+                        {
+                            this.Logger.LogTrace($"{editResult.Info?.Message}");
+                        }
+                        else
+                        {
+                            this.Logger.LogTrace($"\"{name}\" edited.");
+                        }
+
+                        this.Logger.LogTrace($"Saving \"{name}\"...");
+                        await this.mediaService.Add(channel.Id, result.Value.Caption.MediaId, media);
+                        this.Logger.LogTrace($"\"{name}\" saved.");
                     }
 
-                    this.Logger.LogTrace($"\"{name}\" uploaded.");
-
-                    var uploaded = result.Value;
-                    if (uploaded?.Caption == null ||
-                        media.Caption == null)
-                    {
-                        continue;
-                    }
-
-                    this.Logger.LogTrace($"Editing \"{name}\"...");
-                    var editResult = await this.InstagramProvider.EditMediaAsync(
-                        uploaded.Caption.MediaId,
-                        media.Caption.Text,
-                        media.Location,
-                        media.UserTags.AsUpload(channel.ChannelId));
-                    if (!editResult.Succeeded)
-                    {
-                        this.Logger.LogTrace($"{editResult.Info?.Message}");
-                    }
-                    else
-                    {
-                        this.Logger.LogTrace($"\"{name}\" edited.");
-                    }
-
-                    this.Logger.LogTrace($"Saving \"{name}\"...");
-                    await this.mediaService.Add(channel.Id, result.Value.Caption.MediaId, media);
-                    this.Logger.LogTrace($"\"{name}\" saved.");
+                    ConsoleUtils.WaitSec(5);
                 }
-                Thread.Sleep(TimeSpan.FromSeconds(2));
+                catch (Exception e)
+                {
+                    this.Logger.LogError(e.Message);
+                    ConsoleUtils.WaitSec(20);
+                }
             }
         }
 

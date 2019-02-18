@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using AutoMapper;
 using Lacey.Medusa.Common.Email.Services.Email;
@@ -17,7 +18,7 @@ namespace Lacey.Medusa.Youtube.Transfer.Run
     {
         private static ILogger<Program> logger;
 
-        static void Main()
+        static void Main(string[] args)
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
@@ -41,19 +42,26 @@ namespace Lacey.Medusa.Youtube.Transfer.Run
             logger = serviceProvider.GetService<ILoggerFactory>()
                 .CreateLogger<Program>();
 
-            logger.LogTrace("Welcome to the YouTube tool!");
+            string action;
+            if (args != null && args.Any())
+            {
+                action = args[0];
+            }
+            else
+            {
+                Console.WriteLine("Welcome to the YouTube tool!");
+                Console.WriteLine("0 - Update Last Videos");
+                Console.WriteLine("1 - Update Last Thumbnails");
+                Console.WriteLine("2 - Channel Info");
+                Console.WriteLine("3 - Videos");
+                Console.WriteLine("4 - Thumbnails");
+                Console.WriteLine("5 - Playlists");
+                Console.WriteLine("6 - Sections");
+                Console.WriteLine("7 - Subscriptions");
+                Console.WriteLine("8 - Instagram");
 
-            Console.WriteLine("0 - Update Last Videos");
-            Console.WriteLine("1 - Update Last Thumbnails");
-            Console.WriteLine("2 - Channel Info");
-            Console.WriteLine("3 - Videos");
-            Console.WriteLine("4 - Thumbnails");
-            Console.WriteLine("5 - Playlists");
-            Console.WriteLine("6 - Sections");
-            Console.WriteLine("7 - Subscriptions");
-            Console.WriteLine("8 - Instagram");
-
-            var answer = Console.ReadLine();
+                action = Console.ReadLine();
+            }
 
             var transferService = serviceProvider.GetService<ITransferService>();
 
@@ -75,42 +83,42 @@ namespace Lacey.Medusa.Youtube.Transfer.Run
 
                 try
                 {
-                    if (answer == "0")
+                    if (action == "0")
                     {
-                        transferService.TransferVideosLast(
+                        transferService.UpdateVideos(
                             sourceChannelId, 
                             destChannelId,
                             replacements).Wait();
                     }
-                    else if (answer == "1")
+                    else if (action == "1")
                     {
                         transferService.SetThumbnailsLast(sourceChannelId, destChannelId).Wait();
                     }
-                    else if (answer == "2")
+                    else if (action == "2")
                     {
                         transferService.TransferMetadata(sourceChannelId, destChannelId).Wait();
                     }
-                    else if (answer == "3")
+                    else if (action == "3")
                     {
                         transferService.TransferVideos(sourceChannelId, destChannelId).Wait();
                     }
-                    else if (answer == "4")
+                    else if (action == "4")
                     {
                         transferService.SetThumbnails(sourceChannelId, destChannelId).Wait();
                     }
-                    else if (answer == "5")
+                    else if (action == "5")
                     {
                         transferService.TransferPlaylists(sourceChannelId, destChannelId).Wait();
                     }
-                    else if (answer == "6")
+                    else if (action == "6")
                     {
                         transferService.TransferSections(sourceChannelId, destChannelId).Wait();
                     }
-                    else if (answer == "7")
+                    else if (action == "7")
                     {
                         transferService.TransferSubscriptions(sourceChannelId, destChannelId).Wait();
                     }
-                    else if (answer == "8")
+                    else if (action == "8")
                     {
                         transferService.UpdateInstagram(destChannelId, sourceInstagram, destInstagram).Wait();
                     }

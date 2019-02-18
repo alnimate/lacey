@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Lacey.Medusa.Common.Cli.Utils;
 using Lacey.Medusa.Youtube.Api.Base;
 using Lacey.Medusa.Youtube.Api.Extensions;
 using Lacey.Medusa.Youtube.Api.Services;
@@ -41,21 +42,92 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
 
         #endregion
 
-        #region Full Transfer
+        #region update videos
 
-        public async Task TransferChannel(string sourceChannelId, string destChannelId)
+        public async Task UpdateVideos(
+            string sourceChannelId,
+            string destChannelId,
+            Dictionary<string, string> replacements)
         {
-            //            await this.TransferComments(sourceChannelId, destChannelId);
+            ChannelEntity destChannel;
+            IReadOnlyList<VideoEntity> uploadedVideos;
+            IReadOnlyList<Video> sourceVideos;
+            IReadOnlyList<Video> dest;
 
-            await this.TransferMetadata(sourceChannelId, destChannelId);
+            while (true)
+            {
+                try
+                {
+                    destChannel = await this.channelsService.GetChannelMetadata(destChannelId);
+                    uploadedVideos = await this.videosService.GetChannelVideos(destChannelId);
 
-            await this.TransferVideos(sourceChannelId, destChannelId);
+                    sourceVideos = await this.YoutubeProvider.GetVideosLast(sourceChannelId);
+                    dest = await this.YoutubeProvider.GetVideos(destChannelId);
+                    break;
+                }
+                catch (Exception e)
+                {
+                    this.Logger.LogError(e.Message);
+                    ConsoleUtils.WaitSec(5 * 60);
+                }
+            }
 
-            await this.TransferPlaylists(sourceChannelId, destChannelId);
+            var newVideos = new List<Video>();
+            foreach (var sourceVideo in sourceVideos
+                .Where(v => v.Snippet != null)
+                .OrderBy(v => v.Snippet.PublishedAt))
+            {
+                // skip existing items
+                if ((uploadedVideos != null &&
+                     uploadedVideos.Any(u => u.OriginalVideoId == sourceVideo.Id))
+                    || dest.Any(d =>
+                    sourceVideo.Snippet.Title == d.Snippet.Title &&
+                    sourceVideo.Snippet.Description == d.Snippet.Description))
+                {
+                    continue;
+                }
 
-            await this.TransferSections(sourceChannelId, destChannelId);
+                string filePath = null;
+                try
+                {
+                    var name = sourceVideo.Snippet.Title;
+                    this.Logger.LogTrace($"Downloading \"{name}\"...");
+                    filePath = await this.YoutubeProvider.DownloadVideo(sourceVideo.Id, this.outputFolder);
+                    this.Logger.LogTrace($"\"{name}\" => \"{filePath}\"");
 
-            await this.TransferSubscriptions(sourceChannelId, destChannelId);
+                    this.Logger.LogTrace($"Uploading \"{name}\"...");
+                    var uploadedVideo = await this.YoutubeProvider.UploadVideo(
+                        destChannelId,
+                        sourceVideo.ReplaceDescription(replacements),
+                        filePath);
+                    newVideos.Add(uploadedVideo);
+                    this.Logger.LogTrace($"\"{name}\" uploaded.");
+
+                    this.Logger.LogTrace($"Saving \"{name}\" to the database...");
+                    await this.videosService.Add(destChannel.Id, sourceVideo.Id, uploadedVideo);
+                    this.Logger.LogTrace($"\"{name}\" saved.");
+                }
+                catch (Exception exc)
+                {
+                    this.Logger.LogError(exc.Message);
+                    ConsoleUtils.WaitSec(60);
+                }
+                finally
+                {
+                    if (!string.IsNullOrEmpty(filePath))
+                    {
+                        File.Delete(filePath);
+                    }
+                }
+            }
+
+            if (newVideos.Any())
+            {
+                ConsoleUtils.WaitSec(20 * 60);
+                await this.SetThumbnailsLast(sourceChannelId, destChannelId);
+                ConsoleUtils.WaitSec(60);
+                await this.TransferPlaylists(sourceChannelId, destChannelId);
+            }
         }
 
         #endregion
@@ -113,60 +185,114 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
 
         #endregion
 
-        #region videos
+        #region playlists
 
-        public async Task TransferVideosLast(
-            string sourceChannelId, 
-            string destChannelId,
-            Dictionary<string, string> replacements)
+        public async Task TransferPlaylists(string sourceChannelId, string destChannelId)
         {
-            var sourceVideos = await this.YoutubeProvider.GetVideosLast(sourceChannelId);
-            var dest = await this.YoutubeProvider.GetVideos(destChannelId);
-            var destChannel = await this.channelsService.GetChannelMetadata(destChannelId);
-            var uploadedVideos = await this.videosService.GetChannelVideos(destChannelId);
-
-            foreach (var sourceVideo in sourceVideos
-                .Where(v => v.Snippet != null)
-                .OrderBy(v => v.Snippet.PublishedAt))
+            try
             {
+                var sourcePlaylists = await this.YoutubeProvider.GetPlaylists(sourceChannelId);
+                var destPlaylists = await this.YoutubeProvider.GetPlaylists(destChannelId);
+                var localChannel = await this.channelsService.GetChannelMetadata(destChannelId);
+                var localVideos = await this.videosService.GetTransferVideos(sourceChannelId, destChannelId);
+                var localPlaylists = await this.playlistsService.GetChannelPlaylists(destChannelId);
+
+                var now = DateTime.UtcNow;
                 // skip existing items
-                if ((uploadedVideos != null &&
-                     uploadedVideos.Any(u => u.OriginalVideoId == sourceVideo.Id))
-                    || dest.Any(d =>
-                    sourceVideo.Snippet.Title == d.Snippet.Title &&
-                    sourceVideo.Snippet.Description == d.Snippet.Description))
+                foreach (var sourcePlaylist in sourcePlaylists
+                    .Where(p => p.Snippet != null)
+                    .OrderBy(p => p.Snippet.PublishedAt))
                 {
-                    this.Logger.LogTrace($"Video [{sourceVideo.Snippet.Title}] skipped. Video already exists.");
-                    continue;
-                }
+                    var destPlaylist = destPlaylists.FirstOrDefault(d =>
+                        sourcePlaylist.Snippet.Title == d.Snippet.Title);
 
-                string filePath = null;
-                try
-                {
-                    this.Logger.LogTrace($"Downloading video [{sourceVideo.Id}]...");
-                    filePath = await this.YoutubeProvider.DownloadVideo(sourceVideo.Id, this.outputFolder);
-                    this.Logger.LogTrace($"Video [{sourceVideo.Id}] downloaded to [{filePath}]");
-
-                    var uploadedVideo = await this.YoutubeProvider.UploadVideo(
-                        destChannelId, 
-                        sourceVideo.ReplaceDescription(replacements), 
-                        filePath);
-                    await this.videosService.Add(destChannel.Id, sourceVideo.Id, uploadedVideo);
-                }
-                catch (Exception exc)
-                {
-                    this.Logger.LogError(exc.Message);
-                }
-                finally
-                {
-                    if (!string.IsNullOrEmpty(filePath))
+                    PlaylistEntity localPlaylist;
+                    if (destPlaylist == null)
                     {
-                        File.Delete(filePath);
+                        destPlaylist = await this.YoutubeProvider.UploadPlaylist(destChannelId, sourcePlaylist);
+                        var localPlaylistId = await this.playlistsService.Add(localChannel.Id, sourcePlaylist.Id, destPlaylist);
+                        localPlaylist = await this.playlistsService.GetPlaylist(localPlaylistId);
+                    }
+                    else
+                    {
+                        localPlaylist = localPlaylists.FirstOrDefault(p => p.PlaylistId == destPlaylist.Id);
+                    }
+
+                    if (localPlaylist == null)
+                    {
+                        continue;
+                    }
+
+                    var localPlaylistVideos =
+                        await this.playlistsService.GetPlaylistVideos(localPlaylist.Id);
+
+                    // insert playlist items
+                    var sourceItems = await this.YoutubeProvider.GetPlaylistItems(sourcePlaylist.Id);
+                    foreach (var sourceItem in sourceItems)
+                    {
+                        if (sourceItem.Snippet.ResourceId == null)
+                        {
+                            continue;
+                        }
+
+                        var localVideo = localVideos.FirstOrDefault(
+                            l => l.OriginalVideoId == sourceItem.Snippet.ResourceId.VideoId);
+
+                        if (localVideo != null)
+                        {
+                            // if we already have this video in playlist
+                            if (localPlaylistVideos.Any(v => v.VideoId == localVideo.Id))
+                            {
+                                continue;
+                            }
+
+                            sourceItem.Snippet.ResourceId.VideoId = localVideo.VideoId;
+                        }
+
+                        // skip old videos
+                        if (sourceItem.Snippet.PublishedAt == null
+                            || (now - sourceItem.Snippet.PublishedAt.Value).TotalDays > 10)
+                        {
+                            continue;
+                        }
+
+                        await this.YoutubeProvider.UploadPlaylistItem(destChannelId, destPlaylist.Id, sourceItem);
+
+                        if (localVideo != null)
+                        {
+                            await this.playlistsService.AddVideoToPlaylist(destPlaylist.Id, localVideo.VideoId);
+                        }
                     }
                 }
             }
+            catch (Exception exc)
+            {
+                this.Logger.LogError(exc.Message);
+            }
         }
 
+        #endregion
+
+        #region Full Transfer
+
+        public async Task TransferChannel(string sourceChannelId, string destChannelId)
+        {
+//            await this.TransferComments(sourceChannelId, destChannelId);
+
+            await this.TransferMetadata(sourceChannelId, destChannelId);
+
+            await this.TransferVideos(sourceChannelId, destChannelId);
+
+            await this.TransferPlaylists(sourceChannelId, destChannelId);
+
+            await this.TransferSections(sourceChannelId, destChannelId);
+
+            await this.TransferSubscriptions(sourceChannelId, destChannelId);
+        }
+
+        #endregion
+
+        #region transfer videos
 
         public async Task UpdateInstagram(string channelId, string originalInstagram, string newInstagram)
         {
@@ -264,94 +390,6 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                         File.Delete(filePath);
                     }
                 }
-            }
-        }
-
-        #endregion
-
-        #region playlists
-
-        public async Task TransferPlaylists(string sourceChannelId, string destChannelId)
-        {
-            try
-            {
-                var sourcePlaylists = await this.YoutubeProvider.GetPlaylists(sourceChannelId);
-                var destPlaylists = await this.YoutubeProvider.GetPlaylists(destChannelId);
-                var localChannel = await this.channelsService.GetChannelMetadata(destChannelId);
-                var localVideos = await this.videosService.GetTransferVideos(sourceChannelId, destChannelId);
-                var localPlaylists = await this.playlistsService.GetChannelPlaylists(destChannelId);
-
-                var now = DateTime.UtcNow;
-                // skip existing items
-                foreach (var sourcePlaylist in sourcePlaylists
-                    .Where(p => p.Snippet != null)
-                    .OrderBy(p => p.Snippet.PublishedAt))
-                {
-                    var destPlaylist = destPlaylists.FirstOrDefault(d =>
-                        sourcePlaylist.Snippet.Title == d.Snippet.Title);
-
-                    PlaylistEntity localPlaylist;
-                    if (destPlaylist == null)
-                    {
-                        destPlaylist = await this.YoutubeProvider.UploadPlaylist(destChannelId, sourcePlaylist);
-                        var localPlaylistId = await this.playlistsService.Add(localChannel.Id, sourcePlaylist.Id, destPlaylist);
-                        localPlaylist = await this.playlistsService.GetPlaylist(localPlaylistId);
-                    }
-                    else
-                    {
-                        localPlaylist = localPlaylists.FirstOrDefault(p => p.PlaylistId == destPlaylist.Id);
-                    }
-
-                    if (localPlaylist == null)
-                    {
-                        continue;
-                    }
-
-                    var localPlaylistVideos = 
-                        await this.playlistsService.GetPlaylistVideos(localPlaylist.Id);
-
-                    // insert playlist items
-                    var sourceItems = await this.YoutubeProvider.GetPlaylistItems(sourcePlaylist.Id);
-                    foreach (var sourceItem in sourceItems)
-                    {
-                        if (sourceItem.Snippet.ResourceId == null)
-                        {
-                            continue;
-                        }
-
-                        var localVideo = localVideos.FirstOrDefault(
-                            l => l.OriginalVideoId == sourceItem.Snippet.ResourceId.VideoId);
-
-                        if (localVideo != null)
-                        {
-                            // if we already have this video in playlist
-                            if (localPlaylistVideos.Any(v => v.VideoId == localVideo.Id))
-                            {
-                                continue;
-                            }
-
-                            sourceItem.Snippet.ResourceId.VideoId = localVideo.VideoId;
-                        }
-
-                        // skip old videos
-                        if (sourceItem.Snippet.PublishedAt == null
-                            || (now - sourceItem.Snippet.PublishedAt.Value).TotalDays > 10)
-                        {
-                            continue;
-                        }
-
-                        await this.YoutubeProvider.UploadPlaylistItem(destChannelId, destPlaylist.Id, sourceItem);
-
-                        if (localVideo != null)
-                        {
-                            await this.playlistsService.AddVideoToPlaylist(destPlaylist.Id, localVideo.VideoId);
-                        }
-                    }
-                }
-            }
-            catch (Exception exc)
-            {
-                this.Logger.LogError(exc.Message);
             }
         }
 

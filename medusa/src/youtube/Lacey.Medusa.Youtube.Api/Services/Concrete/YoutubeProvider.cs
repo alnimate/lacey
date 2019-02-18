@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Mime;
-using System.Threading;
 using System.Threading.Tasks;
 using Lacey.Medusa.Common.Api.Base.Services;
 using Lacey.Medusa.Common.Api.Base.Upload;
@@ -43,7 +42,7 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
 
         #endregion
 
-        #region videos
+        #region get videos
 
         public async Task<IReadOnlyList<string>> GetVideoIdsLast(string channelId)
         {
@@ -124,6 +123,10 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
             return list;
         }
 
+        #endregion
+
+        #region Download video
+
         public async Task<string> DownloadVideo(string videoId, string outputFolder)
         {
             using (var service = Client.For(YouTube.Default))
@@ -135,6 +138,10 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
                 return outputFilePath;
             }
         }
+
+        #endregion
+
+        #region update video
 
         public async Task<Base.Video> UpdateVideoDescription(
             Base.Video video,
@@ -178,19 +185,6 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
                 request.ResponseReceived += OnResponseReceived;
 
                 await request.UploadAsync();
-
-                try
-                {
-                    Thread.Sleep(TimeSpan.FromSeconds(5));
-                    await this.UploadThumbnail(
-                        request.ResponseBody.Id,
-                        video.Snippet.Thumbnails.GetMaxResUrl());
-                }
-                catch (Exception exc)
-                {
-                    this.logger.LogTrace($"Thumbnail upload failed - \"{exc.Message}\"");
-                }
-
                 return request.ResponseBody;
             }
         }
@@ -218,6 +212,10 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
         {
             this.logger.LogTrace($"Video [{video.Snippet.Title}] uploaded.");
         }
+
+        #endregion
+
+        #region delete video
 
         public async Task<string> DeleteVideo(string videoId)
         {

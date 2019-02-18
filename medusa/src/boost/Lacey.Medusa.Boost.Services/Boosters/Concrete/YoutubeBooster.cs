@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Lacey.Medusa.Boost.Services.Extensions;
 using Lacey.Medusa.Boost.Services.Providers;
 using Lacey.Medusa.Boost.Services.Utils;
+using Lacey.Medusa.Common.Cli.Utils;
 using Lacey.Medusa.Youtube.Domain.Entities;
 using Lacey.Medusa.Youtube.Services.Transfer.Services;
 using Microsoft.Extensions.Logging;
