@@ -68,7 +68,7 @@ namespace Lacey.Medusa.Instagram.Services.Transfer.Services.Concrete
 
             foreach (var localMedia in medias.OrderByDescending(m => m.CreatedAt))
             {
-                if (isOnlyLast && (now - localMedia.CreatedAt).TotalHours > 8)
+                if (isOnlyLast && (now - localMedia.CreatedAt).TotalDays > 7)
                 {
                     continue;
                 }
@@ -215,7 +215,7 @@ namespace Lacey.Medusa.Instagram.Services.Transfer.Services.Concrete
                 catch (Exception e)
                 {
                     this.Logger.LogError(e.Message);
-                    ConsoleUtils.WaitSec(20);
+                    ConsoleUtils.WaitSec(30);
                 }
             }
         }

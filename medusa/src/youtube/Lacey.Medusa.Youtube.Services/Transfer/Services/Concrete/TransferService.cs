@@ -136,24 +136,23 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
 
         public async Task SetThumbnailsLast(string sourceChannelId, string destChannelId)
         {
-            var sourceVideos = await this.YoutubeProvider.GetVideosLast(sourceChannelId);
-            var destVideos = await this.videosService.GetChannelVideos(destChannelId);
-
-            await this.SetThumbnails(sourceVideos, destVideos);
+            await this.SetThumbnails(sourceChannelId, destChannelId, true);
         }
 
         public async Task SetThumbnails(string sourceChannelId, string destChannelId)
         {
-            var sourceVideos = await this.YoutubeProvider.GetVideos(sourceChannelId);
-            var destVideos = await this.videosService.GetChannelVideos(destChannelId);
-
-            await this.SetThumbnails(sourceVideos, destVideos);
+            await this.SetThumbnails(sourceChannelId, destChannelId, false);
         }
 
         private async Task SetThumbnails(
-            IReadOnlyList<Video> sourceVideos,
-            IReadOnlyList<VideoEntity> destVideos)
+            string sourceChannelId, 
+            string destChannelId,
+            bool onlyLast)
         {
+            var sourceVideos = onlyLast ? await this.YoutubeProvider.GetVideosLast(sourceChannelId) :
+                await this.YoutubeProvider.GetVideos(sourceChannelId);
+            var destVideos = await this.videosService.GetChannelVideos(destChannelId);
+
             var now = DateTime.UtcNow;
             foreach (var destVideo in destVideos)
             {
@@ -163,7 +162,7 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                     continue;
                 }
 
-                if ((now - destVideo.CreatedAt).TotalHours >= 8)
+                if (onlyLast && (now - destVideo.CreatedAt).TotalDays > 7)
                 {
                     continue;
                 }
@@ -251,7 +250,7 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
 
                         // skip old videos
                         if (sourceItem.Snippet.PublishedAt == null
-                            || (now - sourceItem.Snippet.PublishedAt.Value).TotalDays > 10)
+                            || (now - sourceItem.Snippet.PublishedAt.Value).TotalDays > 7)
                         {
                             continue;
                         }
