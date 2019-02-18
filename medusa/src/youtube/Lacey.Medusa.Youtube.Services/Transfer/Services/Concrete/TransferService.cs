@@ -49,20 +49,20 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
             string destChannelId,
             Dictionary<string, string> replacements)
         {
-            ChannelEntity destChannel;
-            IReadOnlyList<VideoEntity> uploadedVideos;
+            ChannelEntity channel;
+            IReadOnlyList<VideoEntity> videos;
             IReadOnlyList<Video> sourceVideos;
-            IReadOnlyList<Video> dest;
+            IReadOnlyList<Video> destVideos;
 
             while (true)
             {
                 try
                 {
-                    destChannel = await this.channelsService.GetChannelMetadata(destChannelId);
-                    uploadedVideos = await this.videosService.GetChannelVideos(destChannelId);
+                    channel = await this.channelsService.GetChannelMetadata(destChannelId);
+                    videos = await this.videosService.GetChannelVideos(destChannelId);
 
                     sourceVideos = await this.YoutubeProvider.GetVideosLast(sourceChannelId);
-                    dest = await this.YoutubeProvider.GetVideos(destChannelId);
+                    destVideos = await this.YoutubeProvider.GetVideos(destChannelId);
                     break;
                 }
                 catch (Exception e)
@@ -72,15 +72,15 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                 }
             }
 
-            var newVideos = new List<Video>();
+            var uploadedSourceVideos = new List<Video>();
             foreach (var sourceVideo in sourceVideos
                 .Where(v => v.Snippet != null)
                 .OrderBy(v => v.Snippet.PublishedAt))
             {
                 // skip existing items
-                if ((uploadedVideos != null &&
-                     uploadedVideos.Any(u => u.OriginalVideoId == sourceVideo.Id))
-                    || dest.Any(d =>
+                if ((videos != null &&
+                     videos.Any(u => u.OriginalVideoId == sourceVideo.Id))
+                    || destVideos.Any(d =>
                     sourceVideo.Snippet.Title == d.Snippet.Title &&
                     sourceVideo.Snippet.Description == d.Snippet.Description))
                 {
@@ -100,11 +100,11 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                         destChannelId,
                         sourceVideo.ReplaceDescription(replacements),
                         filePath);
-                    newVideos.Add(uploadedVideo);
+                    uploadedSourceVideos.Add(uploadedVideo);
                     this.Logger.LogTrace($"\"{name}\" uploaded.");
 
                     this.Logger.LogTrace($"Saving \"{name}\" to the database...");
-                    await this.videosService.Add(destChannel.Id, sourceVideo.Id, uploadedVideo);
+                    await this.videosService.Add(channel.Id, sourceVideo.Id, uploadedVideo);
                     this.Logger.LogTrace($"\"{name}\" saved.");
                 }
                 catch (Exception exc)
@@ -121,10 +121,10 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                 }
             }
 
-            if (newVideos.Any())
+            if (uploadedSourceVideos.Any())
             {
                 ConsoleUtils.WaitSec(20 * 60);
-                await this.SetThumbnailsLast(sourceChannelId, destChannelId);
+                await this.SetThumbnails(sourceChannelId, destChannelId, true, uploadedSourceVideos);
                 ConsoleUtils.WaitSec(60);
                 await this.TransferPlaylists(sourceChannelId, destChannelId);
             }
@@ -147,12 +147,21 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
         private async Task SetThumbnails(
             string sourceChannelId, 
             string destChannelId,
-            bool onlyLast)
+            bool onlyLast,
+            IReadOnlyList<Video> source = null)
         {
-            var sourceVideos = onlyLast ? await this.YoutubeProvider.GetVideosLast(sourceChannelId) :
-                await this.YoutubeProvider.GetVideos(sourceChannelId);
-            var destVideos = await this.videosService.GetChannelVideos(destChannelId);
+            IReadOnlyList<Video> sourceVideos;
+            if (source != null)
+            {
+                sourceVideos = source;
+            }
+            else
+            {
+                sourceVideos = onlyLast ? await this.YoutubeProvider.GetVideosLast(sourceChannelId) :
+                    await this.YoutubeProvider.GetVideos(sourceChannelId);
+            }
 
+            var destVideos = await this.videosService.GetChannelVideos(destChannelId);
             var now = DateTime.UtcNow;
             foreach (var destVideo in destVideos)
             {
