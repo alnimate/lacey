@@ -73,7 +73,7 @@ namespace Lacey.Medusa.Boost.Services.Boosters.Concrete
                     return false;
                 }
 
-                this.logger.LogTrace($"{similarVideo.GetYoutubeUrl()}");
+                this.logger.LogTrace($"[{similarVideo.GetYoutubeUrl()}] [{video.Snippet.ChannelId}] [{video.GetYoutubeUser()}]");
                 return true;
             }
 

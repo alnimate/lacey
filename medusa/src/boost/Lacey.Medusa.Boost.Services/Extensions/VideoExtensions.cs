@@ -73,6 +73,17 @@ namespace Lacey.Medusa.Boost.Services.Extensions
             return $"{YoutubeConst.YoutubeVideoUrl}{video.Id.VideoId}";
         }
 
+        public static string GetYoutubeUser(
+            this Video video)
+        {
+            if (string.IsNullOrEmpty(video?.Snippet?.ChannelTitle))
+            {
+                return string.Empty;
+            }
+
+            return $"{video.Snippet.ChannelTitle}";
+        }
+
         public static string GetYoutubeQuery(
             this Video video,
             string[] excludes)

@@ -114,7 +114,7 @@ namespace Lacey.Medusa.Boost.Services.Boosters.Concrete
                         continue;
                     }
 
-                    this.logger.LogTrace($"{media.GetInstagramUrl()}");
+                    this.logger.LogTrace($"[{media.GetInstagramUrl()}] [{media.GetInstagramUser()}]");
                     return true;
                 }
             }
