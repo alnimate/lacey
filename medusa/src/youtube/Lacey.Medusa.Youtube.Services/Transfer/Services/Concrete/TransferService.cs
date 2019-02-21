@@ -542,28 +542,42 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
         {
             try
             {
-                var source = await this.YoutubeProvider.GetChannel(sourceChannelId);
+                var sourceChannel = await this.YoutubeProvider.GetChannel(sourceChannelId);
 
                 if (downloadIcon)
                 {
-                    var iconFilePath = await this.YoutubeProvider.DownloadIcon(source, this.outputFolder);
+                    var iconFilePath = await this.YoutubeProvider.DownloadIcon(sourceChannel, this.outputFolder);
                     this.Logger.LogTrace($"Icon downloaded to [{iconFilePath}].");
                 }
 
                 if (replacements != null && replacements.Any())
                 {
-                    source.BrandingSettings.Channel.Description =
-                        source.BrandingSettings.Channel.Description.Replace(replacements);
+                    sourceChannel.BrandingSettings.Channel.Description =
+                        sourceChannel.BrandingSettings.Channel.Description.Replace(replacements);
                 }
 
                 var destVideos = await this.videosService.GetTransferVideos(sourceChannelId, destChannelId);
+                // if update existing channel
+                if (destVideos != null && destVideos.Any())
+                {
+                    var destChannel = await this.YoutubeProvider.GetChannel(destChannelId);
+                    if (destChannel != null)
+                    {
+                        if (sourceChannel.BrandingSettings.Channel.UnsubscribedTrailer ==
+                            destChannel.BrandingSettings.Channel.UnsubscribedTrailer)
+                        {
+                            return;
+                        }
+                    }
+                }
+
                 var unsubscribedTrailer = destVideos.FirstOrDefault(v => 
-                    v.OriginalVideoId == source.BrandingSettings.Channel.UnsubscribedTrailer);
-                source.BrandingSettings.Channel.UnsubscribedTrailer = unsubscribedTrailer != null ? 
+                    v.OriginalVideoId == sourceChannel.BrandingSettings.Channel.UnsubscribedTrailer);
+                sourceChannel.BrandingSettings.Channel.UnsubscribedTrailer = unsubscribedTrailer != null ? 
                     unsubscribedTrailer.VideoId : string.Empty;
 
-                await this.YoutubeProvider.UpdateMetadata(destChannelId, source);
-                await this.channelsService.AddOrUpdate(sourceChannelId, destChannelId, source);
+                await this.YoutubeProvider.UpdateMetadata(destChannelId, sourceChannel);
+                await this.channelsService.AddOrUpdate(sourceChannelId, destChannelId, sourceChannel);
             }
             catch (Exception exc)
             {
