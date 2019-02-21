@@ -126,7 +126,8 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                 ConsoleUtils.WaitSec(20 * 60);
                 await this.SetThumbnails(sourceChannelId, destChannelId, true, uploadedSourceVideos);
                 ConsoleUtils.WaitSec(60);
-                await this.TransferPlaylists(sourceChannelId, destChannelId);
+                await this.TransferPlaylists(sourceChannelId, destChannelId, true);
+                await this.TransferMetadata(sourceChannelId, destChannelId, false, replacements);
             }
         }
 
@@ -195,7 +196,7 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
 
         #region playlists
 
-        public async Task TransferPlaylists(string sourceChannelId, string destChannelId)
+        public async Task TransferPlaylists(string sourceChannelId, string destChannelId, bool onlyLast)
         {
             try
             {
@@ -258,8 +259,8 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                         }
 
                         // skip old videos
-                        if (sourceItem.Snippet.PublishedAt == null
-                            || (now - sourceItem.Snippet.PublishedAt.Value).TotalDays > 7)
+                        if (sourceItem.Snippet.PublishedAt == null || 
+                            onlyLast && (now - sourceItem.Snippet.PublishedAt.Value).TotalDays > 7)
                         {
                             continue;
                         }
@@ -287,11 +288,11 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
         {
 //            await this.TransferComments(sourceChannelId, destChannelId);
 
-            await this.TransferMetadata(sourceChannelId, destChannelId);
+            await this.TransferMetadata(sourceChannelId, destChannelId, true);
 
             await this.TransferVideos(sourceChannelId, destChannelId);
 
-            await this.TransferPlaylists(sourceChannelId, destChannelId);
+            await this.TransferPlaylists(sourceChannelId, destChannelId, false);
 
             await this.TransferSections(sourceChannelId, destChannelId);
 
@@ -533,14 +534,27 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
 
         #region metadata
 
-        public async Task TransferMetadata(string sourceChannelId, string destChannelId)
+        public async Task TransferMetadata(
+            string sourceChannelId, 
+            string destChannelId, 
+            bool downloadIcon = false,
+            Dictionary<string, string> replacements = null)
         {
             try
             {
                 var source = await this.YoutubeProvider.GetChannel(sourceChannelId);
 
-                var iconFilePath = await this.YoutubeProvider.DownloadIcon(source, this.outputFolder);
-                this.Logger.LogTrace($"Icon downloaded to [{iconFilePath}].");
+                if (downloadIcon)
+                {
+                    var iconFilePath = await this.YoutubeProvider.DownloadIcon(source, this.outputFolder);
+                    this.Logger.LogTrace($"Icon downloaded to [{iconFilePath}].");
+                }
+
+                if (replacements != null && replacements.Any())
+                {
+                    source.BrandingSettings.Channel.Description =
+                        source.BrandingSettings.Channel.Description.Replace(replacements);
+                }
 
                 var destVideos = await this.videosService.GetTransferVideos(sourceChannelId, destChannelId);
                 var unsubscribedTrailer = destVideos.FirstOrDefault(v => 

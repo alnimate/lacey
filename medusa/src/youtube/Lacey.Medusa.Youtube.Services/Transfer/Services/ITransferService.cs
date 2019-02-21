@@ -16,11 +16,15 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services
 
         Task SetThumbnails(string sourceChannelId, string destChannelId);
 
-        Task TransferMetadata(string sourceChannelId, string destChannelId);
+        Task TransferMetadata(
+            string sourceChannelId, 
+            string destChannelId, 
+            bool downloadIcon = false,
+            Dictionary<string, string> replacements = null);
 
         Task TransferVideos(string sourceChannelId, string destChannelId);
 
-        Task TransferPlaylists(string sourceChannelId, string destChannelId);
+        Task TransferPlaylists(string sourceChannelId, string destChannelId, bool onlyLast);
 
         Task TransferSections(string sourceChannelId, string destChannelId);
 

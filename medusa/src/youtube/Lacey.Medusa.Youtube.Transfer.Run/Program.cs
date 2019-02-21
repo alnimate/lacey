@@ -96,7 +96,7 @@ namespace Lacey.Medusa.Youtube.Transfer.Run
                     }
                     else if (action == "2")
                     {
-                        transferService.TransferMetadata(sourceChannelId, destChannelId).Wait();
+                        transferService.TransferMetadata(sourceChannelId, destChannelId, true, replacements).Wait();
                     }
                     else if (action == "3")
                     {
@@ -108,7 +108,7 @@ namespace Lacey.Medusa.Youtube.Transfer.Run
                     }
                     else if (action == "5")
                     {
-                        transferService.TransferPlaylists(sourceChannelId, destChannelId).Wait();
+                        transferService.TransferPlaylists(sourceChannelId, destChannelId, false).Wait();
                     }
                     else if (action == "6")
                     {
