@@ -100,6 +100,11 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                         destChannelId,
                         sourceVideo.ReplaceDescription(replacements),
                         filePath);
+                    if (uploadedVideo == null)
+                    {
+                        continue;
+                    }
+
                     uploadedSourceVideos.Add(sourceVideo);
                     this.Logger.LogTrace($"\"{name}\" uploaded.");
 
@@ -557,24 +562,24 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                 }
 
                 var destVideos = await this.videosService.GetTransferVideos(sourceChannelId, destChannelId);
-                // if update existing channel
-                if (destVideos != null && destVideos.Any())
+                var trailer = destVideos.FirstOrDefault(v =>
+                    v.OriginalVideoId == sourceChannel.BrandingSettings.Channel.UnsubscribedTrailer);
+
+                if (trailer != null)
                 {
                     var destChannel = await this.YoutubeProvider.GetChannel(destChannelId);
                     if (destChannel != null)
                     {
-                        if (sourceChannel.BrandingSettings.Channel.UnsubscribedTrailer ==
-                            destChannel.BrandingSettings.Channel.UnsubscribedTrailer)
+                        if (destChannel.BrandingSettings.Channel.UnsubscribedTrailer ==
+                            trailer.VideoId)
                         {
                             return;
                         }
                     }
                 }
 
-                var unsubscribedTrailer = destVideos.FirstOrDefault(v => 
-                    v.OriginalVideoId == sourceChannel.BrandingSettings.Channel.UnsubscribedTrailer);
-                sourceChannel.BrandingSettings.Channel.UnsubscribedTrailer = unsubscribedTrailer != null ? 
-                    unsubscribedTrailer.VideoId : string.Empty;
+                sourceChannel.BrandingSettings.Channel.UnsubscribedTrailer = trailer != null ? 
+                    trailer.VideoId : string.Empty;
 
                 await this.YoutubeProvider.UpdateMetadata(destChannelId, sourceChannel);
                 await this.channelsService.AddOrUpdate(sourceChannelId, destChannelId, sourceChannel);
