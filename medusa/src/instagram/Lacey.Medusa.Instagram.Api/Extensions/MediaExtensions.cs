@@ -46,7 +46,7 @@ namespace Lacey.Medusa.Instagram.Api.Extensions
             return new InstaVideoUpload(video, thumbnail);
         }
 
-        public static IEnumerable<InstaImage> GetOriginalImages(
+        public static IEnumerable<InstaImage> GetImages(
             this InstaMedia media)
         {
             if (media.Images == null)
@@ -55,6 +55,26 @@ namespace Lacey.Medusa.Instagram.Api.Extensions
             }
 
             return media.Images.Where(i => i.Width == media.Width);
+        }
+
+        public static InstaImage[] GetAlbumImages(this InstaMedia media)
+        {
+            var list = new List<InstaImage>();
+            if (media.Carousel != null)
+            {
+                foreach (var carousel in media.Carousel)
+                {
+                    if (carousel.Images != null)
+                    {
+                        foreach (var image in carousel.Images?.Where(i => i.Width == carousel.Width))
+                        {
+                            list.Add(image);
+                        }
+                    }
+                }
+            }
+
+            return list.ToArray();
         }
 
         public static IEnumerable<InstaVideo> GetOriginalVideos(

@@ -159,7 +159,7 @@ namespace Lacey.Medusa.Instagram.Api.Services.Concrete
             using (var client = new WebClient())
             {
                 Directory.CreateDirectory(outputFolder);
-                var image = media.GetOriginalImages().FirstOrDefault();
+                var image = media.GetImages().FirstOrDefault();
                 if (image != null)
                 {
                     var outputFilePath = Path.Combine(outputFolder, $"{media.Code}.jpg");
@@ -174,18 +174,27 @@ namespace Lacey.Medusa.Instagram.Api.Services.Concrete
         public async Task<IReadOnlyList<IResult<InstaMedia>>> UploadMedia(InstaMedia media, string outputFolder)
         {
             var images = new List<InstaImageUpload>();
+            var albumImages = new List<InstaImageUpload>();
 //            var videos = new List<InstaVideoUpload>();
             var files = new List<string>();
 
             using (var client = new WebClient())
             {
                 Directory.CreateDirectory(outputFolder);
-                foreach (var image in media.GetOriginalImages())
+                foreach (var image in media.GetImages())
                 {
                     var outputFilePath = Path.Combine(outputFolder, $"IMG-{Guid.NewGuid()}.jpg");
                     client.DownloadFile(image.Uri, outputFilePath);
                     files.Add(outputFilePath);
                     images.Add(image.AsUpload(media, outputFilePath));
+                }
+
+                foreach (var image in media.GetAlbumImages())
+                {
+                    var outputFilePath = Path.Combine(outputFolder, $"IMG-{Guid.NewGuid()}.jpg");
+                    client.DownloadFile(image.Uri, outputFilePath);
+                    files.Add(outputFilePath);
+                    albumImages.Add(image.AsUpload(media, outputFilePath));
                 }
 
                 /*
@@ -210,6 +219,22 @@ namespace Lacey.Medusa.Instagram.Api.Services.Concrete
                     results.Add(await this.instagram.MediaProcessor.UploadPhotoAsync(
                         this.UploadProgress,
                         image,
+                        caption,
+                        location));
+                }
+                catch (Exception e)
+                {
+                    this.logger.LogTrace(e.Message);
+                }
+            }
+
+            if (albumImages.Any())
+            {
+                try
+                {
+                    results.Add(await this.instagram.MediaProcessor.UploadAlbumAsync(
+                        albumImages.ToArray(),
+                        null,
                         caption,
                         location));
                 }
