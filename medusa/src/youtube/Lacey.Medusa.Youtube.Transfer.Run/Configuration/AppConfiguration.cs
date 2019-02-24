@@ -10,6 +10,8 @@ namespace Lacey.Medusa.Youtube.Transfer.Run.Configuration
 
         public string TempFolder { get; set; }
 
+        public int Threshold { get; set; }
+
         public Channel[] SourceChannels { get; set; }
 
         public Channel[] DestChannels { get; set; }

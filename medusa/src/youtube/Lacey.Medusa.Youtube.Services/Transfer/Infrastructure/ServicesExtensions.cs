@@ -15,7 +15,8 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Infrastructure
             string clientSecretsFilePath,
             string userName,
             string outputFolder,
-            string connectionString)
+            string connectionString,
+            int threshold)
         {
             services
                 .AddYoutubeServices(
@@ -26,6 +27,7 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Infrastructure
                 .AddTransient<IChannelsService, ChannelsService>()
                 .AddTransient<IVideosService, VideosService>()
                 .AddTransient<IPlaylistsService, PlaylistsService>()
+                .AddTransient<IVideoObfuscateService, VideoObfuscateService>()
 
                 .AddTransient<ITransferService, TransferService>(
                     provider => new TransferService(
@@ -34,7 +36,9 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Infrastructure
                         outputFolder,
                         provider.GetService<IChannelsService>(),
                         provider.GetService<IVideosService>(),
-                        provider.GetService<IPlaylistsService>()));
+                        provider.GetService<IPlaylistsService>(),
+                        provider.GetService<IVideoObfuscateService>(),
+                        threshold));
 
             return services;
         }

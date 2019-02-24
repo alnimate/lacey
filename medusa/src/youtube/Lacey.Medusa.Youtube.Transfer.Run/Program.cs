@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -74,10 +73,7 @@ namespace Lacey.Medusa.Youtube.Transfer.Run
                 var sourceInstagram = config.SourceChannels[i].Instagram;
                 var destInstagram = config.DestChannels[i].Instagram;
 
-                var replacements = new Dictionary<string, string>
-                {
-                    [sourceInstagram] = destInstagram
-                };
+                var replacements = config.DestChannels[i].Replacements;
 
                 logger.LogTrace($"[{sourceChannelId}] => [{destChannelId}]...");
 

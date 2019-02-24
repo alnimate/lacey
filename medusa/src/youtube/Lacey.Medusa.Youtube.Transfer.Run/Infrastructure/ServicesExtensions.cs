@@ -25,7 +25,8 @@ namespace Lacey.Medusa.Youtube.Transfer.Run.Infrastructure
                     config.ClientSecretsFilePath,
                     config.UserName,
                     Path.Combine(currentFolder, config.TempFolder),
-                    connectionString);
+                    connectionString,
+                    config.Threshold);
 
             return services;
         }

@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Lacey.Medusa.Common.Cli.Utils;
+using Lacey.Medusa.Common.Extensions.Extensions;
 using Lacey.Medusa.Youtube.Api.Base;
 using Lacey.Medusa.Youtube.Api.Extensions;
 using Lacey.Medusa.Youtube.Api.Services;
@@ -26,18 +27,26 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
 
         private readonly string outputFolder;
 
+        private readonly IVideoObfuscateService videoObfuscateService;
+
+        private readonly int threshold;
+
         public TransferService(
             IYoutubeProvider youtubeProvider,
             ILogger<TransferService> logger,
             string outputFolder,
             IChannelsService channelsService,
             IVideosService videosService,
-            IPlaylistsService playlistsService) : base(youtubeProvider, logger)
+            IPlaylistsService playlistsService, 
+            IVideoObfuscateService videoObfuscateService, 
+            int threshold) : base(youtubeProvider, logger)
         {
             this.outputFolder = outputFolder;
             this.channelsService = channelsService;
             this.videosService = videosService;
             this.playlistsService = playlistsService;
+            this.videoObfuscateService = videoObfuscateService;
+            this.threshold = threshold;
         }
 
         #endregion
@@ -77,6 +86,16 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                 .Where(v => v.Snippet != null)
                 .OrderBy(v => v.Snippet.PublishedAt))
             {
+                if (sourceVideo.Id != "zfECyZ77VBo")
+                {
+                    continue;
+                }
+
+                if (sourceVideo.IsObsoleted(this.threshold))
+                {
+                    continue;
+                }
+
                 // skip existing items
                 if ((videos != null &&
                      videos.Any(u => u.OriginalVideoId == sourceVideo.Id))
@@ -88,6 +107,7 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                 }
 
                 string filePath = null;
+                string obfuscatedFilePath = null;
                 try
                 {
                     var name = sourceVideo.Snippet.Title;
@@ -95,16 +115,20 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                     filePath = await this.YoutubeProvider.DownloadVideo(sourceVideo.Id, this.outputFolder);
                     this.Logger.LogTrace($"\"{name}\" => \"{filePath}\"");
 
+                    this.Logger.LogTrace($"Obfuscating \"{name}\"...");
+                    obfuscatedFilePath = Path.Combine(this.outputFolder, $"{Guid.NewGuid()}.mp4");
+                    this.videoObfuscateService.Obfuscate(filePath, obfuscatedFilePath);
+                    this.Logger.LogTrace($"\"{name}\" => \"{filePath}\"");
+
                     this.Logger.LogTrace($"Uploading \"{name}\"...");
                     var uploadedVideo = await this.YoutubeProvider.UploadVideo(
                         destChannelId,
                         sourceVideo.ReplaceDescription(replacements),
-                        filePath);
+                        obfuscatedFilePath);
                     if (uploadedVideo == null)
                     {
                         continue;
                     }
-
                     uploadedSourceVideos.Add(sourceVideo);
                     this.Logger.LogTrace($"\"{name}\" uploaded.");
 
@@ -119,9 +143,13 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                 }
                 finally
                 {
-                    if (!string.IsNullOrEmpty(filePath))
+                    if (File.Exists(filePath))
                     {
                         File.Delete(filePath);
+                    }
+                    if (File.Exists(obfuscatedFilePath))
+                    {
+                        File.Delete(obfuscatedFilePath);
                     }
                 }
             }
@@ -168,7 +196,6 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
             }
 
             var destVideos = await this.videosService.GetChannelVideos(destChannelId);
-            var now = DateTime.UtcNow;
             foreach (var destVideo in destVideos)
             {
                 var sourceVideo = sourceVideos.FirstOrDefault(s => s.Id == destVideo.OriginalVideoId);
@@ -177,7 +204,7 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                     continue;
                 }
 
-                if (onlyLast && (now - destVideo.CreatedAt).TotalDays > 7)
+                if (onlyLast && destVideo.IsObsoleted(this.threshold))
                 {
                     continue;
                 }
@@ -211,7 +238,6 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                 var localVideos = await this.videosService.GetTransferVideos(sourceChannelId, destChannelId);
                 var localPlaylists = await this.playlistsService.GetChannelPlaylists(destChannelId);
 
-                var now = DateTime.UtcNow;
                 // skip existing items
                 foreach (var sourcePlaylist in sourcePlaylists
                     .Where(p => p.Snippet != null)
@@ -265,7 +291,7 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
 
                         // skip old videos
                         if (sourceItem.Snippet.PublishedAt == null || 
-                            onlyLast && (now - sourceItem.Snippet.PublishedAt.Value).TotalDays > 7)
+                            onlyLast && sourceItem.IsObsoleted(this.threshold))
                         {
                             continue;
                         }
@@ -558,7 +584,7 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                 if (replacements != null && replacements.Any())
                 {
                     sourceChannel.BrandingSettings.Channel.Description =
-                        sourceChannel.BrandingSettings.Channel.Description.Replace(replacements);
+                        sourceChannel.BrandingSettings.Channel.Description.ReplaceWholeWords(replacements);
                 }
 
                 var destVideos = await this.videosService.GetTransferVideos(sourceChannelId, destChannelId);
