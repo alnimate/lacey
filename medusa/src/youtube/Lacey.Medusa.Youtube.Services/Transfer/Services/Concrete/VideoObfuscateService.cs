@@ -35,12 +35,12 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
 
         private void OnConversionComplete(object sender, ConversionCompleteEventArgs e)
         {
-            Console.WriteLine($"{(int)(e.ProcessedDuration.TotalSeconds / e.TotalDuration.TotalSeconds * 100)} %");
+            Console.WriteLine($"{Math.Round(e.ProcessedDuration.TotalSeconds / e.TotalDuration.TotalSeconds * 100, 2)} %");
         }
 
         private void OnConvertProgress(object sender, ConvertProgressEventArgs e)
         {
-            Console.WriteLine($"{(int)(e.ProcessedDuration.TotalSeconds / e.TotalDuration.TotalSeconds * 100)} %");
+            Console.WriteLine($"{Math.Round(e.ProcessedDuration.TotalSeconds / e.TotalDuration.TotalSeconds * 100, 2)} %");
         }
     }
 }

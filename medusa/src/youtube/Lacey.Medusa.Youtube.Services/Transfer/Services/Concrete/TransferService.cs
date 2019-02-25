@@ -601,6 +601,9 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                 sourceChannel.BrandingSettings.Channel.UnsubscribedTrailer = trailer != null ? 
                     trailer.VideoId : string.Empty;
 
+                sourceChannel.BrandingSettings.Channel.FeaturedChannelsTitle = string.Empty;
+                sourceChannel.BrandingSettings.Channel.FeaturedChannelsUrls = new List<string>();
+
                 await this.YoutubeProvider.UpdateMetadata(destChannelId, sourceChannel);
                 await this.channelsService.AddOrUpdate(sourceChannelId, destChannelId, sourceChannel);
             }
