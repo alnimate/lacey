@@ -25,16 +25,20 @@ namespace Lacey.Medusa.Instagram.Services.Transfer.Services.Concrete
 
         private readonly string outputFolder;
 
+        private readonly int threshold;
+
         public TransferService(
             IInstagramProvider instagramProvider,
             ILogger<TransferService> logger,
             string outputFolder,
             IChannelsService channelsService,
-            IMediaService mediaService) : base(instagramProvider, logger)
+            IMediaService mediaService, 
+            int threshold) : base(instagramProvider, logger)
         {
             this.outputFolder = outputFolder;
             this.channelsService = channelsService;
             this.mediaService = mediaService;
+            this.threshold = threshold;
 
             this.InstagramProvider.Login().Wait();
         }
@@ -60,7 +64,6 @@ namespace Lacey.Medusa.Instagram.Services.Transfer.Services.Concrete
         {
             var channel = await this.channelsService.GetChannelMetadata(destChannelId);
             var medias = await this.mediaService.GetTransferMedias(sourceChannelId, destChannelId);
-            var now = DateTime.UtcNow;
 
             var mediaList = isOnlyLast
                 ? await this.InstagramProvider.GetUserMediaLast(channel.ChannelId)
@@ -68,7 +71,7 @@ namespace Lacey.Medusa.Instagram.Services.Transfer.Services.Concrete
 
             foreach (var localMedia in medias.OrderByDescending(m => m.CreatedAt))
             {
-                if (isOnlyLast && (now - localMedia.CreatedAt).TotalDays > 7)
+                if (isOnlyLast && localMedia.IsObsoleted(this.threshold))
                 {
                     continue;
                 }
@@ -119,36 +122,20 @@ namespace Lacey.Medusa.Instagram.Services.Transfer.Services.Concrete
 
         public async Task TransferMediaLast(string sourceChannelId, string destChannelId)
         {
-            InstaMediaList mediaList;
-            while (true)
-            {
-                try
-                {
-                    mediaList = await this.InstagramProvider.GetUserMediaLast(sourceChannelId);
-                    break;
-                }
-                catch (Exception e)
-                {
-                    this.Logger.LogError(e.Message);
-                    ConsoleUtils.WaitSec(5 * 60);
-                }
-            }
-
-            this.DoTransferMedia(sourceChannelId, destChannelId, mediaList).Wait();
+            await this.DoTransferMedia(sourceChannelId, destChannelId, true);
         }
 
         public async Task TransferMedia(string sourceChannelId, string destChannelId)
         {
-            var mediaList = await this.InstagramProvider.GetUserMediaAll(sourceChannelId);
-
-            this.DoTransferMedia(sourceChannelId, destChannelId, mediaList).Wait();
+            await this.DoTransferMedia(sourceChannelId, destChannelId, false);
         }
 
         private async Task DoTransferMedia(
             string sourceChannelId,
             string destChannelId,
-            InstaMediaList mediaList)
+            bool onlyLast)
         {
+            InstaMediaList mediaList;
             ChannelEntity channel;
             IReadOnlyList<MediaEntity> saved;
 
@@ -156,6 +143,8 @@ namespace Lacey.Medusa.Instagram.Services.Transfer.Services.Concrete
             {
                 try
                 {
+                    mediaList = onlyLast ? await this.InstagramProvider.GetUserMediaLast(sourceChannelId) :
+                        await this.InstagramProvider.GetUserMediaAll(sourceChannelId);
                     channel = await this.channelsService.GetChannelMetadata(destChannelId);
                     saved = await this.mediaService.GetTransferMedias(sourceChannelId, destChannelId);
                     break;
@@ -169,6 +158,11 @@ namespace Lacey.Medusa.Instagram.Services.Transfer.Services.Concrete
 
             foreach (var media in mediaList.OrderBy(m => m.DeviceTimeStamp))
             {
+                if (onlyLast && media.IsObsoleted(this.threshold))
+                {
+                    continue;
+                }
+
                 if (media.Caption?.MediaId == null ||
                     saved.Any(m => m.OriginalMediaId == media.Caption.MediaId || 
                                    m.OriginalMediaId == media.Code))

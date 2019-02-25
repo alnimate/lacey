@@ -86,11 +86,6 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                 .Where(v => v.Snippet != null)
                 .OrderBy(v => v.Snippet.PublishedAt))
             {
-                if (sourceVideo.Id != "zfECyZ77VBo")
-                {
-                    continue;
-                }
-
                 if (sourceVideo.IsObsoleted(this.threshold))
                 {
                     continue;
@@ -278,16 +273,18 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                         var localVideo = localVideos.FirstOrDefault(
                             l => l.OriginalVideoId == sourceItem.Snippet.ResourceId.VideoId);
 
-                        if (localVideo != null)
+                        if (localVideo == null)
                         {
-                            // if we already have this video in playlist
-                            if (localPlaylistVideos.Any(v => v.VideoId == localVideo.Id))
-                            {
-                                continue;
-                            }
-
-                            sourceItem.Snippet.ResourceId.VideoId = localVideo.VideoId;
+                            continue;
                         }
+
+                        // if we already have this video in playlist
+                        if (localPlaylistVideos.Any(v => v.VideoId == localVideo.Id))
+                        {
+                            continue;
+                        }
+
+                        sourceItem.Snippet.ResourceId.VideoId = localVideo.VideoId;
 
                         // skip old videos
                         if (sourceItem.Snippet.PublishedAt == null || 
@@ -298,10 +295,7 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
 
                         await this.YoutubeProvider.UploadPlaylistItem(destChannelId, destPlaylist.Id, sourceItem);
 
-                        if (localVideo != null)
-                        {
-                            await this.playlistsService.AddVideoToPlaylist(destPlaylist.Id, localVideo.VideoId);
-                        }
+                        await this.playlistsService.AddVideoToPlaylist(destPlaylist.Id, localVideo.VideoId);
                     }
                 }
             }

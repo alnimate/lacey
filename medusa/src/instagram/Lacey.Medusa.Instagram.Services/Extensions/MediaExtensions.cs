@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using InstagramApiSharp.Classes.Models;
+using Lacey.Medusa.Instagram.Domain.Entities;
 
 namespace Lacey.Medusa.Instagram.Services.Extensions
 {
@@ -34,6 +36,30 @@ namespace Lacey.Medusa.Instagram.Services.Extensions
             }
 
             return tags;
+        }
+
+        public static bool IsObsoleted(
+            this InstaMedia media,
+            int threshold)
+        {
+            if (media == null)
+            {
+                return true;
+            }
+
+            return (DateTime.UtcNow - media.DeviceTimeStamp).TotalDays > threshold;
+        }
+
+        public static bool IsObsoleted(
+            this MediaEntity media,
+            int threshold)
+        {
+            if (media == null)
+            {
+                return true;
+            }
+
+            return (DateTime.UtcNow - media.CreatedAt).TotalDays > threshold;
         }
     }
 }

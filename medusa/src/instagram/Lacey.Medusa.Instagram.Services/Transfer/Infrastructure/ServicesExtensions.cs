@@ -14,7 +14,8 @@ namespace Lacey.Medusa.Instagram.Services.Transfer.Infrastructure
             this IServiceCollection services,
             string clientSecretsFilePath,
             string outputFolder,
-            string connectionString)
+            string connectionString,
+            int threshold)
         {
             services
                 .AddInstagramServices(clientSecretsFilePath)
@@ -28,7 +29,8 @@ namespace Lacey.Medusa.Instagram.Services.Transfer.Infrastructure
                         provider.GetService<ILogger<TransferService>>(),
                         outputFolder,
                         provider.GetService<IChannelsService>(),
-                        provider.GetService<IMediaService>()));
+                        provider.GetService<IMediaService>(),
+                        threshold));
 
             return services;
         }

@@ -24,7 +24,8 @@ namespace Lacey.Medusa.Instagram.Transfer.Run.Infrastructure
                 .AddInstagramTransferServices(
                     config.ClientSecretsFilePath,
                     Path.Combine(currentFolder, config.TempFolder),
-                    connectionString);
+                    connectionString,
+                    config.Threshold);
 
             return services;
         }

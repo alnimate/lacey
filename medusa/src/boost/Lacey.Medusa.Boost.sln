@@ -45,6 +45,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Common.Generat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Common.Cli", "..\common\Lacey.Medusa.Common.Cli\Lacey.Medusa.Common.Cli.csproj", "{ABF9D3FA-42A1-43F0-942E-1D148D125B6A}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Common.Extensions", "..\common\Lacey.Medusa.Common.Extensions\Lacey.Medusa.Common.Extensions.csproj", "{FE1203CD-93C6-45E4-98E6-FF3309B8F8CF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -135,6 +137,10 @@ Global
 		{ABF9D3FA-42A1-43F0-942E-1D148D125B6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ABF9D3FA-42A1-43F0-942E-1D148D125B6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ABF9D3FA-42A1-43F0-942E-1D148D125B6A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE1203CD-93C6-45E4-98E6-FF3309B8F8CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE1203CD-93C6-45E4-98E6-FF3309B8F8CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE1203CD-93C6-45E4-98E6-FF3309B8F8CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE1203CD-93C6-45E4-98E6-FF3309B8F8CF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

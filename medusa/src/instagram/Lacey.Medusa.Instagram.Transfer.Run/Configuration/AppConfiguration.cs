@@ -6,6 +6,8 @@
 
         public string TempFolder { get; set; }
 
+        public int Threshold { get; set; }
+
         public string[] SourceChannels { get; set; }
 
         public string[] DestChannels { get; set; }
