@@ -185,23 +185,36 @@ namespace Lacey.Medusa.Instagram.Services.Transfer.Services.Concrete
                         this.Logger.LogTrace($"\"{name}\" uploaded.");
 
                         this.Logger.LogTrace($"Editing \"{name}\"...");
-                        var editResult = await this.InstagramProvider.EditMediaAsync(
-                            result.Value.Caption.MediaId,
-                            media.Caption.Text,
-                            media.Location,
-                            media.UserTags.AsUpload(channel.ChannelId));
-                        if (!editResult.Succeeded)
+                        if (!string.IsNullOrEmpty(result?.Value?.Caption?.MediaId) &&
+                            media.Caption != null)
                         {
-                            this.Logger.LogTrace($"{editResult.Info?.Message}");
-                        }
-                        else
-                        {
-                            this.Logger.LogTrace($"\"{name}\" edited.");
+                            var editResult = await this.InstagramProvider.EditMediaAsync(
+                                result.Value.Caption.MediaId,
+                                media.Caption.Text,
+                                media.Location,
+                                media.UserTags.AsUpload(channel.ChannelId));
+                            if (!editResult.Succeeded)
+                            {
+                                this.Logger.LogTrace($"{editResult.Info?.Message}");
+                            }
+                            else
+                            {
+                                this.Logger.LogTrace($"\"{name}\" edited.");
+                            }
                         }
 
-                        this.Logger.LogTrace($"Saving \"{name}\"...");
-                        await this.mediaService.Add(channel.Id, result.Value.Caption.MediaId, media);
-                        this.Logger.LogTrace($"\"{name}\" saved.");
+                        var mediaId = result?.Value?.Caption?.MediaId;
+                        if (string.IsNullOrEmpty(mediaId))
+                        {
+                            mediaId = result?.Value?.Code;
+                        }
+
+                        if (!string.IsNullOrEmpty(mediaId))
+                        {
+                            this.Logger.LogTrace($"Saving \"{name}\"...");
+                            await this.mediaService.Add(channel.Id, mediaId, media);
+                            this.Logger.LogTrace($"\"{name}\" saved.");
+                        }
                     }
 
                     ConsoleUtils.WaitSec(5);
