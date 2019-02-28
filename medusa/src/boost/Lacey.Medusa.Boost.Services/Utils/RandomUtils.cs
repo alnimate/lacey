@@ -10,5 +10,10 @@ namespace Lacey.Medusa.Boost.Services.Utils
         {
             return Random.Next(min, max);
         }
+
+        public static bool GetRandom()
+        {
+            return Random.Next(0, 1) > 0;
+        }
     }
 }

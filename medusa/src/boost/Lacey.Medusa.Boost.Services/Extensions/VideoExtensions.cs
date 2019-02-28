@@ -16,9 +16,9 @@ namespace Lacey.Medusa.Boost.Services.Extensions
             }
 
             var sb = new StringBuilder();
-            sb.AppendLine($"*{video.Snippet.Title}*");
+            sb.AppendLine($"{video.Snippet.Title}");
             sb.AppendLine(video.GetYoutubeUrl());
-            sb.AppendLine(video.Snippet.Description);
+            sb.AppendLine(video.Snippet.Description.GetFirstSentence());
 
             return sb.ToString();
         }
