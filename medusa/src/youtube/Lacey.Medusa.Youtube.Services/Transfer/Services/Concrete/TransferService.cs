@@ -568,7 +568,7 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
             try
             {
                 var sourceChannel = await this.YoutubeProvider.GetChannel(sourceChannelId);
-
+                var destChannel = await this.YoutubeProvider.GetChannel(destChannelId);
                 if (downloadIcon)
                 {
                     var iconFilePath = await this.YoutubeProvider.DownloadIcon(sourceChannel, this.outputFolder);
@@ -584,10 +584,9 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                 var destVideos = await this.videosService.GetTransferVideos(sourceChannelId, destChannelId);
                 var trailer = destVideos.FirstOrDefault(v =>
                     v.OriginalVideoId == sourceChannel.BrandingSettings.Channel.UnsubscribedTrailer);
-
                 if (trailer != null)
                 {
-                    var destChannel = await this.YoutubeProvider.GetChannel(destChannelId);
+                    
                     if (destChannel != null)
                     {
                         if (destChannel.BrandingSettings.Channel.UnsubscribedTrailer ==
@@ -597,12 +596,17 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                         }
                     }
                 }
-
                 sourceChannel.BrandingSettings.Channel.UnsubscribedTrailer = trailer != null ? 
                     trailer.VideoId : string.Empty;
 
                 sourceChannel.BrandingSettings.Channel.FeaturedChannelsTitle = string.Empty;
                 sourceChannel.BrandingSettings.Channel.FeaturedChannelsUrls = new List<string>();
+
+                if (destChannel != null)
+                {
+                    sourceChannel.BrandingSettings.Channel.Country = destChannel.BrandingSettings.Channel.Country;
+                    sourceChannel.BrandingSettings.Channel.DefaultLanguage = destChannel.BrandingSettings.Channel.DefaultLanguage;
+                }
 
                 await this.YoutubeProvider.UpdateMetadata(destChannelId, sourceChannel);
                 await this.channelsService.AddOrUpdate(sourceChannelId, destChannelId, sourceChannel);
