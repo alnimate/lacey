@@ -581,32 +581,42 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                         sourceChannel.BrandingSettings.Channel.Description.ReplaceWholeWords(replacements);
                 }
 
-                var destVideos = await this.videosService.GetTransferVideos(sourceChannelId, destChannelId);
-                var trailer = destVideos.FirstOrDefault(v =>
-                    v.OriginalVideoId == sourceChannel.BrandingSettings.Channel.UnsubscribedTrailer);
-                if (trailer != null)
+                if (destChannel != null)
                 {
-                    
-                    if (destChannel != null)
+                    var destVideos = await this.videosService.GetTransferVideos(sourceChannelId, destChannelId);
+                    // set trailer
+                    var trailer = destVideos.FirstOrDefault(v =>
+                        v.OriginalVideoId == sourceChannel.BrandingSettings.Channel.UnsubscribedTrailer);
+                    if (trailer != null)
                     {
                         if (destChannel.BrandingSettings.Channel.UnsubscribedTrailer ==
                             trailer.VideoId)
                         {
                             return;
                         }
+
+                        sourceChannel.BrandingSettings.Channel.UnsubscribedTrailer = trailer.VideoId;
                     }
-                }
-                sourceChannel.BrandingSettings.Channel.UnsubscribedTrailer = trailer != null ? 
-                    trailer.VideoId : string.Empty;
+                    else
+                    {
+                        sourceChannel.BrandingSettings.Channel.UnsubscribedTrailer = string.Empty;
+                    }
 
-                sourceChannel.BrandingSettings.Channel.FeaturedChannelsTitle = string.Empty;
-                sourceChannel.BrandingSettings.Channel.FeaturedChannelsUrls = new List<string>();
+                    // set featured channels
+                    sourceChannel.BrandingSettings.Channel.FeaturedChannelsTitle = destChannel.BrandingSettings.Channel.FeaturedChannelsTitle;
+                    sourceChannel.BrandingSettings.Channel.FeaturedChannelsUrls = destChannel.BrandingSettings.Channel.FeaturedChannelsUrls;
 
-                if (destChannel != null)
-                {
+                    // set country
                     sourceChannel.BrandingSettings.Channel.Country = destChannel.BrandingSettings.Channel.Country;
                     sourceChannel.BrandingSettings.Channel.DefaultLanguage = destChannel.BrandingSettings.Channel.DefaultLanguage;
                 }
+                else
+                {
+                    sourceChannel.BrandingSettings.Channel.UnsubscribedTrailer = string.Empty;
+                    sourceChannel.BrandingSettings.Channel.FeaturedChannelsTitle = string.Empty;
+                    sourceChannel.BrandingSettings.Channel.FeaturedChannelsUrls = new List<string>();
+                }
+
 
                 await this.YoutubeProvider.UpdateMetadata(destChannelId, sourceChannel);
                 await this.channelsService.AddOrUpdate(sourceChannelId, destChannelId, sourceChannel);
