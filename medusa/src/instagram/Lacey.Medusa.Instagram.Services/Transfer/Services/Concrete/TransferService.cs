@@ -156,7 +156,7 @@ namespace Lacey.Medusa.Instagram.Services.Transfer.Services.Concrete
                 }
             }
 
-            foreach (var media in mediaList.OrderBy(m => m.DeviceTimeStamp))
+            foreach (var media in mediaList.OrderBy(m => m.GetMediaDate()))
             {
                 if (onlyLast && media.IsObsoleted(this.threshold))
                 {
@@ -236,7 +236,7 @@ namespace Lacey.Medusa.Instagram.Services.Transfer.Services.Concrete
             var channel = await this.channelsService.GetChannelMetadata(destChannelId);
             var saved = await this.mediaService.GetTransferMedias(sourceChannelId, destChannelId);
             var mediaList = await this.InstagramProvider.GetUserMediaAll(sourceChannelId);
-            foreach (var media in mediaList.OrderBy(m => m.DeviceTimeStamp))
+            foreach (var media in mediaList.OrderBy(m => m.GetMediaDate()))
             {
                 if (media.Caption == null ||
                     string.IsNullOrEmpty(media.Caption.MediaId) ||
@@ -283,7 +283,7 @@ namespace Lacey.Medusa.Instagram.Services.Transfer.Services.Concrete
                 }
             }
 
-            foreach (var media in mediaList.OrderBy(m => m.DeviceTimeStamp))
+            foreach (var media in mediaList.OrderBy(m => m.GetMediaDate()))
             {
                 var name = media.Caption != null ? media.Caption.Text : media.Code;
                 this.Logger.LogTrace($"Uploading \"{name}\"...");

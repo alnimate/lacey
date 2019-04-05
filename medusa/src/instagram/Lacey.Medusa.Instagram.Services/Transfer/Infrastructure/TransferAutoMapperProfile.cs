@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using InstagramApiSharp.Classes.Models;
 using Lacey.Medusa.Instagram.Domain.Entities;
+using Lacey.Medusa.Instagram.Services.Extensions;
 using Newtonsoft.Json;
 
 namespace Lacey.Medusa.Instagram.Services.Transfer.Infrastructure
@@ -25,7 +26,7 @@ namespace Lacey.Medusa.Instagram.Services.Transfer.Infrastructure
                     OriginalMediaId = m.Caption != null ? m.Caption.MediaId : string.Empty,
                     Name = m.Caption != null ? m.Caption.Text : null,
                     Description = JsonConvert.SerializeObject(m),
-                    PublishedAt = m.DeviceTimeStamp
+                    PublishedAt = m.GetMediaDate()
                 });
         }
     }

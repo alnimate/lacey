@@ -47,7 +47,7 @@ namespace Lacey.Medusa.Instagram.Services.Extensions
                 return true;
             }
 
-            return (DateTime.UtcNow - media.DeviceTimeStamp).TotalDays > threshold;
+            return (DateTime.UtcNow - media.GetMediaDate()).TotalDays > threshold;
         }
 
         public static bool IsObsoleted(
@@ -60,6 +60,19 @@ namespace Lacey.Medusa.Instagram.Services.Extensions
             }
 
             return (DateTime.UtcNow - media.CreatedAt).TotalDays > threshold;
+        }
+
+        public static DateTime GetMediaDate(
+            this InstaMedia media)
+        {
+            if (media.Caption == null || 
+                media.Caption.CreatedAtUtc == DateTime.MinValue ||
+                media.Caption.CreatedAtUtc == DateTime.UnixEpoch)
+            {
+                return media.DeviceTimeStamp;
+            }
+
+            return media.Caption.CreatedAtUtc;
         }
     }
 }
