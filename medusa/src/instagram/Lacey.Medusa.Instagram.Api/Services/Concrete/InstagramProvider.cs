@@ -149,7 +149,8 @@ namespace Lacey.Medusa.Instagram.Api.Services.Concrete
         public async Task<InstaMediaList> GetUserMediaAll(string userName)
         {
             var userMedia = await this.instagram.UserProcessor.GetUserMediaAsync(
-                userName, PaginationParameters.MaxPagesToLoad(int.MaxValue));
+//                userName, PaginationParameters.MaxPagesToLoad(int.MaxValue));
+                userName, PaginationParameters.MaxPagesToLoad(3));
 
             return userMedia.Value;
         }
