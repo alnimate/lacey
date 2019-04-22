@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Lacey.Medusa.Common.Cli.Utils;
-using Lacey.Medusa.Common.Extensions.Extensions;
 using Lacey.Medusa.Youtube.Api.Base;
 using Lacey.Medusa.Youtube.Api.Extensions;
 using Lacey.Medusa.Youtube.Api.Services;
@@ -652,7 +651,7 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                     continue;
                 }
 
-                this.Logger.LogTrace($"Updating \"{video.Snippet.Title}\" description...");
+                this.Logger.LogTrace($"\"{video.Snippet.Title}\" processing...");
                 var updatedVideo = await this.YoutubeProvider.UpdateDescription(video, 
                     DescriptionUtils.TransformDescription(
                         channelId,
@@ -664,7 +663,7 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                     continue;
                 }
 
-                this.Logger.LogTrace($"Description updated for \"{video.Snippet.Title}\".");
+                this.Logger.LogTrace($"\"{video.Snippet.Title}\" completed.");
             }
         }
 
