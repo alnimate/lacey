@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Lacey.Medusa.Common.Extensions.Extensions;
 using Lacey.Medusa.Youtube.Api.Base;
 using Lacey.Medusa.Youtube.Domain.Entities;
+using Lacey.Medusa.Youtube.Services.Transfer.Utils;
 
 namespace Lacey.Medusa.Youtube.Services.Transfer.Extensions
 {
@@ -10,7 +11,8 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Extensions
     {
         public static Video ReplaceDescription(
             this Video video,
-            Dictionary<string, string> replacements)
+            Dictionary<string, string> replacements,
+            string channelId)
         {
             if (video?.Snippet == null)
             {
@@ -18,7 +20,10 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Extensions
             }
 
             video.Snippet.Title = video.Snippet.Title.ReplaceWholeWords(replacements);
-            video.Snippet.Description = video.Snippet.Description.ReplaceWholeWords(replacements);
+            video.Snippet.Description = DescriptionUtils.TransformDescription(
+                channelId,
+                video.Snippet.Description, 
+                replacements);
 
             return video;
         }

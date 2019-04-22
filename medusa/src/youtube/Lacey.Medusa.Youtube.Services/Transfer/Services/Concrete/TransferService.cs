@@ -11,6 +11,7 @@ using Lacey.Medusa.Youtube.Api.Services;
 using Lacey.Medusa.Youtube.Domain.Entities;
 using Lacey.Medusa.Youtube.Services.Common.Services;
 using Lacey.Medusa.Youtube.Services.Transfer.Extensions;
+using Lacey.Medusa.Youtube.Services.Transfer.Utils;
 using Microsoft.Extensions.Logging;
 
 namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
@@ -116,9 +117,12 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                     this.Logger.LogTrace($"\"{name}\" => \"{filePath}\"");
 
                     this.Logger.LogTrace($"Uploading \"{name}\"...");
+
+                    // save original description
+                    var sourceDescription = sourceVideo.Snippet.Description;
                     var uploadedVideo = await this.YoutubeProvider.UploadVideo(
                         destChannelId,
-                        sourceVideo.ReplaceDescription(replacements),
+                        sourceVideo.ReplaceDescription(replacements, destChannelId),
                         obfuscatedFilePath);
                     if (uploadedVideo == null)
                     {
@@ -128,6 +132,8 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                     this.Logger.LogTrace($"\"{name}\" uploaded.");
 
                     this.Logger.LogTrace($"Saving \"{name}\" to the database...");
+                    // restore original description
+                    uploadedVideo.Snippet.Description = sourceDescription;
                     await this.videosService.Add(channel.Id, sourceVideo.Id, uploadedVideo);
                     this.Logger.LogTrace($"\"{name}\" saved.");
                 }
@@ -575,11 +581,10 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                     this.Logger.LogTrace($"Icon downloaded to [{iconFilePath}].");
                 }
 
-                if (replacements != null && replacements.Any())
-                {
-                    sourceChannel.BrandingSettings.Channel.Description =
-                        sourceChannel.BrandingSettings.Channel.Description.ReplaceWholeWords(replacements);
-                }
+                sourceChannel.BrandingSettings.Channel.Description = DescriptionUtils.TransformDescription(
+                    destChannelId,
+                    sourceChannel.BrandingSettings.Channel.Description,
+                    replacements);
 
                 if (destChannel != null)
                 {
@@ -626,6 +631,43 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                 this.Logger.LogError(exc.Message);
             }
         }
+
+        #endregion
+
+        #region description
+
+        public async Task UpdateDescription(string channelId, Dictionary<string, string> replacements)
+        {
+            var videos = await this.YoutubeProvider.GetVideos(channelId);
+            var localVideos = await this.videosService.GetChannelVideos(channelId);
+
+            foreach (var video in videos
+                .Where(v => v.Snippet != null)
+                .OrderByDescending(v => v.Snippet.PublishedAt))
+            {
+                var localVideo = localVideos.FirstOrDefault(v => v.VideoId == video.Id);
+                if (localVideo == null)
+                {
+                    this.Logger.LogTrace($"Video \"{video.Snippet.Title}\" skipped.");
+                    continue;
+                }
+
+                this.Logger.LogTrace($"Updating \"{video.Snippet.Title}\" description...");
+                var updatedVideo = await this.YoutubeProvider.UpdateDescription(video, 
+                    DescriptionUtils.TransformDescription(
+                        channelId,
+                        localVideo.Description,
+                        replacements));
+
+                if (updatedVideo == null)
+                {
+                    continue;
+                }
+
+                this.Logger.LogTrace($"Description updated for \"{video.Snippet.Title}\".");
+            }
+        }
+
 
         #endregion
     }

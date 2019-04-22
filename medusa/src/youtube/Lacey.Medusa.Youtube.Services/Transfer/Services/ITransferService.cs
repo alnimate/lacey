@@ -31,5 +31,7 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services
         Task TransferSubscriptions(string sourceChannelId, string destChannelId);
 
         Task UpdateInstagram(string channelId, string originalInstagram, string newInstagram);
+
+        Task UpdateDescription(string channelId, Dictionary<string, string> replacements);
     }
 }

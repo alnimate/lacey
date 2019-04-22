@@ -106,5 +106,11 @@ namespace Lacey.Medusa.Youtube.Api.Services
         Task<string> DownloadIcon(Channel channel, string outputFolder);
 
         #endregion
+
+        #region description
+
+        Task<Base.Video> UpdateDescription(Base.Video video, string description);
+
+        #endregion
     }
 }

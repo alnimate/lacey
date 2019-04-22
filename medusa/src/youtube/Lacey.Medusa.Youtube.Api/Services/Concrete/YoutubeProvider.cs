@@ -633,5 +633,26 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
         }
 
         #endregion
+
+        #region description
+
+        public async Task<Base.Video> UpdateDescription(
+            Base.Video video,
+            string description)
+        {
+            if (video.Snippet == null)
+            {
+                return video;
+            }
+
+            video.Snippet.Description = description;
+
+            var request = this.youtube.Videos.Update(video, VideoParts.AllAnonymous.AsListParam());
+            var response = await request.ExecuteAsync();
+            return response;
+        }
+
+
+        #endregion
     }
 }

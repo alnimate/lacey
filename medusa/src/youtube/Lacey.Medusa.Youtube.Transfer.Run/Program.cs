@@ -58,6 +58,7 @@ namespace Lacey.Medusa.Youtube.Transfer.Run
                 Console.WriteLine("6 - Sections");
                 Console.WriteLine("7 - Subscriptions");
                 Console.WriteLine("8 - Instagram");
+                Console.WriteLine("9 - Update Description");
 
                 action = Console.ReadLine();
             }
@@ -117,6 +118,10 @@ namespace Lacey.Medusa.Youtube.Transfer.Run
                     else if (action == "8")
                     {
                         transferService.UpdateInstagram(destChannelId, sourceInstagram, destInstagram).Wait();
+                    }
+                    else if (action == "9")
+                    {
+                        transferService.UpdateDescription(destChannelId, replacements).Wait();
                     }
                 }
                 catch (Exception exc)
