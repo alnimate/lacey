@@ -613,6 +613,9 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                     // set country
                     sourceChannel.BrandingSettings.Channel.Country = destChannel.BrandingSettings.Channel.Country;
                     sourceChannel.BrandingSettings.Channel.DefaultLanguage = destChannel.BrandingSettings.Channel.DefaultLanguage;
+
+                    // preserve banner
+                    sourceChannel.SetBannerUrl(destChannel.GetBannerUrl());
                 }
                 else
                 {

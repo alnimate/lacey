@@ -581,7 +581,7 @@ namespace Lacey.Medusa.Youtube.Api.Services.Concrete
 
             // set banner
             // load max res channel banner
-            var banner = await this.UploadChannelBanner(channel.BrandingSettings.Image.BannerTvHighImageUrl);
+            var banner = await this.UploadChannelBanner(channel.GetBannerUrl());
             channelUpdate.BrandingSettings.Image.BannerExternalUrl = banner.Url;
 
             var request = this.youtube.Channels.Update(channelUpdate, ChannelParts.BrandingSettings);
