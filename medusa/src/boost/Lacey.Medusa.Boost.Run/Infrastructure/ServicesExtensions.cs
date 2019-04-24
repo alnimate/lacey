@@ -25,6 +25,7 @@ namespace Lacey.Medusa.Boost.Run.Infrastructure
                 .AddBoostServices(
                     config.YoutubeSecretsFile,
                     config.InstagramSecretsFile,
+                    config.FacebookSecretsFile,
                     config.UserName,
                     Path.Combine(currentFolder, config.TempFolder),
                     youtubeConnectionString,

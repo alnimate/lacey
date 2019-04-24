@@ -4,6 +4,7 @@ using Lacey.Medusa.Boost.Services.Providers;
 using Lacey.Medusa.Boost.Services.Providers.Concrete;
 using Lacey.Medusa.Common.Generators.Generators;
 using Lacey.Medusa.Common.Generators.Generators.Concrete;
+using Lacey.Medusa.Facebook.Api.Infrastructure;
 using Lacey.Medusa.Instagram.Api.Infrastructure;
 using Lacey.Medusa.Instagram.Dal.Infrastructure;
 using Lacey.Medusa.Instagram.Services.Transfer.Services;
@@ -25,6 +26,7 @@ namespace Lacey.Medusa.Boost.Services.Infrastructure
             this IServiceCollection services,
             string youtubeClientSecretsFile,
             string instagramClientSecretsFile,
+            string facebookClientSecretsFile,
             string userName,
             string outputFolder,
             string youtubeConnectionString,
@@ -47,6 +49,11 @@ namespace Lacey.Medusa.Boost.Services.Infrastructure
                 .AddTransient<IInstagramBoostProvider, InstagramBoostProvider>()
                 .AddTransient<YoutubeOnInstagramBooster, YoutubeOnInstagramBooster>()
 
+                // facebook
+                .AddFacebookServices(facebookClientSecretsFile)
+                .AddTransient<IFacebookBoostProvider, FacebookBoostProvider>()
+                .AddTransient<YoutubeOnFacebookBooster, YoutubeOnFacebookBooster>()
+
                 // generators
                 .AddSingleton<INamesGenerator, NamesGenerator>()
 
@@ -59,7 +66,8 @@ namespace Lacey.Medusa.Boost.Services.Infrastructure
                         provider.GetService<IVideosService>(),
                         provider.GetService<Instagram.Services.Transfer.Services.IChannelsService>(),
                         provider.GetService<YoutubeOnYoutubeBooster>(),
-                        provider.GetService<YoutubeOnInstagramBooster>()));
+                        provider.GetService<YoutubeOnInstagramBooster>(),
+                        provider.GetService<YoutubeOnFacebookBooster>()));
 
             return services;
         }

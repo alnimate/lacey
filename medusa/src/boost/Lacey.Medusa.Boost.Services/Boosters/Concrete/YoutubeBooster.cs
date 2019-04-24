@@ -30,6 +30,8 @@ namespace Lacey.Medusa.Boost.Services.Boosters.Concrete
 
         private readonly YoutubeOnInstagramBooster instagramBooster;
 
+        private readonly YoutubeOnFacebookBooster facebookBooster;
+
         public YoutubeBooster(
             IYoutubeBoostProvider youtubeProvider,
             ILogger<YoutubeBooster> logger,
@@ -37,7 +39,8 @@ namespace Lacey.Medusa.Boost.Services.Boosters.Concrete
             IVideosService videosService,
             Instagram.Services.Transfer.Services.IChannelsService instagramChannelsService,
             YoutubeOnYoutubeBooster youtubeBooster, 
-            YoutubeOnInstagramBooster instagramBooster)
+            YoutubeOnInstagramBooster instagramBooster, 
+            YoutubeOnFacebookBooster facebookBooster)
         {
             this.youtubeProvider = youtubeProvider;
             this.logger = logger;
@@ -46,6 +49,7 @@ namespace Lacey.Medusa.Boost.Services.Boosters.Concrete
             this.videosService = videosService;
             this.youtubeBooster = youtubeBooster;
             this.instagramBooster = instagramBooster;
+            this.facebookBooster = facebookBooster;
         }
 
         #endregion

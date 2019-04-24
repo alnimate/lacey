@@ -13,6 +13,7 @@
     <ProjectReference Include="..\..\common\Lacey.Medusa.Common.Browser\Lacey.Medusa.Common.Browser.csproj" />
     <ProjectReference Include="..\..\common\Lacey.Medusa.Common.Cli\Lacey.Medusa.Common.Cli.csproj" />
     <ProjectReference Include="..\..\common\Lacey.Medusa.Common.Generators\Lacey.Medusa.Common.Generators.csproj" />
+    <ProjectReference Include="..\..\facebook\Lacey.Medusa.Facebook.Api\Lacey.Medusa.Facebook.Api.csproj" />
     <ProjectReference Include="..\..\instagram\Lacey.Medusa.Instagram.Api\Lacey.Medusa.Instagram.Api.csproj" />
     <ProjectReference Include="..\..\instagram\Lacey.Medusa.Instagram.Services\Lacey.Medusa.Instagram.Services.csproj" />
     <ProjectReference Include="..\..\youtube\Lacey.Medusa.Youtube.Api\Lacey.Medusa.Youtube.Api.csproj" />
