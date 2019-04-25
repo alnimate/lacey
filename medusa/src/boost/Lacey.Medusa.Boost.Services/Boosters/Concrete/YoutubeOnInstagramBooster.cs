@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using InstagramApiSharp.Classes.Models;
 using Lacey.Medusa.Boost.Services.Extensions;
 using Lacey.Medusa.Boost.Services.Providers;
-using Lacey.Medusa.Boost.Services.Utils;
 using Lacey.Medusa.Common.Generators.Generators;
 using Lacey.Medusa.Instagram.Domain.Entities;
 using Lacey.Medusa.Youtube.Api.Base;
@@ -38,8 +37,7 @@ namespace Lacey.Medusa.Boost.Services.Boosters.Concrete
             Youtube.Domain.Entities.ChannelEntity youtubeChannel,
             Video video)
         {
-            var name = this.names[RandomUtils.GetRandom(0, this.names.Count - 1)];
-            var query = $"{name.Replace(" ", string.Empty).ToLower()}";
+            var query = this.names.GetRandomName();
 
             var usersCount = 10;
             var users = new List<InstaUser>();

@@ -1,4 +1,6 @@
-﻿namespace Lacey.Medusa.Facebook.Api.Services.Concrete
+﻿using System.IO;
+
+namespace Lacey.Medusa.Facebook.Api.Services.Concrete
 {
     public sealed class FacebookAuthProvider : IFacebookAuthProvider
     {
@@ -7,6 +9,12 @@
         public FacebookAuthProvider(string clientSecretsFilePath)
         {
             this.clientSecretsFilePath = clientSecretsFilePath;
+        }
+
+        public string GetAccessToken()
+        {
+            var lines = File.ReadAllLines(this.clientSecretsFilePath);
+            return lines[0];
         }
     }
 }
