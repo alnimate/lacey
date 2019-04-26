@@ -34,6 +34,7 @@ namespace Lacey.Medusa.Boost.Services.Boosters.Concrete
             Video video)
         {
             var query = this.names.GetRandomName();
+            var users = this.facebookProvider.SearchPeopleAsync(query);
 
             return false;
         }
