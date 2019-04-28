@@ -27,7 +27,7 @@ namespace Lacey.Medusa.Boost.Services.Providers.Concrete
             object result;
             try
             {
-                result = await this.Facebook.GetTaskAsync($"search", new { q = query });
+                result = await this.Facebook.GetTaskAsync($"pages/search", new { q = query });
             }
             catch (Exception exc)
             {
