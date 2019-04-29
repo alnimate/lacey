@@ -5,6 +5,7 @@ using Lacey.Medusa.Boost.Services.Providers.Concrete;
 using Lacey.Medusa.Common.Generators.Generators;
 using Lacey.Medusa.Common.Generators.Generators.Concrete;
 using Lacey.Medusa.Facebook.Api.Infrastructure;
+using Lacey.Medusa.Google.Api.Infrastructure;
 using Lacey.Medusa.Instagram.Api.Infrastructure;
 using Lacey.Medusa.Instagram.Dal.Infrastructure;
 using Lacey.Medusa.Instagram.Services.Transfer.Services;
@@ -27,6 +28,7 @@ namespace Lacey.Medusa.Boost.Services.Infrastructure
             string youtubeClientSecretsFile,
             string instagramClientSecretsFile,
             string facebookClientSecretsFile,
+            string googleClientSecretsFile,
             string userName,
             string outputFolder,
             string youtubeConnectionString,
@@ -53,6 +55,9 @@ namespace Lacey.Medusa.Boost.Services.Infrastructure
                 .AddFacebookServices(facebookClientSecretsFile)
                 .AddTransient<IFacebookBoostProvider, FacebookBoostProvider>()
                 .AddTransient<YoutubeOnFacebookBooster, YoutubeOnFacebookBooster>()
+
+                // google
+                .AddGoogleServices(googleClientSecretsFile)
 
                 // generators
                 .AddSingleton<INamesGenerator, NamesGenerator>()

@@ -10,6 +10,8 @@ namespace Lacey.Medusa.Boost.Run.Configuration
 
         public string FacebookSecretsFile { get; set; }
 
+        public string GoogleSecretsFile { get; set; }
+
         public string UserName { get; set; }
 
         public string TempFolder { get; set; }

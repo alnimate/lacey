@@ -47,7 +47,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Common.Cli", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Common.Extensions", "..\common\Lacey.Medusa.Common.Extensions\Lacey.Medusa.Common.Extensions.csproj", "{FE1203CD-93C6-45E4-98E6-FF3309B8F8CF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lacey.Medusa.Facebook.Api", "..\facebook\Lacey.Medusa.Facebook.Api\Lacey.Medusa.Facebook.Api.csproj", "{530854BE-0C83-40AE-AE1A-C5A578ABA864}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Facebook.Api", "..\facebook\Lacey.Medusa.Facebook.Api\Lacey.Medusa.Facebook.Api.csproj", "{530854BE-0C83-40AE-AE1A-C5A578ABA864}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lacey.Medusa.Google.Api", "..\google\Lacey.Medusa.Google.Api\Lacey.Medusa.Google.Api.csproj", "{3248896B-F30A-44FA-9718-51880F88CAAD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -147,6 +149,10 @@ Global
 		{530854BE-0C83-40AE-AE1A-C5A578ABA864}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{530854BE-0C83-40AE-AE1A-C5A578ABA864}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{530854BE-0C83-40AE-AE1A-C5A578ABA864}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3248896B-F30A-44FA-9718-51880F88CAAD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3248896B-F30A-44FA-9718-51880F88CAAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3248896B-F30A-44FA-9718-51880F88CAAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3248896B-F30A-44FA-9718-51880F88CAAD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
