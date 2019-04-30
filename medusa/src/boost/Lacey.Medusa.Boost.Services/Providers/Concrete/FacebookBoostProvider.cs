@@ -28,7 +28,20 @@ namespace Lacey.Medusa.Boost.Services.Providers.Concrete
 
         public async Task<object> SearchPeopleAsync(string query)
         {
-            object result = await this.google.Search(query);
+            var result = await this.google.Search(query);
+
+            if (result?.Items == null)
+            {
+                return null;
+            }
+
+            foreach (var item in result.Items)
+            {
+                if (!item.Link.Contains("Public-Figure"))
+                {
+                    continue;
+                }
+            }
 
             return result;
         }

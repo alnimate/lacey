@@ -15,7 +15,9 @@ namespace Lacey.Medusa.Boost.Services.Boosters.Concrete
 
         private readonly ILogger logger;
 
-        private readonly IReadOnlyList<string> names;
+        private readonly IReadOnlyList<string> firstNames;
+
+        private readonly IReadOnlyList<string> lastNames;
 
         public YoutubeOnFacebookBooster(
             IFacebookBoostProvider facebookProvider,
@@ -25,7 +27,8 @@ namespace Lacey.Medusa.Boost.Services.Boosters.Concrete
             this.facebookProvider = facebookProvider;
             this.logger = logger;
 
-            this.names = generator.GenerateFirstNames();
+            this.firstNames = generator.GenerateFirstNames();
+            this.lastNames = generator.GenerateLastNames();
         }
 
         public async Task<bool> Boost(
@@ -33,7 +36,7 @@ namespace Lacey.Medusa.Boost.Services.Boosters.Concrete
             Youtube.Domain.Entities.ChannelEntity youtubeChannel,
             Video video)
         {
-            var query = this.names.GetRandomName();
+            var query = $"facebook {this.firstNames.GetRandomName()} {this.firstNames.GetRandomName()}";
             var users = this.facebookProvider.SearchPeopleAsync(query);
 
             return false;
