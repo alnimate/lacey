@@ -7,6 +7,7 @@ using Lacey.Medusa.Common.Generators.Generators.Concrete;
 using Lacey.Medusa.Facebook.Api.Infrastructure;
 using Lacey.Medusa.Google.Api.Infrastructure;
 using Lacey.Medusa.Instagram.Api.Infrastructure;
+using Lacey.Medusa.Instagram.Api.Services;
 using Lacey.Medusa.Instagram.Dal.Infrastructure;
 using Lacey.Medusa.Instagram.Services.Transfer.Services;
 using Lacey.Medusa.Instagram.Services.Transfer.Services.Concrete;
@@ -29,6 +30,7 @@ namespace Lacey.Medusa.Boost.Services.Infrastructure
             string instagramClientSecretsFile,
             string facebookClientSecretsFile,
             string googleClientSecretsFile,
+            string instagramStateFilePath,
             string userName,
             string outputFolder,
             string youtubeConnectionString,
@@ -44,11 +46,15 @@ namespace Lacey.Medusa.Boost.Services.Infrastructure
                 .AddTransient<YoutubeOnYoutubeBooster, YoutubeOnYoutubeBooster>()
 
                 // instagram
-                .AddInstagramServices(instagramClientSecretsFile)
+                .AddInstagramServices(instagramClientSecretsFile, instagramStateFilePath)
                 .AddInstagramDalServices(instagramConnectionString)
                 .AddTransient<Instagram.Services.Transfer.Services.IChannelsService, Instagram.Services.Transfer.Services.Concrete.ChannelsService>()
                 .AddTransient<IMediaService, MediaService>()
-                .AddTransient<IInstagramBoostProvider, InstagramBoostProvider>()
+                .AddTransient<IInstagramBoostProvider, InstagramBoostProvider>(
+                    provider => new InstagramBoostProvider(
+                        provider.GetService<IInstagramAuthProvider>(),
+                        provider.GetService<ILogger<InstagramBoostProvider>>(),
+                        instagramStateFilePath))
                 .AddTransient<YoutubeOnInstagramBooster, YoutubeOnInstagramBooster>()
 
                 // facebook

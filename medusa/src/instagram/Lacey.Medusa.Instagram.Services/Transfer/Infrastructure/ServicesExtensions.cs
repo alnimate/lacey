@@ -13,12 +13,13 @@ namespace Lacey.Medusa.Instagram.Services.Transfer.Infrastructure
         public static IServiceCollection AddInstagramTransferServices(
             this IServiceCollection services,
             string clientSecretsFilePath,
+            string instagramStateFilePath,
             string outputFolder,
             string connectionString,
             int threshold)
         {
             services
-                .AddInstagramServices(clientSecretsFilePath)
+                .AddInstagramServices(clientSecretsFilePath, instagramStateFilePath)
                 .AddInstagramDalServices(connectionString)
                 .AddTransient<IChannelsService, ChannelsService>()
                 .AddTransient<IMediaService, MediaService>()

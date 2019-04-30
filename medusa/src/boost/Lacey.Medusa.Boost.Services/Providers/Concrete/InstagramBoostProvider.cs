@@ -17,8 +17,9 @@ namespace Lacey.Medusa.Boost.Services.Providers.Concrete
 
         public InstagramBoostProvider(
             IInstagramAuthProvider instagramAuthProvider,
-            ILogger<InstagramBoostProvider> logger)
-            : base(instagramAuthProvider, logger)
+            ILogger<InstagramBoostProvider> logger,
+            string instagramStateFilePath)
+            : base(instagramAuthProvider, logger, instagramStateFilePath)
         {
             this.logger = logger;
         }

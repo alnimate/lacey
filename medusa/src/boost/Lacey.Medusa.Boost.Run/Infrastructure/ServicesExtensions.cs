@@ -27,6 +27,7 @@ namespace Lacey.Medusa.Boost.Run.Infrastructure
                     config.InstagramSecretsFile,
                     config.FacebookSecretsFile,
                     config.GoogleSecretsFile,
+                    config.InstagramStateFile,
                     config.UserName,
                     Path.Combine(currentFolder, config.TempFolder),
                     youtubeConnectionString,

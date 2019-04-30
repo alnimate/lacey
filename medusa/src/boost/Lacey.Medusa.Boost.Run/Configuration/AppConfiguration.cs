@@ -12,6 +12,8 @@ namespace Lacey.Medusa.Boost.Run.Configuration
 
         public string GoogleSecretsFile { get; set; }
 
+        public string InstagramStateFile { get; set; }
+
         public string UserName { get; set; }
 
         public string TempFolder { get; set; }

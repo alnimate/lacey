@@ -14,7 +14,7 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Utils
         {
             var templateFile = Path.Combine(
                 Path.GetDirectoryName(Assembly.GetEntryAssembly().Location),
-                "Templates",
+                "templates",
                 $"{channleId}.tmpl");
 
             if (!File.Exists(templateFile))

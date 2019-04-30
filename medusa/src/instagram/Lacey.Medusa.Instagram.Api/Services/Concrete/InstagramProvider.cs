@@ -24,19 +24,21 @@ namespace Lacey.Medusa.Instagram.Api.Services.Concrete
 
         private readonly IInstagramAuthProvider instagramAuthProvider;
 
-        private IInstaApi instagram;
-
         private readonly ILogger logger;
+
+        private readonly string instagramStateFilePath;
 
         public InstagramProvider(
             IInstagramAuthProvider instagramAuthProvider,
-            ILogger<InstagramProvider> logger)
+            ILogger<InstagramProvider> logger, 
+            string instagramStateFilePath)
         {
             this.instagramAuthProvider = instagramAuthProvider;
             this.logger = logger;
+            this.instagramStateFilePath = instagramStateFilePath;
         }
 
-        protected IInstaApi Instagram => instagram;
+        protected IInstaApi Instagram { get; set; }
 
         #endregion
 
@@ -46,14 +48,14 @@ namespace Lacey.Medusa.Instagram.Api.Services.Concrete
         {
             var userSession = instagramAuthProvider.GetUserSessionData();
             var delay = RequestDelay.FromSeconds(2, 2);
-            this.instagram = InstaApiBuilder.CreateBuilder()
+            this.Instagram = InstaApiBuilder.CreateBuilder()
                 .SetUser(userSession)
                 .UseLogger(new DebugLogger(LogLevel.Info))
                 .SetRequestDelay(delay)
                 .Build();
 
             var currentFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            var stateFile = Path.Combine(currentFolder, "state.bin");
+            var stateFile = Path.Combine(currentFolder, this.instagramStateFilePath);
             try
             {
                 if (File.Exists(stateFile))
@@ -61,7 +63,7 @@ namespace Lacey.Medusa.Instagram.Api.Services.Concrete
                     Console.WriteLine("Loading state from file.");
                     using (var fs = File.OpenRead(stateFile))
                     {
-                        this.instagram.LoadStateDataFromString(new StreamReader(fs).ReadToEnd());
+                        this.Instagram.LoadStateDataFromString(new StreamReader(fs).ReadToEnd());
                     }
                 }
             }
@@ -70,27 +72,27 @@ namespace Lacey.Medusa.Instagram.Api.Services.Concrete
                 this.logger.LogTrace(e.ToString());
             }
 
-            if (!this.instagram.IsUserAuthenticated)
+            if (!this.Instagram.IsUserAuthenticated)
             {
                 this.logger.LogTrace($"Logging in as {userSession.UserName}");
                 delay.Disable();
-                var logInResult = await this.instagram.LoginAsync();
+                var logInResult = await this.Instagram.LoginAsync();
                 delay.Enable();
                 if (!logInResult.Succeeded)
                 {
                     if (logInResult.Value == InstaLoginResult.ChallengeRequired)
                     {
-                        var challenge = await this.instagram.GetChallengeRequireVerifyMethodAsync();
+                        var challenge = await this.Instagram.GetChallengeRequireVerifyMethodAsync();
                         if (challenge.Succeeded)
                         {
-                            var request = await this.instagram.RequestVerifyCodeToEmailForChallengeRequireAsync();
+                            var request = await this.Instagram.RequestVerifyCodeToEmailForChallengeRequireAsync();
                             if (request.Succeeded)
                             {
                                 var code = File.ReadAllLines(Path.Combine(currentFolder, "code.secret"))[0];
-                                var verifyLogin = await this.instagram.VerifyCodeForChallengeRequireAsync(code);
+                                var verifyLogin = await this.Instagram.VerifyCodeForChallengeRequireAsync(code);
                                 if (verifyLogin.Succeeded)
                                 {
-                                    var s = this.instagram.GetStateDataAsString();
+                                    var s = this.Instagram.GetStateDataAsString();
                                     File.WriteAllText(stateFile, s);
                                     throw new Exception("Login state saved. Please try again later.");
                                 }
@@ -102,7 +104,7 @@ namespace Lacey.Medusa.Instagram.Api.Services.Concrete
                 }
             }
 
-            var state = this.instagram.GetStateDataAsString();
+            var state = this.Instagram.GetStateDataAsString();
             File.WriteAllText(stateFile, state);
         }
 
@@ -113,12 +115,12 @@ namespace Lacey.Medusa.Instagram.Api.Services.Concrete
 
         public async Task<IResult<bool>> UnArchiveMediaAsync(string mediaId)
         {
-            return await this.instagram.MediaProcessor.UnArchiveMediaAsync(mediaId);
+            return await this.Instagram.MediaProcessor.UnArchiveMediaAsync(mediaId);
         }
 
         public async Task<IResult<bool>> UnSaveMediaAsync(string mediaId)
         {
-            return await this.instagram.MediaProcessor.UnSaveMediaAsync(mediaId);
+            return await this.Instagram.MediaProcessor.UnSaveMediaAsync(mediaId);
         }
 
         public async Task<IResult<InstaMedia>> EditMediaAsync(
@@ -127,7 +129,7 @@ namespace Lacey.Medusa.Instagram.Api.Services.Concrete
             InstaLocationShort location = null,
             InstaUserTagUpload[] userTags = null)
         {
-            return await this.instagram.MediaProcessor.EditMediaAsync(
+            return await this.Instagram.MediaProcessor.EditMediaAsync(
                 mediaId,
                 caption,
                 location,
@@ -140,7 +142,7 @@ namespace Lacey.Medusa.Instagram.Api.Services.Concrete
 
         public async Task<InstaMediaList> GetUserMediaLast(string userName)
         {
-            var userMedia = await this.instagram.UserProcessor.GetUserMediaAsync(
+            var userMedia = await this.Instagram.UserProcessor.GetUserMediaAsync(
                 userName, PaginationParameters.MaxPagesToLoad(3));
 
             return userMedia.Value;
@@ -148,7 +150,7 @@ namespace Lacey.Medusa.Instagram.Api.Services.Concrete
 
         public async Task<InstaMediaList> GetUserMediaAll(string userName)
         {
-            var userMedia = await this.instagram.UserProcessor.GetUserMediaAsync(
+            var userMedia = await this.Instagram.UserProcessor.GetUserMediaAsync(
 //                userName, PaginationParameters.MaxPagesToLoad(int.MaxValue));
                 userName, PaginationParameters.MaxPagesToLoad(3));
 
@@ -217,7 +219,7 @@ namespace Lacey.Medusa.Instagram.Api.Services.Concrete
             {
                 try
                 {
-                    results.Add(await this.instagram.MediaProcessor.UploadPhotoAsync(
+                    results.Add(await this.Instagram.MediaProcessor.UploadPhotoAsync(
                         this.UploadProgress,
                         image,
                         caption,
@@ -233,7 +235,7 @@ namespace Lacey.Medusa.Instagram.Api.Services.Concrete
             {
                 try
                 {
-                    results.Add(await this.instagram.MediaProcessor.UploadAlbumAsync(
+                    results.Add(await this.Instagram.MediaProcessor.UploadAlbumAsync(
                         albumImages.ToArray(),
                         null,
                         caption,
@@ -249,7 +251,7 @@ namespace Lacey.Medusa.Instagram.Api.Services.Concrete
             {
                 try
                 {
-                    results.Add(await this.instagram.MediaProcessor.UploadVideoAsync(
+                    results.Add(await this.Instagram.MediaProcessor.UploadVideoAsync(
                         this.UploadProgress,
                         video,
                         caption,

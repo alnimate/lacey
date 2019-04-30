@@ -16,7 +16,7 @@ namespace Lacey.Medusa.Common.Generators.Generators.Concrete
             if (!this.firstNames.Any())
             {
                 var currentFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-                var values = File.ReadAllLines(Path.Combine(currentFolder, "firstnames.txt"));
+                var values = File.ReadAllLines(Path.Combine(currentFolder, "data/firstnames.txt"));
                 this.firstNames.AddRange(values);
             }
 
@@ -28,7 +28,7 @@ namespace Lacey.Medusa.Common.Generators.Generators.Concrete
             if (!this.lastNames.Any())
             {
                 var currentFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-                var values = File.ReadAllLines(Path.Combine(currentFolder, "lastnames.txt"));
+                var values = File.ReadAllLines(Path.Combine(currentFolder, "data/lastnames.txt"));
                 this.lastNames.AddRange(values);
             }
 

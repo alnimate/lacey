@@ -4,6 +4,8 @@
     {        
         public string ClientSecretsFilePath { get; set; }
 
+        public string InstagramStateFile { get; set; }
+
         public string TempFolder { get; set; }
 
         public int Threshold { get; set; }
