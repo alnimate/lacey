@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Lacey.Medusa.Facebook.Api.Services;
 using Lacey.Medusa.Facebook.Api.Services.Concrete;
 using Lacey.Medusa.Google.Api.Services;
@@ -26,24 +27,17 @@ namespace Lacey.Medusa.Boost.Services.Providers.Concrete
 
         #endregion
 
-        public async Task<object> SearchPeopleAsync(string query)
+        public async Task<string[]> SearchPeopleAsync(string query)
         {
-            var result = await this.google.Search(query);
+            var facebookQuery = $"facebook {query} home";
+            var result = await this.google.Search(facebookQuery);
 
             if (result?.Items == null)
             {
-                return null;
+                return new string[0];
             }
 
-            foreach (var item in result.Items)
-            {
-                if (!item.Link.Contains("Public-Figure"))
-                {
-                    continue;
-                }
-            }
-
-            return result;
+            return result.Items.Select(i => i.Link).ToArray();
         }
     }
 }

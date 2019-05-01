@@ -36,7 +36,7 @@ namespace Lacey.Medusa.Boost.Services.Boosters.Concrete
             Youtube.Domain.Entities.ChannelEntity youtubeChannel,
             Video video)
         {
-            var query = $"facebook {this.firstNames.GetRandomName()} {this.firstNames.GetRandomName()}";
+            var query = $"{this.firstNames.GetRandomName()} {this.lastNames.GetRandomName()}";
             var users = this.facebookProvider.SearchPeopleAsync(query);
 
             return false;
