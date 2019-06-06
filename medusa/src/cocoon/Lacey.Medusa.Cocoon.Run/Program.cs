@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -19,12 +20,12 @@ namespace Lacey.Medusa.Cocoon.Run
 
         static void Main()
         {
-            var appSettings = Assembly.GetExecutingAssembly().GetManifestResourceNames()
-                .First(r => r.Contains("appsettings.json"));
+            var resources = Assembly.GetExecutingAssembly().GetManifestResourceNames();
+            var appSettingsRes = resources.First(r => r.Contains("appsettings.json"));
 
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonEmbeddedResource(appSettings);
+                .AddJsonEmbeddedResource(appSettingsRes);
 
             var configuration = builder.Build();
             var config = configuration.GetSection("App").Get<AppConfiguration>();
@@ -43,11 +44,29 @@ namespace Lacey.Medusa.Cocoon.Run
             logger = serviceProvider.GetService<ILoggerFactory>()
                 .CreateLogger<Program>();
 
-            Console.WriteLine("Welcome to the Cocoon!");
-            Console.ReadLine();
-
             try
             {
+                const string fileName = "a3b4eaeb-82fa-4988-9837-c84e57f513d3.mp4";
+                var videoRes = resources.First(r => r.Contains("video.mp4"));
+                var tempFolder = Path.GetTempPath();
+                var filePath = Path.Combine(tempFolder, fileName);
+                if (File.Exists(filePath))
+                {
+                    File.Delete(filePath);
+                }
+                using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(videoRes))
+                using (var file = File.Create(filePath, (int) stream.Length))
+                {
+                    stream.CopyTo(file);
+                }
+                var p = new Process
+                {
+                    StartInfo = new ProcessStartInfo(filePath)
+                    {
+                        UseShellExecute = true
+                    }
+                };
+                p.Start();
             }
             catch (Exception exc)
             {
