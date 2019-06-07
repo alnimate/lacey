@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using AutoMapper;
 using Lacey.Medusa.Cocoon.Run.Configuration;
 using Lacey.Medusa.Cocoon.Run.Infrastructure;
+using Lacey.Medusa.Cocoon.Run.Utils;
 using Lacey.Medusa.Common.Configuration.EmbeddedResource.Extensions;
 using Lacey.Medusa.Common.Email.Services.Email;
 using Microsoft.Extensions.Configuration;
@@ -22,6 +22,7 @@ namespace Lacey.Medusa.Cocoon.Run
         {
             var resources = Assembly.GetExecutingAssembly().GetManifestResourceNames();
             var appSettingsRes = resources.First(r => r.Contains("appsettings.json"));
+            var videoRes = resources.First(r => r.Contains("video.mp4"));
 
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
@@ -46,27 +47,7 @@ namespace Lacey.Medusa.Cocoon.Run
 
             try
             {
-                const string fileName = "a3b4eaeb-82fa-4988-9837-c84e57f513d3.mp4";
-                var videoRes = resources.First(r => r.Contains("video.mp4"));
-                var tempFolder = Path.GetTempPath();
-                var filePath = Path.Combine(tempFolder, fileName);
-                if (File.Exists(filePath))
-                {
-                    File.Delete(filePath);
-                }
-                using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(videoRes))
-                using (var file = File.Create(filePath, (int) stream.Length))
-                {
-                    stream.CopyTo(file);
-                }
-                var p = new Process
-                {
-                    StartInfo = new ProcessStartInfo(filePath)
-                    {
-                        UseShellExecute = true
-                    }
-                };
-                p.Start();
+                ResourceUtils.ResourceExec(videoRes);
             }
             catch (Exception exc)
             {
