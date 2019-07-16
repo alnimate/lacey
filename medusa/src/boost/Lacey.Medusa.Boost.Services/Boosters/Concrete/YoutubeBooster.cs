@@ -85,13 +85,13 @@ namespace Lacey.Medusa.Boost.Services.Boosters.Concrete
                     var randomVideo = youtubeVideos.PickRandom();
                     var video = await this.youtubeProvider.GetVideo(randomVideo.VideoId);
 
-                    await this.facebookBooster.Boost(instagramChannel, youtubeChannel, video);
+//                    await this.facebookBooster.Boost(instagramChannel, youtubeChannel, video);
+//                    this.WaitNext(interval);
+
+                    await this.youtubeBooster.Boost(youtubeChannel, video);
                     this.WaitNext(interval);
 
                     await this.instagramBooster.Boost(instagramChannel, youtubeChannel, video);
-                    this.WaitNext(interval);
-
-                    await this.youtubeBooster.Boost(youtubeChannel, video);
                     this.WaitNext(interval);
                 }
                 catch (Exception e)
