@@ -1,0 +1,49 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29025.244
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Surfer.Run", "Lacey.Medusa.Surfer.Run\Lacey.Medusa.Surfer.Run.csproj", "{FB9EBEA4-3B0F-4C24-BB4A-DD701CBA9135}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Common.Email", "..\common\Lacey.Medusa.Common.Email\Lacey.Medusa.Common.Email.csproj", "{8E372B7A-7A71-4B91-A0FD-45A2C2328C6C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Common.Api.Core", "..\common\Lacey.Medusa.Common.Api.Core\Lacey.Medusa.Common.Api.Core.csproj", "{ED0BA082-D8A0-41EB-96F0-CA6E803C6543}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Common.Api", "..\common\Lacey.Medusa.Common.Api\Lacey.Medusa.Common.Api.csproj", "{EFC78E0B-B43F-4683-B483-B12FE997123F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lacey.Medusa.Surfer.Services.LikesRock", "Lacey.Medusa.Surfer.Services.LikesRock\Lacey.Medusa.Surfer.Services.LikesRock.csproj", "{DE5F515C-4681-40C7-9049-6DE233D78F6A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FB9EBEA4-3B0F-4C24-BB4A-DD701CBA9135}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB9EBEA4-3B0F-4C24-BB4A-DD701CBA9135}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB9EBEA4-3B0F-4C24-BB4A-DD701CBA9135}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB9EBEA4-3B0F-4C24-BB4A-DD701CBA9135}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E372B7A-7A71-4B91-A0FD-45A2C2328C6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E372B7A-7A71-4B91-A0FD-45A2C2328C6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E372B7A-7A71-4B91-A0FD-45A2C2328C6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E372B7A-7A71-4B91-A0FD-45A2C2328C6C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED0BA082-D8A0-41EB-96F0-CA6E803C6543}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED0BA082-D8A0-41EB-96F0-CA6E803C6543}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED0BA082-D8A0-41EB-96F0-CA6E803C6543}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED0BA082-D8A0-41EB-96F0-CA6E803C6543}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EFC78E0B-B43F-4683-B483-B12FE997123F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFC78E0B-B43F-4683-B483-B12FE997123F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFC78E0B-B43F-4683-B483-B12FE997123F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFC78E0B-B43F-4683-B483-B12FE997123F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE5F515C-4681-40C7-9049-6DE233D78F6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE5F515C-4681-40C7-9049-6DE233D78F6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE5F515C-4681-40C7-9049-6DE233D78F6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE5F515C-4681-40C7-9049-6DE233D78F6A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C0C5FFE5-9876-44F3-9634-2AEDC8499E8E}
+	EndGlobalSection
+EndGlobal
