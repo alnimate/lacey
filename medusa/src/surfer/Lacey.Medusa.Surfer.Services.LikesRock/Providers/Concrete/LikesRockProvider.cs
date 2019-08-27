@@ -6,11 +6,9 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Providers.Concrete
 {
     public sealed class LikesRockProvider : BaseClientService
     {
-        private readonly AuthResource auth;
-
         public LikesRockProvider(Initializer initializer) : base(initializer)
         {
-            this.auth = new AuthResource(this);
+            this.Auth = new AuthResource(this);
         }
 
         public override string Name => "LikesRock";
@@ -20,5 +18,7 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Providers.Concrete
         public override string BasePath => "client-v2/";
 
         public override IList<string> Features => new string[0];
+
+        public AuthResource Auth { get; }
     }
 }
