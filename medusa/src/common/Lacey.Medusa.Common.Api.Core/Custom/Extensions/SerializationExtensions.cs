@@ -16,6 +16,15 @@ namespace Lacey.Medusa.Common.Api.Core.Custom.Extensions
             return string.Join("&", properties.ToArray());
         }
 
+        public static string GetCookiesString(this object obj)
+        {
+            var properties = from p in obj.GetType().GetProperties()
+                where p.GetValue(obj, null) != null
+                select GetPropertyName(p) + "=" + HttpUtility.UrlEncode(p.GetValue(obj, null).ToString());
+
+            return string.Join("; ", properties.ToArray());
+        }
+
         private static string GetPropertyName(PropertyInfo p)
         {
             var attr = p.GetCustomAttributes().FirstOrDefault(a => a is JsonPropertyAttribute);

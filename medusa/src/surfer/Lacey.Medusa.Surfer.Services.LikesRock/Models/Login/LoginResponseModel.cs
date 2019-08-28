@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
 
-namespace Lacey.Medusa.Surfer.Services.LikesRock.Models.Auth
+namespace Lacey.Medusa.Surfer.Services.LikesRock.Models.Login
 {
-    public class AuthInfo
+    public class LoginResponseModel
     {
         [JsonProperty("client_version")]
         public virtual string ClientVersion { get; set; }

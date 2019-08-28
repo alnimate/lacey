@@ -8,7 +8,8 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Providers.Concrete
     {
         public LikesRockProvider(Initializer initializer) : base(initializer)
         {
-            this.Auth = new AuthResource(this);
+            this.UserSignIn= new UserSignInResource(this);
+            this.Ajax = new AjaxResource(this);
         }
 
         public override string Name => "LikesRock";
@@ -19,6 +20,8 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Providers.Concrete
 
         public override IList<string> Features => new string[0];
 
-        public AuthResource Auth { get; }
+        public UserSignInResource UserSignIn { get; }
+
+        public AjaxResource Ajax { get; }
     }
 }

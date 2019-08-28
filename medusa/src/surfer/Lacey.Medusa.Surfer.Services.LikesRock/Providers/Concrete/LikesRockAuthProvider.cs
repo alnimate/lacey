@@ -12,11 +12,11 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Providers.Concrete
             this.secretsFilePath = secretsFilePath;
         }
 
-        public LikesRockCredentials GetCredentials()
+        public Credentials GetCredentials()
         {
             var lines = File.ReadAllLines(this.secretsFilePath);
 
-            return new LikesRockCredentials
+            return new Credentials
             {
                 Username = lines[0],
                 Password = lines[1]

@@ -4,6 +4,6 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Providers
 {
     public interface ILikesRockAuthProvider
     {
-        LikesRockCredentials GetCredentials();
+        Credentials GetCredentials();
     }
 }

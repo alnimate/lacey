@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Lacey.Medusa.Surfer.Services.LikesRock.Common;
+using Lacey.Medusa.Surfer.Services.LikesRock.Providers;
 using Microsoft.Extensions.Logging;
 
 namespace Lacey.Medusa.Surfer.Services.LikesRock.Services.Concrete
@@ -8,11 +9,10 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Services.Concrete
     {
         #region Fields/Constructors
 
-        private readonly ILogger logger;
-
-        public LikesRockAutoSurfService(ILogger logger)
+        public LikesRockAutoSurfService(
+            ILogger logger,
+            ILikesRockAuthProvider authProvider) : base(logger, authProvider)
         {
-            this.logger = logger;
         }
 
         #endregion

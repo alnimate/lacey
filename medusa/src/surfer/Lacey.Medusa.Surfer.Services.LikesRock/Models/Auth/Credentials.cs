@@ -1,6 +1,6 @@
 ﻿namespace Lacey.Medusa.Surfer.Services.LikesRock.Models.Auth
 {
-    public sealed class LikesRockCredentials
+    public sealed class Credentials
     {
         public string Username { get; set; }
 
