@@ -15,5 +15,8 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Models.Auth
 
         [JsonProperty("BVB45629")]
         public string Bvb { get; set; }
+
+        [JsonProperty("PHPSESSID")]
+        public string PhpSessionId { get; set; }
     }
 }

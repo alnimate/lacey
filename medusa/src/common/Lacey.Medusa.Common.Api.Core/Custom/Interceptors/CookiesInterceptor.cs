@@ -17,6 +17,8 @@ namespace Lacey.Medusa.Common.Api.Core.Custom.Interceptors
 
         public Task InterceptAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
+            request.Headers.Remove("Cookie");
+
             if (this.cookies != null)
             {
                 request.Headers.Add("Cookie", this.cookies.GetCookiesString());

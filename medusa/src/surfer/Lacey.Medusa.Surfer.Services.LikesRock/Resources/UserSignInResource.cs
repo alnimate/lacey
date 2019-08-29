@@ -12,9 +12,9 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Resources
         {
         }
 
-        public UserSignInRequest SignIn(string userLang, string clientVersion)
+        public UserSignInRequest SignIn(string userLang, string clientVersion, string security)
         {
-            return new UserSignInRequest(this.Service, userLang, clientVersion);
+            return new UserSignInRequest(this.Service, userLang, clientVersion, security);
         }
 
         public sealed class UserSignInRequest : LikesRockRequest<string>
@@ -22,10 +22,12 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Resources
             public UserSignInRequest(
                 IClientService service, 
                 string userLang, 
-                string clientVersion) : base(service)
+                string clientVersion, 
+                string security) : base(service)
             {
                 UserLang = userLang;
                 ClientVersion = clientVersion;
+                Security = security;
 
                 this.RequestParameters.Add("user_lang", new Parameter
                 {
@@ -44,9 +46,20 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Resources
                     DefaultValue = null,
                     Pattern = null
                 });
+
+
+                this.RequestParameters.Add("security", new Parameter
+                {
+                    Name = "security",
+                    IsRequired = false,
+                    ParameterType = "query",
+                    DefaultValue = null,
+                    Pattern = null
+                });
+
             }
 
-            public override string RestPath => "user_sighin.php";
+            public override string RestPath => "user_signin.php";
 
             public override string HttpMethod => HttpConsts.Get;
 
@@ -55,6 +68,9 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Resources
 
             [RequestParameter("client_version", RequestParameterType.Query)]
             public string ClientVersion { get; private set; }
+
+            [RequestParameter("security", RequestParameterType.Query)]
+            public string Security { get; private set; }
         }
     }
 }

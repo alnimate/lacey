@@ -9,6 +9,11 @@ namespace Lacey.Medusa.Common.Api.Core.Custom.Extensions
     {
         public static string GetQueryString(this object obj)
         {
+            if (obj == null)
+            {
+                return string.Empty;
+            }
+
             var properties = from p in obj.GetType().GetProperties()
                 where p.GetValue(obj, null) != null
                 select GetPropertyName(p) + "=" + HttpUtility.UrlEncode(p.GetValue(obj, null).ToString());
@@ -18,6 +23,11 @@ namespace Lacey.Medusa.Common.Api.Core.Custom.Extensions
 
         public static string GetCookiesString(this object obj)
         {
+            if (obj == null)
+            {
+                return string.Empty;
+            }
+
             var properties = from p in obj.GetType().GetProperties()
                 where p.GetValue(obj, null) != null
                 select GetPropertyName(p) + "=" + HttpUtility.UrlEncode(p.GetValue(obj, null).ToString());
