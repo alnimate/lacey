@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System.Linq;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Lacey.Medusa.Common.Api.Base.Requests;
@@ -22,6 +23,14 @@ namespace Lacey.Medusa.Common.Api.Custom.Extensions
             this ClientServiceRequest<TResponse> request,
             IHttpExecuteInterceptor interceptor)
         {
+            var existingInterceptor = request.Service.HttpClient.MessageHandler.ExecuteInterceptors
+                .FirstOrDefault(i => i.GetType().IsInstanceOfType(interceptor));
+
+            if (existingInterceptor != null)
+            {
+                request.Service.HttpClient.MessageHandler.RemoveExecuteInterceptor(existingInterceptor);
+            }
+
             request.Service.HttpClient.MessageHandler.AddExecuteInterceptor(interceptor);
 
             return request;
