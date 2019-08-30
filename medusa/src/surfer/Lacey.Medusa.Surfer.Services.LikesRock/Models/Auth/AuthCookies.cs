@@ -18,5 +18,14 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Models.Auth
 
         [JsonProperty("PHPSESSID")]
         public string PhpSessionId { get; set; }
+
+        [JsonProperty("_ga")]
+        public string Ga { get; set; }
+
+        [JsonProperty("_gid")]
+        public string Gid { get; set; }
+
+        [JsonProperty("_gat")]
+        public string Gat { get; set; }
     }
 }

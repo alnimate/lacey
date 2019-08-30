@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using Lacey.Medusa.Common.Api.Base.Services;
-using Lacey.Medusa.Common.Api.Core.Custom.Interceptors;
 using Lacey.Medusa.Common.Api.Core.Custom.Serializers;
 using Lacey.Medusa.Common.Api.Custom.Extensions;
 using Lacey.Medusa.Surfer.Services.LikesRock.Extensions;
@@ -43,8 +42,7 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Common
                     Serializer = new WebFormsToJsonSerializer()
                 });
 
-            var userAgentInterceptor = new UserAgentInterceptor(UserAgent);
-            this.LikesRock.HttpClient.MessageHandler.AddExecuteInterceptor(userAgentInterceptor);
+            this.LikesRock.AddUserAgent(UserAgent);
         }
 
         protected bool IsAuthenticated()
@@ -68,23 +66,31 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Common
                 Username = credentials.Username,
                 Password = credentials.Password,
                 UserLang = UserLang,
-                Bvb = bvbResponse.Bvb
+                Bvb = bvbResponse.Bvb,
+                Ga = "GA1.2.1583055054.1567053894",
+                Gid = "GA1.2.49410478.1567140764",
+                Gat = "1"
             };
-            var cookiesInterceptor = new CookiesInterceptor(cookies);
-            this.LikesRock.HttpClient.MessageHandler.AddExecuteInterceptor(cookiesInterceptor);
 
-            var sessionIdRequest = this.LikesRock.UserSignIn.SignIn(UserLang, ClientVersion, "1");
+            var sessionIdRequest = this.LikesRock.UserSignIn.SignIn(UserLang, ClientVersion, "1")
+                .AddCookies(cookies);
+
             var sessionId = (await sessionIdRequest.ExecuteUnparsedAsync()).GetCookie(PhpSessionId);
-            this.LikesRock.HttpClient.MessageHandler.RemoveExecuteInterceptor(cookiesInterceptor);
             cookies.PhpSessionId = sessionId;
-            this.LikesRock.HttpClient.MessageHandler.AddExecuteInterceptor(cookiesInterceptor);
 
             var loginRequest = this.LikesRock.Ajax.Login(new LoginRequestModel
                 {
                     Mode = "login",
                     Username = credentials.Username,
                     Password = credentials.Password
-                });
+                })
+                .AddCookies(cookies)
+                .AddConnection("keep-alive")
+                .AddAccept("*/*")
+                .AddOrigin("https://likesrock.com")
+                .AddXRequestedWith("XMLHttpRequest")
+                .AddReferer($"https://likesrock.com/client-v2/user_signin.php?user_lang={UserLang}&client_version={ClientVersion}&security=1")
+                .AddAcceptLanguage("en-US,en;q=0.8");
 
             this.LoginInfo = await loginRequest.ExecuteAsync();
         }
