@@ -221,7 +221,7 @@ namespace Lacey.Medusa.Common.Api.Base.Services
         #region Serialization
 
         /// <inheritdoc/>
-        public ISerializer Serializer { get; private set; }
+        public ISerializer Serializer { get; set; }
 
         /// <inheritdoc/>
         public virtual string SerializeObject(object obj) => Serializer.Serialize(obj);

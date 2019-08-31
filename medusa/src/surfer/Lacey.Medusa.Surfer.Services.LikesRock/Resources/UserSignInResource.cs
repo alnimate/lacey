@@ -56,7 +56,6 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Resources
                     DefaultValue = null,
                     Pattern = null
                 });
-
             }
 
             public override string RestPath => "user_signin.php";

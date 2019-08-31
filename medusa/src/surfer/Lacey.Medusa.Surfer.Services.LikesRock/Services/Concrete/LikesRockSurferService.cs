@@ -23,11 +23,6 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Services.Concrete
 
         public async Task Surf()
         {
-            if (!this.IsAuthenticated())
-            {
-                await this.Login();
-            }
-
             await this.likesRockAutoSurfService.AutoSurf();
         }
     }

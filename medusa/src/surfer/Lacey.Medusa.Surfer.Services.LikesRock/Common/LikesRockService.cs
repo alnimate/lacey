@@ -27,7 +27,9 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Common
 
         protected readonly LikesRockProvider LikesRock;
 
-        protected LoginResponseModel LoginInfo { get; private set; }
+        protected static LoginResponseModel LoginInfo { get; private set; }
+
+        private static readonly object Obj = new object();
 
         protected LikesRockService(
             ILogger logger, 
@@ -43,11 +45,13 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Common
                 });
 
             this.LikesRock.AddUserAgent(UserAgent);
+
+            this.Login().Wait();
         }
 
         protected bool IsAuthenticated()
         {
-            return this.LoginInfo != null;
+            return LoginInfo != null;
         }
 
         protected async Task Login()
@@ -78,12 +82,7 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Common
             var sessionId = (await sessionIdRequest.ExecuteUnparsedAsync()).GetCookie(PhpSessionId);
             cookies.PhpSessionId = sessionId;
 
-            var loginRequest = this.LikesRock.Ajax.Login(new LoginRequestModel
-                {
-                    Mode = "login",
-                    Username = credentials.Username,
-                    Password = credentials.Password
-                })
+            var loginRequest = this.LikesRock.Ajax.Login(credentials.Username, credentials.Password)
                 .AddCookies(cookies)
                 .AddConnection("keep-alive")
                 .AddAccept("*/*")
@@ -92,7 +91,10 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Common
                 .AddReferer($"https://likesrock.com/client-v2/user_signin.php?user_lang={UserLang}&client_version={ClientVersion}&security=1")
                 .AddAcceptLanguage("en-US,en;q=0.8");
 
-            this.LoginInfo = await loginRequest.ExecuteAsync();
+            lock (Obj)
+            {
+                LoginInfo = loginRequest.ExecuteAsync().Result;
+            }
         }
     }
 }

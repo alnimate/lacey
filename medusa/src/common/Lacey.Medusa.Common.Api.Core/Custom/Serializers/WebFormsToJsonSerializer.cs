@@ -17,7 +17,7 @@ namespace Lacey.Medusa.Common.Api.Core.Custom.Serializers
 
         public string Format => "x-www-form-urlencoded";
 
-        public void Serialize(object obj, Stream target)
+        public virtual void Serialize(object obj, Stream target)
         {
             using (var writer = new StreamWriter(target))
             {
@@ -29,7 +29,7 @@ namespace Lacey.Medusa.Common.Api.Core.Custom.Serializers
             }
         }
 
-        public string Serialize(object obj)
+        public virtual string Serialize(object obj)
         {
             using (TextWriter tw = new StringWriter())
             {
@@ -42,17 +42,17 @@ namespace Lacey.Medusa.Common.Api.Core.Custom.Serializers
             }
         }
 
-        public T Deserialize<T>(string input)
+        public virtual T Deserialize<T>(string input)
         {
             return this.jsonSerializer.Deserialize<T>(input);
         }
 
-        public object Deserialize(string input, Type type)
+        public virtual object Deserialize(string input, Type type)
         {
             return this.jsonSerializer.Deserialize(input, type);
         }
 
-        public T Deserialize<T>(Stream input)
+        public virtual T Deserialize<T>(Stream input)
         {
             return this.jsonSerializer.Deserialize<T>(input);
         }

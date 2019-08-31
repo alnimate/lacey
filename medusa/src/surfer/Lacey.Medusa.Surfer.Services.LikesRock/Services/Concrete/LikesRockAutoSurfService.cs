@@ -19,6 +19,9 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Services.Concrete
 
         public async Task AutoSurf()
         {
+            var getSurfUrlRequest = this.LikesRock.Ajax.GetSurfUrl(LoginInfo.UserAccessToken);
+
+            var getSurfUrlResponse = await getSurfUrlRequest.ExecuteAsync();
         }
     }
 }
