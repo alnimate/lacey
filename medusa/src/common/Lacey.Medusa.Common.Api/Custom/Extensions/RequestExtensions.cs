@@ -84,5 +84,12 @@ namespace Lacey.Medusa.Common.Api.Custom.Extensions
         {
             return request.AddExecInterceptor(new AcceptLanguageInterceptor(acceptLanguage));
         }
+
+        public static ClientServiceRequest<TResponse> AddContentLength<TResponse>(
+            this ClientServiceRequest<TResponse> request,
+            int contentLength)
+        {
+            return request.AddExecInterceptor(new ContentLengthInterceptor(contentLength));
+        }
     }
 }

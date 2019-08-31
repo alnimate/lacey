@@ -60,7 +60,7 @@ namespace Lacey.Medusa.Common.Api.Core.Custom.Serializers
         private static void Serialize(TextWriter writer, object obj)
         {
             var queryString = obj.GetQueryString();
-            writer.WriteLine(queryString);
+            writer.Write(queryString);
         }
     }
 }
