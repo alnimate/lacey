@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Lacey.Medusa.Common.Api.Base.Requests;
+using Lacey.Medusa.Common.Api.Core.Base;
 using Lacey.Medusa.Common.Api.Core.Base.Http;
 using Lacey.Medusa.Common.Api.Core.Custom.Interceptors;
 
@@ -10,6 +11,15 @@ namespace Lacey.Medusa.Common.Api.Custom.Extensions
 {
     public static class RequestExtensions
     {
+        public static ClientServiceRequest<TResponse> SetSerializer<TResponse>(
+            this ClientServiceRequest<TResponse> serviceRequest,
+            ISerializer serializer)
+        {
+            serviceRequest.Service.Serializer = serializer;
+
+            return serviceRequest;
+        }
+
         public static async Task<HttpResponseMessage> ExecuteUnparsedAsync<TResponse>(
             this ClientServiceRequest<TResponse> serviceRequest)
         {

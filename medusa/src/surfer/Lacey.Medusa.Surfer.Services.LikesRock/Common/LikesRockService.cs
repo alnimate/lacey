@@ -2,11 +2,11 @@
 using Lacey.Medusa.Common.Api.Base.Services;
 using Lacey.Medusa.Common.Api.Core.Custom.Serializers;
 using Lacey.Medusa.Common.Api.Custom.Extensions;
-using Lacey.Medusa.Surfer.Services.LikesRock.Extensions;
 using Lacey.Medusa.Surfer.Services.LikesRock.Models.Auth;
 using Lacey.Medusa.Surfer.Services.LikesRock.Models.Login;
 using Lacey.Medusa.Surfer.Services.LikesRock.Providers;
 using Lacey.Medusa.Surfer.Services.LikesRock.Providers.Concrete;
+using Lacey.Medusa.Surfer.Services.LikesRock.Serializers;
 using Microsoft.Extensions.Logging;
 
 namespace Lacey.Medusa.Surfer.Services.LikesRock.Common
@@ -61,8 +61,9 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Common
                 return;
             }
 
-            var bvbRequest = this.LikesRock.UserSignIn.SignIn(UserLang, ClientVersion, null);
-            var bvbResponse = (await bvbRequest.ExecuteAsync()).GetSignInResponse();
+            var bvbRequest = this.LikesRock.UserSignIn.SignInBvb(UserLang, ClientVersion)
+                .SetSerializer(new SignInBvbSerializer());
+            var bvbResponse = await bvbRequest.ExecuteAsync();
 
             var credentials = this.AuthProvider.GetCredentials();
             var cookies = new AuthCookies
@@ -76,7 +77,8 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Common
                 Gat = "1"
             };
 
-            var sessionIdRequest = this.LikesRock.UserSignIn.SignIn(UserLang, ClientVersion, "1")
+            var sessionIdRequest = this.LikesRock.UserSignIn.SignInSessionId(UserLang, ClientVersion, "1")
+                .SetSerializer(new WebFormsToJsonSerializer())
                 .AddCookies(cookies);
 
             var sessionId = (await sessionIdRequest.ExecuteUnparsedAsync()).GetCookie(PhpSessionId);

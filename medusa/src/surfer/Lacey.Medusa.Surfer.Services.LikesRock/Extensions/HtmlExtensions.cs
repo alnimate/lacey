@@ -5,7 +5,7 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Extensions
 {
     internal static class HtmlExtensions
     {
-        public static SignInResponseModel GetSignInResponse(this string html)
+        public static SignInBvbResponseModel GetSignInResponse(this string html)
         {
             var bvb = string.Empty;
 
@@ -15,7 +15,7 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Extensions
                 bvb = match.Groups[1].Value;
             }
 
-            return new SignInResponseModel
+            return new SignInBvbResponseModel
             {
                 Bvb = bvb
             };

@@ -2,7 +2,7 @@
 
 namespace Lacey.Medusa.Surfer.Services.LikesRock.Models.SignIn
 {
-    public sealed class SignInResponseModel
+    public sealed class SignInBvbResponseModel
     {
         [JsonProperty("BVB45629")]
         public string Bvb { get; set; }

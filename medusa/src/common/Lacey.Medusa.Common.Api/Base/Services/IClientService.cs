@@ -75,7 +75,7 @@ namespace Lacey.Medusa.Common.Api.Base.Services
         #region Serialization Methods
 
         /// <summary>Gets the Serializer used by this service.</summary>
-        ISerializer Serializer { get; }
+        ISerializer Serializer { get; set; }
 
         /// <summary>Serializes an object into a string representation.</summary>
         string SerializeObject(object data);

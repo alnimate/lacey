@@ -6,9 +6,9 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Serializers
 {
     internal sealed class SignInBvbSerializer : WebFormsToJsonSerializer
     {
-        public override object Deserialize(string input, Type type)
+        public override T Deserialize<T>(string input)
         {
-            return input.GetSignInResponse();
+            return (T)Convert.ChangeType(input.GetSignInResponse(), typeof(T));
         }
     }
 }
