@@ -5,5 +5,7 @@
         public const string Login = "login";
 
         public const string GetSurfUrl = "get_surf_url";
+
+        public const string RecordAction = "record_action";
     }
 }
