@@ -85,7 +85,8 @@ namespace Lacey.Medusa.Instagram.Api.Services.Concrete
                         var challenge = await this.Instagram.GetChallengeRequireVerifyMethodAsync();
                         if (challenge.Succeeded)
                         {
-                            var request = await this.Instagram.RequestVerifyCodeToEmailForChallengeRequireAsync();
+//                            var request = await this.Instagram.RequestVerifyCodeToEmailForChallengeRequireAsync();
+                            var request = await this.Instagram.RequestVerifyCodeToSMSForChallengeRequireAsync();
                             if (request.Succeeded)
                             {
                                 var code = File.ReadAllLines(Path.Combine(currentFolder, "code.secret"))[0];
