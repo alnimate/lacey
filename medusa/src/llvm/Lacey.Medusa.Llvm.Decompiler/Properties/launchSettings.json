@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Lacey.Medusa.Llvm.Decompiler": {
+      "commandName": "Project",
+      "nativeDebugging": false
+    }
+  }
+}
