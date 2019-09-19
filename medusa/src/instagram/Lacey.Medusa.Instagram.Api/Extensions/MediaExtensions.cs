@@ -54,7 +54,7 @@ namespace Lacey.Medusa.Instagram.Api.Extensions
                 return new InstaImage[0];
             }
 
-            return media.Images.Where(i => i.Width == media.Width);
+            return media.Images.Where(i => i.Width == media.Images.Max(m => m.Width));
         }
 
         public static InstaImage[] GetAlbumImages(this InstaMedia media)
