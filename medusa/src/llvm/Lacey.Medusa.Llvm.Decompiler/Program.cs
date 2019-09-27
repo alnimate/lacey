@@ -37,7 +37,7 @@ namespace Lacey.Medusa.Llvm.Decompiler
 
             try
             {
-                if (LLVM.CreateMemoryBufferWithContentsOfFile(@"c:\live\lr_llvm-dis_3_9_1.bc",
+                if (LLVM.CreateMemoryBufferWithContentsOfFile(@"c:\live\lr_client.exe.bc",
                     out LLVMMemoryBufferRef outMemBuf,
                     out var memBufMsg) != success)
                 {
@@ -83,20 +83,15 @@ namespace Lacey.Medusa.Llvm.Decompiler
                         break;
                     }
 
-//                    var val = g.PrintValueToString();
-//                    if (val.Contains("constant"))
+                    var value = Marshal.PtrToStringAuto(g.Pointer);
+                    if (!string.IsNullOrEmpty(value))
                     {
-                        var value = Marshal.PtrToStringAuto(g.Pointer);
-                        if (!string.IsNullOrEmpty(value))
-                        {
-                            sw.WriteLine($"{value}");
-                        }
+                        sw.WriteLine($"{value}");
                     }
 
                     g = LLVM.GetNextGlobal(g);
                     i++;
                 }
-
 
                 /*
                 var f = LLVM.GetFirstFunction(module);
