@@ -2,7 +2,7 @@
 
 namespace Lacey.Medusa.Surfer.Services.LikesRock.Services
 {
-    public interface ILikesRockAutoSurfService
+    public interface ILrWebsitesService
     {
         Task Surf();
     }

@@ -13,5 +13,10 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Utils
             }
             ConsoleUtils.WaitSec(delay + 1);
         }
+
+        public static void Delay(int taskTime)
+        {
+            Delay(taskTime.ToString());
+        }
     }
 }

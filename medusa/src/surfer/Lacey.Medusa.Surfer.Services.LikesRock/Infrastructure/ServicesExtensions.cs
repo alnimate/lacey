@@ -17,15 +17,23 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Infrastructure
             services
                 .AddTransient<ILikesRockAuthProvider, LikesRockAuthProvider>(
                     provider => new LikesRockAuthProvider(userSecretsFile, commonSecretsFile))
+
                 .AddTransient<ILikesRockAutoSurfService, LikesRockAutoSurfService>(
                     provider => new LikesRockAutoSurfService(
                         provider.GetService<ILogger<LikesRockAutoSurfService>>(),
                         provider.GetService<ILikesRockAuthProvider>()))
+
+                .AddTransient<ILrWebsitesService, LrWebsitesService>(
+                    provider => new LrWebsitesService(
+                        provider.GetService<ILogger<LrWebsitesService>>(),
+                        provider.GetService<ILikesRockAuthProvider>()))
+
                 .AddTransient<ILikesRockSurferService, LikesRockSurferService>(
                     provider => new LikesRockSurferService(
                         provider.GetService<ILogger<LikesRockSurferService>>(),
                         provider.GetService<ILikesRockAuthProvider>(),
-                        provider.GetService<ILikesRockAutoSurfService>()));
+                        provider.GetService<ILikesRockAutoSurfService>(),
+                        provider.GetService<ILrWebsitesService>()));
 
             return services;
         }

@@ -11,19 +11,24 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Services.Concrete
 
         private readonly ILikesRockAutoSurfService likesRockAutoSurfService;
 
+        private readonly ILrWebsitesService lrWebsitesService;
+
         public LikesRockSurferService(
             ILogger logger,
             ILikesRockAuthProvider authProvider,
-            ILikesRockAutoSurfService likesRockAutoSurfService) : base(logger, authProvider)
+            ILikesRockAutoSurfService likesRockAutoSurfService, 
+            ILrWebsitesService lrWebsitesService) : base(logger, authProvider)
         {
             this.likesRockAutoSurfService = likesRockAutoSurfService;
+            this.lrWebsitesService = lrWebsitesService;
         }
 
         #endregion
 
         public async Task Surf()
         {
-            await this.likesRockAutoSurfService.AutoSurf();
+            await this.lrWebsitesService.Surf();
+            await this.likesRockAutoSurfService.Surf();
         }
     }
 }

@@ -32,6 +32,8 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Common
 
         protected static LoginResponseModel LoginInfo { get; private set; }
 
+        protected static AuthCookies AuthCookies { get; private set; }
+
         private static readonly object Obj = new object();
 
         protected LikesRockService(
@@ -70,27 +72,30 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Common
             var bvbResponse = await bvbRequest.ExecuteAsync();
 
             var credentials = this.AuthProvider.GetCredentials();
-            var cookies = new AuthCookies
+            lock (Obj)
             {
-                Username = credentials.Username,
-                Password = credentials.Password,
-                UserLang = UserLang,
-                Bvb = bvbResponse.Bvb,
-                Ga = "GA1.2.1583055054.1567053894",
-                Gid = "GA1.2.49410478.1567140764",
-                Gat = "1"
-            };
+                AuthCookies = new AuthCookies
+                {
+                    Username = credentials.Username,
+                    Password = credentials.Password,
+                    UserLang = UserLang,
+                    Bvb = bvbResponse.Bvb,
+                    Ga = "GA1.2.1583055054.1567053894",
+                    Gid = "GA1.2.49410478.1567140764",
+                    Gat = "1"
+                };
+            }
 
             var sessionIdRequest = this.LikesRock.UserSignIn.SignInSessionId(UserLang, ClientVersion, "1")
                 .SetSerializer(new WebFormsToJsonSerializer())
-                .AddCookies(cookies);
+                .AddCookies(AuthCookies);
 
             var sessionId = (await sessionIdRequest.ExecuteUnparsedAsync()).GetCookie(PhpSessionId);
-            cookies.PhpSessionId = sessionId;
-            this.Logger.LogTrace(cookies.GetLog());
+            AuthCookies.PhpSessionId = sessionId;
+            this.Logger.LogTrace(AuthCookies.GetLog());
 
             var loginRequest = this.LikesRock.Ajax.Login(credentials.Username, credentials.Password)
-                .AddCookies(cookies)
+                .AddCookies(AuthCookies)
                 .AddConnection("keep-alive")
                 .AddAccept("*/*")
                 .AddOrigin("https://likesrock.com")
