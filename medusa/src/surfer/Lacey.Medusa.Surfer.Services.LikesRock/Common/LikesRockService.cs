@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Lacey.Medusa.Common.Api.Base.Services;
 using Lacey.Medusa.Common.Api.Core.Custom.Serializers;
 using Lacey.Medusa.Common.Api.Custom.Extensions;
@@ -106,6 +107,11 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Common
             lock (Obj)
             {
                 LoginInfo = loginRequest.ExecuteAsync().Result;
+                if (LoginInfo == null)
+                {
+                    this.Logger.LogError("Authorization failed.");
+                    throw new Exception();
+                }
             }
             this.Logger.LogTrace(LoginInfo.GetLog());
         }
