@@ -2,6 +2,7 @@
 using Lacey.Medusa.Common.Api.Base.Services;
 using Lacey.Medusa.Common.Api.Core.Custom.Serializers;
 using Lacey.Medusa.Common.Api.Custom.Extensions;
+using Lacey.Medusa.Surfer.Services.LikesRock.Extensions;
 using Lacey.Medusa.Surfer.Services.LikesRock.Models.Auth;
 using Lacey.Medusa.Surfer.Services.LikesRock.Models.Login;
 using Lacey.Medusa.Surfer.Services.LikesRock.Providers;
@@ -27,6 +28,8 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Common
 
         protected readonly LikesRockProvider LikesRock;
 
+        protected readonly CommonSecrets CommonSecrets;
+
         protected static LoginResponseModel LoginInfo { get; private set; }
 
         private static readonly object Obj = new object();
@@ -45,6 +48,7 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Common
                 });
 
             this.LikesRock.AddUserAgent(UserAgent);
+            this.CommonSecrets = this.AuthProvider.GetCommonSecrets();
 
             this.Login().Wait();
         }
@@ -83,6 +87,7 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Common
 
             var sessionId = (await sessionIdRequest.ExecuteUnparsedAsync()).GetCookie(PhpSessionId);
             cookies.PhpSessionId = sessionId;
+            this.Logger.LogTrace(cookies.GetLog());
 
             var loginRequest = this.LikesRock.Ajax.Login(credentials.Username, credentials.Password)
                 .AddCookies(cookies)
@@ -97,6 +102,7 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Common
             {
                 LoginInfo = loginRequest.ExecuteAsync().Result;
             }
+            this.Logger.LogTrace(LoginInfo.GetLog());
         }
     }
 }

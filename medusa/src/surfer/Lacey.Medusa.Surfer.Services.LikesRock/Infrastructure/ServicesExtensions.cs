@@ -11,11 +11,12 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Infrastructure
     {
         public static IServiceCollection AddLikesRockServices(
             this IServiceCollection services,
-            string secretsFilePath)
+            string userSecretsFile,
+            string commonSecretsFile)
         {
             services
                 .AddTransient<ILikesRockAuthProvider, LikesRockAuthProvider>(
-                    provider => new LikesRockAuthProvider(secretsFilePath))
+                    provider => new LikesRockAuthProvider(userSecretsFile, commonSecretsFile))
                 .AddTransient<ILikesRockAutoSurfService, LikesRockAutoSurfService>(
                     provider => new LikesRockAutoSurfService(
                         provider.GetService<ILogger<LikesRockAutoSurfService>>(),

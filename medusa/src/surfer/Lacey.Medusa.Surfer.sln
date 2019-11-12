@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Common.Api.Cor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Common.Api", "..\common\Lacey.Medusa.Common.Api\Lacey.Medusa.Common.Api.csproj", "{EFC78E0B-B43F-4683-B483-B12FE997123F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lacey.Medusa.Surfer.Services.LikesRock", "Lacey.Medusa.Surfer.Services.LikesRock\Lacey.Medusa.Surfer.Services.LikesRock.csproj", "{DE5F515C-4681-40C7-9049-6DE233D78F6A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Surfer.Services.LikesRock", "Lacey.Medusa.Surfer.Services.LikesRock\Lacey.Medusa.Surfer.Services.LikesRock.csproj", "{DE5F515C-4681-40C7-9049-6DE233D78F6A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Common.Cli", "..\common\Lacey.Medusa.Common.Cli\Lacey.Medusa.Common.Cli.csproj", "{87FDE474-29FA-4E6D-AF0A-FD60CEA8E125}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{DE5F515C-4681-40C7-9049-6DE233D78F6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DE5F515C-4681-40C7-9049-6DE233D78F6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DE5F515C-4681-40C7-9049-6DE233D78F6A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87FDE474-29FA-4E6D-AF0A-FD60CEA8E125}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87FDE474-29FA-4E6D-AF0A-FD60CEA8E125}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87FDE474-29FA-4E6D-AF0A-FD60CEA8E125}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87FDE474-29FA-4E6D-AF0A-FD60CEA8E125}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

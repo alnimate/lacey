@@ -5,21 +5,36 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Providers.Concrete
 {
     public sealed class LikesRockAuthProvider : ILikesRockAuthProvider
     {
-        private readonly string secretsFilePath;
+        private readonly string userSecretsFile;
 
-        public LikesRockAuthProvider(string secretsFilePath)
+        private readonly string commonSecretsFile;
+
+        public LikesRockAuthProvider(
+            string userSecretsFile, 
+            string commonSecretsFile)
         {
-            this.secretsFilePath = secretsFilePath;
+            this.userSecretsFile = userSecretsFile;
+            this.commonSecretsFile = commonSecretsFile;
         }
 
         public Credentials GetCredentials()
         {
-            var lines = File.ReadAllLines(this.secretsFilePath);
+            var lines = File.ReadAllLines(this.userSecretsFile);
 
             return new Credentials
             {
                 Username = lines[0],
                 Password = lines[1]
+            };
+        }
+
+        public CommonSecrets GetCommonSecrets()
+        {
+            var lines = File.ReadAllLines(this.commonSecretsFile);
+
+            return new CommonSecrets
+            {
+                HashKey = lines[0]
             };
         }
     }

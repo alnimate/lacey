@@ -15,7 +15,9 @@ namespace Lacey.Medusa.Surfer.Run.Infrastructure
             var currentFolder = Directory.GetCurrentDirectory();
 
             services
-                .AddLikesRockServices(config.LikesRockSecretsFilePath)
+                .AddLikesRockServices(
+                    config.Lr.UserSecretsFile, 
+                    config.Lr.CommonSecretsFile)
                 .AddEmailServices(
                     config.Email.SmtpHost,
                     config.Email.SmtpPort,

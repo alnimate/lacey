@@ -1,7 +1,9 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using LLVMSharp;
 
 namespace Lacey.Medusa.Llvm.Decompiler
@@ -13,6 +15,43 @@ namespace Lacey.Medusa.Llvm.Decompiler
         /// </summary>
         private static void Main()
         {
+            /*
+            try
+            {
+                const string i16Regex = @"constant \[\d+ x i\d+\] \[(.*)\]";
+                using var sr = File.OpenText(@"c:\live\gvs.txt");
+                var matches = Regex.Matches(sr.ReadToEnd(), i16Regex, RegexOptions.Multiline);
+                using var w = new StreamWriter(@"c:\live\01.txt", false);
+                foreach (var m in matches)
+                {
+                    var match = (Match)m;
+                    if (match.Groups.Count > 1)
+                    {
+                        var arr = match.Groups[1].Value
+                            .Replace("i16", string.Empty)
+                            .Replace(" ", string.Empty)
+                            .Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries)
+                            .Select(byte.Parse)
+                            .ToArray();
+
+                        var value = Encoding.ASCII.GetString(arr);
+                        w.WriteLine($"{value}");
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+            finally
+            {
+                Console.WriteLine("Process completed. Press any key.");
+                Console.ReadLine();
+            }
+
+            return;
+            */
+
             byte[] bytes = Encoding.UTF8.GetBytes(@"task_hash");
             string str = Encoding.ASCII.GetString(new byte[]
             {
@@ -37,7 +76,7 @@ namespace Lacey.Medusa.Llvm.Decompiler
 
             try
             {
-                if (LLVM.CreateMemoryBufferWithContentsOfFile(@"c:\live\lr_client.exe.bc",
+                if (LLVM.CreateMemoryBufferWithContentsOfFile(@"c:\live\lr01\lr_client.exe.bc",
                     out LLVMMemoryBufferRef outMemBuf,
                     out var memBufMsg) != success)
                 {
@@ -82,12 +121,15 @@ namespace Lacey.Medusa.Llvm.Decompiler
                     {
                         break;
                     }
-
+                    /*
                     var value = Marshal.PtrToStringAuto(g.Pointer);
                     if (!string.IsNullOrEmpty(value))
                     {
                         sw.WriteLine($"{value}");
                     }
+                    */
+
+                    sw.WriteLine($"{g}");
 
                     g = LLVM.GetNextGlobal(g);
                     i++;

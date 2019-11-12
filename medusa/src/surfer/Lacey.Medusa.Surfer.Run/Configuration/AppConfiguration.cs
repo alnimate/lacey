@@ -2,7 +2,7 @@
 {
     internal sealed class AppConfiguration
     {
-        public string LikesRockSecretsFilePath { get; set; }
+        public LrConfiguration Lr { get; set; }
 
         public string TempFolder { get; set; }
 

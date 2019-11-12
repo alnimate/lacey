@@ -8,9 +8,11 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Models.Auth
         public string Bvb { get; set; }
 
         [JsonProperty("user_name")]
+        [JsonIgnore]
         public string Username { get; set; }
 
         [JsonProperty("user_pass")]
+        [JsonIgnore]
         public string Password { get; set; }
 
         [JsonProperty("user_lang")]
