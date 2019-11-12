@@ -3,9 +3,9 @@ using Lacey.Medusa.Common.Api.Base.Services;
 
 namespace Lacey.Medusa.Surfer.Services.LikesRock.Common
 {
-    public abstract class LikesRockRequest<TResponse> : ClientServiceRequest<TResponse>
+    public abstract class LrRequest<TResponse> : ClientServiceRequest<TResponse>
     {
-        protected LikesRockRequest(IClientService service) : base(service)
+        protected LrRequest(IClientService service) : base(service)
         {
             base.InitParameters();
         }

@@ -12,29 +12,42 @@ using Microsoft.Extensions.Logging;
 
 namespace Lacey.Medusa.Surfer.Services.LikesRock.Services.Concrete
 {
-    public sealed class LrWebsitesService : LikesRockService, ILrWebsitesService
+    public sealed class LrViewsService : LrService, ILrViewsService
     {
-        public LrWebsitesService(
+        public LrViewsService(
             ILogger logger, 
-            ILikesRockAuthProvider authProvider) : base(logger, authProvider)
+            ILrAuthProvider authProvider) : base(logger, authProvider)
         {
         }
 
-        public async Task Surf()
+        public async Task WebsitesSurf()
         {
-            var getTasksRequest = this.LikesRock.GetTasks.GetTasks(LoginInfo.UserAccessToken, Target.Websites, ClientVersion)
-                    .AddConnection("keep-alive")
-                    .AddAccept("text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8")
-                    .AddAcceptLanguage("en-US,en;q=0.8")
-                    .AddCookies(AuthCookies)
+            await this.Surf(Target.Websites);
+        }
+
+        public async Task YoutubeSurf()
+        {
+            await this.Surf(Target.Youtube);
+        }
+
+        private async Task Surf(int targetId)
+        {
+            if (!this.IsAuthenticated())
+            {
+                return;
+            }
+
+            var getTasksRequest = this.Lr.GetTasks.GetTasks(LoginInfo.UserAccessToken, targetId, ClientVersion)
+                    .SetAuthCookies(AuthCookies)
                     .SetSerializer(new GetTasksSerializer());
 
             var getTasksResponse = await getTasksRequest.ExecuteAsync();
-
-            foreach (var task in getTasksResponse.Tasks
+            var tasks = getTasksResponse.Tasks
                 .OrderBy(t => t.Currency)
                 .ThenByDescending(t => t.Money)
-                .ToArray())
+                .ThenBy(t => t.TaskTime)
+                .ToArray();
+            foreach (var task in tasks)
             {
                 if (task.NoSurf())
                 {
@@ -51,7 +64,7 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Services.Concrete
                     string.Empty,
                     this.CommonSecrets.HashKey);
 
-                var recordActionRequest = this.LikesRock.Ajax.RecordAction(
+                var recordActionRequest = this.Lr.Ajax.RecordAction(
                         LoginInfo.UserAccessToken,
                         task.TaskId.ToString(),
                         string.Empty,

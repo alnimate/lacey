@@ -7,7 +7,7 @@ using Lacey.Medusa.Surfer.Services.LikesRock.Models.GetTasks;
 
 namespace Lacey.Medusa.Surfer.Services.LikesRock.Resources
 {
-    public sealed class GetTasksResource : LikesRockResource
+    public sealed class GetTasksResource : LrResource
     {
         public GetTasksResource(IClientService service) : base(service)
         {
@@ -18,7 +18,7 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Resources
             return new GetTasksRequest(this.Service, userAccessToken, targetId, v);
         }
 
-        public sealed class GetTasksRequest : LikesRockRequest<GetTasksResponseModel>
+        public sealed class GetTasksRequest : LrRequest<GetTasksResponseModel>
         {
             public GetTasksRequest(
                 IClientService service, 

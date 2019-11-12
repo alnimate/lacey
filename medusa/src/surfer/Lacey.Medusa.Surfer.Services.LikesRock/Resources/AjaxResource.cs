@@ -10,7 +10,7 @@ using Lacey.Medusa.Surfer.Services.LikesRock.Models.RecordAction;
 
 namespace Lacey.Medusa.Surfer.Services.LikesRock.Resources
 {
-    public sealed class AjaxResource : LikesRockResource
+    public sealed class AjaxResource : LrResource
     {
         public AjaxResource(IClientService service) : base(service)
         {
@@ -37,7 +37,7 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Resources
                 taskId, socialId, taskHash, clicked);
         }
 
-        public sealed class LoginRequest : LikesRockRequest<LoginResponseModel>
+        public sealed class LoginRequest : LrRequest<LoginResponseModel>
         {
             private readonly LoginRequestModel body;
 
@@ -64,7 +64,7 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Resources
             }
         }
 
-        public sealed class GetSurfUrlRequest : LikesRockRequest<GetSurfUrlResponseModel>
+        public sealed class GetSurfUrlRequest : LrRequest<GetSurfUrlResponseModel>
         {
             public GetSurfUrlRequest(
                 IClientService service, string mode, string userAccessToken) : base(service)
@@ -102,7 +102,7 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Resources
             public string UserAccessToken { get; private set; }
         }
 
-        public sealed class RecordActionRequest : LikesRockRequest<RecordActionResponseModel>
+        public sealed class RecordActionRequest : LrRequest<RecordActionResponseModel>
         {
             public RecordActionRequest(
                 IClientService service, 

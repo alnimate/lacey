@@ -11,13 +11,13 @@ using Microsoft.Extensions.Logging;
 
 namespace Lacey.Medusa.Surfer.Services.LikesRock.Services.Concrete
 {
-    public sealed class LikesRockAutoSurfService : LikesRockService, ILikesRockAutoSurfService
+    public sealed class LrAutoSurfService : LrService, ILrAutoSurfService
     {
         #region Fields/Constructors
 
-        public LikesRockAutoSurfService(
+        public LrAutoSurfService(
             ILogger logger,
-            ILikesRockAuthProvider authProvider) : base(logger, authProvider)
+            ILrAuthProvider authProvider) : base(logger, authProvider)
         {
         }
 
@@ -25,9 +25,15 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Services.Concrete
 
         public async Task Surf()
         {
+            if (!this.IsAuthenticated())
+            {
+                return;
+            }
+
             while (true)
             {
-                var getSurfUrlRequest = this.LikesRock.Ajax.GetSurfUrl(LoginInfo.UserAccessToken)
+                var getSurfUrlRequest = this.Lr.Ajax.GetSurfUrl(LoginInfo.UserAccessToken)
+                    .SetAuthCookies(AuthCookies)
                     .SetSerializer(new JsonSerializer<GetSurfUrlResponseModel>());
 
                 var getSurfUrlResponse = await getSurfUrlRequest.ExecuteAsync();
@@ -44,7 +50,7 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Services.Concrete
                     string.Empty,
                     this.CommonSecrets.HashKey);
 
-                var recordActionRequest = this.LikesRock.Ajax.RecordAction(
+                var recordActionRequest = this.Lr.Ajax.RecordAction(
                         LoginInfo.UserAccessToken,
                         getSurfUrlResponse.TaskId,
                         string.Empty,

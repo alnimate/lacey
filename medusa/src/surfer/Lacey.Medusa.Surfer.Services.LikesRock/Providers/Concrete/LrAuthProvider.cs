@@ -3,13 +3,13 @@ using Lacey.Medusa.Surfer.Services.LikesRock.Models.Auth;
 
 namespace Lacey.Medusa.Surfer.Services.LikesRock.Providers.Concrete
 {
-    public sealed class LikesRockAuthProvider : ILikesRockAuthProvider
+    public sealed class LrAuthProvider : ILrAuthProvider
     {
         private readonly string userSecretsFile;
 
         private readonly string commonSecretsFile;
 
-        public LikesRockAuthProvider(
+        public LrAuthProvider(
             string userSecretsFile, 
             string commonSecretsFile)
         {

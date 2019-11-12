@@ -7,7 +7,7 @@ using Lacey.Medusa.Surfer.Services.LikesRock.Models.SignIn;
 
 namespace Lacey.Medusa.Surfer.Services.LikesRock.Resources
 {
-    public sealed class UserSignInResource : LikesRockResource
+    public sealed class UserSignInResource : LrResource
     {
         public UserSignInResource(IClientService service) : base(service)
         {
@@ -23,7 +23,7 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Resources
             return new SignInSessionIdRequest(this.Service, userLang, clientVersion, security);
         }
 
-        public sealed class SignInBvbRequest : LikesRockRequest<SignInBvbResponseModel>
+        public sealed class SignInBvbRequest : LrRequest<SignInBvbResponseModel>
         {
             public SignInBvbRequest(
                 IClientService service, 
@@ -63,7 +63,7 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Resources
             public string ClientVersion { get; private set; }
         }
 
-        public sealed class SignInSessionIdRequest : LikesRockRequest<string>
+        public sealed class SignInSessionIdRequest : LrRequest<string>
         {
             public SignInSessionIdRequest(
                 IClientService service, 

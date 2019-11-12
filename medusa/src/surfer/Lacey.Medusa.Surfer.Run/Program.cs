@@ -36,7 +36,7 @@ namespace Lacey.Medusa.Surfer.Run
             logger = serviceProvider.GetService<ILoggerFactory>()
                 .CreateLogger<Program>();
 
-            var likesRock = serviceProvider.GetService<ILikesRockSurferService>();
+            var likesRock = serviceProvider.GetService<ILrSurfService>();
 
             try
             {

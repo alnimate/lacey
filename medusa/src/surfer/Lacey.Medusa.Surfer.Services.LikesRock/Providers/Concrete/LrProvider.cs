@@ -4,9 +4,9 @@ using Lacey.Medusa.Surfer.Services.LikesRock.Resources;
 
 namespace Lacey.Medusa.Surfer.Services.LikesRock.Providers.Concrete
 {
-    public sealed class LikesRockProvider : BaseClientService
+    public sealed class LrProvider : BaseClientService
     {
-        public LikesRockProvider(Initializer initializer) : base(initializer)
+        public LrProvider(Initializer initializer) : base(initializer)
         {
             this.UserSignIn= new UserSignInResource(this);
             this.Ajax = new AjaxResource(this);

@@ -15,25 +15,31 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Infrastructure
             string commonSecretsFile)
         {
             services
-                .AddTransient<ILikesRockAuthProvider, LikesRockAuthProvider>(
-                    provider => new LikesRockAuthProvider(userSecretsFile, commonSecretsFile))
+                .AddTransient<ILrAuthProvider, LrAuthProvider>(
+                    provider => new LrAuthProvider(userSecretsFile, commonSecretsFile))
 
-                .AddTransient<ILikesRockAutoSurfService, LikesRockAutoSurfService>(
-                    provider => new LikesRockAutoSurfService(
-                        provider.GetService<ILogger<LikesRockAutoSurfService>>(),
-                        provider.GetService<ILikesRockAuthProvider>()))
+                .AddTransient<ILrLoginService, LrLoginService>(
+                    provider => new LrLoginService(
+                        provider.GetService<ILogger<LrLoginService>>(),
+                        provider.GetService<ILrAuthProvider>()))
 
-                .AddTransient<ILrWebsitesService, LrWebsitesService>(
-                    provider => new LrWebsitesService(
-                        provider.GetService<ILogger<LrWebsitesService>>(),
-                        provider.GetService<ILikesRockAuthProvider>()))
+                .AddTransient<ILrAutoSurfService, LrAutoSurfService>(
+                    provider => new LrAutoSurfService(
+                        provider.GetService<ILogger<LrAutoSurfService>>(),
+                        provider.GetService<ILrAuthProvider>()))
 
-                .AddTransient<ILikesRockSurferService, LikesRockSurferService>(
-                    provider => new LikesRockSurferService(
-                        provider.GetService<ILogger<LikesRockSurferService>>(),
-                        provider.GetService<ILikesRockAuthProvider>(),
-                        provider.GetService<ILikesRockAutoSurfService>(),
-                        provider.GetService<ILrWebsitesService>()));
+                .AddTransient<ILrViewsService, LrViewsService>(
+                    provider => new LrViewsService(
+                        provider.GetService<ILogger<LrViewsService>>(),
+                        provider.GetService<ILrAuthProvider>()))
+
+                .AddTransient<ILrSurfService, LrSurfService>(
+                    provider => new LrSurfService(
+                        provider.GetService<ILogger<LrSurfService>>(),
+                        provider.GetService<ILrAuthProvider>(),
+                        provider.GetService<ILrAutoSurfService>(),
+                        provider.GetService<ILrViewsService>(),
+                        provider.GetService<ILrLoginService>()));
 
             return services;
         }

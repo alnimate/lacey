@@ -2,11 +2,11 @@
 
 namespace Lacey.Medusa.Surfer.Services.LikesRock.Common
 {
-    public abstract class LikesRockResource
+    public abstract class LrResource
     {
         protected readonly IClientService Service;
 
-        protected LikesRockResource(IClientService service)
+        protected LrResource(IClientService service)
         {
             Service = service;
         }
