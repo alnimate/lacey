@@ -6,6 +6,8 @@
 
         public string Password { get; set; }
 
-        public string YoutubeSessionId { get; set; }
+        public string YtSessionId { get; set; }
+
+        public string InSessionId { get; set; }
     }
 }

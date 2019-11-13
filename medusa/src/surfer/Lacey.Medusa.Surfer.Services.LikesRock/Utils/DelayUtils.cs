@@ -7,10 +7,6 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Utils
         public static void TaskDelay(string taskTime)
         {
             int.TryParse(taskTime, out var delay);
-            if (delay <= 0)
-            {
-                delay = 30;
-            }
             ConsoleUtils.WaitSec(delay + RandomUtils.GetRandom(10, 60));
         }
 
@@ -22,6 +18,16 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Utils
         public static void Delay()
         {
             ConsoleUtils.WaitSec(RandomUtils.GetRandom(10, 60));
+        }
+
+        public static void SmallDelay()
+        {
+            ConsoleUtils.WaitSec(RandomUtils.GetRandom(10, 20));
+        }
+
+        public static void LargeDelay()
+        {
+            ConsoleUtils.WaitSec(RandomUtils.GetRandom(60, 120));
         }
     }
 }

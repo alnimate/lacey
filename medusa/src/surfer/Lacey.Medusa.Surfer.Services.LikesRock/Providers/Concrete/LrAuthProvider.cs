@@ -26,7 +26,8 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Providers.Concrete
             {
                 Username = lines[0],
                 Password = lines[1],
-                YoutubeSessionId = lines[2].Split(new [] { "=" }, StringSplitOptions.RemoveEmptyEntries)[1]
+                YtSessionId = lines[2].Split(new [] { "=" }, StringSplitOptions.RemoveEmptyEntries)[1],
+                InSessionId = lines[3].Split(new [] { "=" }, StringSplitOptions.RemoveEmptyEntries)[1]
             };
         }
 

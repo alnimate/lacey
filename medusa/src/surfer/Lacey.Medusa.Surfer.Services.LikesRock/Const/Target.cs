@@ -2,6 +2,10 @@
 {
     internal static class Target
     {
+        public const int InLikes = 18;
+
+        public const int InSubscr = 19;
+
         public const int YtSubscr = 4;
 
         public const int YtLikes = 23;

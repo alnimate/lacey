@@ -59,11 +59,11 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Common
             return LoginInfo != null;
         }
 
-        public bool Login()
+        public void Login()
         {
             if (this.IsAuthenticated())
             {
-                return true;
+                return;
             }
 
             lock (Obj)
@@ -93,7 +93,7 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Common
                 AuthCookies.PhpSessionId = sessionId;
                 this.Logger.LogTrace(AuthCookies.GetLog());
 
-                DelayUtils.Delay();
+                DelayUtils.SmallDelay();
                 var loginRequest = this.Lr.Ajax.Login(this.UserSecrets.Username, this.UserSecrets.Password)
                     .ClearExecInterceptors()
                     .AddUserAgent(HttpConst.UserAgent)
@@ -105,14 +105,17 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Common
                     .AddReferer($"https://likesrock.com/client-v2/user_signin.php?user_lang={UserLang}&client_version={ClientVersion}&security=1")
                     .AddAcceptLanguage("en-US,en;q=0.8");
 
-                LoginInfo = loginRequest.ExecuteAsync().Result;
-                if (LoginInfo == null)
+                while (LoginInfo == null)
                 {
-                    return false;
+                    LoginInfo = loginRequest.ExecuteAsync().Result;
+                    if (LoginInfo == null)
+                    {
+                        this.Logger.LogError("Authorization failed.");
+                        DelayUtils.LargeDelay();
+                    }
                 }
 
                 this.Logger.LogTrace(LoginInfo.GetLog());
-                return true;
             }
         }
     }

@@ -32,11 +32,6 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Services.Concrete
         public async Task Surf()
         {
             this.lrLoginService.Login();
-            if (!this.lrLoginService.IsAuthenticated())
-            {
-                this.Logger.LogError("Authorization failed.");
-                return;
-            }
 
             await this.lrTasksService.Surf();
 

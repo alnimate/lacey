@@ -30,60 +30,22 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Services.Concrete
             }
 
             var tasks = new List<GetTasksItemModel>();
-
-            DelayUtils.Delay();
-            // Youtube Subscribe
-            var ytsr = this.Lr.GetTasks.GetTasks(LoginInfo.UserAccessToken, Target.YtSubscr, ClientVersion)
-                    .SetAuthCookies(AuthCookies)
-                    .SetSerializer(new GetTasksSerializer());
-            var yts = await ytsr.ExecuteAsync();
-            foreach (var task in yts.Tasks)
+            if (!string.IsNullOrEmpty(this.UserSecrets.InSessionId))
             {
-                task.SocialId = this.UserSecrets.YoutubeSessionId;
+                tasks.AddRange(await GetTasks(Target.InLikes, this.UserSecrets.InSessionId));
+                tasks.AddRange(await GetTasks(Target.InSubscr, this.UserSecrets.InSessionId));
             }
-            tasks.AddRange(yts.Tasks);
 
-            DelayUtils.Delay();
-            // Youtube Likes
-            var ytlr = this.Lr.GetTasks.GetTasks(LoginInfo.UserAccessToken, Target.YtLikes, ClientVersion)
-                    .SetAuthCookies(AuthCookies)
-                    .SetSerializer(new GetTasksSerializer());
-            var ytl = await ytlr.ExecuteAsync();
-            foreach (var task in ytl.Tasks)
+            if (!string.IsNullOrEmpty(this.UserSecrets.YtSessionId))
             {
-                task.SocialId = this.UserSecrets.YoutubeSessionId;
+                tasks.AddRange(await GetTasks(Target.YtSubscr, this.UserSecrets.YtSessionId));
+                tasks.AddRange(await GetTasks(Target.YtLikes, this.UserSecrets.YtSessionId));
+                tasks.AddRange(await GetTasks(Target.YtDislikes, this.UserSecrets.YtSessionId));
             }
-            tasks.AddRange(ytl.Tasks);
 
-            DelayUtils.Delay();
-            // Youtube Views
-            var ytr = this.Lr.GetTasks.GetTasks(LoginInfo.UserAccessToken, Target.YtViews, ClientVersion)
-                    .SetAuthCookies(AuthCookies)
-                    .SetSerializer(new GetTasksSerializer());
-            var yt = await ytr.ExecuteAsync();
-            tasks.AddRange(yt.Tasks);
+            tasks.AddRange(await GetTasks(Target.YtViews, string.Empty));
+            tasks.AddRange(await GetTasks(Target.SitesView, string.Empty));
 
-            DelayUtils.Delay();
-            // Youtube Dislikes
-            var ytdr = this.Lr.GetTasks.GetTasks(LoginInfo.UserAccessToken, Target.YtDislikes, ClientVersion)
-                    .SetAuthCookies(AuthCookies)
-                    .SetSerializer(new GetTasksSerializer());
-            var ytd = await ytdr.ExecuteAsync();
-            foreach (var task in ytd.Tasks)
-            {
-                task.SocialId = this.UserSecrets.YoutubeSessionId;
-            }
-            tasks.AddRange(ytd.Tasks);
-
-            DelayUtils.Delay();
-            // Sites View
-            var wr = this.Lr.GetTasks.GetTasks(LoginInfo.UserAccessToken, Target.SitesView, ClientVersion)
-                    .SetAuthCookies(AuthCookies)
-                    .SetSerializer(new GetTasksSerializer());
-            var w = await wr.ExecuteAsync();
-            tasks.AddRange(w.Tasks);
-
-            DelayUtils.Delay();
             var sorted = tasks
                 .OrderBy(t => t.Currency)
                 .ThenByDescending(t => t.Money)
@@ -118,6 +80,24 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Services.Concrete
                 var recordActionResponse = await recordActionRequest.ExecuteAsync();
                 this.Logger.LogTrace(recordActionResponse.GetLog());
             }
+        }
+
+        private async Task<IEnumerable<GetTasksItemModel>> GetTasks(int targetId, string socialId)
+        {
+            var tasksRequest = this.Lr.GetTasks.GetTasks(LoginInfo.UserAccessToken, targetId, ClientVersion)
+                .SetAuthCookies(AuthCookies)
+                .SetSerializer(new GetTasksSerializer());
+            var tasks = (await tasksRequest.ExecuteAsync()).Tasks;
+            if (!string.IsNullOrEmpty(socialId))
+            {
+                foreach (var task in tasks)
+                {
+                    task.SocialId = socialId;
+                }
+            }
+            DelayUtils.SmallDelay();
+
+            return tasks;
         }
     }
 }

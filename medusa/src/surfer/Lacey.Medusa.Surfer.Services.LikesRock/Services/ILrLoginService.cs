@@ -4,6 +4,6 @@
     {
         bool IsAuthenticated();
 
-        bool Login();
+        void Login();
     }
 }
