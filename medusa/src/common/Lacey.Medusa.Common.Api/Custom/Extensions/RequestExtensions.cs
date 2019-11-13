@@ -46,11 +46,26 @@ namespace Lacey.Medusa.Common.Api.Custom.Extensions
             return request;
         }
 
+        public static ClientServiceRequest<TResponse> ClearExecInterceptors<TResponse>(
+            this ClientServiceRequest<TResponse> request)
+        {
+            request.Service.HttpClient.MessageHandler.ClearExecuteInterceptors();
+
+            return request;
+        }
+
         public static ClientServiceRequest<TResponse> AddCookies<TResponse>(
             this ClientServiceRequest<TResponse> request,
             object cookies)
         {
             return request.AddExecInterceptor(new CookiesInterceptor(cookies));
+        }
+
+        public static ClientServiceRequest<TResponse> AddUserAgent<TResponse>(
+            this ClientServiceRequest<TResponse> request,
+            string userAgent)
+        {
+            return request.AddExecInterceptor(new UserAgentInterceptor(userAgent));
         }
 
         public static ClientServiceRequest<TResponse> AddConnection<TResponse>(
@@ -100,6 +115,13 @@ namespace Lacey.Medusa.Common.Api.Custom.Extensions
             int contentLength)
         {
             return request.AddExecInterceptor(new ContentLengthInterceptor(contentLength));
+        }
+
+        public static ClientServiceRequest<TResponse> AddUpgradeInsecureRequests<TResponse>(
+            this ClientServiceRequest<TResponse> request,
+            string upgradeInsecureRequests)
+        {
+            return request.AddExecInterceptor(new UpgradeInsecureRequestsInterceptor(upgradeInsecureRequests));
         }
     }
 }

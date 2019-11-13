@@ -30,6 +30,7 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Services.Concrete
                 return;
             }
 
+            DelayUtils.Delay();
             while (true)
             {
                 var getSurfUrlRequest = this.Lr.Ajax.GetSurfUrl(LoginInfo.UserAccessToken)
@@ -38,7 +39,7 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Services.Concrete
 
                 var getSurfUrlResponse = await getSurfUrlRequest.ExecuteAsync();
                 this.Logger.LogTrace(getSurfUrlResponse.GetLog());
-                TaskUtils.Delay(getSurfUrlResponse.TaskTime);
+                DelayUtils.TaskDelay(getSurfUrlResponse.TaskTime);
                 if (getSurfUrlResponse.NoAutoSurf())
                 {
                     continue;
@@ -56,6 +57,7 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Services.Concrete
                         string.Empty,
                         taskHash,
                         string.Empty)
+                    .SetAuthCookies(AuthCookies)
                     .SetSerializer(new JsonSerializer<RecordActionResponseModel>());
 
                 var recordActionResponse = await recordActionRequest.ExecuteAsync();

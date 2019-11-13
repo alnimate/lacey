@@ -1,5 +1,6 @@
 ﻿using Lacey.Medusa.Common.Api.Base.Requests;
 using Lacey.Medusa.Common.Api.Custom.Extensions;
+using Lacey.Medusa.Surfer.Services.LikesRock.Const;
 using Lacey.Medusa.Surfer.Services.LikesRock.Models.Auth;
 
 namespace Lacey.Medusa.Surfer.Services.LikesRock.Extensions
@@ -10,11 +11,21 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Extensions
             this ClientServiceRequest<TResponse> request,
             AuthCookies authCookies)
         {
-            return request
+            request.ClearExecInterceptors();
+
+            var res =  request
+                .AddUserAgent(HttpConst.UserAgent)
                 .AddConnection("keep-alive")
                 .AddAccept("text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8")
                 .AddAcceptLanguage("en-US,en;q=0.8")
-                .AddCookies(authCookies);
+                .AddUpgradeInsecureRequests("1");
+
+            if (authCookies != null)
+            {
+                res = res.AddCookies(authCookies);
+            }
+
+            return res;
         }
     }
 }

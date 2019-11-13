@@ -31,6 +31,7 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Services.Concrete
 
             var tasks = new List<GetTasksItemModel>();
 
+            DelayUtils.Delay();
             // Youtube Subscribe
             var ytsr = this.Lr.GetTasks.GetTasks(LoginInfo.UserAccessToken, Target.YtSubscr, ClientVersion)
                     .SetAuthCookies(AuthCookies)
@@ -42,6 +43,7 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Services.Concrete
             }
             tasks.AddRange(yts.Tasks);
 
+            DelayUtils.Delay();
             // Youtube Likes
             var ytlr = this.Lr.GetTasks.GetTasks(LoginInfo.UserAccessToken, Target.YtLikes, ClientVersion)
                     .SetAuthCookies(AuthCookies)
@@ -53,6 +55,7 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Services.Concrete
             }
             tasks.AddRange(ytl.Tasks);
 
+            DelayUtils.Delay();
             // Youtube Views
             var ytr = this.Lr.GetTasks.GetTasks(LoginInfo.UserAccessToken, Target.YtViews, ClientVersion)
                     .SetAuthCookies(AuthCookies)
@@ -60,10 +63,11 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Services.Concrete
             var yt = await ytr.ExecuteAsync();
             tasks.AddRange(yt.Tasks);
 
+            DelayUtils.Delay();
             // Youtube Dislikes
             var ytdr = this.Lr.GetTasks.GetTasks(LoginInfo.UserAccessToken, Target.YtDislikes, ClientVersion)
-                .SetAuthCookies(AuthCookies)
-                .SetSerializer(new GetTasksSerializer());
+                    .SetAuthCookies(AuthCookies)
+                    .SetSerializer(new GetTasksSerializer());
             var ytd = await ytdr.ExecuteAsync();
             foreach (var task in ytd.Tasks)
             {
@@ -71,6 +75,7 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Services.Concrete
             }
             tasks.AddRange(ytd.Tasks);
 
+            DelayUtils.Delay();
             // Sites View
             var wr = this.Lr.GetTasks.GetTasks(LoginInfo.UserAccessToken, Target.SitesView, ClientVersion)
                     .SetAuthCookies(AuthCookies)
@@ -78,6 +83,7 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Services.Concrete
             var w = await wr.ExecuteAsync();
             tasks.AddRange(w.Tasks);
 
+            DelayUtils.Delay();
             var sorted = tasks
                 .OrderBy(t => t.Currency)
                 .ThenByDescending(t => t.Money)
@@ -92,7 +98,7 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Services.Concrete
 
                 this.Logger.LogTrace(task.GetLog()
                     .Replace(Currency.Euro, Currency.EuroStr));
-                TaskUtils.Delay(task.TaskTime);
+                DelayUtils.TaskDelay(task.TaskTime);
 
                 var taskHash = CryptoUtils.GetTaskHash(
                     task.TaskId.ToString(),
@@ -106,6 +112,7 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Services.Concrete
                         task.SocialId,
                         taskHash,
                         string.Empty)
+                    .SetAuthCookies(AuthCookies)
                     .SetSerializer(new JsonSerializer<RecordActionResponseModel>());
 
                 var recordActionResponse = await recordActionRequest.ExecuteAsync();

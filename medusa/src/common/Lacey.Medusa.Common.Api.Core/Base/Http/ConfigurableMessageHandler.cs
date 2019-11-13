@@ -192,6 +192,15 @@ namespace Lacey.Medusa.Common.Api.Core.Base.Http
             }
         }
 
+        /// <summary>Clear execute interceptors.</summary>
+        public void ClearExecuteInterceptors()
+        {
+            lock (executeInterceptorsLock)
+            {
+                executeInterceptors.Clear();
+            }
+        }
+
         #endregion
 
         private int _loggingRequestId = 0;
