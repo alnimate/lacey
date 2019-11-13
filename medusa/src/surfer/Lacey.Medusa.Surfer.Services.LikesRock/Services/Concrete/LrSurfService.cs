@@ -11,7 +11,7 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Services.Concrete
 
         private readonly ILrAutoSurfService lrAutoSurfService;
 
-        private readonly ILrViewsService lrViewsService;
+        private readonly ILrTasksService lrTasksService;
 
         private readonly ILrLoginService lrLoginService;
 
@@ -19,11 +19,11 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Services.Concrete
             ILogger logger,
             ILrAuthProvider authProvider,
             ILrAutoSurfService lrAutoSurfService, 
-            ILrViewsService lrViewsService, 
+            ILrTasksService lrTasksService, 
             ILrLoginService lrLoginService) : base(logger, authProvider)
         {
             this.lrAutoSurfService = lrAutoSurfService;
-            this.lrViewsService = lrViewsService;
+            this.lrTasksService = lrTasksService;
             this.lrLoginService = lrLoginService;
         }
 
@@ -38,9 +38,7 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Services.Concrete
                 return;
             }
 
-            await this.lrViewsService.YoutubeSurf();
-
-            await this.lrViewsService.WebsitesSurf();
+            await this.lrTasksService.Surf();
 
             await this.lrAutoSurfService.Surf();
         }

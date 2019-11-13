@@ -1,6 +1,4 @@
-﻿using Lacey.Medusa.Common.Api.Base.Requests;
-using Lacey.Medusa.Common.Api.Base.Services;
-using Lacey.Medusa.Common.Api.Core.Custom.Interceptors;
+﻿using Lacey.Medusa.Common.Api.Base.Services;
 using Lacey.Medusa.Common.Api.Core.Custom.Serializers;
 using Lacey.Medusa.Common.Api.Custom.Extensions;
 using Lacey.Medusa.Surfer.Services.LikesRock.Extensions;
@@ -29,6 +27,8 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Common
 
         protected readonly LrProvider Lr;
 
+        protected readonly UserSecrets UserSecrets;
+
         protected readonly CommonSecrets CommonSecrets;
 
         protected static LoginResponseModel LoginInfo { get; private set; }
@@ -51,6 +51,7 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Common
                 });
 
             this.Lr.AddUserAgent(UserAgent);
+            this.UserSecrets = this.AuthProvider.GetUserSecrets();
             this.CommonSecrets = this.AuthProvider.GetCommonSecrets();
         }
 
@@ -72,13 +73,12 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Common
                     .SetSerializer(new SignInBvbSerializer());
                 var bvbResponse = bvbRequest.ExecuteAsync().Result;
 
-                var credentials = this.AuthProvider.GetCredentials();
                 lock (Obj)
                 {
                     AuthCookies = new AuthCookies
                     {
-                        Username = credentials.Username,
-                        Password = credentials.Password,
+                        Username = this.UserSecrets.Username,
+                        Password = this.UserSecrets.Password,
                         UserLang = UserLang,
                         Bvb = bvbResponse.Bvb,
                         Ga = "GA1.2.1583055054.1567053894",
@@ -95,7 +95,7 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Common
                 AuthCookies.PhpSessionId = sessionId;
                 this.Logger.LogTrace(AuthCookies.GetLog());
 
-                var loginRequest = this.Lr.Ajax.Login(credentials.Username, credentials.Password)
+                var loginRequest = this.Lr.Ajax.Login(this.UserSecrets.Username, this.UserSecrets.Password)
                     .AddCookies(AuthCookies)
                     .AddConnection("keep-alive")
                     .AddAccept("*/*")

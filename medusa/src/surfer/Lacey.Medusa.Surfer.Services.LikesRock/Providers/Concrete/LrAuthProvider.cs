@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Lacey.Medusa.Surfer.Services.LikesRock.Models.Auth;
 
 namespace Lacey.Medusa.Surfer.Services.LikesRock.Providers.Concrete
@@ -17,14 +18,15 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Providers.Concrete
             this.commonSecretsFile = commonSecretsFile;
         }
 
-        public Credentials GetCredentials()
+        public UserSecrets GetUserSecrets()
         {
             var lines = File.ReadAllLines(this.userSecretsFile);
 
-            return new Credentials
+            return new UserSecrets
             {
                 Username = lines[0],
-                Password = lines[1]
+                Password = lines[1],
+                YoutubeSessionId = lines[2].Split(new [] { "=" }, StringSplitOptions.RemoveEmptyEntries)[1]
             };
         }
 

@@ -2,10 +2,8 @@
 
 namespace Lacey.Medusa.Surfer.Services.LikesRock.Services
 {
-    public interface ILrViewsService
+    public interface ILrTasksService
     {
-        Task WebsitesSurf();
-
-        Task YoutubeSurf();
+        Task Surf();
     }
 }

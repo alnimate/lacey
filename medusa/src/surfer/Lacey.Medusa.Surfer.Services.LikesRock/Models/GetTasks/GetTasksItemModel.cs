@@ -18,5 +18,8 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Models.GetTasks
 
         [JsonProperty("currency")]
         public string Currency { get; set; }
+
+        [JsonProperty("social_id")]
+        public string SocialId { get; set; }
     }
 }

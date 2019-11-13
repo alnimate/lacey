@@ -28,9 +28,9 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Infrastructure
                         provider.GetService<ILogger<LrAutoSurfService>>(),
                         provider.GetService<ILrAuthProvider>()))
 
-                .AddTransient<ILrViewsService, LrViewsService>(
-                    provider => new LrViewsService(
-                        provider.GetService<ILogger<LrViewsService>>(),
+                .AddTransient<ILrTasksService, LrTasksService>(
+                    provider => new LrTasksService(
+                        provider.GetService<ILogger<LrTasksService>>(),
                         provider.GetService<ILrAuthProvider>()))
 
                 .AddTransient<ILrSurfService, LrSurfService>(
@@ -38,7 +38,7 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Infrastructure
                         provider.GetService<ILogger<LrSurfService>>(),
                         provider.GetService<ILrAuthProvider>(),
                         provider.GetService<ILrAutoSurfService>(),
-                        provider.GetService<ILrViewsService>(),
+                        provider.GetService<ILrTasksService>(),
                         provider.GetService<ILrLoginService>()));
 
             return services;
