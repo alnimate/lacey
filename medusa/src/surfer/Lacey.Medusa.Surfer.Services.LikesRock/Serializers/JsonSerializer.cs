@@ -17,7 +17,14 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Serializers
                 json = match.Groups[1].Value;
             }
 
-            return (T)Convert.ChangeType(JsonConvert.DeserializeObject<TResponse>(json), typeof(T));
+            try
+            {
+                return (T)Convert.ChangeType(JsonConvert.DeserializeObject<TResponse>(json), typeof(T));
+            }
+            catch (Exception)
+            {
+                return default;
+            }
         }
     }
 }

@@ -6,8 +6,6 @@
 
         public string Password { get; set; }
 
-        public string YtSessionId { get; set; }
-
-        public string InSessionId { get; set; }
+        public Social[] Socials { get; set; }
     }
 }

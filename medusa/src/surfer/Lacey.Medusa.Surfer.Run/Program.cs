@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using Lacey.Medusa.Common.Email.Services.Email;
 using Lacey.Medusa.Surfer.Run.Configuration;
 using Lacey.Medusa.Surfer.Run.Infrastructure;
@@ -14,7 +15,7 @@ namespace Lacey.Medusa.Surfer.Run
     {
         private static ILogger<Program> logger;
 
-        static void Main()
+        static void Main(string[] args)
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
@@ -22,6 +23,10 @@ namespace Lacey.Medusa.Surfer.Run
 
             var configuration = builder.Build();
             var config = configuration.GetSection("App").Get<AppConfiguration>();
+            if (args != null && args.Any())
+            {
+                config.Lr.UserSecretsFile = args[0];
+            }
 
             //setup our DI
             var serviceProvider = new ServiceCollection()

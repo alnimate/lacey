@@ -30,17 +30,19 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Services.Concrete
             }
 
             var tasks = new List<GetTasksItemModel>();
-            if (!string.IsNullOrEmpty(this.UserSecrets.InSessionId))
+            var inSessionId = this.UserSecrets.GetSocialId(Socials.Instagram);
+            if (!string.IsNullOrEmpty(inSessionId))
             {
-                tasks.AddRange(await GetTasks(Target.InLikes, this.UserSecrets.InSessionId));
-                tasks.AddRange(await GetTasks(Target.InSubscr, this.UserSecrets.InSessionId));
+                tasks.AddRange(await GetTasks(Target.InLikes, inSessionId));
+                tasks.AddRange(await GetTasks(Target.InSubscr, inSessionId));
             }
 
-            if (!string.IsNullOrEmpty(this.UserSecrets.YtSessionId))
+            var googleSessionId = this.UserSecrets.GetSocialId(Socials.Google);
+            if (!string.IsNullOrEmpty(googleSessionId))
             {
-                tasks.AddRange(await GetTasks(Target.YtSubscr, this.UserSecrets.YtSessionId));
-                tasks.AddRange(await GetTasks(Target.YtLikes, this.UserSecrets.YtSessionId));
-                tasks.AddRange(await GetTasks(Target.YtDislikes, this.UserSecrets.YtSessionId));
+                tasks.AddRange(await GetTasks(Target.YtSubscr, googleSessionId));
+                tasks.AddRange(await GetTasks(Target.YtLikes, googleSessionId));
+                tasks.AddRange(await GetTasks(Target.YtDislikes, googleSessionId));
             }
 
             tasks.AddRange(await GetTasks(Target.YtViews, string.Empty));

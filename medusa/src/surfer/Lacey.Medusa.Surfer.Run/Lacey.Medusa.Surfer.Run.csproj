@@ -33,6 +33,18 @@
     <None Update="secrets\01\lru.secret">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="secrets\02\email.secret">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="secrets\02\lru.secret">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="secrets\03\email.secret">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="secrets\03\lru.secret">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="secrets\lr.secret">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

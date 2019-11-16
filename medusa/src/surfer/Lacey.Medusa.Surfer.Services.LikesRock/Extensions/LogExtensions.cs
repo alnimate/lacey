@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 
 namespace Lacey.Medusa.Surfer.Services.LikesRock.Extensions
 {
@@ -6,7 +7,14 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Extensions
     {
         public static string GetLog(this object obj)
         {
-            return JsonConvert.SerializeObject(obj, Formatting.Indented);
+            try
+            {
+                return JsonConvert.SerializeObject(obj, Formatting.Indented);
+            }
+            catch (Exception)
+            {
+                return string.Empty;
+            }
         }
     }
 }
