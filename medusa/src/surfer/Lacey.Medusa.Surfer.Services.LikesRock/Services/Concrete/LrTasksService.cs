@@ -30,26 +30,20 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Services.Concrete
             }
 
             var tasks = new List<GetTasksItemModel>();
-            var inSessionId = this.UserSecrets.GetSocialId(Socials.Instagram);
-            if (!string.IsNullOrEmpty(inSessionId))
+            foreach (var target in Targets.All)
             {
-                tasks.AddRange(await GetTasks(Target.InLikes, inSessionId));
-                tasks.AddRange(await GetTasks(Target.InSubscr, inSessionId));
+                var socialId = this.UserSecrets.GetSocialId(target.Social);
+                if (!string.IsNullOrEmpty(socialId))
+                {
+                    foreach (var targetId in target.Ids)
+                    {
+                        tasks.AddRange(await GetTasks(targetId, socialId));
+                    }
+                }
             }
-
-            var googleSessionId = this.UserSecrets.GetSocialId(Socials.Google);
-            if (!string.IsNullOrEmpty(googleSessionId))
-            {
-                tasks.AddRange(await GetTasks(Target.YtSubscr, googleSessionId));
-                tasks.AddRange(await GetTasks(Target.YtLikes, googleSessionId));
-                tasks.AddRange(await GetTasks(Target.YtDislikes, googleSessionId));
-            }
-
-            tasks.AddRange(await GetTasks(Target.YtViews, string.Empty));
-            tasks.AddRange(await GetTasks(Target.SitesView, string.Empty));
 
             var sorted = tasks
-                .OrderBy(t => t.Currency)
+                .OrderBy(t => t.Currency)   
                 .ThenByDescending(t => t.Money)
                 .ThenBy(t => t.TaskTime)
                 .ToArray();

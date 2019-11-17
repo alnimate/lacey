@@ -11,6 +11,7 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Providers.Concrete
             this.UserSignIn= new UserSignInResource(this);
             this.Ajax = new AjaxResource(this);
             this.GetTasks = new GetTasksResource(this);
+            this.GetStats = new GetStatsResource(this);
         }
 
         public override string Name => "LikesRock";
@@ -26,5 +27,7 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Providers.Concrete
         public AjaxResource Ajax { get; }
 
         public GetTasksResource GetTasks { get; }
+
+        public GetStatsResource GetStats { get; }
     }
 }
