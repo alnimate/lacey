@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Lacey.Medusa.Common.Api.Custom.Extensions;
@@ -49,32 +50,40 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Services.Concrete
                 .ToArray();
             foreach (var task in sorted)
             {
-                if (task.NoSurf())
+                try
                 {
-                    continue;
-                }
+                    if (task.NoSurf())
+                    {
+                        continue;
+                    }
 
-                this.Logger.LogTrace(task.GetLog()
-                    .Replace(Currency.Euro, Currency.EuroStr));
-                DelayUtils.TaskDelay(task.TaskTime);
+                    this.Logger.LogTrace(task.GetLog()
+                        .Replace(Currency.Euro, Currency.EuroStr));
+                    DelayUtils.TaskDelay(task.TaskTime);
 
-                var taskHash = CryptoUtils.GetTaskHash(
-                    task.TaskId.ToString(),
-                    LoginInfo.UserId,
-                    task.SocialId,
-                    this.CommonSecrets.HashKey);
-
-                var recordActionRequest = this.Lr.Ajax.RecordAction(
-                        LoginInfo.UserAccessToken,
+                    var taskHash = CryptoUtils.GetTaskHash(
                         task.TaskId.ToString(),
+                        LoginInfo.UserId,
                         task.SocialId,
-                        taskHash,
-                        string.Empty)
-                    .SetAuthCookies(AuthCookies)
-                    .SetSerializer(new JsonSerializer<RecordActionResponseModel>());
+                        this.CommonSecrets.HashKey);
 
-                var recordActionResponse = await recordActionRequest.ExecuteAsync();
-                this.Logger.LogTrace(recordActionResponse.GetLog());
+                    var recordActionRequest = this.Lr.Ajax.RecordAction(
+                            LoginInfo.UserAccessToken,
+                            task.TaskId.ToString(),
+                            task.SocialId,
+                            taskHash,
+                            string.Empty)
+                        .SetAuthCookies(AuthCookies)
+                        .SetSerializer(new JsonSerializer<RecordActionResponseModel>());
+
+                    var recordActionResponse = await recordActionRequest.ExecuteAsync();
+                    this.Logger.LogTrace(recordActionResponse.GetLog());
+                }
+                catch (Exception e)
+                {
+                    this.Logger.LogError(e.ToString());
+                    DelayUtils.LargeDelay();
+                }
             }
         }
 

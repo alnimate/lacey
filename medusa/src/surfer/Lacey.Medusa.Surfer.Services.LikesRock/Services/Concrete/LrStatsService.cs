@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Lacey.Medusa.Common.Api.Custom.Extensions;
 using Lacey.Medusa.Surfer.Services.LikesRock.Common;
 using Lacey.Medusa.Surfer.Services.LikesRock.Extensions;
@@ -30,8 +31,16 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Services.Concrete
                 .SetAuthCookies(AuthCookies)
                 .SetSerializer(new GetStatsSerializer());
 
-            var stats = await getStatsRequest.ExecuteAsync();
-            DelayUtils.SmallDelay();
+            GetStatsResponseModel stats = null;
+            try
+            {
+                stats = await getStatsRequest.ExecuteAsync();
+                DelayUtils.SmallDelay();
+            }
+            catch (Exception e)
+            {
+                this.Logger.LogError(e.ToString());
+            }
 
             return stats;
         }
