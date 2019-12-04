@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using Lacey.Medusa.Common.Email.Services.Email;
 using Lacey.Medusa.Surfer.Services.LikesRock.Providers;
 using Lacey.Medusa.Surfer.Services.LikesRock.Providers.Concrete;
 using Lacey.Medusa.Surfer.Services.LikesRock.Services;
@@ -13,7 +14,8 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Infrastructure
         public static IServiceCollection AddLikesRockServices(
             this IServiceCollection services,
             string userSecretsFile,
-            string commonSecretsFile)
+            string commonSecretsFile,
+            bool isSendEmails)
         {
             services
                 .AddTransient<ILrAuthProvider, LrAuthProvider>(
@@ -46,7 +48,9 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Infrastructure
                         provider.GetService<ILrAuthProvider>(),
                         provider.GetService<ILrTasksService>(),
                         provider.GetService<ILrStatsService>(),
-                        provider.GetService<ILrLoginService>()));
+                        provider.GetService<ILrLoginService>(),
+                        provider.GetService<IEmailProvider>(),
+                        isSendEmails));
 
             return services;
         }

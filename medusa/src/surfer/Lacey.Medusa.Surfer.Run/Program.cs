@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using Lacey.Medusa.Common.Email.Services.Email;
 using Lacey.Medusa.Surfer.Run.Configuration;
 using Lacey.Medusa.Surfer.Run.Infrastructure;
 using Lacey.Medusa.Surfer.Services.LikesRock.Services;
@@ -28,7 +27,7 @@ namespace Lacey.Medusa.Surfer.Run
                 config.Lr.UserSecretsFile = args[0];
             }
 
-            //setup our DI
+            //setup DI
             var serviceProvider = new ServiceCollection()
                 .AddLogging(logBuilder =>
                     logBuilder
@@ -50,22 +49,6 @@ namespace Lacey.Medusa.Surfer.Run
             catch (Exception exc)
             {
                 logger.LogError(exc.Message);
-            }
-
-            if (config.Email.IsSendEmails)
-            {
-                var emailService = serviceProvider.GetService<IEmailProvider>();
-                var currentFolder = Directory.GetCurrentDirectory();
-                emailService.Send(
-                    config.Email.From,
-                    config.Email.To,
-                    config.Email.Subject,
-                    "Surfer Message.",
-                    true,
-                    new[]
-                    {
-                        Path.Combine(currentFolder, config.Logs.LogFile)
-                    });
             }
 
             serviceProvider.Dispose();

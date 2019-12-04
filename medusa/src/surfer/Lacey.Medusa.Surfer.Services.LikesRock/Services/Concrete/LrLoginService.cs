@@ -91,6 +91,7 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Services.Concrete
                 {
                     UserId = loginInfo.UserId,
                     UserName = loginInfo.UserName,
+                    UserEmail = loginInfo.UserEmail,
                     UserAccessToken = loginInfo.UserAccessToken
                 };
 

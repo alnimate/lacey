@@ -4,9 +4,11 @@ using System.Threading.Tasks;
 using Lacey.Medusa.Common.Api.Custom.Extensions;
 using Lacey.Medusa.Surfer.Services.LikesRock.Common;
 using Lacey.Medusa.Surfer.Services.LikesRock.Const;
+using Lacey.Medusa.Surfer.Services.LikesRock.Delegates;
 using Lacey.Medusa.Surfer.Services.LikesRock.Extensions;
 using Lacey.Medusa.Surfer.Services.LikesRock.Models.GetTasks;
 using Lacey.Medusa.Surfer.Services.LikesRock.Models.RecordAction;
+using Lacey.Medusa.Surfer.Services.LikesRock.Models.Tasks;
 using Lacey.Medusa.Surfer.Services.LikesRock.Providers;
 using Lacey.Medusa.Surfer.Services.LikesRock.Serializers;
 using Lacey.Medusa.Surfer.Services.LikesRock.Utils;
@@ -16,6 +18,8 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Services.Concrete
 {
     public sealed class LrTasksService : LrService, ILrTasksService
     {
+        public event TasksCompletedDelegate OnTasksCompleted;
+
         public LrTasksService(
             ILogger logger, 
             ILrAuthProvider authProvider) : base(logger, authProvider)
@@ -29,6 +33,7 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Services.Concrete
                 return;
             }
 
+            var tasksCompleted = new List<TaskCompleted>();
             await ProceedUtils.Proceed<bool?>(this.Logger, async () => {
                 var tasks = new List<GetTasksItemModel>();
                 foreach (var social in Socials.All)
@@ -47,9 +52,9 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Services.Concrete
                 this.Logger.LogTrace($"Tasks total {tasks.Count}.");
                 if (!tasks.Any())
                 {
+                    this.DoTasksCompleted(tasksCompleted);
                     this.Logger.LogTrace("No tasks for now. Closing...");
-                    DelayUtils.LargeDelay();
-                    return null;
+                    return true;
                 }
 
                 var sorted = tasks
@@ -83,10 +88,11 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Services.Concrete
                         .SetSerializer(new JsonSerializer<RecordActionResponseModel>());
 
                     var recordActionResponse = await recordActionRequest.ExecuteAsync();
+                    tasksCompleted.Add(new TaskCompleted(task, recordActionResponse));
                     this.Logger.LogTrace(recordActionResponse.GetLog());
                 }
 
-                return true;
+                return null;
             });
         }
 
@@ -106,6 +112,11 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Services.Concrete
                 }
             }
             return tasks;
+        }
+
+        private void DoTasksCompleted(List<TaskCompleted> tasksCompleted)
+        {
+            OnTasksCompleted?.Invoke(tasksCompleted);
         }
     }
 }

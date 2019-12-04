@@ -40,7 +40,7 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Services.Concrete
                 DelayUtils.TaskDelay(getSurfUrlResponse.TaskTime);
                 if (getSurfUrlResponse.NoAutoSurf())
                 {
-                    return null;
+                    return true;
                 }
 
                 var taskHash = CryptoUtils.GetTaskHash(
@@ -60,7 +60,7 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Services.Concrete
 
                 var recordActionResponse = await recordActionRequest.ExecuteAsync();
                 this.Logger.LogTrace(recordActionResponse.GetLog());
-                return true;
+                return null;
             });
         }
     }

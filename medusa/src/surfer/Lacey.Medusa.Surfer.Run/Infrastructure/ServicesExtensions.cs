@@ -17,7 +17,8 @@ namespace Lacey.Medusa.Surfer.Run.Infrastructure
             services
                 .AddLikesRockServices(
                     config.Lr.UserSecretsFile, 
-                    config.Lr.CommonSecretsFile)
+                    config.Lr.CommonSecretsFile,
+                    config.Email.IsSendEmails)
                 .AddEmailServices(
                     config.Email.SmtpHost,
                     config.Email.SmtpPort,
