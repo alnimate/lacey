@@ -10,8 +10,6 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Services.Concrete
     {
         #region Fields/Constructors
 
-        private readonly ILrAutoSurfService lrAutoSurfService;
-
         private readonly ILrTasksService lrTasksService;
 
         private readonly ILrStatsService lrStatsService;
@@ -21,12 +19,10 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Services.Concrete
         public LrSurfService(
             ILogger logger,
             ILrAuthProvider authProvider,
-            ILrAutoSurfService lrAutoSurfService, 
             ILrTasksService lrTasksService, 
             ILrStatsService lrStatsService, 
             ILrLoginService lrLoginService) : base(logger, authProvider)
         {
-            this.lrAutoSurfService = lrAutoSurfService;
             this.lrTasksService = lrTasksService;
             this.lrStatsService = lrStatsService;
             this.lrLoginService = lrLoginService;
@@ -36,14 +32,12 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Services.Concrete
 
         public async Task Surf()
         {
-            this.lrLoginService.Login();
+            await this.lrLoginService.Login();
 
-            var stats = await this.lrStatsService.GetStats();
-            this.Logger.LogTrace(stats.GetLog());
+            var updateAllInfo = await this.lrStatsService.UpdateAllInfo();
+            this.Logger.LogTrace(updateAllInfo.GetLog());
 
             await this.lrTasksService.Surf();
-
-            await this.lrAutoSurfService.Surf();
         }
     }
 }

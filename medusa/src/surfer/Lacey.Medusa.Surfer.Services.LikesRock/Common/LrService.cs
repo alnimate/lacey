@@ -1,14 +1,8 @@
 ﻿using Lacey.Medusa.Common.Api.Base.Services;
 using Lacey.Medusa.Common.Api.Core.Custom.Serializers;
-using Lacey.Medusa.Common.Api.Custom.Extensions;
-using Lacey.Medusa.Surfer.Services.LikesRock.Const;
-using Lacey.Medusa.Surfer.Services.LikesRock.Extensions;
 using Lacey.Medusa.Surfer.Services.LikesRock.Models.Auth;
-using Lacey.Medusa.Surfer.Services.LikesRock.Models.Login;
 using Lacey.Medusa.Surfer.Services.LikesRock.Providers;
 using Lacey.Medusa.Surfer.Services.LikesRock.Providers.Concrete;
-using Lacey.Medusa.Surfer.Services.LikesRock.Serializers;
-using Lacey.Medusa.Surfer.Services.LikesRock.Utils;
 using Microsoft.Extensions.Logging;
 
 namespace Lacey.Medusa.Surfer.Services.LikesRock.Common
@@ -31,11 +25,9 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Common
 
         protected readonly CommonSecrets CommonSecrets;
 
-        protected static LoginResponseModel LoginInfo { get; private set; }
+        protected static UserSession UserSession { get; set; }
 
-        protected static AuthCookies AuthCookies { get; private set; }
-
-        private static readonly object Obj = new object();
+        protected static AuthCookies AuthCookies { get; set; }
 
         protected LrService(
             ILogger logger, 
@@ -56,67 +48,7 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Common
 
         public bool IsAuthenticated()
         {
-            return LoginInfo != null;
-        }
-
-        public void Login()
-        {
-            if (this.IsAuthenticated())
-            {
-                return;
-            }
-
-            lock (Obj)
-            {
-                AuthCookies = new AuthCookies
-                {
-                    Username = this.UserSecrets.Username,
-                    Password = this.UserSecrets.Password,
-                    UserLang = UserLang,
-                    Ga = "GA1.2.1583055054.1567053894",
-                    Gid = "GA1.2.49410478.1567140764",
-                    Gat = "1"
-                };
-
-                var bvbRequest = this.Lr.UserSignIn.SignInBvb(UserLang, ClientVersion)
-                    .SetAuthCookies(AuthCookies)
-                    .SetSerializer(new SignInBvbSerializer());
-                var bvbResponse = bvbRequest.ExecuteAsync().Result;
-                AuthCookies.Bvb = bvbResponse.Bvb;
-
-                var sessionIdRequest = this.Lr.UserSignIn.SignInSessionId(UserLang, ClientVersion, "1")
-                    .SetAuthCookies(AuthCookies)
-                    .AddReferer($"https://likesrock.com/client-v2/user_signin.php?user_lang={UserLang}&client_version={ClientVersion}")
-                    .SetSerializer(new WebFormsToJsonSerializer());
-
-                var sessionId = sessionIdRequest.ExecuteUnparsedAsync().Result.GetCookie(PhpSessionId);
-                AuthCookies.PhpSessionId = sessionId;
-                this.Logger.LogTrace(AuthCookies.GetLog());
-
-                DelayUtils.SmallDelay();
-                var loginRequest = this.Lr.Ajax.Login(this.UserSecrets.Username, this.UserSecrets.Password)
-                    .ClearExecInterceptors()
-                    .AddUserAgent(HttpConst.UserAgent)
-                    .AddCookies(AuthCookies)
-                    .AddConnection("keep-alive")
-                    .AddAccept("*/*")
-                    .AddOrigin("https://likesrock.com")
-                    .AddXRequestedWith("XMLHttpRequest")
-                    .AddReferer($"https://likesrock.com/client-v2/user_signin.php?user_lang={UserLang}&client_version={ClientVersion}&security=1")
-                    .AddAcceptLanguage("en-US,en;q=0.8");
-
-                while (LoginInfo == null)
-                {
-                    LoginInfo = loginRequest.ExecuteAsync().Result;
-                    if (LoginInfo == null)
-                    {
-                        this.Logger.LogError("Authorization failed.");
-                        DelayUtils.LargeDelay();
-                    }
-                }
-
-                this.Logger.LogTrace(LoginInfo.GetLog());
-            }
+            return UserSession != null;
         }
     }
 }

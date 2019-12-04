@@ -1,4 +1,5 @@
-﻿using Lacey.Medusa.Surfer.Services.LikesRock.Providers;
+﻿using System.IO;
+using Lacey.Medusa.Surfer.Services.LikesRock.Providers;
 using Lacey.Medusa.Surfer.Services.LikesRock.Providers.Concrete;
 using Lacey.Medusa.Surfer.Services.LikesRock.Services;
 using Lacey.Medusa.Surfer.Services.LikesRock.Services.Concrete;
@@ -20,6 +21,7 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Infrastructure
 
                 .AddTransient<ILrLoginService, LrLoginService>(
                     provider => new LrLoginService(
+                        Path.Combine(Path.GetDirectoryName(userSecretsFile), "session.secret"),
                         provider.GetService<ILogger<LrLoginService>>(),
                         provider.GetService<ILrAuthProvider>()))
 
@@ -42,7 +44,6 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Infrastructure
                     provider => new LrSurfService(
                         provider.GetService<ILogger<LrSurfService>>(),
                         provider.GetService<ILrAuthProvider>(),
-                        provider.GetService<ILrAutoSurfService>(),
                         provider.GetService<ILrTasksService>(),
                         provider.GetService<ILrStatsService>(),
                         provider.GetService<ILrLoginService>()));

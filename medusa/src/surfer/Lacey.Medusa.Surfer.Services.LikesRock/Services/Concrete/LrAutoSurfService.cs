@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Lacey.Medusa.Common.Api.Custom.Extensions;
 using Lacey.Medusa.Surfer.Services.LikesRock.Common;
 using Lacey.Medusa.Surfer.Services.LikesRock.Extensions;
@@ -31,47 +30,38 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Services.Concrete
                 return;
             }
 
-            DelayUtils.Delay();
-            while (true)
-            {
-                try
+            await ProceedUtils.Proceed<bool?>(this.Logger, async () => {
+                var getSurfUrlRequest = this.Lr.Ajax.GetSurfUrl(UserSession.UserAccessToken)
+                    .SetAuthCookies(AuthCookies)
+                    .SetSerializer(new JsonSerializer<GetSurfUrlResponseModel>());
+
+                var getSurfUrlResponse = await getSurfUrlRequest.ExecuteAsync();
+                this.Logger.LogTrace(getSurfUrlResponse.GetLog());
+                DelayUtils.TaskDelay(getSurfUrlResponse.TaskTime);
+                if (getSurfUrlResponse.NoAutoSurf())
                 {
-                    var getSurfUrlRequest = this.Lr.Ajax.GetSurfUrl(LoginInfo.UserAccessToken)
-                        .SetAuthCookies(AuthCookies)
-                        .SetSerializer(new JsonSerializer<GetSurfUrlResponseModel>());
+                    return null;
+                }
 
-                    var getSurfUrlResponse = await getSurfUrlRequest.ExecuteAsync();
-                    this.Logger.LogTrace(getSurfUrlResponse.GetLog());
-                    DelayUtils.TaskDelay(getSurfUrlResponse.TaskTime);
-                    if (getSurfUrlResponse.NoAutoSurf())
-                    {
-                        continue;
-                    }
+                var taskHash = CryptoUtils.GetTaskHash(
+                    getSurfUrlResponse.TaskId,
+                    UserSession.UserId,
+                    string.Empty,
+                    this.CommonSecrets.HashKey);
 
-                    var taskHash = CryptoUtils.GetTaskHash(
+                var recordActionRequest = this.Lr.Ajax.RecordAction(
+                        UserSession.UserAccessToken,
                         getSurfUrlResponse.TaskId,
-                        LoginInfo.UserId,
                         string.Empty,
-                        this.CommonSecrets.HashKey);
+                        taskHash,
+                        string.Empty)
+                    .SetAuthCookies(AuthCookies)
+                    .SetSerializer(new JsonSerializer<RecordActionResponseModel>());
 
-                    var recordActionRequest = this.Lr.Ajax.RecordAction(
-                            LoginInfo.UserAccessToken,
-                            getSurfUrlResponse.TaskId,
-                            string.Empty,
-                            taskHash,
-                            string.Empty)
-                        .SetAuthCookies(AuthCookies)
-                        .SetSerializer(new JsonSerializer<RecordActionResponseModel>());
-
-                    var recordActionResponse = await recordActionRequest.ExecuteAsync();
-                    this.Logger.LogTrace(recordActionResponse.GetLog());
-                }
-                catch (Exception e)
-                {
-                    this.Logger.LogError(e.ToString());
-                    DelayUtils.LargeDelay();
-                }
-            }
+                var recordActionResponse = await recordActionRequest.ExecuteAsync();
+                this.Logger.LogTrace(recordActionResponse.GetLog());
+                return true;
+            });
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Lacey.Medusa.Common.Api.Custom.Extensions;
@@ -30,27 +29,34 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Services.Concrete
                 return;
             }
 
-            var tasks = new List<GetTasksItemModel>();
-            foreach (var target in Targets.All)
-            {
-                var socialId = this.UserSecrets.GetSocialId(target.Social);
-                if (!string.IsNullOrEmpty(socialId))
+            await ProceedUtils.Proceed<bool?>(this.Logger, async () => {
+                var tasks = new List<GetTasksItemModel>();
+                foreach (var social in Socials.All)
                 {
-                    foreach (var targetId in target.Ids)
+                    var usersSocial = this.UserSecrets.GetUsersSocial(social.Name);
+                    if (usersSocial != null)
                     {
-                        tasks.AddRange(await GetTasks(targetId, socialId));
+                        foreach (var target in social.Targets)
+                        {
+                            var ts = await GetTasks(target.Id, usersSocial.Id);
+                            this.Logger.LogTrace($"{usersSocial.Name} - {target.Name} : {ts.Length} tasks.");
+                            tasks.AddRange(ts);
+                        }
                     }
                 }
-            }
+                this.Logger.LogTrace($"Tasks total {tasks.Count}.");
+                if (!tasks.Any())
+                {
+                    this.Logger.LogTrace("No tasks for now. Closing...");
+                    DelayUtils.LargeDelay();
+                    return null;
+                }
 
-            var sorted = tasks
-                .OrderBy(t => t.Currency)   
-                .ThenByDescending(t => t.Money)
-                .ThenBy(t => t.TaskTime)
-                .ToArray();
-            foreach (var task in sorted)
-            {
-                try
+                var sorted = tasks
+                    .OrderByDescending(t => t.Money)
+                    .ThenBy(t => t.TaskTime)
+                    .ToArray();
+                foreach (var task in sorted)
                 {
                     if (task.NoSurf())
                     {
@@ -63,12 +69,12 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Services.Concrete
 
                     var taskHash = CryptoUtils.GetTaskHash(
                         task.TaskId.ToString(),
-                        LoginInfo.UserId,
+                        UserSession.UserId,
                         task.SocialId,
                         this.CommonSecrets.HashKey);
 
                     var recordActionRequest = this.Lr.Ajax.RecordAction(
-                            LoginInfo.UserAccessToken,
+                            UserSession.UserAccessToken,
                             task.TaskId.ToString(),
                             task.SocialId,
                             taskHash,
@@ -79,20 +85,19 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Services.Concrete
                     var recordActionResponse = await recordActionRequest.ExecuteAsync();
                     this.Logger.LogTrace(recordActionResponse.GetLog());
                 }
-                catch (Exception e)
-                {
-                    this.Logger.LogError(e.ToString());
-                    DelayUtils.LargeDelay();
-                }
-            }
+
+                return true;
+            });
         }
 
-        private async Task<IEnumerable<GetTasksItemModel>> GetTasks(int targetId, string socialId)
+        private async Task<GetTasksItemModel[]> GetTasks(int targetId, string socialId)
         {
-            var tasksRequest = this.Lr.GetTasks.GetTasks(LoginInfo.UserAccessToken, targetId, ClientVersion)
+            var tasksRequest = this.Lr.GetTasks.GetTasks(UserSession.UserAccessToken, targetId, ClientVersion)
                 .SetAuthCookies(AuthCookies)
                 .SetSerializer(new GetTasksSerializer());
-            var tasks = (await tasksRequest.ExecuteAsync()).Tasks;
+            var tasks = (await tasksRequest.ExecuteAsync()).Tasks
+                .Where(t => t.Currency == Currency.Euro)
+                .ToArray();
             if (!string.IsNullOrEmpty(socialId))
             {
                 foreach (var task in tasks)
@@ -100,8 +105,6 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Services.Concrete
                     task.SocialId = socialId;
                 }
             }
-            DelayUtils.SmallDelay();
-
             return tasks;
         }
     }

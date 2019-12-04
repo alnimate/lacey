@@ -7,6 +7,7 @@ using Lacey.Medusa.Surfer.Services.LikesRock.Const;
 using Lacey.Medusa.Surfer.Services.LikesRock.Models.GetSurfUrl;
 using Lacey.Medusa.Surfer.Services.LikesRock.Models.Login;
 using Lacey.Medusa.Surfer.Services.LikesRock.Models.RecordAction;
+using Lacey.Medusa.Surfer.Services.LikesRock.Models.UpdateAllInfo;
 
 namespace Lacey.Medusa.Surfer.Services.LikesRock.Resources
 {
@@ -19,6 +20,11 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Resources
         public LoginRequest Login(string userName, string password)
         {
             return new LoginRequest(this.Service, userName, password);
+        }
+
+        public UpdateAllInfoRequest UpdateAllInfo(string userAccessToken)
+        {
+            return new UpdateAllInfoRequest(this.Service, AjaxMode.UpdateAllInfo, userAccessToken);
         }
 
         public GetSurfUrlRequest GetSurfUrl(string userAccessToken)
@@ -62,6 +68,44 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Resources
             {
                 return this.body;
             }
+        }
+
+        public sealed class UpdateAllInfoRequest : LrRequest<UpdateAllInfoResponseModel>
+        {
+            public UpdateAllInfoRequest(
+                IClientService service, string mode, string userAccessToken) : base(service)
+            {
+                Mode = mode;
+                UserAccessToken = userAccessToken;
+
+                this.RequestParameters.Add("mode", new Parameter
+                {
+                    Name = "mode",
+                    IsRequired = true,
+                    ParameterType = "query",
+                    DefaultValue = null,
+                    Pattern = null
+                });
+
+                this.RequestParameters.Add("user_access_token", new Parameter
+                {
+                    Name = "user_access_token",
+                    IsRequired = true,
+                    ParameterType = "query",
+                    DefaultValue = null,
+                    Pattern = null
+                });
+            }
+
+            public override string RestPath => "ajax.php";
+
+            public override string HttpMethod => HttpConsts.Get;
+
+            [RequestParameter("mode", RequestParameterType.Query)]
+            public string Mode { get; private set; }
+
+            [RequestParameter("user_access_token", RequestParameterType.Query)]
+            public string UserAccessToken { get; private set; }
         }
 
         public sealed class GetSurfUrlRequest : LrRequest<GetSurfUrlResponseModel>
