@@ -60,7 +60,9 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Services.Concrete
         {
             try
             {
-                var moneyEarned = tasksCompleted.Sum(t => t.RecordAction.TaskEarned.ParseMoney());
+                var moneyEarned = tasksCompleted
+                    .Where(t => t.RecordAction != null)
+                    .Sum(t => t.RecordAction.TaskEarned.ParseMoney());
                 var updateAllInfo = this.lrStatsService.UpdateAllInfo().Result;
                 var report = new StringBuilder();
                 report.AppendLine(updateAllInfo.GetLog());
