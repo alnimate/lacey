@@ -54,6 +54,7 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Services.Concrete
                 {
                     this.DoTasksCompleted(tasksCompleted);
                     this.Logger.LogTrace("No tasks for now. Closing...");
+                    DelayUtils.LargeDelay();
                     return true;
                 }
 
