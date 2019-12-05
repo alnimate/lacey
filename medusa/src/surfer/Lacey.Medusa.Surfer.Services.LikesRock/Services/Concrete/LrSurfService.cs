@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -61,7 +60,7 @@ namespace Lacey.Medusa.Surfer.Services.LikesRock.Services.Concrete
         {
             try
             {
-                var moneyEarned = tasksCompleted.Sum(t => float.Parse(t.RecordAction.TaskEarned, CultureInfo.InvariantCulture));
+                var moneyEarned = tasksCompleted.Sum(t => t.RecordAction.TaskEarned.ParseMoney());
                 var updateAllInfo = this.lrStatsService.UpdateAllInfo().Result;
                 var report = new StringBuilder();
                 report.AppendLine(updateAllInfo.GetLog());
