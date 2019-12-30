@@ -17,7 +17,10 @@ namespace Lacey.Medusa.Common.Api.Core.Custom.Interceptors
         public Task InterceptAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             request.Headers.Remove("User-Agent");
-            request.Headers.Add("User-Agent", this.userAgent);
+            if (!string.IsNullOrEmpty(this.userAgent))
+            {
+                request.Headers.Add("User-Agent", this.userAgent);
+            }
 
             return Task.FromResult(0);
         }

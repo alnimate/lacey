@@ -82,6 +82,13 @@ namespace Lacey.Medusa.Common.Api.Custom.Extensions
             return request.AddExecInterceptor(new AcceptInterceptor(accept));
         }
 
+        public static ClientServiceRequest<TResponse> AddAcceptEncoding<TResponse>(
+            this ClientServiceRequest<TResponse> request,
+            string acceptEncoding)
+        {
+            return request.AddExecInterceptor(new AcceptEncodingInterceptor(acceptEncoding));
+        }
+
         public static ClientServiceRequest<TResponse> AddOrigin<TResponse>(
             this ClientServiceRequest<TResponse> request,
             string origin)
@@ -115,6 +122,13 @@ namespace Lacey.Medusa.Common.Api.Custom.Extensions
             int contentLength)
         {
             return request.AddExecInterceptor(new ContentLengthInterceptor(contentLength));
+        }
+
+        public static ClientServiceRequest<TResponse> AddContentType<TResponse>(
+            this ClientServiceRequest<TResponse> request,
+            string contentType)
+        {
+            return request.AddExecInterceptor(new ContentTypeInterceptor(contentType));
         }
 
         public static ClientServiceRequest<TResponse> AddUpgradeInsecureRequests<TResponse>(

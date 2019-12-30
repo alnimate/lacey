@@ -1,4 +1,5 @@
-﻿using Lacey.Medusa.Common.Email.Services.Email;
+﻿using System.IO;
+using Lacey.Medusa.Common.Email.Services.Email;
 using Lacey.Medusa.MakeMoney.Services.Services;
 using Lacey.Medusa.MakeMoney.Services.Services.Concrete;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,13 +16,18 @@ namespace Lacey.Medusa.MakeMoney.Services.Infrastructure
             bool isSendEmails)
         {
             services
-            .AddTransient<IMakeMoneyService, MakeMoneyService>(
-                provider => new MakeMoneyService(
-                    provider.GetService<ILogger<MakeMoneyService>>(),
-                    provider.GetService<IEmailProvider>(),
-                    isSendEmails, 
-                    userSecretsFile, 
-                    commonSecretsFile));
+                .AddTransient<IMmStoreService, FileMmStoreService>(
+                    provider => new FileMmStoreService(
+                        Path.Combine(Path.GetDirectoryName(userSecretsFile), "session.secret")))
+
+                .AddTransient<IMakeMoneyService, MakeMoneyService>(
+                    provider => new MakeMoneyService(
+                        provider.GetService<ILogger<MakeMoneyService>>(),
+                        provider.GetService<IEmailProvider>(),
+                        isSendEmails, 
+                        userSecretsFile, 
+                        commonSecretsFile,
+                        provider.GetService<IMmStoreService>()));
 
             return services;
         }
