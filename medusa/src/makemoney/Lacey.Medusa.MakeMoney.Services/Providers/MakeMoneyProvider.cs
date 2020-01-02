@@ -8,6 +8,8 @@ namespace Lacey.Medusa.MakeMoney.Services.Providers
         public MakeMoneyProvider(Initializer initializer) : base(initializer)
         {
             this.ScDevice = new ScDeviceResource(this);
+            this.ScSaveFirebaseToken = new ScSaveFirebaseTokenResource(this);
+            this.ScNewsAndroid = new ScNewsAndroidResource(this);
         }
 
         public override string Name => "MakeMoney";
@@ -17,5 +19,9 @@ namespace Lacey.Medusa.MakeMoney.Services.Providers
         public override string BasePath => "MAKEMONEY_CONTROL/";
 
         public ScDeviceResource ScDevice { get; }
+
+        public ScSaveFirebaseTokenResource ScSaveFirebaseToken { get; }
+
+        public ScNewsAndroidResource ScNewsAndroid { get; }
     }
 }

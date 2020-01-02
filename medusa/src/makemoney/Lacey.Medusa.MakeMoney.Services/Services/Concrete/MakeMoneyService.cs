@@ -6,6 +6,8 @@ using Lacey.Medusa.Common.Core.Utils;
 using Lacey.Medusa.Common.Email.Services.Email;
 using Lacey.Medusa.MakeMoney.Services.Extensions;
 using Lacey.Medusa.MakeMoney.Services.Models.ScDevice;
+using Lacey.Medusa.MakeMoney.Services.Models.ScNewsAndroid;
+using Lacey.Medusa.MakeMoney.Services.Models.ScSaveFirebaseToken;
 using Lacey.Medusa.MakeMoney.Services.Providers;
 using Microsoft.Extensions.Logging;
 
@@ -57,7 +59,13 @@ namespace Lacey.Medusa.MakeMoney.Services.Services.Concrete
         public async Task Run()
         {
             await this.ScDevice();
+
+            await this.ScSaveFirebaseToken();
+
+            await this.ScNewsAndroid();
         }
+
+        #region private methods
 
         private bool IsAuthenticated()
         {
@@ -91,7 +99,7 @@ namespace Lacey.Medusa.MakeMoney.Services.Services.Concrete
                     Carrier = "Android",
                     Brand = "google",
                     DeviceLanguage = "en-US",
-                    FirebaseToken = "cdOIKCBIYIo:APA91bGjoz9f0dP63-EtfE_3SF4rg4Ej7ooVWbU3MXD4T-ZUwt3PbTYUFfnkOQ8_P_iMQFyMdotAfZrJaXEzP3s0svPx36VbuQQBJL_AJPYIGNM54pI_59ATjKFgkF29wyTvxT1z_Xq8",
+                    FirebaseToken = GetFirebaseToken(),
                     PushId = string.Empty,
                     ReferalCode = string.Empty,
                     DeploymentType = "1",
@@ -115,5 +123,68 @@ namespace Lacey.Medusa.MakeMoney.Services.Services.Concrete
                 return true;
             });
         }
+
+        private async Task ScSaveFirebaseToken()
+        {
+            if (!this.IsAuthenticated())
+            {
+                return;
+            }
+
+            await ProceedUtils.Proceed<bool?>(this.logger, async () =>
+            {
+                var request = this.makeMoney.ScSaveFirebaseToken.ScSaveFirebaseToken(new ScSaveFirebaseTokenRequest
+                {
+                    FirebaseToken = GetFirebaseToken(),
+                    CustomerId = this.scDevice.CustomerId,
+                    Version = GetVersion()
+                }).SetDefault();
+
+                var response = await request.ExecuteAsync();
+                this.logger.LogTrace(response.GetLog());
+                return true;
+            });
+        }
+
+        private async Task ScNewsAndroid()
+        {
+            if (!this.IsAuthenticated())
+            {
+                return;
+            }
+
+            await ProceedUtils.Proceed<bool?>(this.logger, async () =>
+            {
+                var request = this.makeMoney.ScNewsAndroid.ScNewsAndroid(new ScNewsAndroidRequest
+                {
+                    Os = "9",
+                    Country = string.Empty,
+                    CustomerId = this.scDevice.CustomerId,
+                    Version = GetVersion(),
+                    AdvertisingId = GetAdvertisingId()
+                }).SetDefault();
+
+                var response = await request.ExecuteAsync();
+                this.logger.LogTrace(response.GetLog());
+                return true;
+            });
+        }
+
+        private static string GetFirebaseToken()
+        {
+            return "cdOIKCBIYIo:APA91bGjoz9f0dP63-EtfE_3SF4rg4Ej7ooVWbU3MXD4T-ZUwt3PbTYUFfnkOQ8_P_iMQFyMdotAfZrJaXEzP3s0svPx36VbuQQBJL_AJPYIGNM54pI_59ATjKFgkF29wyTvxT1z_Xq8";
+        }
+
+        private static string GetVersion()
+        {
+            return "6ebcffa7b5a59a34";
+        }
+
+        private static string GetAdvertisingId()
+        {
+            return "d1602ad3-80cd-462e-b00a-859732a25392";
+        }
+
+        #endregion
     }
 }
