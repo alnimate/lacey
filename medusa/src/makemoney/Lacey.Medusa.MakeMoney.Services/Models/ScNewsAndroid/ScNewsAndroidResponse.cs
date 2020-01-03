@@ -8,9 +8,6 @@ namespace Lacey.Medusa.MakeMoney.Services.Models.ScNewsAndroid
         public string ReqStatus { get; set; }
 
         [XmlElement("DESCRIPTION")]
-        public string Description { get; set; }
-
-        [XmlElement("NEWS")]
-        public ScNewsAndroidItem[] News { get; set; }
+        public ScNewsAndroidDescription Description { get; set; }
     }
 }

@@ -33,6 +33,47 @@ namespace Lacey.Medusa.MakeMoney.Services.Services.Concrete
 
         private ScDeviceResponse scDevice;
 
+        private bool isNewDevice;
+
+        private string firebaseToken;
+        private string FirebaseToken
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(this.firebaseToken))
+                {
+                    firebaseToken = "cdOIKCBIYIo:APA91bGjoz9f0dP63-EtfE_3SF4rg4Ej7ooVWbU3MXD4T-ZUwt3PbTYUFfnkOQ8_P_iMQFyMdotAfZrJaXEzP3s0svPx36VbuQQBJL_AJPYIGNM54pI_59ATjKFgkF29wyTvxT1z_Xq8";
+                }
+                return this.firebaseToken;
+            }
+        }
+
+        private string version;
+        private string Version
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(this.version))
+                {
+                    this.version = "6ebcffa7b5a59a34";
+                }
+                return this.version;
+            }
+        }
+
+        private string advertisingId;
+        private string AdvertisingId
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(this.advertisingId))
+                {
+                    this.advertisingId = "d1602ad3-80cd-462e-b00a-859732a25392";
+                }
+                return this.advertisingId;
+            }
+        }
+
         public MakeMoneyService(
             ILogger logger,
             IEmailProvider emailProvider,
@@ -67,11 +108,6 @@ namespace Lacey.Medusa.MakeMoney.Services.Services.Concrete
 
         #region private methods
 
-        private bool IsAuthenticated()
-        {
-            return this.scDevice != null;
-        }
-
         private async Task ScDevice()
         {
             if (this.IsAuthenticated())
@@ -99,7 +135,7 @@ namespace Lacey.Medusa.MakeMoney.Services.Services.Concrete
                     Carrier = "Android",
                     Brand = "google",
                     DeviceLanguage = "en-US",
-                    FirebaseToken = GetFirebaseToken(),
+                    FirebaseToken = this.FirebaseToken,
                     PushId = string.Empty,
                     ReferalCode = string.Empty,
                     DeploymentType = "1",
@@ -120,6 +156,7 @@ namespace Lacey.Medusa.MakeMoney.Services.Services.Concrete
                 this.scDevice = response;
                 this.logger.LogTrace(this.scDevice.GetLog());
                 this.storeService.SaveScDevice(this.scDevice);
+                this.isNewDevice = true;
                 return true;
             });
         }
@@ -131,13 +168,18 @@ namespace Lacey.Medusa.MakeMoney.Services.Services.Concrete
                 return;
             }
 
+            if (!this.IsNewDevice())
+            {
+                return;
+            }
+
             await ProceedUtils.Proceed<bool?>(this.logger, async () =>
             {
                 var request = this.makeMoney.ScSaveFirebaseToken.ScSaveFirebaseToken(new ScSaveFirebaseTokenRequest
                 {
-                    FirebaseToken = GetFirebaseToken(),
+                    FirebaseToken = this.FirebaseToken,
                     CustomerId = this.scDevice.CustomerId,
-                    Version = GetVersion()
+                    Version = this.Version
                 }).SetDefault();
 
                 var response = await request.ExecuteAsync();
@@ -160,8 +202,8 @@ namespace Lacey.Medusa.MakeMoney.Services.Services.Concrete
                     Os = "9",
                     Country = string.Empty,
                     CustomerId = this.scDevice.CustomerId,
-                    Version = GetVersion(),
-                    AdvertisingId = GetAdvertisingId()
+                    Version = this.Version,
+                    AdvertisingId = this.AdvertisingId
                 }).SetDefault();
 
                 var response = await request.ExecuteAsync();
@@ -170,19 +212,14 @@ namespace Lacey.Medusa.MakeMoney.Services.Services.Concrete
             });
         }
 
-        private static string GetFirebaseToken()
+        private bool IsAuthenticated()
         {
-            return "cdOIKCBIYIo:APA91bGjoz9f0dP63-EtfE_3SF4rg4Ej7ooVWbU3MXD4T-ZUwt3PbTYUFfnkOQ8_P_iMQFyMdotAfZrJaXEzP3s0svPx36VbuQQBJL_AJPYIGNM54pI_59ATjKFgkF29wyTvxT1z_Xq8";
+            return this.scDevice != null;
         }
 
-        private static string GetVersion()
+        private bool IsNewDevice()
         {
-            return "6ebcffa7b5a59a34";
-        }
-
-        private static string GetAdvertisingId()
-        {
-            return "d1602ad3-80cd-462e-b00a-859732a25392";
+            return this.isNewDevice;
         }
 
         #endregion

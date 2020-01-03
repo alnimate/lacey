@@ -5,7 +5,10 @@
         public override T Deserialize<T>(string input)
         {
             var root = typeof(T).Name;
-            return base.Deserialize<T>($"<{root}>{input}</{root}>");
+            var xml = $"<{root}>{input}</{root}>"
+                .Replace("&", "&amp;");
+
+            return base.Deserialize<T>(xml);
         }
     }
 }
