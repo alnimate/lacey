@@ -10,6 +10,8 @@ namespace Lacey.Medusa.MakeMoney.Services.Providers
             this.ScDevice = new ScDeviceResource(this);
             this.ScSaveFirebaseToken = new ScSaveFirebaseTokenResource(this);
             this.ScNewsAndroid = new ScNewsAndroidResource(this);
+            this.ScCheckInDay = new ScCheckInDayResource(this);
+            this.ScBalance = new ScBalanceResource(this);
         }
 
         public override string Name => "MakeMoney";
@@ -23,5 +25,9 @@ namespace Lacey.Medusa.MakeMoney.Services.Providers
         public ScSaveFirebaseTokenResource ScSaveFirebaseToken { get; }
 
         public ScNewsAndroidResource ScNewsAndroid { get; }
+
+        public ScCheckInDayResource ScCheckInDay { get; }
+
+        public ScBalanceResource ScBalance { get; }
     }
 }

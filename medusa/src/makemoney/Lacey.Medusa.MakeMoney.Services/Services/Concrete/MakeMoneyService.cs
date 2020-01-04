@@ -5,6 +5,8 @@ using Lacey.Medusa.Common.Core.Serializers;
 using Lacey.Medusa.Common.Core.Utils;
 using Lacey.Medusa.Common.Email.Services.Email;
 using Lacey.Medusa.MakeMoney.Services.Extensions;
+using Lacey.Medusa.MakeMoney.Services.Models.ScBalance;
+using Lacey.Medusa.MakeMoney.Services.Models.ScCheckInDay;
 using Lacey.Medusa.MakeMoney.Services.Models.ScDevice;
 using Lacey.Medusa.MakeMoney.Services.Models.ScNewsAndroid;
 using Lacey.Medusa.MakeMoney.Services.Models.ScSaveFirebaseToken;
@@ -104,6 +106,10 @@ namespace Lacey.Medusa.MakeMoney.Services.Services.Concrete
             await this.ScSaveFirebaseToken();
 
             await this.ScNewsAndroid();
+
+            await this.ScCheckInDay();
+
+            await this.ScBalance();
         }
 
         #region private methods
@@ -204,6 +210,48 @@ namespace Lacey.Medusa.MakeMoney.Services.Services.Concrete
                     CustomerId = this.scDevice.CustomerId,
                     Version = this.Version,
                     AdvertisingId = this.AdvertisingId
+                }).SetDefault();
+
+                var response = await request.ExecuteAsync();
+                this.logger.LogTrace(response.GetLog());
+                return true;
+            });
+        }
+
+        private async Task ScCheckInDay()
+        {
+            if (!this.IsAuthenticated())
+            {
+                return;
+            }
+
+            await ProceedUtils.Proceed<bool?>(this.logger, async () =>
+            {
+                var request = this.makeMoney.ScCheckInDay.ScCheckInDay(new ScCheckInDayRequest
+                {
+                    CustomerId = this.scDevice.CustomerId,
+                    Version = this.Version,
+                }).SetDefault();
+
+                var response = await request.ExecuteAsync();
+                this.logger.LogTrace(response.GetLog());
+                return true;
+            });
+        }
+
+        private async Task ScBalance()
+        {
+            if (!this.IsAuthenticated())
+            {
+                return;
+            }
+
+            await ProceedUtils.Proceed<bool?>(this.logger, async () =>
+            {
+                var request = this.makeMoney.ScBalance.ScBalance(new ScBalanceRequest
+                {
+                    CustomerId = this.scDevice.CustomerId,
+                    Version = this.Version,
                 }).SetDefault();
 
                 var response = await request.ExecuteAsync();
