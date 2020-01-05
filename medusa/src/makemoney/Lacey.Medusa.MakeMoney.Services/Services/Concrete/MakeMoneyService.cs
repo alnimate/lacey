@@ -4,6 +4,7 @@ using Lacey.Medusa.Common.Core.Extensions;
 using Lacey.Medusa.Common.Core.Serializers;
 using Lacey.Medusa.Common.Core.Utils;
 using Lacey.Medusa.Common.Email.Services.Email;
+using Lacey.Medusa.MakeMoney.Services.Const;
 using Lacey.Medusa.MakeMoney.Services.Extensions;
 using Lacey.Medusa.MakeMoney.Services.Models.ScBalance;
 using Lacey.Medusa.MakeMoney.Services.Models.ScCheckInDay;
@@ -110,6 +111,8 @@ namespace Lacey.Medusa.MakeMoney.Services.Services.Concrete
             await this.ScCheckInDay();
 
             await this.ScBalance();
+
+            await this.SeAdColonyCredit();
         }
 
         #region private methods
@@ -253,6 +256,34 @@ namespace Lacey.Medusa.MakeMoney.Services.Services.Concrete
                     CustomerId = this.scDevice.CustomerId,
                     Version = this.Version,
                 }).SetDefault();
+
+                var response = await request.ExecuteAsync();
+                this.logger.LogTrace(response.GetLog());
+                return true;
+            });
+        }
+
+        private async Task SeAdColonyCredit()
+        {
+            if (!this.IsAuthenticated())
+            {
+                return;
+            }
+
+            await ProceedUtils.Proceed<bool?>(this.logger, async () =>
+            {
+                var request = this.makeMoney.SeAdColonyCredit.SeAdColonyCredit(
+                    "1400552599670",
+                    "d1602ad3-80cd-462e-b00a-859732a25392",
+                    "vzc076826c907e4609a1",
+                    "2",
+                    Currency.Credits,
+                    "611c397ebe4cd9b1b0e428f01aafba80",
+                    string.Empty,
+                    string.Empty,
+                    string.Empty,
+                    string.Empty,
+                    this.scDevice.CustomerId).SetSe();
 
                 var response = await request.ExecuteAsync();
                 this.logger.LogTrace(response.GetLog());

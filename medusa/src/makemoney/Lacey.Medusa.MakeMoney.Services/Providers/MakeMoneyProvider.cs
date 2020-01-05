@@ -12,6 +12,7 @@ namespace Lacey.Medusa.MakeMoney.Services.Providers
             this.ScNewsAndroid = new ScNewsAndroidResource(this);
             this.ScCheckInDay = new ScCheckInDayResource(this);
             this.ScBalance = new ScBalanceResource(this);
+            this.SeAdColonyCredit = new SeAdColonyCreditResource(this);
         }
 
         public override string Name => "MakeMoney";
@@ -29,5 +30,7 @@ namespace Lacey.Medusa.MakeMoney.Services.Providers
         public ScCheckInDayResource ScCheckInDay { get; }
 
         public ScBalanceResource ScBalance { get; }
+
+        public SeAdColonyCreditResource SeAdColonyCredit { get; }
     }
 }
