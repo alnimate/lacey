@@ -13,8 +13,12 @@
     <ProjectReference Include="..\..\common\Lacey.Medusa.Common.Api.Core\Lacey.Medusa.Common.Api.Core.csproj" />
     <ProjectReference Include="..\..\common\Lacey.Medusa.Common.Api\Lacey.Medusa.Common.Api.csproj" />
     <ProjectReference Include="..\..\common\Lacey.Medusa.Common.Core\Lacey.Medusa.Common.Core.csproj" />
-    <ProjectReference Include="..\..\common\Lacey.Medusa.Common.Email\Lacey.Medusa.Common.Email.csproj" />
-    <ProjectReference Include="..\..\vendor\Lacey.Medusa.Vendor.AdColony\Lacey.Medusa.Vendor.AdColony.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\..\..\..\..\..\Program Files\dotnet\sdk\NuGetFallbackFolder\newtonsoft.json\11.0.2\lib\netstandard2.0\Newtonsoft.Json.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

@@ -12,6 +12,7 @@ using Lacey.Medusa.MakeMoney.Services.Models.ScDevice;
 using Lacey.Medusa.MakeMoney.Services.Models.ScNewsAndroid;
 using Lacey.Medusa.MakeMoney.Services.Models.ScSaveFirebaseToken;
 using Lacey.Medusa.MakeMoney.Services.Providers;
+using Lacey.Medusa.Vendor.AdColony.Services;
 using Microsoft.Extensions.Logging;
 
 namespace Lacey.Medusa.MakeMoney.Services.Services.Concrete
@@ -31,6 +32,8 @@ namespace Lacey.Medusa.MakeMoney.Services.Services.Concrete
         private readonly string commonSecretsFile;
 
         private readonly IMmStoreService storeService;
+
+        private readonly IAds30Service ads30Service;
 
         private readonly MakeMoneyProvider makeMoney;
 
@@ -83,7 +86,8 @@ namespace Lacey.Medusa.MakeMoney.Services.Services.Concrete
             bool isSendEmails, 
             string userSecretsFile, 
             string commonSecretsFile, 
-            IMmStoreService storeService)
+            IMmStoreService storeService, 
+            IAds30Service ads30Service)
         {
             this.logger = logger;
             this.emailProvider = emailProvider;
@@ -91,6 +95,7 @@ namespace Lacey.Medusa.MakeMoney.Services.Services.Concrete
             this.userSecretsFile = userSecretsFile;
             this.commonSecretsFile = commonSecretsFile;
             this.storeService = storeService;
+            this.ads30Service = ads30Service;
 
             this.makeMoney = new MakeMoneyProvider(new BaseClientService.Initializer
             {
@@ -107,6 +112,8 @@ namespace Lacey.Medusa.MakeMoney.Services.Services.Concrete
             await this.ScSaveFirebaseToken();
 
             await this.ScNewsAndroid();
+
+            var configure = await this.ads30Service.Configure();
 
             await this.ScCheckInDay();
 
