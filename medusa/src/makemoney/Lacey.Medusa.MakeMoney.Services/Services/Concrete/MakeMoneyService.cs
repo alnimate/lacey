@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.IO;
+using System.Threading.Tasks;
 using Lacey.Medusa.Common.Api.Base.Services;
 using Lacey.Medusa.Common.Core.Extensions;
 using Lacey.Medusa.Common.Core.Serializers;
@@ -11,9 +12,13 @@ using Lacey.Medusa.MakeMoney.Services.Models.ScCheckInDay;
 using Lacey.Medusa.MakeMoney.Services.Models.ScDevice;
 using Lacey.Medusa.MakeMoney.Services.Models.ScNewsAndroid;
 using Lacey.Medusa.MakeMoney.Services.Models.ScSaveFirebaseToken;
+using Lacey.Medusa.MakeMoney.Services.Models.Settings;
 using Lacey.Medusa.MakeMoney.Services.Providers;
+using Lacey.Medusa.Vendor.AdColony.Models.Ads30.Configure;
 using Lacey.Medusa.Vendor.AdColony.Services;
+using Lacey.Medusa.Vendor.AdColony.Utils;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace Lacey.Medusa.MakeMoney.Services.Services.Concrete
 {
@@ -41,44 +46,7 @@ namespace Lacey.Medusa.MakeMoney.Services.Services.Concrete
 
         private bool isNewDevice;
 
-        private string firebaseToken;
-        private string FirebaseToken
-        {
-            get
-            {
-                if (string.IsNullOrEmpty(this.firebaseToken))
-                {
-                    firebaseToken = "cdOIKCBIYIo:APA91bGjoz9f0dP63-EtfE_3SF4rg4Ej7ooVWbU3MXD4T-ZUwt3PbTYUFfnkOQ8_P_iMQFyMdotAfZrJaXEzP3s0svPx36VbuQQBJL_AJPYIGNM54pI_59ATjKFgkF29wyTvxT1z_Xq8";
-                }
-                return this.firebaseToken;
-            }
-        }
-
-        private string version;
-        private string Version
-        {
-            get
-            {
-                if (string.IsNullOrEmpty(this.version))
-                {
-                    this.version = "6ebcffa7b5a59a34";
-                }
-                return this.version;
-            }
-        }
-
-        private string advertisingId;
-        private string AdvertisingId
-        {
-            get
-            {
-                if (string.IsNullOrEmpty(this.advertisingId))
-                {
-                    this.advertisingId = "d1602ad3-80cd-462e-b00a-859732a25392";
-                }
-                return this.advertisingId;
-            }
-        }
+        private UserSettings userSettings;
 
         public MakeMoneyService(
             ILogger logger,
@@ -101,6 +69,8 @@ namespace Lacey.Medusa.MakeMoney.Services.Services.Concrete
             {
                 Serializer = new NoRootXmlSerializer()
             });
+
+            this.userSettings = JsonConvert.DeserializeObject<UserSettings>(File.ReadAllText(this.userSecretsFile));
         }
 
         #endregion
@@ -113,7 +83,7 @@ namespace Lacey.Medusa.MakeMoney.Services.Services.Concrete
 
             await this.ScNewsAndroid();
 
-            var configure = await this.ads30Service.Configure();
+            var configure = await this.ads30Service.Configure(this.GetAdColonyConfigureRequest());
 
             await this.ScCheckInDay();
 
@@ -145,13 +115,13 @@ namespace Lacey.Medusa.MakeMoney.Services.Services.Concrete
                 {
                     AutoName = string.Empty,
                     Model = "Android SDK built for x86",
-                    UniqueId = "6ebcffa7b5a59a34",
+                    UniqueId = this.userSettings.UniqueId,
                     Manufacturer = "Google",
                     AppVesrsion = "4.0",
                     Carrier = "Android",
                     Brand = "google",
                     DeviceLanguage = "en-US",
-                    FirebaseToken = this.FirebaseToken,
+                    FirebaseToken = this.userSettings.FirebaseToken,
                     PushId = string.Empty,
                     ReferalCode = string.Empty,
                     DeploymentType = "1",
@@ -193,9 +163,9 @@ namespace Lacey.Medusa.MakeMoney.Services.Services.Concrete
             {
                 var request = this.makeMoney.ScSaveFirebaseToken.ScSaveFirebaseToken(new ScSaveFirebaseTokenRequest
                 {
-                    FirebaseToken = this.FirebaseToken,
+                    FirebaseToken = this.userSettings.FirebaseToken,
                     CustomerId = this.scDevice.CustomerId,
-                    Version = this.Version
+                    Version = this.userSettings.UniqueId
                 }).SetDefault();
 
                 var response = await request.ExecuteAsync();
@@ -218,8 +188,8 @@ namespace Lacey.Medusa.MakeMoney.Services.Services.Concrete
                     Os = "9",
                     Country = string.Empty,
                     CustomerId = this.scDevice.CustomerId,
-                    Version = this.Version,
-                    AdvertisingId = this.AdvertisingId
+                    Version = this.userSettings.UniqueId,
+                    AdvertisingId = this.userSettings.AdvertiserId
                 }).SetDefault();
 
                 var response = await request.ExecuteAsync();
@@ -240,7 +210,7 @@ namespace Lacey.Medusa.MakeMoney.Services.Services.Concrete
                 var request = this.makeMoney.ScCheckInDay.ScCheckInDay(new ScCheckInDayRequest
                 {
                     CustomerId = this.scDevice.CustomerId,
-                    Version = this.Version,
+                    Version = this.userSettings.UniqueId,
                 }).SetDefault();
 
                 var response = await request.ExecuteAsync();
@@ -261,7 +231,7 @@ namespace Lacey.Medusa.MakeMoney.Services.Services.Concrete
                 var request = this.makeMoney.ScBalance.ScBalance(new ScBalanceRequest
                 {
                     CustomerId = this.scDevice.CustomerId,
-                    Version = this.Version,
+                    Version = this.userSettings.UniqueId,
                 }).SetDefault();
 
                 var response = await request.ExecuteAsync();
@@ -281,7 +251,7 @@ namespace Lacey.Medusa.MakeMoney.Services.Services.Concrete
             {
                 var request = this.makeMoney.SeAdColonyCredit.SeAdColonyCredit(
                     "1400552599670",
-                    "d1602ad3-80cd-462e-b00a-859732a25392",
+                    this.userSettings.AdvertiserId,
                     "vzc076826c907e4609a1",
                     "2",
                     Currency.Credits,
@@ -306,6 +276,25 @@ namespace Lacey.Medusa.MakeMoney.Services.Services.Concrete
         private bool IsNewDevice()
         {
             return this.isNewDevice;
+        }
+
+        private ConfigureRequestModel GetAdColonyConfigureRequest()
+        {
+            var request = AdColonyDefault.GetConfigureRequest(
+                this.userSettings.AdvertiserId,
+                this.scDevice.CustomerId,
+                AdColony.MediaPath,
+                AdColony.TempStoragePath,
+                this.scDevice.CustomerId,
+                AdColony.AddId,
+                AdColony.BundleId,
+                AdColony.Zones,
+                AdColony.Sid,
+                AdColony.ZoneIds,
+                AdColony.Guid,
+                AdColony.GuidKey);
+
+            return request;
         }
 
         #endregion

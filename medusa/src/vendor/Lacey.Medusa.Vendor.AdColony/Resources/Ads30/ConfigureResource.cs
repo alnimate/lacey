@@ -11,9 +11,9 @@ namespace Lacey.Medusa.Vendor.AdColony.Resources.Ads30
         {
         }
 
-        public ConfigureRequest Configure()
+        public ConfigureRequest Configure(ConfigureRequestModel request)
         {
-            return new ConfigureRequest(this.Service, new ConfigureRequestModel());
+            return new ConfigureRequest(this.Service, request);
         }
 
         public sealed class ConfigureRequest : ApiRequest<ConfigureModel>

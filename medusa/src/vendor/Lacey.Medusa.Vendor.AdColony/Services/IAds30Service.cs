@@ -5,6 +5,6 @@ namespace Lacey.Medusa.Vendor.AdColony.Services
 {
     public interface IAds30Service
     {
-        Task<ConfigureModel> Configure();
+        Task<ConfigureModel> Configure(ConfigureRequestModel req);
     }
 }
