@@ -32,7 +32,8 @@ namespace Lacey.Medusa.MakeMoney.Services.Infrastructure
                         userSecretsFile, 
                         commonSecretsFile,
                         provider.GetService<IMmStoreService>(),
-                        provider.GetService<IAds30Service>()));
+                        provider.GetService<IAds30Service>(),
+                        provider.GetService<IEvents3Service>()));
 
             return services;
         }

@@ -1,4 +1,5 @@
-﻿using Lacey.Medusa.Vendor.AdColony.Models.Ads30.Configure;
+﻿using System;
+using Lacey.Medusa.Vendor.AdColony.Models.Ads30.Configure;
 
 namespace Lacey.Medusa.Vendor.AdColony.Utils
 {
@@ -15,9 +16,9 @@ namespace Lacey.Medusa.Vendor.AdColony.Utils
             string[] zones,
             string sid,
             string[] zoneIds,
-            string guid,
-            string guidKey)
+            string guidKeyPostfix)
         {
+            var guid = Guid.NewGuid().ToString();
             var res = new ConfigureRequestModel
             {
                 AdvertiserId = advertiserId,
@@ -104,7 +105,7 @@ namespace Lacey.Medusa.Vendor.AdColony.Utils
                 AdRequest = true,
                 DeviceAudio = true,
                 Guid = guid,
-                GuidKey = guidKey
+                GuidKey = $"{guid}{guidKeyPostfix}"
             };
 
             return res;

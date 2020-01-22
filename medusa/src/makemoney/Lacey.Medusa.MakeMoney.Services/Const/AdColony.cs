@@ -16,8 +16,6 @@
 
         public static readonly string[] ZoneIds = { "vzc076826c907e4609a1" };
 
-        public const string Guid = "d558c41f-79bf-4000-8142-83aac76e1022";
-
-        public const string GuidKey = "d558c41f-79bf-4000-8142-83aac76e1022DUBu6wJ27y6xs7VWmNDw67DD";
+        public const string GuidKeyPostfix = "DUBu6wJ27y6xs7VWmNDw67DD";
     }
 }

@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Lacey.Medusa.Common.Api.Base.Services;
 using Lacey.Medusa.Common.Core.Extensions;
@@ -15,6 +17,7 @@ using Lacey.Medusa.MakeMoney.Services.Models.ScSaveFirebaseToken;
 using Lacey.Medusa.MakeMoney.Services.Models.Settings;
 using Lacey.Medusa.MakeMoney.Services.Providers;
 using Lacey.Medusa.Vendor.AdColony.Models.Ads30.Configure;
+using Lacey.Medusa.Vendor.AdColony.Models.Events3.Rewardv4vc;
 using Lacey.Medusa.Vendor.AdColony.Services;
 using Lacey.Medusa.Vendor.AdColony.Utils;
 using Microsoft.Extensions.Logging;
@@ -40,6 +43,8 @@ namespace Lacey.Medusa.MakeMoney.Services.Services.Concrete
 
         private readonly IAds30Service ads30Service;
 
+        private readonly IEvents3Service events3Service;
+
         private readonly MakeMoneyProvider makeMoney;
 
         private ScDeviceResponse scDevice;
@@ -55,7 +60,8 @@ namespace Lacey.Medusa.MakeMoney.Services.Services.Concrete
             string userSecretsFile, 
             string commonSecretsFile, 
             IMmStoreService storeService, 
-            IAds30Service ads30Service)
+            IAds30Service ads30Service,
+            IEvents3Service events3Service)
         {
             this.logger = logger;
             this.emailProvider = emailProvider;
@@ -64,6 +70,7 @@ namespace Lacey.Medusa.MakeMoney.Services.Services.Concrete
             this.commonSecretsFile = commonSecretsFile;
             this.storeService = storeService;
             this.ads30Service = ads30Service;
+            this.events3Service = events3Service;
 
             this.makeMoney = new MakeMoneyProvider(new BaseClientService.Initializer
             {
@@ -84,6 +91,8 @@ namespace Lacey.Medusa.MakeMoney.Services.Services.Concrete
             await this.ScNewsAndroid();
 
             var configure = await this.ads30Service.Configure(this.GetAdColonyConfigureRequest());
+
+            var reward = await this.Rewardv4Vc(configure.App.Macros.S2);
 
             await this.ScCheckInDay();
 
@@ -268,6 +277,31 @@ namespace Lacey.Medusa.MakeMoney.Services.Services.Concrete
             });
         }
 
+        private async Task<Rewardv4VcModel> Rewardv4Vc(string pl)
+        {
+            return await ProceedUtils.Proceed(this.logger, async () =>
+            {
+                var guid = Guid.NewGuid().ToString();
+                var request = new Rewardv4VcRequestModel
+                {
+                    EventType = "reward_v4vc",
+                    Guid = guid,
+                    GuidKey = $"{guid}{AdColony.GuidKeyPostfix}",
+                    Replay = false,
+                    Reward = true,
+                    RewardAmount = 2,
+                    RewardName = "Credits",
+                    SImpCount = 1,
+                    STime = 81.65299987792969,
+                    Sid = AdColony.Sid,
+                    ZoneId = AdColony.Zones.First()
+                };
+                var response = await this.events3Service.Rewardv4Vc(pl, request);
+                this.logger.LogTrace(response.GetLog());
+                return response;
+            });
+        }
+
         private bool IsAuthenticated()
         {
             return this.scDevice != null;
@@ -291,8 +325,7 @@ namespace Lacey.Medusa.MakeMoney.Services.Services.Concrete
                 AdColony.Zones,
                 AdColony.Sid,
                 AdColony.ZoneIds,
-                AdColony.Guid,
-                AdColony.GuidKey);
+                AdColony.GuidKeyPostfix);
 
             return request;
         }

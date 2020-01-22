@@ -13,7 +13,11 @@ namespace Lacey.Medusa.Vendor.AdColony.Infrastructure
             services
                 .AddTransient<IAds30Service, Ads30Service>(
                     provider => new Ads30Service(
-                        provider.GetService<ILogger<Ads30Service>>()));
+                        provider.GetService<ILogger<Ads30Service>>()))
+
+                .AddTransient<IEvents3Service, Events3Service>(
+                    provider => new Events3Service(
+                        provider.GetService<ILogger<Events3Service>>()));
 
             return services;
         }
