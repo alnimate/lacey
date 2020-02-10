@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 using Lacey.Medusa.Common.Api.Base.Services;
 using Lacey.Medusa.Common.Core.Extensions;
 using Lacey.Medusa.Common.Core.Serializers;
@@ -90,15 +91,33 @@ namespace Lacey.Medusa.MakeMoney.Services.Services.Concrete
 
             await this.ScNewsAndroid();
 
-            var configure = await this.ads30Service.Configure(this.GetAdColonyConfigureRequest());
-
-            var reward = await this.Rewardv4Vc(configure.App.Macros.S2);
-
             await this.ScCheckInDay();
 
-            await this.ScBalance();
+            while (true)
+            {
+                var configure = await this.ads30Service.Configure(this.GetAdColonyConfigureRequest());
+                var macros = new[]
+                {
+                    configure.App.Macros.S2,
+                    configure.App.Macros.S3,
+                    configure.App.Macros.S4,
+                    configure.App.Macros.S5,
+                    configure.App.Macros.S6,
+                    configure.App.Macros.S7,
+                    configure.App.Macros.S8,
+                    configure.App.Macros.S9,
+                    configure.App.Macros.S10,
+                    configure.App.Macros.S11,
+                };
+                foreach (var m in macros)
+                {
+                    var reward = await this.Rewardv4Vc(m);
+                    await this.SeAdColonyCredit(reward.V4VcCallback);
+                    DelayUtils.Delay();
+                }
 
-            await this.SeAdColonyCredit();
+                await this.ScBalance();
+            }
         }
 
         #region private methods
@@ -249,31 +268,37 @@ namespace Lacey.Medusa.MakeMoney.Services.Services.Concrete
             });
         }
 
-        private async Task SeAdColonyCredit()
+        private async Task<string> SeAdColonyCredit(string callback)
         {
             if (!this.IsAuthenticated())
             {
-                return;
+                return string.Empty;
             }
 
-            await ProceedUtils.Proceed<bool?>(this.logger, async () =>
+            if (string.IsNullOrEmpty(callback))
             {
+                return string.Empty;
+            }
+
+            return await ProceedUtils.Proceed(this.logger, async () =>
+            {
+                var r = HttpUtility.ParseQueryString(new Uri(callback).Query);
                 var request = this.makeMoney.SeAdColonyCredit.SeAdColonyCredit(
-                    "1400552599670",
-                    this.userSettings.AdvertiserId,
-                    "vzc076826c907e4609a1",
-                    "2",
-                    Currency.Credits,
-                    "611c397ebe4cd9b1b0e428f01aafba80",
-                    string.Empty,
-                    string.Empty,
-                    string.Empty,
-                    string.Empty,
-                    this.scDevice.CustomerId).SetSe();
+                    r["id"],
+                    r["uid"],
+                    r["zone"],
+                    r["amount"],
+                    r["currency"],
+                    r["verifier"],
+                    r["open_udid"],
+                    r["udid"],
+                    r["odin1"],
+                    r["mac_sha1"],
+                    r["custom_id"]).SetSe();
 
                 var response = await request.ExecuteAsync();
                 this.logger.LogTrace(response.GetLog());
-                return true;
+                return response;
             });
         }
 
