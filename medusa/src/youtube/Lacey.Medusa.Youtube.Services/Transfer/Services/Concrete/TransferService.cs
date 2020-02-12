@@ -107,7 +107,18 @@ namespace Lacey.Medusa.Youtube.Services.Transfer.Services.Concrete
                 {
                     var name = sourceVideo.Snippet.Title;
                     this.Logger.LogTrace($"Downloading \"{name}\"...");
-                    filePath = await this.YoutubeProvider.DownloadVideo(sourceVideo.Id, this.outputFolder);
+                    try
+                    {
+                        filePath = await this.YoutubeProvider.DownloadVideo(sourceVideo.Id, this.outputFolder);
+                    }
+                    catch (Exception)
+                    {
+                        filePath = Path.Combine(this.outputFolder, $"{sourceVideo.Id}.mp4");
+                        if (!File.Exists(filePath))
+                        {
+                            continue;
+                        }
+                    }
                     this.Logger.LogTrace($"\"{name}\" => \"{filePath}\"");
 
                     this.Logger.LogTrace($"Obfuscating \"{name}\"...");
