@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using Lacey.Medusa.Common.Api.Base.Services;
-using Lacey.Medusa.Common.Core.Extensions;
 using Lacey.Medusa.Common.Core.Serializers;
 using Lacey.Medusa.Common.Core.Utils;
 using Lacey.Medusa.Vendor.AdColony.Extensions;
@@ -31,10 +30,7 @@ namespace Lacey.Medusa.Vendor.AdColony.Services.Concrete
             return await ProceedUtils.Proceed(this.logger, async () =>
             {
                 var request = this.ads30.Configure.Configure(req).SetDefault();
-
-                var response = await request.ExecuteAsync();
-                this.logger.LogTrace(response.GetLog());
-                return response;
+                return await request.ExecuteAsync();
             });
         }
     }

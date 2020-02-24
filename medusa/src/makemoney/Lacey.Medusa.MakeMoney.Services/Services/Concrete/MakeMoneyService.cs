@@ -95,6 +95,7 @@ namespace Lacey.Medusa.MakeMoney.Services.Services.Concrete
 
             while (true)
             {
+                var delayed = false;
                 var configure = await this.ads30Service.Configure(this.GetAdColonyConfigureRequest());
                 var macros = new[]
                 {
@@ -108,15 +109,24 @@ namespace Lacey.Medusa.MakeMoney.Services.Services.Concrete
                     configure.App.Macros.S9,
                     configure.App.Macros.S10,
                     configure.App.Macros.S11,
-                };
+                }.Where(m => !string.IsNullOrEmpty(m));
+
                 foreach (var m in macros)
                 {
                     var reward = await this.Rewardv4Vc(m);
-                    await this.SeAdColonyCredit(reward.V4VcCallback);
+                    var seAdColonyCredit = await this.SeAdColonyCredit(reward.V4VcCallback);
+                    if (string.IsNullOrEmpty(seAdColonyCredit))
+                    {
+                        continue;
+                    }
                     DelayUtils.Delay();
+                    delayed = true;
                 }
 
-                await this.ScBalance();
+                if (!delayed)
+                {
+                    DelayUtils.Delay();
+                }
             }
         }
 
@@ -322,7 +332,10 @@ namespace Lacey.Medusa.MakeMoney.Services.Services.Concrete
                     ZoneId = AdColony.Zones.First()
                 };
                 var response = await this.events3Service.Rewardv4Vc(pl, request);
-                this.logger.LogTrace(response.GetLog());
+                if(response != null && !string.IsNullOrEmpty(response.V4VcCallback))
+                {
+                    this.logger.LogTrace(response.GetLog());
+                }
                 return response;
             });
         }
