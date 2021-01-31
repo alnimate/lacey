@@ -127,7 +127,15 @@ namespace Lacey.Alexa.Common.Metasploit.Manager
 			foreach (var pair in dict)
 			{
 				MessagePackObject obj = (MessagePackObject)pair.Value;
-				string key = System.Text.Encoding.ASCII.GetString ((byte[])pair.Key);
+                string key;
+                try
+                {
+                    key = System.Text.Encoding.ASCII.GetString((byte[])pair.Key);
+                }
+				catch (Exception)
+                {
+                    key = pair.Key.ToString();
+                }
 
 				if (obj.UnderlyingType == null)
 					continue;

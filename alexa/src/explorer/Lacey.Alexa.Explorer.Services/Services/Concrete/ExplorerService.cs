@@ -20,8 +20,7 @@ namespace Lacey.Alexa.Explorer.Services.Services.Concrete
 
         public Task Run()
         {
-            var stats = _metasploit.GetCoreModuleStats();
-            var info = _metasploit.GetCoreVersionInformation();
+            var response = _metasploit.Unreal_Ircd_3281_Backdoor();
             return Task.CompletedTask;
         }
     }
