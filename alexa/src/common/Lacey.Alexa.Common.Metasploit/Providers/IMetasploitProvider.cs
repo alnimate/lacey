@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace Lacey.Alexa.Common.Metasploit.Providers
 {
@@ -7,20 +8,20 @@ namespace Lacey.Alexa.Common.Metasploit.Providers
     {
         IPAddress MetasploitAddress { get; }
 
-        Dictionary<string, object> ExecuteModule(string moduleType, string moduleName, Dictionary<string, object> options);
+        Task<Dictionary<string, object>> ExecuteModule(string moduleType, string moduleName, Dictionary<string, object> options);
 
-        Dictionary<string, object> ListJobs();
+        Task<Dictionary<string, object>> ListJobs();
 
-        Dictionary<string, object> StopJob(string jobId);
+        Task<Dictionary<string, object>> StopJob(string jobId);
 
-        Dictionary<string, object> ListSessions();
+        Task<Dictionary<string, object>> ListSessions();
 
-        Dictionary<string, object> WriteToSessionShell(string sessionId, string data);
+        Task<Dictionary<string, object>> WriteToSessionShell(string sessionId, string data);
 
-        Dictionary<string, object> ReadSessionShell(string sessionId);
+        Task<Dictionary<string, object>> ReadSessionShell(string sessionId);
 
-        Dictionary<string, object> StopSession(string sessionId);
+        Task<Dictionary<string, object>> StopSession(string sessionId);
 
-        Dictionary<string, object> GetModuleCompatibleSessions(string moduleName);
+        Task<Dictionary<string, object>> GetModuleCompatibleSessions(string moduleName);
     }
 }

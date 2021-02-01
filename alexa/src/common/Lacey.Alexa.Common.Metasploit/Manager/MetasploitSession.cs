@@ -3,28 +3,30 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Text;
+using System.Threading.Tasks;
 using MsgPack;
 
 namespace Lacey.Alexa.Common.Metasploit.Manager
 {
 	internal sealed class MetasploitSession : IDisposable
 	{
-		string _host;
-		string _token;
+        private readonly string _host;
+
+        private readonly string _token;
 		
 		public MetasploitSession (string username, string password, string host)
 		{
 			_host = host;
 			_token = null;
 			
-			Dictionary<string, object > response = this.Authenticate (username, password);
+			var response = this.Authenticate (username, password).Result;
 			
-			bool loggedIn = !response.ContainsKey ("error");
+			var loggedIn = !response.ContainsKey("error");
 
 			if (!loggedIn)
 				throw new Exception (response ["error_message"] as string);
 			
-			if ((response ["result"] as string) == "success")
+			if (response ["result"] as string == "success")
 				_token = response ["token"] as string;
 		} 
 
@@ -34,16 +36,14 @@ namespace Lacey.Alexa.Common.Metasploit.Manager
 			_host = host;
 		}
 		
-		public string Token { 
-			get { return _token; }
-		}
-		
-		public Dictionary<string, object> Authenticate (string username, string password)
+		public string Token => _token;
+
+        public async Task<Dictionary<string, object>> Authenticate (string username, string password)
 		{
-			return this.Execute ("auth.login", username, password);
+			return await this.Execute ("auth.login", username, password);
 		}
 		
-		public Dictionary<string, object> Execute (string method, params object[] args)
+		public async Task<Dictionary<string, object>> Execute (string method, params object[] args)
 		{
 			if (string.IsNullOrEmpty (_host))
 				throw new Exception ("Host null or empty");
@@ -62,12 +62,12 @@ namespace Lacey.Alexa.Common.Metasploit.Manager
 			Stream requestStream = null;
 
 			try{
-				requestStream = request.GetRequestStream ();
+				requestStream = request.GetRequestStream();
 			} catch (Exception ex) {
 				Console.WriteLine (ex);
 			}
 
-			Packer msgpackWriter = Packer.Create(requestStream);
+			var msgpackWriter = Packer.Create(requestStream);
 			
 			msgpackWriter.PackArrayHeader (args.Length + 1 + (string.IsNullOrEmpty (_token) ? 0 : 1));
 			
@@ -81,30 +81,26 @@ namespace Lacey.Alexa.Common.Metasploit.Manager
 			
 			requestStream.Close();
 
-			byte[] buffer = new byte[4096];
-			MemoryStream mstream = new MemoryStream();
+			var buffer = new byte[4096];
+			var mstream = new MemoryStream();
 
-			try {
-			using (WebResponse response = request.GetResponse ())
-			{
-				using (Stream rstream = response.GetResponseStream())
-				{
-					int count = 0;
-					
-					do
-					{
-						count = rstream.Read(buffer, 0, buffer.Length);
-						mstream.Write(buffer, 0, count);
-					} while (count != 0);
-					
-				}
-			}
-			}
+			try
+            {
+                using WebResponse response = request.GetResponse ();
+                await using Stream rstream = response.GetResponseStream();
+                int count = 0;
+					    
+                do
+                {
+                    count = rstream.Read(buffer, 0, buffer.Length);
+                    mstream.Write(buffer, 0, count);
+                } while (count != 0);
+            }
 			catch (WebException ex) {
 				if (ex.Response != null) {
 					string res = string.Empty;
 					using (StreamReader rdr = new StreamReader(ex.Response.GetResponseStream()))
-						res = rdr.ReadToEnd();
+						res = await rdr.ReadToEndAsync();
 
 					Console.WriteLine(res) ;
 				}
@@ -112,9 +108,9 @@ namespace Lacey.Alexa.Common.Metasploit.Manager
 			
 			mstream.Position = 0;
 
-			MessagePackObjectDictionary resp = Unpacking.UnpackObject(mstream).AsDictionary();
+			var resp = Unpacking.UnpackObject(mstream).AsDictionary();
 
-			Dictionary<string, object > returnDictionary = TypifyDictionary(resp);
+			var returnDictionary = TypifyDictionary(resp);
 			
 			return returnDictionary;
 		}
@@ -122,19 +118,19 @@ namespace Lacey.Alexa.Common.Metasploit.Manager
 		//this is a ridiculous method
 		Dictionary<string, object> TypifyDictionary(MessagePackObjectDictionary dict)
 		{
-			Dictionary<string, object> returnDictionary = new Dictionary<string, object>();
+			var returnDictionary = new Dictionary<string, object>();
 			
-			foreach (var pair in dict)
+			foreach (var (messagePackObject, value) in dict)
 			{
-				MessagePackObject obj = (MessagePackObject)pair.Value;
+				var obj = (MessagePackObject)value;
                 string key;
                 try
                 {
-                    key = System.Text.Encoding.ASCII.GetString((byte[])pair.Key);
+                    key = System.Text.Encoding.ASCII.GetString((byte[])messagePackObject);
                 }
 				catch (Exception)
                 {
-                    key = pair.Key.ToString();
+                    key = messagePackObject.ToString();
                 }
 
 				if (obj.UnderlyingType == null)
@@ -142,62 +138,62 @@ namespace Lacey.Alexa.Common.Metasploit.Manager
 				
 				if (obj.IsRaw) {
 					if (obj.UnderlyingType == typeof(string)) {
-						if (pair.Key.IsRaw && pair.Key.IsTypeOf (typeof(Byte[])).Value)
-							returnDictionary [key] = obj.AsString ();
+						if (messagePackObject.IsRaw && messagePackObject.IsTypeOf(typeof(byte[])).Value)
+							returnDictionary[key] = obj.AsString ();
 						else
-							returnDictionary [pair.Key.ToString ()] = obj.AsString ();
+							returnDictionary[messagePackObject.ToString ()] = obj.AsString ();
 					}
-					else if (obj.IsTypeOf (typeof(int)).Value)
-						returnDictionary [pair.Key.ToString ()] = (int)obj.ToObject ();
-					else if (obj.IsTypeOf (typeof(Byte[])).Value) {
+					else if (obj.IsTypeOf(typeof(int)).Value)
+						returnDictionary [messagePackObject.ToString ()] = (int)obj.ToObject ();
+					else if (obj.IsTypeOf(typeof(byte[])).Value) {
 						if (key == "payload") 
 							returnDictionary [key] = (byte[])obj;
 						else 
-							returnDictionary [key] = System.Text.Encoding.ASCII.GetString ((Byte[])obj.ToObject ());
+							returnDictionary [key] = System.Text.Encoding.ASCII.GetString((byte[])obj.ToObject ());
 					} else
-						throw new Exception ("I don't know type: " + pair.Value.GetType ().Name);
+						throw new Exception ("I don't know type: " + value.GetType().Name);
 				} else if (obj.IsArray) {
-					List<object> arr = new List<object> ();
+					List<object> arr = new List<object>();
 					foreach (var o in obj.ToObject() as MessagePackObject[]) {
 						if (o.IsDictionary)
-							arr.Add (TypifyDictionary (o.AsDictionary ()));
+							arr.Add (TypifyDictionary (o.AsDictionary()));
 						else if (o.IsRaw)
-							arr.Add (System.Text.Encoding.ASCII.GetString ((byte[])o));
+							arr.Add (System.Text.Encoding.ASCII.GetString((byte[])o));
 						else if (o.IsArray) {
-							var enu = o.AsEnumerable ();
-							List<object> array = new List<object> ();
+							var enu = o.AsEnumerable();
+							List<object> array = new List<object>();
 							foreach (var blah in enu)
 								array.Add (blah as object);
 
-							arr.Add (array.ToArray ());
-						} else if (o.ToObject ().GetType () == typeof(Byte)) //this is a hack because I don't know what type you are...
-							arr.Add (o.ToString ());
+							arr.Add (array.ToArray());
+						} else if (o.ToObject () is byte) //this is a hack because I don't know what type you are...
+							arr.Add (o.ToString());
 					}
 
-					if (pair.Key.IsRaw && pair.Key.IsTypeOf (typeof(Byte[])).Value)
+					if (messagePackObject.IsRaw && messagePackObject.IsTypeOf(typeof(byte[])).Value)
 						returnDictionary.Add (key, arr);
 					else
 						returnDictionary.Add (key, arr);
 				} else if (obj.IsDictionary) {
-					if (pair.Key.IsRaw && pair.Key.IsTypeOf(typeof(Byte[])).Value)
-						returnDictionary [key] = TypifyDictionary (obj.AsDictionary ());
+					if (messagePackObject.IsRaw && messagePackObject.IsTypeOf(typeof(byte[])).Value)
+						returnDictionary[key] = TypifyDictionary (obj.AsDictionary ());
 					else 
-						returnDictionary [pair.Key.ToString ()] = TypifyDictionary (obj.AsDictionary ());
-				} else if (obj.IsTypeOf (typeof(UInt16)).Value) {
-					if (pair.Key.IsRaw && pair.Key.IsTypeOf (typeof(Byte[])).Value)
-						returnDictionary [key] = obj.AsUInt16 ();
+						returnDictionary [messagePackObject.ToString()] = TypifyDictionary (obj.AsDictionary ());
+				} else if (obj.IsTypeOf (typeof(ushort)).Value) {
+					if (messagePackObject.IsRaw && messagePackObject.IsTypeOf(typeof(byte[])).Value)
+						returnDictionary[key] = obj.AsUInt16();
 					else
-						returnDictionary [pair.Key.ToString ()] = obj.AsUInt16 ();
-				} else if (obj.IsTypeOf (typeof(UInt32)).Value) {
-					if (pair.Key.IsRaw && pair.Key.IsTypeOf (typeof(Byte[])).Value)
-						returnDictionary [key] = obj.AsUInt32 ();
+						returnDictionary[messagePackObject.ToString()] = obj.AsUInt16 ();
+				} else if (obj.IsTypeOf(typeof(uint)).Value) {
+					if (messagePackObject.IsRaw && messagePackObject.IsTypeOf(typeof(byte[])).Value)
+						returnDictionary[key] = obj.AsUInt32 ();
 					else
-						returnDictionary [pair.Key.ToString ()] = obj.AsUInt32 ();
-				} else if (obj.IsTypeOf (typeof(bool)).Value) {
-					if (pair.Key.IsRaw && pair.Key.IsTypeOf (typeof(Byte[])).Value)
-						returnDictionary [key] = obj.AsBoolean ();
+						returnDictionary[messagePackObject.ToString()] = obj.AsUInt32 ();
+				} else if (obj.IsTypeOf(typeof(bool)).Value) {
+					if (messagePackObject.IsRaw && messagePackObject.IsTypeOf(typeof(byte[])).Value)
+						returnDictionary[key] = obj.AsBoolean();
 					else
-						returnDictionary [pair.Key.ToString ()] = obj.AsBoolean ();
+						returnDictionary[messagePackObject.ToString()] = obj.AsBoolean();
 				}
 				else 
 					throw new Exception("Don't know type: " + obj.ToObject().GetType().Name);
@@ -206,7 +202,7 @@ namespace Lacey.Alexa.Common.Metasploit.Manager
 			return returnDictionary;
 		}
 		
-		void Pack (Packer packer, object o)
+		void Pack(Packer packer, object o)
 		{
  	 	
 			if (o == null) {
@@ -263,7 +259,7 @@ namespace Lacey.Alexa.Common.Metasploit.Manager
 		
 		public void Dispose ()
 		{
-			this.Execute ("auth.logout", new object[] {});
+			this.Execute("auth.logout");
 		}
 	}
 }
