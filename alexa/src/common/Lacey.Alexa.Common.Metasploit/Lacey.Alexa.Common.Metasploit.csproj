@@ -10,4 +10,8 @@
     <PackageReference Include="MsgPack.Cli" Version="1.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\medusa\src\common\Lacey.Medusa.Common.Core\Lacey.Medusa.Common.Core.csproj" />
+  </ItemGroup>
+
 </Project>

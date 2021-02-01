@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 using Lacey.Alexa.Common.Metasploit.Manager;
+using Lacey.Alexa.Common.Metasploit.Utils;
 using Microsoft.Extensions.Logging;
 
 namespace Lacey.Alexa.Common.Metasploit.Providers.Concrete
@@ -37,42 +38,42 @@ namespace Lacey.Alexa.Common.Metasploit.Providers.Concrete
 
         public Dictionary<string, object> ExecuteModule(string moduleType, string moduleName, Dictionary<string, object> options)
         {
-            return _metasploit.ExecuteModule(moduleType, moduleName, options);
+            return RequestUtils.InContext(() => _metasploit.ExecuteModule(moduleType, moduleName, options), _logger);
         }
 
         public Dictionary<string, object> ListJobs()
         {
-            return _metasploit.ListJobs();
+            return RequestUtils.InContext(() => _metasploit.ListJobs(), _logger);
         }
 
         public Dictionary<string, object> StopJob(string jobId)
         {
-            return _metasploit.StopJob(jobId);
+            return RequestUtils.InContext(() => _metasploit.StopJob(jobId), _logger);
         }
 
         public Dictionary<string, object> ListSessions()
         {
-            return _metasploit.ListSessions();
+            return RequestUtils.InContext(() => _metasploit.ListSessions(), _logger);
         }
 
         public Dictionary<string, object> WriteToSessionShell(string sessionId, string data)
         {
-            return _metasploit.WriteToSessionShell(sessionId, data);
+            return RequestUtils.InContext(() => _metasploit.WriteToSessionShell(sessionId, data), _logger);
         }
 
         public Dictionary<string, object> ReadSessionShell(string sessionId)
         {
-            return _metasploit.ReadSessionShell(sessionId);
+            return RequestUtils.InContext(() => _metasploit.ReadSessionShell(sessionId), _logger);
         }
 
         public Dictionary<string, object> StopSession(string sessionId)
         {
-            return _metasploit.StopSession(sessionId);
+            return RequestUtils.InContext(() => _metasploit.StopSession(sessionId), _logger);
         }
 
         public Dictionary<string, object> GetModuleCompatibleSessions(string moduleName)
         {
-            return _metasploit.GetModuleCompatibleSessions(moduleName);
+            return RequestUtils.InContext(() => _metasploit.GetModuleCompatibleSessions(moduleName), _logger);
         }
 
         #endregion

@@ -7,7 +7,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Alexa.Explorer.Run", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Alexa.Explorer.Services", "Lacey.Alexa.Explorer.Services\Lacey.Alexa.Explorer.Services.csproj", "{A11BEC19-E6F4-4410-AACE-4066F99D4C0C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lacey.Alexa.Common.Metasploit", "..\common\Lacey.Alexa.Common.Metasploit\Lacey.Alexa.Common.Metasploit.csproj", "{493E10FD-FD6F-47AD-B839-440E01983AAC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Alexa.Common.Metasploit", "..\common\Lacey.Alexa.Common.Metasploit\Lacey.Alexa.Common.Metasploit.csproj", "{493E10FD-FD6F-47AD-B839-440E01983AAC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Common.Core", "..\..\..\medusa\src\common\Lacey.Medusa.Common.Core\Lacey.Medusa.Common.Core.csproj", "{C589EEC7-6155-4552-81AA-F79620DCEB61}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Common.Api.Core", "..\..\..\medusa\src\common\Lacey.Medusa.Common.Api.Core\Lacey.Medusa.Common.Api.Core.csproj", "{FA1DDFDD-B1DE-4139-8EFF-60A20526DB9A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Common.Api", "..\..\..\medusa\src\common\Lacey.Medusa.Common.Api\Lacey.Medusa.Common.Api.csproj", "{911D9549-B52C-4CBD-8E41-CD74305C8931}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +33,18 @@ Global
 		{493E10FD-FD6F-47AD-B839-440E01983AAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{493E10FD-FD6F-47AD-B839-440E01983AAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{493E10FD-FD6F-47AD-B839-440E01983AAC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C589EEC7-6155-4552-81AA-F79620DCEB61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C589EEC7-6155-4552-81AA-F79620DCEB61}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C589EEC7-6155-4552-81AA-F79620DCEB61}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C589EEC7-6155-4552-81AA-F79620DCEB61}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA1DDFDD-B1DE-4139-8EFF-60A20526DB9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA1DDFDD-B1DE-4139-8EFF-60A20526DB9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA1DDFDD-B1DE-4139-8EFF-60A20526DB9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA1DDFDD-B1DE-4139-8EFF-60A20526DB9A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{911D9549-B52C-4CBD-8E41-CD74305C8931}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{911D9549-B52C-4CBD-8E41-CD74305C8931}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{911D9549-B52C-4CBD-8E41-CD74305C8931}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{911D9549-B52C-4CBD-8E41-CD74305C8931}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

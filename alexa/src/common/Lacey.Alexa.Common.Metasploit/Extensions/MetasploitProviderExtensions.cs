@@ -4,11 +4,31 @@ using System.Linq;
 using Lacey.Alexa.Common.Metasploit.Const;
 using Lacey.Alexa.Common.Metasploit.Models.Modules;
 using Lacey.Alexa.Common.Metasploit.Providers;
+using Lacey.Alexa.Common.Metasploit.Utils;
 
 namespace Lacey.Alexa.Common.Metasploit.Extensions
 {
     public static class MetasploitProviderExtensions
     {
+        public static void ShellInteract(
+            this IMetasploitProvider metasploit,
+            string sessionId)
+        {
+            while (true)
+            {
+                var cmd = Console.ReadLine();
+                if (cmd == "exit")
+                {
+                    metasploit.StopSession(sessionId);
+                    break;
+                }
+
+                metasploit.WriteToSessionShell(sessionId, $"{cmd}{Environment.NewLine}");
+                Delay.Small();
+                metasploit.ReadSessionShell(sessionId);
+            }
+        }
+
         public static object ShellExec(
             this IMetasploitProvider metasploit,
             Dictionary<string, object> shell,
@@ -20,8 +40,8 @@ namespace Lacey.Alexa.Common.Metasploit.Extensions
                 var dict = (Dictionary<string, object>)value;
                 if (dict[ResultFields.Type] as string == ResultType.Shell)
                 {
-                    metasploit.WriteToSessionShell(id, $"{command}\n");
-                    System.Threading.Thread.Sleep(Delays.Small);
+                    metasploit.WriteToSessionShell(id, $"{command}{Environment.NewLine}");
+                    Delay.Small();
                     var response = metasploit.ReadSessionShell(id);
                     result = response[ResultFields.Data];
                     metasploit.StopSession(id);
@@ -58,8 +78,7 @@ namespace Lacey.Alexa.Common.Metasploit.Extensions
             var vals = new List<object>(response.Values);
             while (vals.Any(v => ((string)v).Contains(moduleName)))
             {
-                Console.WriteLine("Waiting");
-                System.Threading.Thread.Sleep(Delays.Small);
+                Delay.Small();
                 response = metasploit.ListJobs();
                 vals = new List<object>(response.Values);
             }
