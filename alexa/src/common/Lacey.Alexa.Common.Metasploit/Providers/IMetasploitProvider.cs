@@ -1,14 +1,14 @@
 ﻿using System.Collections.Generic;
-using System.Net;
 using System.Threading.Tasks;
 
 namespace Lacey.Alexa.Common.Metasploit.Providers
 {
     public interface IMetasploitProvider
     {
-        IPAddress MetasploitAddress { get; }
+        string MetasploitAddress { get; }
 
-        Task<Dictionary<string, object>> ExecuteModule(string moduleType, string moduleName, Dictionary<string, object> options);
+        Task<Dictionary<string, object>> ExecuteModule(string moduleType, string moduleName,
+            Dictionary<string, object> options);
 
         Task<Dictionary<string, object>> ListJobs();
 
@@ -22,6 +22,12 @@ namespace Lacey.Alexa.Common.Metasploit.Providers
 
         Task<Dictionary<string, object>> StopSession(string sessionId);
 
-        Task<Dictionary<string, object>> GetModuleCompatibleSessions(string moduleName);
+        Task<Dictionary<string, object>> UpgradeShellToMeterpreter(string sessionId, string host, string port);
+
+        Task<Dictionary<string, object>> WriteToSessionMeterpreter(string sessionId, string data);
+
+        Task<Dictionary<string, object>> ReadSessionMeterpreter(string sessionId);
+
+        Task<Dictionary<string, object>> KillMeterpreterSession(string sessionId);
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net;
 using System.Threading.Tasks;
 using Lacey.Alexa.Common.Metasploit.Manager;
 using Lacey.Alexa.Common.Metasploit.Utils;
@@ -28,14 +27,14 @@ namespace Lacey.Alexa.Common.Metasploit.Providers.Concrete
             var creds = authProvider.GetUserSecrets();
             _session = new MetasploitSession(creds.Username, creds.Password, $"{metasploitUrl}/api/");
             _metasploit = new MetasploitProManager(_session);
-            MetasploitAddress = IPAddress.Parse(new Uri(metasploitUrl).Host);
+            MetasploitAddress = new Uri(metasploitUrl).Host;
         }
 
         #endregion
 
         #region IMetasploitProvider
 
-        public IPAddress MetasploitAddress { get; }
+        public string MetasploitAddress { get; }
 
         public async Task<Dictionary<string, object>> ExecuteModule(string moduleType, string moduleName, Dictionary<string, object> options)
         {
@@ -72,9 +71,24 @@ namespace Lacey.Alexa.Common.Metasploit.Providers.Concrete
             return await Process.InContext(() => _metasploit.StopSession(sessionId), _logger);
         }
 
-        public async Task<Dictionary<string, object>> GetModuleCompatibleSessions(string moduleName)
+        public async Task<Dictionary<string, object>> UpgradeShellToMeterpreter(string sessionId, string host, string port)
         {
-            return await Process.InContext(() => _metasploit.GetModuleCompatibleSessions(moduleName), _logger);
+            return await Process.InContext(() => _metasploit.UpgradeShellToMeterpreter(sessionId, host, port), _logger);
+        }
+
+        public async Task<Dictionary<string, object>> WriteToSessionMeterpreter(string sessionId, string data)
+        {
+            return await Process.InContext(() => _metasploit.WriteToSessionMeterpreter(sessionId, data), _logger);
+        }
+
+        public async Task<Dictionary<string, object>> ReadSessionMeterpreter(string sessionId)
+        {
+            return await Process.InContext(() => _metasploit.ReadSessionMeterpreter(sessionId), _logger);
+        }
+
+        public async Task<Dictionary<string, object>> KillMeterpreterSession(string sessionId)
+        {
+            return await Process.InContext(() => _metasploit.KillMeterpreterSession(sessionId), _logger);
         }
 
         #endregion
