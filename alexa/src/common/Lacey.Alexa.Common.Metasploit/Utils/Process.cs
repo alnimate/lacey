@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Lacey.Alexa.Common.Metasploit.Utils
 {
-    internal static class RequestUtils
+    internal static class Process
     {
         public static async Task<Dictionary<string, object>> InContext(
             Func<Task<Dictionary<string, object>>> action,
@@ -14,7 +14,7 @@ namespace Lacey.Alexa.Common.Metasploit.Utils
         {
             var result = await action();
 
-            Console.WriteLine(result.AsColumns());
+            logger.LogTrace(result.AsColumns());
             
             return result;
         }

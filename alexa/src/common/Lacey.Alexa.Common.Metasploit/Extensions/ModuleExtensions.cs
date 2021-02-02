@@ -1,5 +1,4 @@
-﻿using Lacey.Alexa.Common.Metasploit.Const;
-using Lacey.Alexa.Common.Metasploit.Models.Modules;
+﻿using Lacey.Alexa.Common.Metasploit.Models.Modules;
 
 namespace Lacey.Alexa.Common.Metasploit.Extensions
 {
@@ -13,37 +12,37 @@ namespace Lacey.Alexa.Common.Metasploit.Extensions
 
         public static MetasploitModule LHost(this MetasploitModule module, string lHost)
         {
-            module.AddOption(ModuleOptions.LHost, lHost);
+            module.AddOption("LHOST", lHost);
             return module;
         }
 
         public static MetasploitModule LPort(this MetasploitModule module, int lPort)
         {
-            module.AddOption(ModuleOptions.LPort, lPort);
+            module.AddOption("LPORT", lPort);
             return module;
         }
 
         public static MetasploitModule RHost(this MetasploitModule module, string rHost)
         {
-            module.AddOption(ModuleOptions.RHost, rHost);
+            module.AddOption("RHOST", rHost);
             return module;
         }
 
         public static MetasploitModule Payload(this MetasploitModule module, string payload)
         {
-            module.AddOption(ModuleOptions.Payload, payload);
+            module.AddOption("PAYLOAD", payload);
             return module;
         }
 
         public static MetasploitModule ExitOnSession(this MetasploitModule module, bool exitOnSession)
         {
-            module.AddOption(ModuleOptions.ExitOnSession, exitOnSession);
+            module.AddOption("ExitOnSession", exitOnSession);
             return module;
         }
 
         public static MetasploitModule DisablePayloadHandler(this MetasploitModule module, bool disablePayloadHandler)
         {
-            module.AddOption(ModuleOptions.DisablePayloadHandler, disablePayloadHandler);
+            module.AddOption("DisablePayloadHandler", disablePayloadHandler);
             return module;
         }
     }

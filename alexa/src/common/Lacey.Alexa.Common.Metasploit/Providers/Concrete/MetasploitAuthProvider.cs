@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using Lacey.Alexa.Common.Metasploit.Models.Auth;
 
 namespace Lacey.Alexa.Common.Metasploit.Providers.Concrete
 {
@@ -9,18 +8,13 @@ namespace Lacey.Alexa.Common.Metasploit.Providers.Concrete
 
         public MetasploitAuthProvider(string userSecretsFile)
         {
-            this._userSecretsFile = userSecretsFile;
+            this._userSecretsFile = userSecretsFile;    
         }
 
-        public UserSecrets GetUserSecrets()
+        public (string Username, string Password) GetUserSecrets()
         {
             var lines = File.ReadAllLines(_userSecretsFile);
-
-            return new UserSecrets
-            {
-                Username = lines[0],
-                Password = lines[1]
-            };
+            return (lines[0], lines[1]);
         }
     }
 }

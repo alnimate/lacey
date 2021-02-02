@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Lacey.Alexa.Common.Metasploit.Extensions
 {
-    public static class RequestResultExtensions
+    public static class ResultExtensions
     {
         public static string AsColumns(this Dictionary<string, object> result)
         {

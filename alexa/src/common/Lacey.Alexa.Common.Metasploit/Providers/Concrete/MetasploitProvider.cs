@@ -39,42 +39,42 @@ namespace Lacey.Alexa.Common.Metasploit.Providers.Concrete
 
         public async Task<Dictionary<string, object>> ExecuteModule(string moduleType, string moduleName, Dictionary<string, object> options)
         {
-            return await RequestUtils.InContext(() => _metasploit.ExecuteModule(moduleType, moduleName, options), _logger);
+            return await Process.InContext(() => _metasploit.ExecuteModule(moduleType, moduleName, options), _logger);
         }
 
         public async Task<Dictionary<string, object>> ListJobs()
         {
-            return await RequestUtils.InContext(() => _metasploit.ListJobs(), _logger);
+            return await Process.InContext(() => _metasploit.ListJobs(), _logger);
         }
 
         public async Task<Dictionary<string, object>> StopJob(string jobId)
         {
-            return await RequestUtils.InContext(() => _metasploit.StopJob(jobId), _logger);
+            return await Process.InContext(() => _metasploit.StopJob(jobId), _logger);
         }
 
         public async Task<Dictionary<string, object>> ListSessions()
         {
-            return await RequestUtils.InContext(() => _metasploit.ListSessions(), _logger);
+            return await Process.InContext(() => _metasploit.ListSessions(), _logger);
         }
 
         public async Task<Dictionary<string, object>> WriteToSessionShell(string sessionId, string data)
         {
-            return await RequestUtils.InContext(() => _metasploit.WriteToSessionShell(sessionId, data), _logger);
+            return await Process.InContext(() => _metasploit.WriteToSessionShell(sessionId, data), _logger);
         }
 
         public async Task<Dictionary<string, object>> ReadSessionShell(string sessionId)
         {
-            return await RequestUtils.InContext(() => _metasploit.ReadSessionShell(sessionId), _logger);
+            return await Process.InContext(() => _metasploit.ReadSessionShell(sessionId), _logger);
         }
 
         public async Task<Dictionary<string, object>> StopSession(string sessionId)
         {
-            return await RequestUtils.InContext(() => _metasploit.StopSession(sessionId), _logger);
+            return await Process.InContext(() => _metasploit.StopSession(sessionId), _logger);
         }
 
         public async Task<Dictionary<string, object>> GetModuleCompatibleSessions(string moduleName)
         {
-            return await RequestUtils.InContext(() => _metasploit.GetModuleCompatibleSessions(moduleName), _logger);
+            return await Process.InContext(() => _metasploit.GetModuleCompatibleSessions(moduleName), _logger);
         }
 
         #endregion
