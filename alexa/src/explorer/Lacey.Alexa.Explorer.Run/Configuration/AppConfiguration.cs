@@ -7,5 +7,7 @@
         public LogsConfiguration Logs { get; set; }
 
         public MetasploitConfiguration Metasploit { get; set; }
+
+        public ShodanConfiguration Shodan { get; set; }
     }
 }

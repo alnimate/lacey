@@ -2,6 +2,6 @@
 {
     public interface IMetasploitAuthProvider
     {
-        (string Username, string Password) GetUserSecrets();
+        (string Username, string Password) GetCredentials();
     }
 }

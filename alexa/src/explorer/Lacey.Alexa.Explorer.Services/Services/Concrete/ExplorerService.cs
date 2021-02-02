@@ -1,6 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Lacey.Alexa.Common.Metasploit.Extensions;
 using Lacey.Alexa.Common.Metasploit.Providers;
+using Lacey.Alexa.Common.Shodan.Providers;
 using Microsoft.Extensions.Logging;
 
 namespace Lacey.Alexa.Explorer.Services.Services.Concrete
@@ -11,16 +13,28 @@ namespace Lacey.Alexa.Explorer.Services.Services.Concrete
 
         private readonly IMetasploitProvider _metasploit;
 
+        private readonly IShodanProvider _shodan;
+
         public ExplorerService(
-            IMetasploitProvider metasploit, 
+            IMetasploitProvider metasploit,
+            IShodanProvider shodan,
             ILogger logger)
         {
             _metasploit = metasploit;
+            _shodan = shodan;
             _logger = logger;
         }
 
         public async Task Run()
         {
+            /*
+            var hosts = await _shodan.SearchHosts(
+                query: a => a.Withcity("boston")
+                    .Withcountry("usa")
+                    .Before(DateTime.Now.AddDays(-5)),
+                facet: b => b.WithAsn());
+            */
+
             const string rHost = "192.168.0.14";
             const string exploit = "multi/samba/usermap_script";
 

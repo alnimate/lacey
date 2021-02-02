@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\common\Lacey.Alexa.Common.Metasploit\Lacey.Alexa.Common.Metasploit.csproj" />
+    <ProjectReference Include="..\..\common\Lacey.Alexa.Common.Shodan\Lacey.Alexa.Common.Shodan.csproj" />
   </ItemGroup>
 
 </Project>

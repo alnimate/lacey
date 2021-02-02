@@ -14,23 +14,23 @@ namespace Lacey.Alexa.Common.Metasploit.Manager
 
         private readonly string _token;
 		
-		public MetasploitSession (string username, string password, string host)
+		public MetasploitSession(string username, string password, string host)
 		{
 			_host = host;
 			_token = null;
 			
-			var response = this.Authenticate (username, password).Result;
+			var response = this.Authenticate(username, password).Result;
 			
 			var loggedIn = !response.ContainsKey("error");
 
 			if (!loggedIn)
-				throw new Exception (response ["error_message"] as string);
+				throw new Exception(response["error_message"] as string);
 			
-			if (response ["result"] as string == "success")
-				_token = response ["token"] as string;
+			if (response["result"] as string == "success")
+				_token = response["token"] as string;
 		} 
 
-		public MetasploitSession (string token, string host)
+		public MetasploitSession(string token, string host)
 		{
 			_token = token;
 			_host = host;
@@ -38,12 +38,12 @@ namespace Lacey.Alexa.Common.Metasploit.Manager
 		
 		public string Token => _token;
 
-        public async Task<Dictionary<string, object>> Authenticate (string username, string password)
+        public async Task<Dictionary<string, object>> Authenticate(string username, string password)
 		{
 			return await this.Execute ("auth.login", username, password);
 		}
 		
-		public async Task<Dictionary<string, object>> Execute (string method, params object[] args)
+		public async Task<Dictionary<string, object>> Execute(string method, params object[] args)
 		{
 			if (string.IsNullOrEmpty (_host))
 				throw new Exception ("Host null or empty");
@@ -259,7 +259,7 @@ namespace Lacey.Alexa.Common.Metasploit.Manager
 		
 		public void Dispose ()
 		{
-			this.Execute("auth.logout");
+			this.Execute("auth.logout").Wait();
 		}
 	}
 }

@@ -1,5 +1,7 @@
 ﻿using Lacey.Alexa.Common.Metasploit.Infrastructure;
 using Lacey.Alexa.Common.Metasploit.Providers;
+using Lacey.Alexa.Common.Shodan.Infrastructure;
+using Lacey.Alexa.Common.Shodan.Providers;
 using Lacey.Alexa.Explorer.Services.Services;
 using Lacey.Alexa.Explorer.Services.Services.Concrete;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,16 +14,20 @@ namespace Lacey.Alexa.Explorer.Services.Infrastructure
         public static IServiceCollection AddExplorerServices(
             this IServiceCollection services,
             string metasploitUrl,
-            string metasploitSecretsFile)
+            string metasploitSecretsFile,
+            string shodanSecretsFile)
         {
             services
                 .AddMetasploitServices(
                     metasploitUrl,
                     metasploitSecretsFile)
 
+                .AddShodanServices(shodanSecretsFile)
+
                 .AddTransient<IExplorerService, ExplorerService>(
                     provider => new ExplorerService(
                         provider.GetService<IMetasploitProvider>(),
+                        provider.GetService<IShodanProvider>(),
                         provider.GetService<ILogger<ExplorerService>>()));
             return services;
         }

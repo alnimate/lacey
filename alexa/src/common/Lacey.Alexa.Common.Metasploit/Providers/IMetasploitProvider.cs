@@ -27,7 +27,5 @@ namespace Lacey.Alexa.Common.Metasploit.Providers
         Task<Dictionary<string, object>> WriteToSessionMeterpreter(string sessionId, string data);
 
         Task<Dictionary<string, object>> ReadSessionMeterpreter(string sessionId);
-
-        Task<Dictionary<string, object>> KillMeterpreterSession(string sessionId);
     }
 }

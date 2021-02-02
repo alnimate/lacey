@@ -24,7 +24,7 @@ namespace Lacey.Alexa.Common.Metasploit.Providers.Concrete
         {
             _logger = logger;
 
-            var creds = authProvider.GetUserSecrets();
+            var creds = authProvider.GetCredentials();
             _session = new MetasploitSession(creds.Username, creds.Password, $"{metasploitUrl}/api/");
             _metasploit = new MetasploitProManager(_session);
             MetasploitAddress = new Uri(metasploitUrl).Host;
@@ -84,11 +84,6 @@ namespace Lacey.Alexa.Common.Metasploit.Providers.Concrete
         public async Task<Dictionary<string, object>> ReadSessionMeterpreter(string sessionId)
         {
             return await Process.InContext(() => _metasploit.ReadSessionMeterpreter(sessionId), _logger);
-        }
-
-        public async Task<Dictionary<string, object>> KillMeterpreterSession(string sessionId)
-        {
-            return await Process.InContext(() => _metasploit.KillMeterpreterSession(sessionId), _logger);
         }
 
         #endregion
