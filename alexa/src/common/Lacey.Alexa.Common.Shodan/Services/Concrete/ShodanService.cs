@@ -7,19 +7,18 @@ namespace Lacey.Alexa.Common.Shodan.Services.Concrete
 {
     public sealed class ShodanService : BaseService, IShodanService
     {
-        private readonly IShodanLoginService _loginService;
-
         public ShodanService(
             IShodanAuthProvider authProvider, 
-            ILogger logger, 
-            IShodanLoginService loginService) : base(authProvider, logger)
+            ILogger logger) : base(authProvider, logger)
         {
-            this._loginService = loginService;
         }
 
         public async Task<string[]> GetHosts(string query)
         {
-            await _loginService.Login();
+            if (!IsAuthenticated())
+            {
+                return new string[]{};
+            }
 
             return new string[]{};
         }

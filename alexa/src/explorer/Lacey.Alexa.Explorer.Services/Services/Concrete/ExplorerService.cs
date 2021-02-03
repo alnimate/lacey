@@ -12,21 +12,32 @@ namespace Lacey.Alexa.Explorer.Services.Services.Concrete
 
         private readonly IMetasploitProvider _metasploit;
 
+        private readonly IShodanLoginService _shodanLogin;
+
         private readonly IShodanService _shodan;
 
         public ExplorerService(
             IMetasploitProvider metasploit,
+            IShodanLoginService shodanLogin,
             IShodanService shodan,
             ILogger logger)
         {
             _metasploit = metasploit;
+            _shodanLogin = shodanLogin;
             _shodan = shodan;
             _logger = logger;
         }
 
         public async Task Run()
         {
+            await _shodanLogin.Login();
+            if (!_shodanLogin.IsAuthenticated())
+            {
+                return;
+            }
+
             var hosts = await _shodan.GetHosts("city:miami os:windows");
+            return;
 
             await _metasploit.Login();
             if (!_metasploit.IsAuthenticated())

@@ -27,6 +27,7 @@ namespace Lacey.Alexa.Explorer.Services.Infrastructure
                 .AddTransient<IExplorerService, ExplorerService>(
                     provider => new ExplorerService(
                         provider.GetService<IMetasploitProvider>(),
+                        provider.GetService<IShodanLoginService>(),
                         provider.GetService<IShodanService>(),
                         provider.GetService<ILogger<ExplorerService>>()));
             return services;

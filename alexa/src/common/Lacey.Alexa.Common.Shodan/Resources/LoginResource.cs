@@ -22,7 +22,7 @@ namespace Lacey.Alexa.Common.Shodan.Resources
             string continu,
             string csrfToken)
         {
-            return new LoginRequest(Service, username, password, grantType, continu, csrfToken);
+            return new(Service, username, password, grantType, continu, csrfToken);
         }
 
         public sealed class LoginGetRequest : BaseRequest<LoginGetResponseModel>
@@ -36,7 +36,7 @@ namespace Lacey.Alexa.Common.Shodan.Resources
             public override string HttpMethod => HttpConsts.Get;
         }
 
-        public sealed class LoginRequest : BaseRequest<LoginResponseModel>
+        public sealed class LoginRequest : BaseRequest<string>
         {
             private readonly LoginRequestModel _body;
 

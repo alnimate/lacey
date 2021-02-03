@@ -28,8 +28,7 @@ namespace Lacey.Alexa.Common.Shodan.Infrastructure
                 .AddTransient<IShodanService, ShodanService>(
                     provider => new ShodanService(
                         provider.GetService<IShodanAuthProvider>(),
-                        provider.GetService<ILogger<ShodanService>>(),
-                        provider.GetService<IShodanLoginService>()));
+                        provider.GetService<ILogger<ShodanService>>()));
 
             return services;
         }
