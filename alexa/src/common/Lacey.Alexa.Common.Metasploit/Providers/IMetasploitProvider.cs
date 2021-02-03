@@ -7,6 +7,10 @@ namespace Lacey.Alexa.Common.Metasploit.Providers
     {
         string MetasploitAddress { get; }
 
+        Task Login();
+
+        bool IsAuthenticated();
+
         Task<Dictionary<string, object>> ExecuteModule(string moduleType, string moduleName,
             Dictionary<string, object> options);
 

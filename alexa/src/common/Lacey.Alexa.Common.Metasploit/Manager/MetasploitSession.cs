@@ -12,23 +12,15 @@ namespace Lacey.Alexa.Common.Metasploit.Manager
 	{
         private readonly string _host;
 
-        private readonly string _token;
-		
-		public MetasploitSession(string username, string password, string host)
+        private string _token;
+
+        private bool _isAuthenticated;
+
+		public MetasploitSession(string host)
 		{
 			_host = host;
 			_token = null;
-			
-			var response = this.Authenticate(username, password).Result;
-			
-			var loggedIn = !response.ContainsKey("error");
-
-			if (!loggedIn)
-				throw new Exception(response["error_message"] as string);
-			
-			if (response["result"] as string == "success")
-				_token = response["token"] as string;
-		} 
+        }
 
 		public MetasploitSession(string token, string host)
 		{
@@ -38,10 +30,29 @@ namespace Lacey.Alexa.Common.Metasploit.Manager
 		
 		public string Token => _token;
 
-        public async Task<Dictionary<string, object>> Authenticate(string username, string password)
+        public async Task Login(string username, string password)
+        {
+            var response = await Authenticate(username, password);
+            _isAuthenticated = !response.ContainsKey("error");
+
+            if (!_isAuthenticated)
+                throw new Exception(response["error_message"] as string);
+
+            if (response["result"] as string == "success")
+                _token = response["token"] as string;
+        }
+
+		public bool IsAuthenticated()
+        {
+            return _isAuthenticated;
+        }
+
+		public async Task<Dictionary<string, object>> Authenticate(string username, string password)
 		{
-			return await this.Execute ("auth.login", username, password);
-		}
+			var response = await this.Execute ("auth.login", username, password);
+            _isAuthenticated = !response.ContainsKey("error");
+			return response;
+        }
 		
 		public async Task<Dictionary<string, object>> Execute(string method, params object[] args)
 		{
@@ -257,9 +268,12 @@ namespace Lacey.Alexa.Common.Metasploit.Manager
 		
 		}
 		
-		public void Dispose ()
+		public void Dispose()
 		{
-			this.Execute("auth.logout").Wait();
+            if (IsAuthenticated())
+            {
+                Execute("auth.logout").Wait();
+            }
 		}
 	}
 }

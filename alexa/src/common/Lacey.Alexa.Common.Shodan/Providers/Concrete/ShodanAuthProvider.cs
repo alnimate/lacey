@@ -11,10 +11,10 @@ namespace Lacey.Alexa.Common.Shodan.Providers.Concrete
             _secretsFile = secretsFile;
         }
 
-        public string GetApiKey()
+        public (string Username, string Password) GetCredentials()
         {
             var lines = File.ReadAllLines(_secretsFile);
-            return lines[0];
+            return (lines[0], lines[1]);
         }
     }
 }

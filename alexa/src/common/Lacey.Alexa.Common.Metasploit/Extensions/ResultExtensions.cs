@@ -6,7 +6,7 @@ namespace Lacey.Alexa.Common.Metasploit.Extensions
 {
     public static class ResultExtensions
     {
-        public static string AsColumns(this Dictionary<string, object> result)
+        public static string Format(this Dictionary<string, object> result)
         {
             const int firstCol = -10;
             const int largeCol = -50;

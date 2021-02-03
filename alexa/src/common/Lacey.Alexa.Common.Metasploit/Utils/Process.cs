@@ -14,7 +14,7 @@ namespace Lacey.Alexa.Common.Metasploit.Utils
         {
             var result = await action();
 
-            logger.LogTrace(result.AsColumns());
+            logger.LogTrace(result.Format());
             
             return result;
         }

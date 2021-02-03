@@ -15,7 +15,9 @@ namespace Lacey.Alexa.Common.Metasploit.Providers.Concrete
 
         private readonly MetasploitSession _session;
 
-        private readonly MetasploitProManager _metasploit;
+        private MetasploitProManager _metasploit;
+
+        private readonly (string Username, string Password) _credentials;
 
         public MetasploitProvider(
             string metasploitUrl, 
@@ -23,11 +25,10 @@ namespace Lacey.Alexa.Common.Metasploit.Providers.Concrete
             ILogger logger)
         {
             _logger = logger;
+            _session = new MetasploitSession($"{metasploitUrl}/api/");
 
-            var creds = authProvider.GetCredentials();
-            _session = new MetasploitSession(creds.Username, creds.Password, $"{metasploitUrl}/api/");
-            _metasploit = new MetasploitProManager(_session);
             MetasploitAddress = new Uri(metasploitUrl).Host;
+            _credentials = authProvider.GetCredentials();
         }
 
         #endregion
@@ -35,6 +36,17 @@ namespace Lacey.Alexa.Common.Metasploit.Providers.Concrete
         #region IMetasploitProvider
 
         public string MetasploitAddress { get; }
+
+        public async Task Login()
+        {
+            await _session.Login(_credentials.Username, _credentials.Password);
+            _metasploit = new MetasploitProManager(_session);
+        }
+
+        public bool IsAuthenticated()
+        {
+            return _session.IsAuthenticated();
+        }
 
         public async Task<Dictionary<string, object>> ExecuteModule(string moduleType, string moduleName, Dictionary<string, object> options)
         {
@@ -92,7 +104,7 @@ namespace Lacey.Alexa.Common.Metasploit.Providers.Concrete
 
         public void Dispose()
         {
-            _metasploit.Dispose();
+            _metasploit?.Dispose();
             _session.Dispose();
         }
 

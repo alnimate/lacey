@@ -1,5 +1,8 @@
-﻿using Lacey.Alexa.Common.Shodan.Providers;
+﻿using System.IO;
+using Lacey.Alexa.Common.Shodan.Providers;
 using Lacey.Alexa.Common.Shodan.Providers.Concrete;
+using Lacey.Alexa.Common.Shodan.Services;
+using Lacey.Alexa.Common.Shodan.Services.Concrete;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -15,10 +18,18 @@ namespace Lacey.Alexa.Common.Shodan.Infrastructure
                 .AddTransient<IShodanAuthProvider, ShodanAuthProvider>(
                     _ => new ShodanAuthProvider(shodanSecretsFile))
 
-                .AddTransient<IShodanProvider, ShodanProvider>(
-                    provider => new ShodanProvider(
+                .AddTransient<IShodanLoginService, ShodanLoginService>(
+                    provider => new ShodanLoginService(
+                        Path.Combine(Path.GetDirectoryName(shodanSecretsFile) ?? string.Empty, "session.sec"),
                         provider.GetService<IShodanAuthProvider>(),
-                        provider.GetService<ILogger<ShodanProvider>>()));
+                        provider.GetService<ILogger<ShodanLoginService>>()))
+
+
+                .AddTransient<IShodanService, ShodanService>(
+                    provider => new ShodanService(
+                        provider.GetService<IShodanAuthProvider>(),
+                        provider.GetService<ILogger<ShodanService>>(),
+                        provider.GetService<IShodanLoginService>()));
 
             return services;
         }
