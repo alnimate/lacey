@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
 using Lacey.Alexa.Common.Shodan.Common;
+using Lacey.Alexa.Common.Shodan.Extensions;
 using Lacey.Alexa.Common.Shodan.Models.Login;
 using Lacey.Alexa.Common.Shodan.Providers;
 using Lacey.Alexa.Common.Shodan.Serializers;
@@ -42,6 +43,7 @@ namespace Lacey.Alexa.Common.Shodan.Services.Concrete
                 }
 
                 var loginGetRequest = AccountProvider.Login.LoginGet()
+                    .SetDefault()
                     .SetSerializer(new LoginGetSerializer());
                 var loginGet = await loginGetRequest.ExecuteAsync();
 
@@ -50,7 +52,8 @@ namespace Lacey.Alexa.Common.Shodan.Services.Concrete
                     Credentials.Password,
                     loginGet.GrantType,
                     loginGet.Continue,
-                    loginGet.CsrfToken);
+                    loginGet.CsrfToken)
+                    .SetDefault();
                 var loginResult = await loginRequest.ExecuteUnparsedAsync();
                 var politoCookie = loginResult.GetCookie("polito");
                 var sessionCookie = loginResult.GetCookie("session");

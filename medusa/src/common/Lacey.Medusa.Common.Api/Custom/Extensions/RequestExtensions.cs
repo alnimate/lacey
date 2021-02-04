@@ -144,5 +144,33 @@ namespace Lacey.Medusa.Common.Api.Custom.Extensions
         {
             return request.AddExecInterceptor(new UpgradeInsecureRequestsInterceptor(upgradeInsecureRequests));
         }
+
+        public static ClientServiceRequest<TResponse> AddSecFetchSite<TResponse>(
+            this ClientServiceRequest<TResponse> request,
+            string value)
+        {
+            return request.AddExecInterceptor(new SecFetchSiteInterceptor(value));
+        }
+
+        public static ClientServiceRequest<TResponse> AddSecFetchMode<TResponse>(
+            this ClientServiceRequest<TResponse> request,
+            string value)
+        {
+            return request.AddExecInterceptor(new SecFetchModeInterceptor(value));
+        }
+
+        public static ClientServiceRequest<TResponse> AddSecFetchUser<TResponse>(
+            this ClientServiceRequest<TResponse> request,
+            string value)
+        {
+            return request.AddExecInterceptor(new SecFetchUserInterceptor(value));
+        }
+
+        public static ClientServiceRequest<TResponse> AddSecFetchDest<TResponse>(
+            this ClientServiceRequest<TResponse> request,
+            string value)
+        {
+            return request.AddExecInterceptor(new SecFetchDestInterceptor(value));
+        }
     }
 }
