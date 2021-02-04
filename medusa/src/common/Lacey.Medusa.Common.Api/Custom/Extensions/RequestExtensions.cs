@@ -89,6 +89,13 @@ namespace Lacey.Medusa.Common.Api.Custom.Extensions
             return request.AddExecInterceptor(new AcceptEncodingInterceptor(acceptEncoding));
         }
 
+        public static ClientServiceRequest<TResponse> AddAcceptEncodings<TResponse>(
+            this ClientServiceRequest<TResponse> request,
+            params string[] values)
+        {
+            return request.AddExecInterceptor(new AcceptEncodingsInterceptor(values));
+        }
+
         public static ClientServiceRequest<TResponse> AddAcceptCharset<TResponse>(
             this ClientServiceRequest<TResponse> request,
             string acceptCharset)

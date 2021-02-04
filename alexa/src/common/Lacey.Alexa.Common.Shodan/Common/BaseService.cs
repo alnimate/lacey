@@ -1,4 +1,4 @@
-﻿using Lacey.Alexa.Common.Shodan.Models.Login;
+﻿using Lacey.Alexa.Common.Shodan.Models;
 using Lacey.Alexa.Common.Shodan.Providers;
 using Lacey.Alexa.Common.Shodan.Providers.Concrete;
 using Lacey.Medusa.Common.Api.Base.Services;
@@ -15,7 +15,7 @@ namespace Lacey.Alexa.Common.Shodan.Common
 
         protected readonly ShodanAccountProvider AccountProvider;
 
-        protected static LoginResponseModel UserSession { get; set; }
+        protected static AuthCookies AuthCookies { get; set; }
 
         protected BaseService(
             IShodanAuthProvider authProvider, 
@@ -34,7 +34,7 @@ namespace Lacey.Alexa.Common.Shodan.Common
 
         public bool IsAuthenticated()
         {
-            return UserSession != null;
+            return AuthCookies != null;
         }
     }
 }

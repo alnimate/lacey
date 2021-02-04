@@ -9,14 +9,23 @@ namespace Lacey.Medusa.Common.Api.Custom.Extensions
             this HttpResponseMessage response,
             string cookieName)
         {
-            var header = response.Headers.GetValues("Set-Cookie").FirstOrDefault();
+            var headers = response.Headers.GetValues("Set-Cookie").ToArray();
 
-            if (string.IsNullOrEmpty(header))
+            if (!headers.Any())
             {
                 return string.Empty;
             }
 
-            return header.GetCookie(cookieName);
+            foreach (var header in headers)
+            {
+                var cookie = header.GetCookie(cookieName);
+                if (!string.IsNullOrEmpty(cookie))
+                {
+                    return cookie;
+                }
+            }
+
+            return string.Empty;
         }
     }
 }

@@ -25,7 +25,7 @@ namespace Lacey.Alexa.Common.Shodan.Resources
             return new(Service, username, password, grantType, continu, csrfToken);
         }
 
-        public sealed class LoginGetRequest : BaseRequest<LoginGetResponseModel>
+        public sealed class LoginGetRequest : BaseRequest<string>
         {
             public LoginGetRequest(IClientService service) : base(service)
             {

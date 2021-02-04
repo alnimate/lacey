@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Lacey.Alexa.Common.Shodan.Common;
 using Lacey.Alexa.Common.Shodan.Extensions;
+using Lacey.Alexa.Common.Shodan.Models;
 using Lacey.Alexa.Common.Shodan.Models.Login;
 using Lacey.Alexa.Common.Shodan.Providers;
 using Lacey.Alexa.Common.Shodan.Serializers;
@@ -37,15 +38,19 @@ namespace Lacey.Alexa.Common.Shodan.Services.Concrete
                 var session = this.LoadSession();
                 if (session != null)
                 {
-                    UserSession = session;
-                    _logger.LogTrace(UserSession.GetLog());
+                    AuthCookies = session;
+                    _logger.LogTrace(AuthCookies.GetLog());
                     return true;
                 }
 
                 var loginGetRequest = AccountProvider.Login.LoginGet()
-                    .SetDefault()
-                    .SetSerializer(new LoginGetSerializer());
-                var loginGet = await loginGetRequest.ExecuteAsync();
+                    .SetDefault();
+                var loginGet = await (await loginGetRequest.ExecuteUnparsedAsync()).ToLoginGet();
+                AuthCookies = new AuthCookies
+                {
+                    CfdUid = loginGet.CfdUid,
+                    Session = loginGet.Session
+                };
 
                 var loginRequest = AccountProvider.Login.Login(
                     Credentials.Username,
@@ -53,41 +58,35 @@ namespace Lacey.Alexa.Common.Shodan.Services.Concrete
                     loginGet.GrantType,
                     loginGet.Continue,
                     loginGet.CsrfToken)
-                    .SetDefault();
+                    .SetDefault()
+                    .AddOrigin("https://account.shodan.io")
+                    .AddSecFetchSite("same-origin")
+                    .AddReferer("https://account.shodan.io/login")
+                    .AddCookies(AuthCookies);
                 var loginResult = await loginRequest.ExecuteUnparsedAsync();
-                var politoCookie = loginResult.GetCookie("polito");
-                var sessionCookie = loginResult.GetCookie("session");
-                if (string.IsNullOrEmpty(sessionCookie))
-                {
-                    _logger.LogError("Authorization failed.");
-                    DelayUtils.SmallDelay();
-                    return null;
-                }
-                UserSession = new LoginResponseModel
-                {
-                    Polito = politoCookie,
-                    Session = sessionCookie
-                };
-                _logger.LogTrace(UserSession.GetLog());
-                this.SaveSession(UserSession);
+                AuthCookies.Polito = loginResult.GetCookie("polito");
+                AuthCookies.Session = loginResult.GetCookie("session");
+                _logger.LogTrace(AuthCookies.GetLog());
+
+                this.SaveSession(AuthCookies);
 
                 return true;
             });
         }
 
-        private void SaveSession(LoginResponseModel session)
+        private void SaveSession(AuthCookies session)
         {
             File.WriteAllText(_sessionFilePath, JsonConvert.SerializeObject(session));
         }
 
-        private LoginResponseModel LoadSession()
+        private AuthCookies LoadSession()
         {
             if(!File.Exists(_sessionFilePath))
             {
                 return null;
             }
 
-            return JsonConvert.DeserializeObject<LoginResponseModel>(File.ReadAllText(_sessionFilePath));
+            return JsonConvert.DeserializeObject<AuthCookies>(File.ReadAllText(_sessionFilePath));
         }
     }
 }
