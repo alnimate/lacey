@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -178,6 +179,13 @@ namespace Lacey.Medusa.Common.Api.Custom.Extensions
             string value)
         {
             return request.AddExecInterceptor(new SecFetchDestInterceptor(value));
+        }
+
+        public static ClientServiceRequest<TResponse> AddCacheControlMaxAge<TResponse>(
+            this ClientServiceRequest<TResponse> request,
+            TimeSpan? value)
+        {
+            return request.AddExecInterceptor(new CacheControlMaxAgeInterceptor(value));
         }
     }
 }

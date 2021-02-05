@@ -1,11 +1,10 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using Lacey.Alexa.Common.Shodan.Common;
 using Lacey.Alexa.Common.Shodan.Extensions;
 using Lacey.Alexa.Common.Shodan.Models;
-using Lacey.Alexa.Common.Shodan.Models.Login;
 using Lacey.Alexa.Common.Shodan.Providers;
-using Lacey.Alexa.Common.Shodan.Serializers;
 using Lacey.Medusa.Common.Api.Custom.Extensions;
 using Lacey.Medusa.Common.Core.Extensions;
 using Lacey.Medusa.Common.Core.Utils;
@@ -59,6 +58,7 @@ namespace Lacey.Alexa.Common.Shodan.Services.Concrete
                     loginGet.Continue,
                     loginGet.CsrfToken)
                     .SetDefault()
+                    .AddCacheControlMaxAge(TimeSpan.Zero)
                     .AddOrigin("https://account.shodan.io")
                     .AddSecFetchSite("same-origin")
                     .AddReferer("https://account.shodan.io/login")
