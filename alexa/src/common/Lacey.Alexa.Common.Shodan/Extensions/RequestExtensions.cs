@@ -8,9 +8,8 @@ namespace Lacey.Alexa.Common.Shodan.Extensions
         public static ClientServiceRequest<TResponse> SetDefault<TResponse>(
             this ClientServiceRequest<TResponse> request)
         {
-            request.ClearExecInterceptors();
-
-            var res = request
+            return request
+                .ClearExecInterceptors()
                 .AddConnection("keep-alive")
                 .AddUpgradeInsecureRequests("1")
                 .AddUserAgent("Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.146 Safari/537.36")
@@ -21,8 +20,6 @@ namespace Lacey.Alexa.Common.Shodan.Extensions
                 .AddSecFetchDest("document")
                 .AddAcceptEncoding("gzip")
                 .AddAcceptLanguage("en-US,en;q=0.9");
-
-            return res;
         }
     }
 }

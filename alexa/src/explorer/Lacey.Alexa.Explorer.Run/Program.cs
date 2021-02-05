@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
+using System.Net;
 using Lacey.Alexa.Explorer.Run.Configuration;
 using Lacey.Alexa.Explorer.Run.Infrastructure;
 using Lacey.Alexa.Explorer.Services.Services;
@@ -13,7 +15,7 @@ namespace Lacey.Alexa.Explorer.Run
     {
         private static ILogger<Program> _logger;
 
-        static void Main()
+        static void Main(string[] args)
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
@@ -35,11 +37,55 @@ namespace Lacey.Alexa.Explorer.Run
             _logger = serviceProvider.GetService<ILoggerFactory>()
                 .CreateLogger<Program>();
 
+            string action;
+            if (args != null && args.Any())
+            {
+                action = args[0];
+            }
+            else
+            {
+                Console.WriteLine("Welcome to the Explorer!");
+                Console.WriteLine("0 - Find Vulnerable Hosts");
+                Console.WriteLine("1 - Query Hosts");
+                Console.WriteLine("2 - Exploit Host");
+                action = Console.ReadLine();
+            }
+
             var service = serviceProvider.GetService<IExplorerService>();
 
             try
             {
-                service?.Run().Wait();
+                if (action == "0")
+                {
+                    service?.FindVulnerableHosts().Wait();
+                }
+                else if (action == "1")
+                {
+                    Console.Write("Query: ");
+                    var query = Console.ReadLine();
+                    var hosts = service?.QueryHosts(query).Result;
+                    if (hosts != null)
+                    {
+                        foreach (var host in hosts)
+                        {
+                            Console.WriteLine(host);
+                        }
+                    }
+                }
+                else if (action == "2")
+                {
+                    string host;
+                    while (true)
+                    {
+                        Console.Write("Host Address: ");
+                        host = Console.ReadLine();
+                        if (IPAddress.TryParse(host, out _))
+                        {
+                            break;
+                        }
+                    }
+                    service?.ExploitHost(host).Wait();
+                }
             }
             catch (Exception exc)
             {

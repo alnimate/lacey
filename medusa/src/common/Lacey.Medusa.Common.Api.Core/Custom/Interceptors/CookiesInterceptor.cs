@@ -24,7 +24,7 @@ namespace Lacey.Medusa.Common.Api.Core.Custom.Interceptors
                 request.Headers.Add("Cookie", this.cookies.GetCookiesString());
             }
 
-            return Task.FromResult(0);
+            return Task.CompletedTask;
         }
     }
 }

