@@ -9,6 +9,7 @@ namespace Lacey.Alexa.Common.Shodan.Extensions
             this ClientServiceRequest<TResponse> request)
         {
             return request
+                .SetFollowRedirect(false)
                 .ClearExecInterceptors()
                 .AddConnection("keep-alive")
                 .AddUpgradeInsecureRequests("1")

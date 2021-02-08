@@ -45,9 +45,12 @@ namespace Lacey.Alexa.Explorer.Run
             else
             {
                 Console.WriteLine("Welcome to the Explorer!");
+                Console.WriteLine("----------------------------------");
                 Console.WriteLine("0 - Find Vulnerable Hosts");
                 Console.WriteLine("1 - Query Hosts");
                 Console.WriteLine("2 - Exploit Host");
+                Console.WriteLine("----------------------------------");
+                Console.Write("$ ");
                 action = Console.ReadLine();
             }
 

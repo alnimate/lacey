@@ -12,6 +12,14 @@ namespace Lacey.Medusa.Common.Api.Custom.Extensions
 {
     public static class RequestExtensions
     {
+        public static ClientServiceRequest<TResponse> SetFollowRedirect<TResponse>(
+            this ClientServiceRequest<TResponse> request,
+            bool followRedirect)
+        {
+            request.Service.HttpClient.MessageHandler.FollowRedirect = followRedirect;
+            return request;
+        }
+
         public static ClientServiceRequest<TResponse> SetSerializer<TResponse>(
             this ClientServiceRequest<TResponse> serviceRequest,
             ISerializer serializer)
