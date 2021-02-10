@@ -13,6 +13,7 @@ namespace Lacey.Alexa.Explorer.Run.Infrastructure
             services.AddExplorerServices(
                 config.Metasploit.MetasploitUrl,
                 config.Metasploit.MetasploitSecretsFile,
+                config.Google.GoogleSecretsFile,
                 config.Shodan.ShodanSecretsFile);
 
             return services;

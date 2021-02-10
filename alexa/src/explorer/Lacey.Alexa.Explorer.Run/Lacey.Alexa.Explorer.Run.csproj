@@ -23,6 +23,9 @@
     <None Update="log4net.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="secrets\google.sec">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="secrets\metasploit.sec">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

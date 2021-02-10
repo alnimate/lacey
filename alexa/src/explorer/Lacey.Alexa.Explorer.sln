@@ -15,7 +15,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Common.Api.Cor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Common.Api", "..\..\..\medusa\src\common\Lacey.Medusa.Common.Api\Lacey.Medusa.Common.Api.csproj", "{911D9549-B52C-4CBD-8E41-CD74305C8931}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lacey.Alexa.Common.Shodan", "..\common\Lacey.Alexa.Common.Shodan\Lacey.Alexa.Common.Shodan.csproj", "{024245B7-168C-4614-A611-AA3DFC96724C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Alexa.Common.Shodan", "..\common\Lacey.Alexa.Common.Shodan\Lacey.Alexa.Common.Shodan.csproj", "{024245B7-168C-4614-A611-AA3DFC96724C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacey.Medusa.Google.Api", "..\..\..\medusa\src\google\Lacey.Medusa.Google.Api\Lacey.Medusa.Google.Api.csproj", "{9E56EE38-DC82-46B1-BF37-2E499942C4DB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{024245B7-168C-4614-A611-AA3DFC96724C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{024245B7-168C-4614-A611-AA3DFC96724C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{024245B7-168C-4614-A611-AA3DFC96724C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E56EE38-DC82-46B1-BF37-2E499942C4DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E56EE38-DC82-46B1-BF37-2E499942C4DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E56EE38-DC82-46B1-BF37-2E499942C4DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E56EE38-DC82-46B1-BF37-2E499942C4DB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

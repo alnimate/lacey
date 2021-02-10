@@ -8,6 +8,8 @@
 
         public MetasploitConfiguration Metasploit { get; set; }
 
+        public GoogleConfiguration Google { get; set; }
+
         public ShodanConfiguration Shodan { get; set; }
     }
 }

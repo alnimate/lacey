@@ -36,7 +36,8 @@ namespace Lacey.Medusa.Google.Api.Services.Concrete
 
         public async Task<Search> Search(string query)
         {
-            var request = this.Google.Cse.List(query);
+            var request = this.Google.Cse.List();
+            request.Q = query;
             request.Cx = this.googleAuthProvider.GetCx();
             var result = await request.ExecuteAsync();
 

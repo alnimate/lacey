@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\medusa\src\google\Lacey.Medusa.Google.Api\Lacey.Medusa.Google.Api.csproj" />
     <ProjectReference Include="..\..\common\Lacey.Alexa.Common.Metasploit\Lacey.Alexa.Common.Metasploit.csproj" />
     <ProjectReference Include="..\..\common\Lacey.Alexa.Common.Shodan\Lacey.Alexa.Common.Shodan.csproj" />
   </ItemGroup>

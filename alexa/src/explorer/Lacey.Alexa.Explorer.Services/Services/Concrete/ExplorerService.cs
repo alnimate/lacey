@@ -2,6 +2,7 @@
 using Lacey.Alexa.Common.Metasploit.Extensions;
 using Lacey.Alexa.Common.Metasploit.Providers;
 using Lacey.Alexa.Common.Shodan.Services;
+using Lacey.Medusa.Google.Api.Services;
 using Microsoft.Extensions.Logging;
 
 namespace Lacey.Alexa.Explorer.Services.Services.Concrete
@@ -12,17 +13,21 @@ namespace Lacey.Alexa.Explorer.Services.Services.Concrete
 
         private readonly IMetasploitProvider _metasploit;
 
+        private readonly IGoogleProvider _google;
+
         private readonly IShodanLoginService _shodanLogin;
 
         private readonly IShodanService _shodan;
 
         public ExplorerService(
             IMetasploitProvider metasploit,
+            IGoogleProvider google,
             IShodanLoginService shodanLogin,
             IShodanService shodan,
             ILogger logger)
         {
             _metasploit = metasploit;
+            _google = google;
             _shodanLogin = shodanLogin;
             _shodan = shodan;
             _logger = logger;
@@ -30,6 +35,7 @@ namespace Lacey.Alexa.Explorer.Services.Services.Concrete
 
         public async Task FindVulnerableHosts()
         {
+            var result = await _google.Search("shodan");
         }
 
         public async Task<string[]> QueryHosts(string query)
