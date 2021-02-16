@@ -20,7 +20,7 @@ namespace Lacey.Medusa.Common.Core.Utils
                     {
                         return result;
                     }
-                    DelayUtils.LargeDelay();
+                    Delay.Huge();
                 }
                 catch (Exception e)
                 {
@@ -29,10 +29,10 @@ namespace Lacey.Medusa.Common.Core.Utils
                     if (errors > ErrorsLimit)
                     {
                         logger.LogError($"Errors limit ({ErrorsLimit}) exceeded. Closing...");
-                        DelayUtils.LargeDelay();
+                        Delay.Huge();
                         return default;
                     }
-                    DelayUtils.LargeDelay();
+                    Delay.Huge();
                 }
             }
         }

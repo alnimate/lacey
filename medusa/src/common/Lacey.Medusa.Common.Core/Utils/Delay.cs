@@ -1,8 +1,6 @@
-﻿using Lacey.Medusa.Common.Core.Utils;
-
-namespace Lacey.Alexa.Common.Metasploit.Utils
+﻿namespace Lacey.Medusa.Common.Core.Utils
 {
-    internal static class Delay
+    public static class Delay
     {
         public static void Tiny()
         {
@@ -12,6 +10,11 @@ namespace Lacey.Alexa.Common.Metasploit.Utils
         public static void Small()
         {
             ConsoleUtils.WaitSec(RandomUtils.GetRandom(8, 10));
+        }
+
+        public static void Huge()
+        {
+            ConsoleUtils.WaitSec(RandomUtils.GetRandom(60, 120));
         }
     }
 }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Lacey.Alexa.Common.Metasploit.Models.Modules;
 using Lacey.Alexa.Common.Metasploit.Providers;
-using Lacey.Alexa.Common.Metasploit.Utils;
+using Lacey.Medusa.Common.Core.Utils;
 
 namespace Lacey.Alexa.Common.Metasploit.Extensions
 {

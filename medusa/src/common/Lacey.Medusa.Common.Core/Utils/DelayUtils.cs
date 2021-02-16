@@ -1,5 +1,8 @@
-﻿namespace Lacey.Medusa.Common.Core.Utils
+﻿using System;
+
+namespace Lacey.Medusa.Common.Core.Utils
 {
+    [Obsolete]
     public class DelayUtils
     {
         public static void Delay(string taskTime)
