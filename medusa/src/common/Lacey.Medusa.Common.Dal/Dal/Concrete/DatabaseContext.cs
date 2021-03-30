@@ -34,7 +34,7 @@ namespace Lacey.Medusa.Common.Dal.Dal.Concrete
 
         public void ExecuteCommand(string command, params object[] parameters)
         {
-            this.Database.ExecuteSqlCommand(command, parameters);
+            this.Database.ExecuteSqlRaw(command, parameters);
         }
 
         public virtual async Task<int> CommitAsync()

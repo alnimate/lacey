@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using AutoMapper;
 using Lacey.Medusa.Youtube.Services.Transfer.Services;
 using Lacey.Medusa.Youtube.Transfer.Clean.Configuration;
 using Lacey.Medusa.Youtube.Transfer.Clean.Infrastructure;
@@ -26,7 +25,7 @@ namespace Lacey.Medusa.Youtube.Transfer.Clean
 
             //setup our DI
             var serviceProvider = new ServiceCollection()
-                .AddAutoMapper()
+                .AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies())
                 .AddLogging(logBuilder =>
                     logBuilder
                         .AddLog4Net()

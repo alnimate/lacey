@@ -2,7 +2,6 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using AutoMapper;
 using Lacey.Medusa.Cocoon.Run.Configuration;
 using Lacey.Medusa.Cocoon.Run.Infrastructure;
 using Lacey.Medusa.Cocoon.Run.Utils;
@@ -33,7 +32,7 @@ namespace Lacey.Medusa.Cocoon.Run
 
             //setup our DI
             var serviceProvider = new ServiceCollection()
-                .AddAutoMapper()
+                .AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies())
                 .AddLogging(logBuilder =>
                     logBuilder
 //                        .AddLog4Net()

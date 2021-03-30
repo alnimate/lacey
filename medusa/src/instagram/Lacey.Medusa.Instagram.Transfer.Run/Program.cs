@@ -2,7 +2,6 @@
 using System.IO;
 using System.Linq;
 using System.Text;
-using AutoMapper;
 using Lacey.Medusa.Common.Email.Services.Email;
 using Lacey.Medusa.Instagram.Services.Transfer.Services;
 using Lacey.Medusa.Instagram.Transfer.Run.Configuration;
@@ -29,7 +28,7 @@ namespace Lacey.Medusa.Instagram.Transfer.Run
 
             //setup our DI
             var serviceProvider = new ServiceCollection()
-                .AddAutoMapper()
+                .AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies())
                 .AddLogging(logBuilder =>
                     logBuilder
                         .AddLog4Net()

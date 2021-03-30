@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using AutoMapper;
 using Lacey.Medusa.Boost.Run.Configuration;
 using Lacey.Medusa.Boost.Run.Infrastructure;
 using Lacey.Medusa.Boost.Services.Boosters;
@@ -27,7 +26,7 @@ namespace Lacey.Medusa.Boost.Run
 
             //setup our DI
             var serviceProvider = new ServiceCollection()
-                .AddAutoMapper()
+                .AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies())
                 .AddLogging(logBuilder =>
                     logBuilder
                         .AddLog4Net()
